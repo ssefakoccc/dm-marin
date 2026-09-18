@@ -2,50 +2,701 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DM MARİN Yönetim Paneli · Taslak</title>
+<title>DM MARİN Yönetim Paneli · Taslak / Önizleme</title>
 <meta name="robots" content="noindex,nofollow,noarchive"><meta name="theme-color" content="#071b2b">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
-:root{--navy:#071b2b;--deep:#061522;--cyan:#19c7df;--cyan2:#087f93;--ink:#102734;--muted:#6b7b84;--paper:#f3f7f8;--line:#dce7ea;--white:#fff;--ok:#129a66;--warn:#d99b31;--shadow:0 18px 50px rgba(3,22,35,.1)}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,textarea,select{font:inherit}button,a{color:inherit}a{text-decoration:none}.app{min-height:100vh;display:grid;grid-template-columns:260px 1fr}.sidebar{position:sticky;top:0;height:100vh;padding:22px 16px;background:var(--navy);color:#fff}.brand{display:flex;align-items:center;min-height:72px;padding:8px 12px;border-radius:15px;background:#fff}.brand img{display:block;width:100%;height:56px;object-fit:contain}.mode{display:flex;align-items:center;gap:8px;margin:18px 8px 22px;padding:10px 12px;border:1px solid rgba(255,255,255,.13);border-radius:12px;color:rgba(255,255,255,.68);font-size:12px}.mode:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 5px rgba(217,155,49,.12)}.nav{display:grid;gap:5px}.nav button{display:flex;align-items:center;gap:12px;width:100%;min-height:46px;padding:0 14px;border:0;border-radius:12px;background:transparent;color:rgba(255,255,255,.65);text-align:left;cursor:pointer}.nav button:hover,.nav button.active{background:rgba(255,255,255,.1);color:#fff}.nav .icon{display:grid;place-items:center;width:26px;font-size:18px}.side-foot{position:absolute;left:16px;right:16px;bottom:20px;padding:14px;border:1px solid rgba(255,255,255,.12);border-radius:14px;color:rgba(255,255,255,.58);font-size:12px}.side-foot a{display:block;margin-top:8px;color:#b7f4fb;font-weight:800}.main{min-width:0}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:20px;height:78px;padding:0 34px;border-bottom:1px solid var(--line);background:rgba(243,247,248,.92);backdrop-filter:blur(16px)}.topbar h1{margin:0;font-size:22px}.top-actions{display:flex;align-items:center;gap:10px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:43px;padding:0 16px;border:1px solid var(--line);border-radius:11px;background:#fff;font-weight:800;cursor:pointer}.btn:hover{transform:translateY(-1px)}.btn.primary{border-color:var(--cyan2);background:var(--cyan2);color:#fff}.mobile-menu{display:none;width:43px;padding:0}.content{width:min(1180px,calc(100% - 68px));margin:0 auto;padding:34px 0 70px}.notice{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;margin-bottom:24px;padding:17px 19px;border:1px solid #f1d59d;border-radius:15px;background:#fff9ec}.notice strong,.notice small{display:block}.notice small{margin-top:3px;color:#7d6b48}.notice .ico{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;background:#ffedc7}.notice a{font-weight:850;color:#9a6511}.view{display:none}.view.active{display:block}.head{display:flex;align-items:end;justify-content:space-between;gap:28px;margin-bottom:24px}.head h2{margin:0;font-size:32px;letter-spacing:-.035em}.head p{max-width:650px;margin:7px 0 0;color:var(--muted)}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.metric{min-height:150px;padding:22px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 10px 35px rgba(3,22,35,.04)}.metric .metric-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#e8fafd;color:#08788b;font-size:18px}.metric b{display:block;margin-top:20px;font-size:24px}.metric span{color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:18px}.panel{border:1px solid var(--line);border-radius:20px;background:#fff;box-shadow:0 12px 40px rgba(3,22,35,.05)}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:21px 23px;border-bottom:1px solid var(--line)}.panel-head h3{margin:0;font-size:18px}.panel-body{padding:23px}.status-list{display:grid;gap:16px}.status{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}.status-dot{width:10px;height:10px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 5px rgba(18,154,102,.1)}.status-dot.warn{background:var(--warn);box-shadow:0 0 0 5px rgba(217,155,49,.1)}.status strong,.status small{display:block}.status small{color:var(--muted)}.status em{font-style:normal;color:var(--muted);font-size:12px}.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px}.quick a,.quick button{display:flex;align-items:center;gap:10px;min-height:58px;padding:0 15px;border:1px solid var(--line);border-radius:13px;background:#fbfdfe;text-align:left;font-weight:800;cursor:pointer}.quick a:hover,.quick button:hover{border-color:#9fdfe7;background:#f1fcfd}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:13px;font-weight:800}.field small{color:var(--muted)}input,textarea,select{width:100%;border:1px solid #cbd9de;border-radius:11px;background:#fbfdfe;padding:12px 13px;color:var(--ink)}input:focus,textarea:focus,select:focus{outline:3px solid rgba(25,199,223,.16);border-color:var(--cyan2)}.char{align-self:flex-end;color:var(--muted);font-size:12px}.service-list{display:grid;gap:10px}.service-row{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:15px 16px;border:1px solid var(--line);border-radius:14px;background:#fff}.drag{color:#9aabb2;font-size:20px}.service-row b,.service-row small{display:block}.service-row small{color:var(--muted)}.switch{position:relative;width:46px;height:26px}.switch input{position:absolute;opacity:0}.switch span{position:absolute;inset:0;border-radius:999px;background:#cbd6da;cursor:pointer;transition:.2s}.switch span:after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:.2s}.switch input:checked+span{background:var(--ok)}.switch input:checked+span:after{transform:translateX(20px)}.media-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.media{overflow:hidden;border:1px solid var(--line);border-radius:15px;background:#fff}.media img{display:block;width:100%;height:150px;object-fit:cover}.media div{padding:12px}.media b,.media small{display:block}.media small{color:var(--muted)}.checklist{display:grid;gap:10px}.check{display:flex;align-items:center;gap:11px;padding:13px 14px;border:1px solid var(--line);border-radius:12px}.check:before{content:"✓";display:grid;place-items:center;width:25px;height:25px;border-radius:50%;background:#e9f8f2;color:var(--ok);font-weight:900}.check.warn:before{content:"!";background:#fff3da;color:#a76b08}.empty{display:grid;place-items:center;min-height:360px;padding:40px;text-align:center}.empty .empty-icon{display:grid;place-items:center;width:72px;height:72px;border-radius:22px;background:#e8fafd;color:#08788b;font-size:30px}.empty h3{margin:22px 0 7px;font-size:24px}.empty p{max-width:520px;margin:0;color:var(--muted)}.domain{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:18px;border:1px solid var(--line);border-radius:14px;background:#fbfdfe}.domain b,.domain small{display:block}.domain small{color:var(--muted)}.pill{padding:6px 10px;border-radius:999px;background:#fff3da;color:#8d5b08;font-size:12px;font-weight:850}.toast{position:fixed;right:24px;bottom:24px;z-index:60;transform:translateY(100px);padding:14px 18px;border-radius:12px;background:var(--navy);color:#fff;box-shadow:var(--shadow);opacity:0;transition:.25s}.toast.show{transform:none;opacity:1}
+:root{--navy:#071b2b;--deep:#061522;--cyan:#19c7df;--cyan2:#087f93;--ink:#102734;--muted:#6b7b84;--paper:#f3f7f8;--line:#dce7ea;--white:#fff;--ok:#129a66;--warn:#d99b31;--danger:#e04848;--shadow:0 18px 50px rgba(3,22,35,.1)}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,textarea,select{font:inherit}button,a{color:inherit}a{text-decoration:none}.app{min-height:100vh;display:grid;grid-template-columns:260px 1fr}.sidebar{position:sticky;top:0;height:100vh;padding:22px 16px;background:var(--navy);color:#fff;overflow-y:auto}.brand{display:flex;align-items:center;min-height:72px;padding:8px 12px;border-radius:15px;background:#fff}.brand img{display:block;width:100%;height:56px;object-fit:contain}.mode{display:flex;align-items:center;gap:8px;margin:18px 8px 22px;padding:10px 12px;border:1px solid rgba(255,255,255,.13);border-radius:12px;color:rgba(255,255,255,.75);font-size:12px}.mode:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 5px rgba(217,155,49,.12)}.nav{display:grid;gap:5px}.nav button{display:flex;align-items:center;gap:12px;width:100%;min-height:46px;padding:0 14px;border:0;border-radius:12px;background:transparent;color:rgba(255,255,255,.7);text-align:left;cursor:pointer;transition:.15s}.nav button:hover,.nav button.active{background:rgba(255,255,255,.12);color:#fff}.nav .icon{display:grid;place-items:center;width:26px;font-size:18px}.side-foot{margin-top:30px;padding:14px;border:1px solid rgba(255,255,255,.12);border-radius:14px;color:rgba(255,255,255,.58);font-size:12px}.side-foot a{display:block;margin-top:8px;color:#b7f4fb;font-weight:800}.main{min-width:0}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:20px;height:78px;padding:0 34px;border-bottom:1px solid var(--line);background:rgba(243,247,248,.94);backdrop-filter:blur(16px)}.topbar h1{margin:0;font-size:22px}.top-actions{display:flex;align-items:center;gap:10px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:43px;padding:0 16px;border:1px solid var(--line);border-radius:11px;background:#fff;font-weight:800;cursor:pointer;transition:.15s}.btn:hover{transform:translateY(-1px)}.btn.primary{border-color:var(--cyan2);background:var(--cyan2);color:#fff}.btn.danger{border-color:#f8d7da;background:#fff2f2;color:var(--danger)}.btn.danger:hover{background:#fee2e2}.mobile-menu{display:none;width:43px;padding:0}.content{width:min(1180px,calc(100% - 68px));margin:0 auto;padding:34px 0 70px}.notice{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;margin-bottom:24px;padding:17px 19px;border:1px solid #f1d59d;border-radius:15px;background:#fff9ec}.notice strong,.notice small{display:block}.notice small{margin-top:3px;color:#7d6b48}.notice .ico{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;background:#ffedc7;font-weight:900;color:#9a6511}.notice a{font-weight:850;color:#9a6511}.view{display:none}.view.active{display:block}.head{display:flex;align-items:end;justify-content:space-between;gap:28px;margin-bottom:24px}.head h2{margin:0;font-size:32px;letter-spacing:-.035em}.head p{max-width:650px;margin:7px 0 0;color:var(--muted)}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.metric{min-height:150px;padding:22px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 10px 35px rgba(3,22,35,.04)}.metric .metric-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#e8fafd;color:#08788b;font-size:18px}.metric b{display:block;margin-top:20px;font-size:24px}.metric span{color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:18px}.panel{border:1px solid var(--line);border-radius:20px;background:#fff;box-shadow:0 12px 40px rgba(3,22,35,.05)}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:21px 23px;border-bottom:1px solid var(--line)}.panel-head h3{margin:0;font-size:18px}.panel-body{padding:23px}.status-list{display:grid;gap:16px}.status{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}.status-dot{width:10px;height:10px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 5px rgba(18,154,102,.1)}.status-dot.warn{background:var(--warn);box-shadow:0 0 0 5px rgba(217,155,49,.1)}.status strong,.status small{display:block}.status small{color:var(--muted)}.status em{font-style:normal;color:var(--muted);font-size:12px}.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px}.quick a,.quick button{display:flex;align-items:center;gap:10px;min-height:58px;padding:0 15px;border:1px solid var(--line);border-radius:13px;background:#fbfdfe;text-align:left;font-weight:800;cursor:pointer}.quick a:hover,.quick button:hover{border-color:#9fdfe7;background:#f1fcfd}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:13px;font-weight:800}.field small{color:var(--muted)}input,textarea,select{width:100%;border:1px solid #cbd9de;border-radius:11px;background:#fbfdfe;padding:12px 13px;color:var(--ink)}input:focus,textarea:focus,select:focus{outline:3px solid rgba(25,199,223,.16);border-color:var(--cyan2)}.char{align-self:flex-end;color:var(--muted);font-size:12px}.service-list{display:grid;gap:10px}.service-row{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:15px 16px;border:1px solid var(--line);border-radius:14px;background:#fff}.drag{color:#9aabb2;font-size:20px}.service-row b,.service-row small{display:block}.service-row small{color:var(--muted)}.switch{position:relative;width:46px;height:26px;display:inline-block}.switch input{position:absolute;opacity:0}.switch span{position:absolute;inset:0;border-radius:999px;background:#cbd6da;cursor:pointer;transition:.2s}.switch span:after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:.2s}.switch input:checked+span{background:var(--ok)}.switch input:checked+span:after{transform:translateX(20px)}.media-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.media{overflow:hidden;border:1px solid var(--line);border-radius:15px;background:#fff}.media img{display:block;width:100%;height:150px;object-fit:cover}.media div{padding:12px}.media b,.media small{display:block}.media small{color:var(--muted)}.checklist{display:grid;gap:10px}.check{display:flex;align-items:center;gap:11px;padding:13px 14px;border:1px solid var(--line);border-radius:12px}.check:before{content:"✓";display:grid;place-items:center;width:25px;height:25px;border-radius:50%;background:#e9f8f2;color:var(--ok);font-weight:900}.check.warn:before{content:"!";background:#fff3da;color:#a76b08}.empty{display:grid;place-items:center;min-height:360px;padding:40px;text-align:center}.empty .empty-icon{display:grid;place-items:center;width:72px;height:72px;border-radius:22px;background:#e8fafd;color:#08788b;font-size:30px}.empty h3{margin:22px 0 7px;font-size:24px}.empty p{max-width:520px;margin:0;color:var(--muted)}.domain{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:18px;border:1px solid var(--line);border-radius:14px;background:#fbfdfe}.domain b,.domain small{display:block}.domain small{color:var(--muted)}.pill{padding:6px 10px;border-radius:999px;background:#fff3da;color:#8d5b08;font-size:12px;font-weight:850}.pill.ok{background:#e8f8f1;color:#0d7a50}.pill.badge{background:#e9f7fa;color:#08788b}.toast{position:fixed;right:24px;bottom:24px;z-index:60;transform:translateY(100px);padding:14px 18px;border-radius:12px;background:var(--navy);color:#fff;box-shadow:var(--shadow);opacity:0;transition:.25s}.toast.show{transform:none;opacity:1}
+.brand-tools,.keyword-tools{display:flex;gap:10px;margin-bottom:14px}.brand-tools input,.keyword-tools input{flex:1}.brand-editor,.keyword-editor{display:grid;gap:9px}.brand-edit-row,.keyword-row{display:grid;grid-template-columns:1fr auto auto;gap:9px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:14px;background:#fbfdfe}.brand-edit-row input{border:1px solid #d0dee3;background:#fff}
+.seo-page-box{padding:18px;border:1px solid var(--line);border-radius:16px;background:#f8fbfc;margin-bottom:20px}
+.seo-table-wrap{overflow-x:auto;margin-top:16px}
+.seo-table{width:100%;border-collapse:collapse;font-size:14px}
+.seo-table th,.seo-table td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left}
+.seo-table th{color:var(--muted);font-size:12px;font-weight:800;background:#fbfdfe}
+.seo-table tr:hover td{background:#f4f9fa}
 @media(max-width:1000px){.app{grid-template-columns:1fr}.sidebar{position:fixed;inset:0 auto 0 0;z-index:50;width:260px;transform:translateX(-100%);transition:.25s}.sidebar.open{transform:none}.mobile-menu{display:inline-flex}.cards{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.content{width:calc(100% - 36px)}.topbar{padding:0 18px}}
-@media(max-width:640px){.topbar h1{font-size:18px}.top-actions .btn:not(.primary){display:none}.content{padding-top:22px}.notice{grid-template-columns:auto 1fr}.notice a{grid-column:2}.head{display:block}.head h2{font-size:28px}.cards{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.media-grid{grid-template-columns:1fr}.quick{grid-template-columns:1fr}.domain{grid-template-columns:1fr}.panel-head{align-items:flex-start;flex-direction:column}.service-row{grid-template-columns:auto 1fr}.service-row .switch{grid-column:2}}
-.brand-tools,.keyword-tools{display:flex;gap:10px;margin-bottom:14px}.brand-tools input,.keyword-tools input{flex:1}.brand-editor,.keyword-editor{display:grid;gap:9px}.brand-edit-row,.keyword-row{display:grid;grid-template-columns:1fr auto auto;gap:9px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:12px;background:#fbfdfe}.danger{border-color:#f2c8c8!important;color:#a43a3a!important}.seo-score{display:grid;place-items:center;width:88px;height:88px;border-radius:50%;background:conic-gradient(var(--ok) calc(var(--score)*1%),#e3ecef 0);position:relative}.seo-score:after{content:"";position:absolute;inset:8px;border-radius:50%;background:#fff}.seo-score b{position:relative;z-index:1;font-size:23px}.seo-overview{display:flex;align-items:center;gap:20px}.seo-overview p{margin:0;color:var(--muted)}.priority-table{width:100%;border-collapse:collapse}.priority-table th,.priority-table td{padding:12px;border-bottom:1px solid var(--line);text-align:left}.priority-table th{font-size:12px;color:var(--muted)}
-@media(max-width:640px){.brand-edit-row,.keyword-row{grid-template-columns:1fr auto}.brand-edit-row .switch{display:none}.brand-tools,.keyword-tools{align-items:stretch;flex-direction:column}}
+@media(max-width:640px){.topbar h1{font-size:18px}.top-actions .btn:not(.primary){display:none}.content{padding-top:22px}.notice{grid-template-columns:auto 1fr}.notice a{grid-column:2}.head{display:block}.head h2{font-size:28px}.cards{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.media-grid{grid-template-columns:1fr}.quick{grid-template-columns:1fr}.domain{grid-template-columns:1fr}.panel-head{align-items:flex-start;flex-direction:column}.service-row{grid-template-columns:auto 1fr}.service-row .switch{grid-column:2}.brand-edit-row{grid-template-columns:1fr auto}.brand-tools{flex-direction:column}}
 </style>
 </head>
 <body>
 <div class="app">
-<aside class="sidebar" id="sidebar"><a class="brand" href="index.html" aria-label="DM MARİN sitesine dön"><img src="assets/dm-marin-logo-v2.webp" alt="DM MARİN" width="544" height="190"></a><div class="mode">Taslak paneli · Bu cihazda saklanır</div><nav class="nav" aria-label="Yönetim paneli"><button class="active" data-view="dashboard"><span class="icon">⌂</span>Genel Bakış</button><button data-view="content"><span class="icon">✎</span>Site İçeriği</button><button data-view="services"><span class="icon">⚙</span>Hizmetler</button><button data-view="brands"><span class="icon">◇</span>Markalar</button><button data-view="media"><span class="icon">▧</span>Görseller</button><button data-view="seo"><span class="icon">⌕</span>SEO Çalışması</button><button data-view="inbox"><span class="icon">✉</span>Servis Talepleri</button><button data-view="settings"><span class="icon">◉</span>Ayarlar</button></nav><div class="side-foot">Bu panel henüz güvenli giriş ve ortak veritabanı içermez.<a href="index.html" target="_blank" rel="noopener">Canlı siteyi aç →</a></div></aside>
-<main class="main"><header class="topbar"><div style="display:flex;align-items:center;gap:12px"><button class="btn mobile-menu" id="menu" aria-label="Menüyü aç">☰</button><h1 id="page-title">Genel Bakış</h1></div><div class="top-actions"><button class="btn" id="export">JSON dışa aktar</button><button class="btn primary" id="save">Taslağı kaydet</button></div></header><div class="content">
-<div class="notice"><span class="ico">!</span><div><strong>Önizleme modu</strong><small>Değişiklikler yalnızca bu tarayıcıda taslak olarak saklanır. Siteyi gerçekten güncellemek için güvenli backend ve yayınlama bağlantısı kurulmalıdır.</small></div><a href="#settings" data-jump="settings">Altyapı durumu →</a></div>
-<section class="view active" id="dashboard"><div class="head"><div><h2>Günaydın, DM MARİN</h2><p>Web sitesi içeriğini, görselleri ve SEO hazırlığını tek noktadan takip edin.</p></div></div><div class="cards"><article class="metric"><span class="metric-icon">✓</span><b>Yayında</b><span>GitHub Pages geçici yayın</span></article><article class="metric"><span class="metric-icon">26</span><b>26 yıl</b><span>Sitedeki deneyim verisi</span></article><article class="metric"><span class="metric-icon">⌕</span><b>SEO hazır</b><span>Teknik temel tamamlandı</span></article><article class="metric"><span class="metric-icon">✉</span><b>WhatsApp</b><span>Aktif talep kanalı</span></article></div><div class="grid"><article class="panel"><div class="panel-head"><h3>Yayın hazırlığı</h3><span class="pill">2 adım kaldı</span></div><div class="panel-body status-list"><div class="status"><span class="status-dot"></span><div><strong>Ana sayfa</strong><small>V1 + V2 güçlü bölümler birleşti</small></div><em>Hazır</em></div><div class="status"><span class="status-dot"></span><div><strong>Teknik SEO</strong><small>Meta, şema ve sitemap mevcut</small></div><em>Hazır</em></div><div class="status"><span class="status-dot warn"></span><div><strong>dmmarin.com</strong><small>DNS henüz yayına yönlendirilmedi</small></div><em>Bekliyor</em></div><div class="status"><span class="status-dot warn"></span><div><strong>Güvenli yönetim</strong><small>Backend ve kullanıcı girişi gerekiyor</small></div><em>Bekliyor</em></div></div></article><article class="panel"><div class="panel-head"><h3>Hızlı işlemler</h3></div><div class="panel-body quick"><button data-jump="content">✎ Ana metinler</button><button data-jump="services">⚙ Hizmetler</button><button data-jump="seo">⌕ SEO kontrolü</button><a href="index.html" target="_blank" rel="noopener">↗ Siteyi görüntüle</a></div></article></div></section>
-<section class="view" id="content"><div class="head"><div><h2>Site İçeriği</h2><p>Ana sayfadaki temel iletişim ve açılış metinleri için cihaz içi taslak oluşturun.</p></div></div><article class="panel"><div class="panel-head"><h3>Açılış ve iletişim</h3><span class="pill">Taslak</span></div><div class="panel-body form-grid"><div class="field full"><label for="hero-title">Ana başlık</label><input id="hero-title" data-key="heroTitle" value="Denizde kalmayın. Biz yola çıkarız."></div><div class="field full"><label for="hero-text">Açıklama</label><textarea id="hero-text" data-key="heroText" rows="4">Motor ve mekanik bakım, marin jeneratör, elektrik-elektronik ve acil mobil servis ihtiyaçlarınızda teknenizin bulunduğu noktaya profesyonel destek.</textarea></div><div class="field"><label for="phone">Telefon</label><input id="phone" data-key="phone" value="0543 724 09 92"></div><div class="field"><label for="email">E-posta</label><input id="email" data-key="email" value="servis@dmmarin.com"></div><div class="field"><label for="region">Hizmet bölgesi</label><input id="region" data-key="region" value="İstanbul ve Marmara Bölgesi"></div><div class="field"><label for="hours">Çalışma saatleri</label><input id="hours" data-key="hours" value="08:00–18:00 · Acil Hat 7/24"></div></div></article></section>
-<section class="view" id="services"><div class="head"><div><h2>Hizmetler</h2><p>Sitede gösterilecek hizmetler için cihaz içi taslak görünürlük ayarları.</p></div></div><div class="service-list" id="service-list"><div class="service-row"><span class="drag">⋮⋮</span><div><b>Motor ve Mekanik Bakım</b><small>Periyodik bakım, teşhis ve onarım</small></div><label class="switch" aria-label="Motor ve mekanik bakım görünür"><input type="checkbox" checked data-service="motor"><span></span></label></div><div class="service-row"><span class="drag">⋮⋮</span><div><b>7/24 Mobil Marin Servis</b><small>İstanbul ve Marmara’da yerinde müdahale</small></div><label class="switch" aria-label="Mobil servis görünür"><input type="checkbox" checked data-service="mobile"><span></span></label></div><div class="service-row"><span class="drag">⋮⋮</span><div><b>Marin Jeneratör</b><small>Arıza tespiti, bakım ve onarım</small></div><label class="switch" aria-label="Marin jeneratör görünür"><input type="checkbox" checked data-service="generator"><span></span></label></div><div class="service-row"><span class="drag">⋮⋮</span><div><b>Elektrik & Elektronik</b><small>Ölçüm, kontrol ve teknik çözüm</small></div><label class="switch" aria-label="Elektrik ve elektronik görünür"><input type="checkbox" checked data-service="electric"><span></span></label></div><div class="service-row"><span class="drag">⋮⋮</span><div><b>Yedek Parça</b><small>Marka ve modele uygun parça desteği</small></div><label class="switch" aria-label="Yedek parça görünür"><input type="checkbox" checked data-service="parts"><span></span></label></div><div class="service-row"><span class="drag">⋮⋮</span><div><b>Periyodik Bakım</b><small>Planlı motor ve yardımcı sistem bakımı</small></div><label class="switch" aria-label="Periyodik bakım görünür"><input type="checkbox" checked data-service="periodic"><span></span></label></div></div></section>
-<section class="view" id="media"><div class="head"><div><h2>Görseller</h2><p>Şu anda yayında kullanılan optimize edilmiş DM MARİN görselleri.</p></div></div><div class="media-grid"><article class="media"><img src="assets/dm-marin-mobil-servis.webp" alt="Mobil servis"><div><b>Ana kapak</b><small>Mobil servis & marina</small></div></article><article class="media"><img src="assets/dm-marin-atolye.webp" alt="Atölye"><div><b>Atölye</b><small>Motor ve mekanik bakım</small></div></article><article class="media"><img src="assets/dm-marin-ariza-tespit.webp" alt="Arıza tespiti"><div><b>Teknik teşhis</b><small>Cihazlı arıza tespiti</small></div></article><article class="media"><img src="assets/dm-marin-servis-araci.webp" alt="Servis aracı"><div><b>Mobil ekip</b><small>Yerinde servis aracı</small></div></article><article class="media"><img src="assets/dm-marin-servis-noktasi.webp" alt="Servis noktası"><div><b>Servis noktası</b><small>Marina ve ekip</small></div></article><article class="media"><img src="assets/dm-marin-musteri-teslim.webp" alt="Müşteri teslim"><div><b>Kontrol & teslim</b><small>Müşteri iletişimi</small></div></article></div></section>
-<section class="view" id="seo"><div class="head"><div><h2>SEO Ayarları</h2><p>Arama görünümünü, hedef kelimeyi ve yerel bulunurluk sinyallerini tek noktadan kontrol edin.</p></div></div><div class="grid"><article class="panel"><div class="panel-head"><h3>Arama görünümü</h3></div><div class="panel-body form-grid"><div class="field full"><label for="seo-title">SEO başlığı</label><input id="seo-title" data-key="seoTitle" maxlength="60" value="DM MARİN | İstanbul ve Marmara Mobil Marin Servisi"><span class="char" data-count="seo-title"></span></div><div class="field full"><label for="seo-description">Meta açıklaması</label><textarea id="seo-description" data-key="seoDescription" maxlength="170" rows="4">İstanbul ve Marmara’da 26 yıllık deneyimle tekne motoru, marin jeneratör, elektrik, yedek parça ve 7/24 mobil marin servis.</textarea><span class="char" data-count="seo-description"></span></div><div class="field"><label for="seo-focus">Odak anahtar kelime</label><input id="seo-focus" data-key="seoFocus" value="İstanbul mobil marin servis"></div><div class="field"><label for="seo-locations">Yerel hedefler</label><input id="seo-locations" data-key="seoLocations" value="Kalamış, Ataköy, Tuzla, Pendik"></div><div class="field full"><label for="canonical">Ana alan adı</label><input id="canonical" data-key="canonical" value="https://dmmarin.com/"><small>Alan adı bağlandığında canonical ve sitemap bu adreste çalışacak.</small></div></div></article><article class="panel"><div class="panel-head"><h3>Teknik kontrol</h3></div><div class="panel-body checklist"><div class="check">Tek bir H1 başlığı</div><div class="check">LocalBusiness şeması</div><div class="check">Sayfa içeriğiyle uyumlu yapılandırılmış veri</div><div class="check">Görsel açıklama metinleri</div><div class="check">Mobil uyumlu tasarım</div><div class="check warn">Search Console bağlantısı bekliyor</div><div class="check warn">GA4 ölçüm kimliği bekliyor</div></div></article></div></section>
-<section class="view" id="inbox"><div class="head"><div><h2>Servis Talepleri</h2><p>Form ve iletişim talepleri backend bağlandıktan sonra burada listelenecek.</p></div></div><article class="panel empty"><div><span class="empty-icon">✉</span><h3>Henüz merkezi talep kaydı yok</h3><p>Mevcut sitedeki form WhatsApp mesajı hazırlar; kullanıcı son gönderimi kendisi yapar. Talepleri burada görmek için veritabanı ve güvenli API bağlantısı kurulmalıdır.</p></div></article></section>
-<section class="view" id="settings"><div class="head"><div><h2>Ayarlar ve Altyapı</h2><p>Alan adı ile gerçek yönetim paneli için tamamlanacak bağlantılar.</p></div></div><div class="grid"><article class="panel"><div class="panel-head"><h3>Alan adı</h3><span class="pill">DNS bekliyor</span></div><div class="panel-body"><div class="domain"><div><b>dmmarin.com</b><small>Alan adı sizde. Statik site için ayrıca ücretli hosting zorunlu değil; GitHub Pages veya Vercel’e yönlendirilebilir.</small></div><span class="pill">Bağlanabilir</span></div></div></article><article class="panel"><div class="panel-head"><h3>Gerçek panel için gerekenler</h3></div><div class="panel-body checklist"><div class="check warn">Güvenli yönetici girişi</div><div class="check warn">Kalıcı veritabanı</div><div class="check warn">Form ve servis talebi kayıtları</div><div class="check warn">Görsel yükleme alanı</div><div class="check warn">Tek tuşla yayınlama</div></div></article></div></section>
-<section class="view" id="brands"><div class="head"><div><h2>Marka Yönetimi</h2><p>Hizmet verdiğiniz motor ve jeneratör markalarını ekleyin, düzenleyin, gizleyin veya silin.</p></div></div><article class="panel"><div class="panel-head"><h3>Özel servis markaları</h3><span class="pill">Cihaz içi taslak</span></div><div class="panel-body"><div class="brand-tools"><input id="new-brand" placeholder="Örn. Volvo Penta" aria-label="Yeni marka"><button class="btn primary" id="add-brand">Marka ekle</button></div><div class="brand-editor" id="brand-editor"></div><p style="color:var(--muted);margin:16px 0 0">Not: DM MARİN bağımsız özel servistir; marka eklemek yetkili servis ilişkisi anlamına gelmez.</p></div></article></section>
-</div></main></div><div class="toast" id="toast" role="status" aria-live="polite">Taslak bu cihazda kaydedildi.</div>
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="index.html" aria-label="DM MARİN sitesine dön"><img src="assets/dm-marin-logo-v2.webp" alt="DM MARİN" width="544" height="190"></a>
+<div class="mode">Taslak paneli · Bu cihazda saklanır</div>
+<nav class="nav" aria-label="Yönetim paneli">
+<button class="active" data-view="dashboard"><span class="icon">⌂</span>Genel Bakış</button>
+<button data-view="content"><span class="icon">✎</span>Site İçeriği</button>
+<button data-view="services"><span class="icon">⚙</span>Hizmetler</button>
+<button data-view="brands"><span class="icon">◇</span>Markalar</button>
+<button data-view="seo"><span class="icon">⌕</span>SEO Yönetimi</button>
+<button data-view="media"><span class="icon">▧</span>Görseller</button>
+<button data-view="inbox"><span class="icon">✉</span>Servis Talepleri</button>
+<button data-view="settings"><span class="icon">◉</span>Ayarlar</button>
+</nav>
+<div class="side-foot">⚠️ <strong>Önemli:</strong> Bu panel istemci taraflı taslak (localStorage) modundadır. Harici sunucu veritabanı bağlantısı henüz kurulmamıştır.<a href="index.html" target="_blank" rel="noopener">Canlı siteyi aç →</a></div>
+</aside>
+<main class="main">
+<header class="topbar">
+<div style="display:flex;align-items:center;gap:12px"><button class="btn mobile-menu" id="menu" aria-label="Menüyü aç">☰</button><h1 id="page-title">Genel Bakış</h1></div>
+<div class="top-actions"><button class="btn" id="export">JSON dışa aktar</button><button class="btn primary" id="save">Taslağı kaydet</button></div>
+</header>
+<div class="content">
+
+<div class="notice">
+<span class="ico">!</span>
+<div>
+<strong>Önizleme & Taslak Modu (Local)</strong>
+<small>Bu paneldeki tüm değişiklikler sadece tarayıcınızın yerel depolama alanında (localStorage) saklanır. Harici bir veritabanı veya canlı API henüz bağlı değildir.</small>
+</div>
+<a href="#settings" data-jump="settings">Altyapı durumu →</a>
+</div>
+
+<!-- DASHBOARD VIEW -->
+<section class="view active" id="dashboard">
+<div class="head"><div><h2>Hoş Geldiniz, DM MARİN</h2><p>Web sitesi içeriğini, markaları ve her sayfanın arama motoru (SEO) ayarlarını tek noktadan yönetin.</p></div></div>
+<div class="cards">
+<article class="metric"><span class="metric-icon">▲</span><b>Vercel</b><span>Canlı üretim ortamı</span></article>
+<article class="metric"><span class="metric-icon">📄</span><b>16 Sayfa</b><span>Hizmet, marka & bölge</span></article>
+<article class="metric"><span class="metric-icon">⌕</span><b>SEO Hazır</b><span>Statik meta & JSON-LD</span></article>
+<article class="metric"><span class="metric-icon">✉</span><b>WhatsApp</b><span>Aktif hızlı talep hattı</span></article>
+</div>
+<div class="grid">
+<article class="panel">
+<div class="panel-head"><h3>Yayın ve SEO Durumu</h3><span class="pill ok">Teknik Temel Tamam</span></div>
+<div class="panel-body status-list">
+<div class="status"><span class="status-dot"></span><div><strong>V1 Tasarım ve Sayfalar</strong><small>16 ana, marka, hizmet ve bölge sayfası yayında</small></div><em>Tamamlandı</em></div>
+<div class="status"><span class="status-dot"></span><div><strong>Canonical & Metadata</strong><small>Tüm sayfalar https://dmmarin.com/ hedefli</small></div><em>Hazır</em></div>
+<div class="status"><span class="status-dot"></span><div><strong>Sitemap & Robots</strong><small>16 sayfalık sitemap.xml ve admin noindex koruması</small></div><em>Hazır</em></div>
+<div class="status"><span class="status-dot warn"></span><div><strong>Kalıcı Veritabanı</strong><small>Form taleplerini doğrudan panelde toplamak için backend gerekir</small></div><em>Gelecek Aşama</em></div>
+</div>
+</article>
+<article class="panel">
+<div class="panel-head"><h3>Hızlı İşlemler</h3></div>
+<div class="panel-body quick">
+<button data-jump="seo">⌕ Sayfa SEO Ayarları</button>
+<button data-jump="brands">◇ Markaları Yönet</button>
+<button data-jump="content">✎ Site Metinleri</button>
+<a href="index.html" target="_blank" rel="noopener">↗ Canlı Siteyi Aç</a>
+</div>
+</article>
+</div>
+</section>
+
+<!-- CONTENT VIEW -->
+<section class="view" id="content">
+<div class="head"><div><h2>Site İçeriği</h2><p>Ana sayfadaki temel iletişim ve açılış metinleri için cihaz içi taslak oluşturun.</p></div></div>
+<article class="panel">
+<div class="panel-head"><h3>Açılış ve İletişim Bilgileri</h3><span class="pill">Cihaz içi taslak</span></div>
+<div class="panel-body form-grid">
+<div class="field full"><label for="hero-title">Ana başlık</label><input id="hero-title" data-key="heroTitle" value="Denizde kalmayın. Biz yola çıkarız."></div>
+<div class="field full"><label for="hero-text">Açıklama</label><textarea id="hero-text" data-key="heroText" rows="4">Motor ve mekanik bakım, marin jeneratör, elektrik-elektronik ve acil mobil servis ihtiyaçlarınızda teknenizin bulunduğu noktaya profesyonel destek.</textarea></div>
+<div class="field"><label for="phone">Telefon</label><input id="phone" data-key="phone" value="0543 724 09 92"></div>
+<div class="field"><label for="email">E-posta</label><input id="email" data-key="email" value="servis@dmmarin.com"></div>
+<div class="field"><label for="region">Hizmet bölgesi</label><input id="region" data-key="region" value="İstanbul ve Marmara Bölgesi"></div>
+<div class="field"><label for="hours">Çalışma saatleri</label><input id="hours" data-key="hours" value="08:00–18:00 · Acil Hat 7/24"></div>
+</div>
+</article>
+</section>
+
+<!-- SERVICES VIEW -->
+<section class="view" id="services">
+<div class="head"><div><h2>Hizmetler</h2><p>Sitede gösterilecek hizmetler için cihaz içi taslak görünürlük ayarları.</p></div></div>
+<div class="service-list" id="service-list">
+<div class="service-row"><span class="drag">⋮⋮</span><div><b>Motor ve Mekanik Bakım</b><small>Periyodik bakım, teşhis ve onarım</small></div><label class="switch" aria-label="Motor ve mekanik bakım görünür"><input type="checkbox" checked data-service="motor"><span></span></label></div>
+<div class="service-row"><span class="drag">⋮⋮</span><div><b>7/24 Mobil Marin Servis</b><small>İstanbul ve Marmara’da yerinde müdahale</small></div><label class="switch" aria-label="Mobil servis görünür"><input type="checkbox" checked data-service="mobile"><span></span></label></div>
+<div class="service-row"><span class="drag">⋮⋮</span><div><b>Marin Jeneratör</b><small>Arıza tespiti, bakım ve onarım</small></div><label class="switch" aria-label="Marin jeneratör görünür"><input type="checkbox" checked data-service="generator"><span></span></label></div>
+<div class="service-row"><span class="drag">⋮⋮</span><div><b>Elektrik & Elektronik</b><small>Ölçüm, kontrol ve teknik çözüm</small></div><label class="switch" aria-label="Elektrik ve elektronik görünür"><input type="checkbox" checked data-service="electric"><span></span></label></div>
+<div class="service-row"><span class="drag">⋮⋮</span><div><b>Yedek Parça</b><small>Marka ve modele uygun parça desteği</small></div><label class="switch" aria-label="Yedek parça görünür"><input type="checkbox" checked data-service="parts"><span></span></label></div>
+<div class="service-row"><span class="drag">⋮⋮</span><div><b>Periyodik Bakım</b><small>Planlı motor ve yardımcı sistem bakımı</small></div><label class="switch" aria-label="Periyodik bakım görünür"><input type="checkbox" checked data-service="periodic"><span></span></label></div>
+</div>
+</section>
+
+<!-- BRANDS VIEW -->
+<section class="view" id="brands">
+<div class="head"><div><h2>Marka Yönetimi</h2><p>Hizmet verdiğiniz motor ve jeneratör markalarını ekleyin, adını düzenleyin, görünürlüğünü açıp kapatın veya listeden silin.</p></div></div>
+<article class="panel">
+<div class="panel-head"><h3>Özel Servis Markaları</h3><span class="pill">Cihaz içi taslak</span></div>
+<div class="panel-body">
+<div class="brand-tools">
+<input id="new-brand" placeholder="Yeni marka adı yazın (Örn. Volvo Penta, Yanmar)" aria-label="Yeni marka">
+<button class="btn primary" id="add-brand" type="button">Marka Ekle</button>
+</div>
+<div class="brand-editor" id="brand-editor"></div>
+<p style="color:var(--muted);margin:18px 0 0;font-size:13px">Bilgilendirme: DM MARİN bağımsız özel marin servistir; marka listelemek yetkili servis ilişkisi anlamına gelmez.</p>
+</div>
+</article>
+</section>
+
+<!-- SEO MANAGEMENT VIEW (EVERY PAGE TITLE, DESCRIPTION, KEYWORD, INDEX/NOINDEX) -->
+<section class="view" id="seo">
+<div class="head"><div><h2>Sayfa Bazlı SEO Yönetimi</h2><p>Her sayfa için SEO başlığı, meta açıklaması, odak anahtar kelimesi ve arama motoru indeksleme durumunu yönetin.</p></div></div>
+
+<article class="panel">
+<div class="panel-head"><h3>Sayfa Seçin ve Düzenleyin</h3><span class="pill badge" id="selected-page-badge">Ana Sayfa</span></div>
+<div class="panel-body">
+
+<div class="seo-page-box">
+<label for="seo-page-select" style="font-weight:800;display:block;margin-bottom:8px">Düzenlenecek Sayfa:</label>
+<select id="seo-page-select" aria-label="Sayfa Seçimi" style="background:#fff;font-weight:700">
+<optgroup label="Ana Sayfa">
+<option value="index">Ana Sayfa (index.html)</option>
+</optgroup>
+<optgroup label="Hizmet Sayfaları">
+<option value="motor-mekanik">Motor ve Mekanik Bakım (motor-mekanik-bakim.html)</option>
+<option value="marin-jenerator">Marin Jeneratör Servisi (marin-jenerator-servisi.html)</option>
+<option value="acil-mobil">7/24 Acil Mobil Marin Servis (acil-mobil-marin-servis.html)</option>
+<option value="marin-elektrik">Marin Elektrik & Elektronik (marin-elektrik-elektronik.html)</option>
+<option value="marin-yedek-parca">Marin Yedek Parça (marin-yedek-parca.html)</option>
+<option value="periyodik-bakim">Tekne Periyodik Bakım (tekne-periyodik-bakim.html)</option>
+</optgroup>
+<optgroup label="Marka Sayfaları">
+<option value="volvo-penta">Volvo Penta D4 / D6 (volvo-penta-d4-d6-ozel-servis.html)</option>
+<option value="yanmar">Yanmar 4JH / 6LY (yanmar-4jh-6ly-ozel-servis.html)</option>
+<option value="cat">CAT Marine (cat-marine-ozel-servis.html)</option>
+<option value="man">MAN Marine V8 / V12 (man-marine-v8-v12-ozel-servis.html)</option>
+<option value="mtu">MTU Series 2000 (mtu-series-2000-ozel-servis.html)</option>
+<option value="kohler-onan">Kohler & Cummins Onan (kohler-onan-marin-jenerator-servisi.html)</option>
+</optgroup>
+<optgroup label="Bölge / Marina Sayfaları">
+<option value="kalamis">Kalamış ve Fenerbahçe (kalamis-fenerbahce-marin-servis.html)</option>
+<option value="atakoy">Ataköy ve West İstanbul (atakoy-west-istanbul-marina-servis.html)</option>
+<option value="tuzla">Tuzla ve Pendik Marintürk (tuzla-pendik-marinturk-marin-servis.html)</option>
+</optgroup>
+</select>
+</div>
+
+<div class="form-grid">
+<div class="field full">
+<label for="page-seo-title">SEO Başlığı (Title)</label>
+<input id="page-seo-title" maxlength="70">
+<span class="char" id="page-title-counter">0 / 70 karakter</span>
+</div>
+
+<div class="field full">
+<label for="page-seo-description">Meta Açıklaması (Description)</label>
+<textarea id="page-seo-description" rows="3" maxlength="170"></textarea>
+<span class="char" id="page-desc-counter">0 / 170 karakter</span>
+</div>
+
+<div class="field">
+<label for="page-seo-keyword">Odak Anahtar Kelime</label>
+<input id="page-seo-keyword" placeholder="Örn. İstanbul mobil marin servis">
+</div>
+
+<div class="field">
+<label for="page-seo-canonical">Canonical URL</label>
+<input id="page-seo-canonical" placeholder="https://dmmarin.com/...">
+</div>
+
+<div class="field full" style="flex-direction:row;align-items:center;justify-content:space-between;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fbfdfe">
+<div>
+<b style="display:block">Arama Motoru İndeksleme (Robots)</b>
+<small style="color:var(--muted)">Açık olduğunda Google arama sonuçlarında görünür (index, follow).</small>
+</div>
+<label class="switch" aria-label="İndeksleme durumu"><input type="checkbox" id="page-seo-indexed" checked><span></span></label>
+</div>
+</div>
+
+<div style="margin-top:20px;display:flex;justify-content:flex-end">
+<button class="btn primary" id="update-page-seo" type="button">Bu Sayfanın SEO Ayarını Güncelle</button>
+</div>
+
+</div>
+</article>
+
+<article class="panel" style="margin-top:24px">
+<div class="panel-head"><h3>Tüm Sayfaların SEO Özeti (16 Sayfa)</h3><span class="pill ok">Canonical: dmmarin.com</span></div>
+<div class="panel-body">
+<div class="seo-table-wrap">
+<table class="seo-table">
+<thead>
+<tr>
+<th>Sayfa / Dosya</th>
+<th>Kategori</th>
+<th>Odak Kelime</th>
+<th>İndeks</th>
+<th>İşlem</th>
+</tr>
+</thead>
+<tbody id="seo-summary-table-body">
+<!-- Injected dynamically -->
+</tbody>
+</table>
+</div>
+</div>
+</article>
+</section>
+
+<!-- MEDIA VIEW -->
+<section class="view" id="media">
+<div class="head"><div><h2>Görseller</h2><p>Yayında kullanılan optimize edilmiş WebP görselleri.</p></div></div>
+<div class="media-grid">
+<article class="media"><img src="assets/dm-marin-mobil-servis.webp" alt="Mobil servis"><div><b>Ana Kapak / Hero</b><small>Mobil servis & marina</small></div></article>
+<article class="media"><img src="assets/dm-marin-tamir-atolyesi.webp" alt="Tamir atölyesi"><div><b>Atölye Mekanik</b><small>Motor tamiri ve blok</small></div></article>
+<article class="media"><img src="assets/dm-marin-atolye.webp" alt="Atölye"><div><b>Atölye Bakım</b><small>Mekanik servis</small></div></article>
+<article class="media"><img src="assets/dm-marin-ariza-tespit.webp" alt="Arıza tespiti"><div><b>Teknik Teşhis</b><small>Cihazlı hata tespiti</small></div></article>
+<article class="media"><img src="assets/dm-marin-servis-araci.webp" alt="Servis aracı"><div><b>Mobil Araç</b><small>Yerinde servis donanımı</small></div></article>
+<article class="media"><img src="assets/dm-marin-servis-noktasi.webp" alt="Servis noktası"><div><b>Servis Noktası</b><small>Kalamış ve Fenerbahçe</small></div></article>
+</div>
+</section>
+
+<!-- INBOX VIEW -->
+<section class="view" id="inbox">
+<div class="head"><div><h2>Servis Talepleri</h2><p>Form ve iletişim talepleri merkezi veritabanı bağlandığında burada listelenecek.</p></div></div>
+<article class="panel empty">
+<div>
+<span class="empty-icon">✉</span>
+<h3>Merkezi Talep Kaydı Bekleniyor</h3>
+<p>Mevcut sitedeki servis formu doğrudan işletme WhatsApp hattınıza mesaj oluşturmaktadır. Taleplerin tarayıcıdan bağımsız bir yönetim panelinde listelenmesi için güvenli bir backend (API & Veritabanı) entegrasyonu gerekmektedir.</p>
+</div>
+</article>
+</section>
+
+<!-- SETTINGS VIEW -->
+<section class="view" id="settings">
+<div class="head"><div><h2>Ayarlar ve Altyapı</h2><p>Alan adı, hosting ve gerçek yönetim paneli entegrasyon yol haritası.</p></div></div>
+<div class="grid">
+<article class="panel">
+<div class="panel-head"><h3>Alan Adı ve DNS</h3><span class="pill ok">Vercel Üretim</span></div>
+<div class="panel-body">
+<div class="domain">
+<div>
+<b>dmmarin.com</b>
+<small>hosting.com.tr üzerinden alınan alan adı Vercel DNS (A / CNAME) kayıtları ile projenize yönlendirildiğinde otomatik SSL sertifikası devreye girer.</small>
+</div>
+<span class="pill ok">Yapılandırılabilir</span>
+</div>
+</div>
+</article>
+
+<article class="panel">
+<div class="panel-head"><h3>Tam Veritabanlı Panele Geçiş</h3></div>
+<div class="panel-body checklist">
+<div class="check">Statik HTML / WebP optimizasyonu tamamlandı</div>
+<div class="check">16 sayfalık SEO ve Schema mimarisi oluşturuldu</div>
+<div class="check">Sitemap.xml ve robots.txt güncellendi</div>
+<div class="check warn">Güvenli JWT / Parola korumalı giriş sistemi</div>
+<div class="check warn">PostgreSQL / Supabase servis talepleri veritabanı</div>
+<div class="check warn">Tek tıkla statik dosyaları yeniden yayınlama (CI/CD)</div>
+</div>
+</article>
+</div>
+</section>
+
+</div>
+</main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">Taslak kaydedildi.</div>
+
 <script>
-const storageKey='dm-marin-admin-draft-v1';const sidebar=document.querySelector('#sidebar'),title=document.querySelector('#page-title'),toast=document.querySelector('#toast');const labels={dashboard:'Genel Bakış',content:'Site İçeriği',services:'Hizmetler',media:'Görseller',seo:'SEO Ayarları',inbox:'Servis Talepleri',settings:'Ayarlar'};function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));title.textContent=labels[id]||'Yönetim Paneli';sidebar.classList.remove('open');history.replaceState(null,'','#'+id)}document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));document.querySelectorAll('[data-jump]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();showView(b.dataset.jump)}));document.querySelector('#menu').addEventListener('click',()=>sidebar.classList.toggle('open'));function collect(){const fields={};document.querySelectorAll('[data-key]').forEach(el=>fields[el.dataset.key]=el.value);const services={};document.querySelectorAll('[data-service]').forEach(el=>services[el.dataset.service]=el.checked);return{version:1,savedAt:new Date().toISOString(),fields,services}}function flash(message){toast.textContent=message;toast.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>toast.classList.remove('show'),2400)}document.querySelector('#save').addEventListener('click',()=>{localStorage.setItem(storageKey,JSON.stringify(collect()));flash('Taslak bu cihazda kaydedildi.')});document.querySelector('#export').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(collect(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='dm-marin-site-taslagi.json';a.click();URL.revokeObjectURL(url);flash('Taslak JSON olarak indirildi.')});function restore(){try{const data=JSON.parse(localStorage.getItem(storageKey)||'null');if(!data)return;document.querySelectorAll('[data-key]').forEach(el=>{if(data.fields?.[el.dataset.key]!=null)el.value=data.fields[el.dataset.key]});document.querySelectorAll('[data-service]').forEach(el=>{if(data.services?.[el.dataset.service]!=null)el.checked=data.services[el.dataset.service]})}catch{localStorage.removeItem(storageKey)}}function counters(){document.querySelectorAll('[data-count]').forEach(out=>{const input=document.getElementById(out.dataset.count),update=()=>out.textContent=input.value.length+' / '+input.maxLength+' karakter';input.addEventListener('input',update);update()})}restore();counters();showView(location.hash.slice(1)in labels?location.hash.slice(1):'dashboard');
+const storageKey = 'dm-marin-admin-draft-v1';
+const sidebar = document.querySelector('#sidebar');
+const title = document.querySelector('#page-title');
+const toast = document.querySelector('#toast');
+
+const labels = {
+  dashboard: 'Genel Bakış',
+  content: 'Site İçeriği',
+  services: 'Hizmetler',
+  brands: 'Marka Yönetimi',
+  seo: 'SEO Yönetimi',
+  media: 'Görseller',
+  inbox: 'Servis Talepleri',
+  settings: 'Ayarlar'
+};
+
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === id));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('active', b.dataset.view === id));
+  title.textContent = labels[id] || 'Yönetim Paneli';
+  sidebar.classList.remove('open');
+  history.replaceState(null, '', '#' + id);
+}
+
+document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => showView(b.dataset.view)));
+document.querySelectorAll('[data-jump]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); showView(b.dataset.jump); }));
+document.querySelector('#menu').addEventListener('click', () => sidebar.classList.toggle('open'));
+
+function flash(message) {
+  toast.textContent = message;
+  toast.classList.add('show');
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+}
+
+// 1. DEFAULT BRANDS
+const defaultBrands = [
+  'Volvo Penta', 'MAN Marine', 'MTU', 'CAT', 'Yamaha Marine', 'Yanmar',
+  'Suzuki Marine', 'Kubota', 'Mercedes-Benz / Daimler', 'Mitsubishi',
+  'Cummins Onan', 'Kohler', 'Fischer Panda', 'Northern Lights', 'Northstar', 'Coelmo', 'Baudouin'
+];
+
+let savedState = {};
+try { savedState = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch(e) {}
+
+let brandState = (savedState.brands || defaultBrands.map(name => ({ name, visible: true })))
+  .map(item => typeof item === 'string' ? { name: item, visible: true } : item);
+
+const brandEditor = document.querySelector('#brand-editor');
+function renderBrands() {
+  brandEditor.innerHTML = '';
+  brandState.forEach((brand, index) => {
+    const row = document.createElement('div');
+    row.className = 'brand-edit-row';
+    row.innerHTML = `
+      <input value="${brand.name}" aria-label="Marka adı">
+      <label class="switch" title="Görünürlük">
+        <input type="checkbox" ${brand.visible !== false ? 'checked' : ''}>
+        <span></span>
+      </label>
+      <button class="btn danger" type="button">Sil</button>
+    `;
+    const input = row.querySelector('input[type="text"], input:not([type="checkbox"])');
+    input.addEventListener('input', () => { brand.name = input.value; autoSave(); });
+    const toggle = row.querySelector('input[type="checkbox"]');
+    toggle.addEventListener('change', () => { brand.visible = toggle.checked; autoSave(); });
+    row.querySelector('button').addEventListener('click', () => {
+      brandState.splice(index, 1);
+      renderBrands();
+      autoSave();
+      flash('Marka silindi.');
+    });
+    brandEditor.appendChild(row);
+  });
+}
+
+document.querySelector('#add-brand').addEventListener('click', () => {
+  const input = document.querySelector('#new-brand');
+  const name = input.value.trim();
+  if (!name) return flash('Lütfen bir marka adı yazın.');
+  brandState.push({ name, visible: true });
+  input.value = '';
+  renderBrands();
+  autoSave();
+  flash('Yeni marka eklendi.');
+});
+
+// 2. MULTI-PAGE SEO DEFINITIONS
+const defaultPagesSeo = [
+  {
+    id: "index",
+    url: "index.html",
+    name: "Ana Sayfa",
+    type: "Ana Sayfa",
+    title: "DM MARİN | İstanbul ve Marmara Mobil Marin Servisi",
+    description: "İstanbul ve Marmara’da 26 yıllık deneyimle tekne motoru, marin jeneratör, elektrik, yedek parça ve 7/24 mobil marin servis.",
+    keyword: "İstanbul mobil marin servis",
+    canonical: "https://dmmarin.com/",
+    indexed: true
+  },
+  {
+    id: "motor-mekanik",
+    url: "motor-mekanik-bakim.html",
+    name: "Motor ve Mekanik Bakım",
+    type: "Hizmet Sayfası",
+    title: "Tekne Motor Tamiri ve Mekanik Bakım | DM MARİN",
+    description: "İstanbul ve Marmara'da tekne motor tamiri, periyodik bakım, cihazlı arıza tespiti ve mekanik onarım. DM MARİN bağımsız özel marin servis.",
+    keyword: "tekne motor tamiri",
+    canonical: "https://dmmarin.com/motor-mekanik-bakim.html",
+    indexed: true
+  },
+  {
+    id: "marin-jenerator",
+    url: "marin-jenerator-servisi.html",
+    name: "Marin Jeneratör Servisi",
+    type: "Hizmet Sayfası",
+    title: "Marin Jeneratör Servisi ve Bakımı | DM MARİN",
+    description: "İstanbul ve Marmara'da marin jeneratör arıza tespiti, bakım, onarım, elektrik kontrolü ve yedek parça desteği. DM MARİN bağımsız özel servis.",
+    keyword: "marin jeneratör servisi",
+    canonical: "https://dmmarin.com/marin-jenerator-servisi.html",
+    indexed: true
+  },
+  {
+    id: "acil-mobil",
+    url: "acil-mobil-marin-servis.html",
+    name: "7/24 Mobil Marin Servis",
+    type: "Hizmet Sayfası",
+    title: "7/24 Acil Mobil Marin Servis | DM MARİN",
+    description: "İstanbul ve Marmara marinalarında 7/24 mobil marin servis: yerinde arıza tespiti, acil motor müdahalesi ve teknik destek. DM MARİN bağımsız özel servis.",
+    keyword: "acil mobil marin servis",
+    canonical: "https://dmmarin.com/acil-mobil-marin-servis.html",
+    indexed: true
+  },
+  {
+    id: "marin-elektrik",
+    url: "marin-elektrik-elektronik.html",
+    name: "Marin Elektrik & Elektronik",
+    type: "Hizmet Sayfası",
+    title: "Marin Elektrik ve Elektronik Servisi | DM MARİN",
+    description: "İstanbul ve Marmara'da tekne ve yatlarda marin elektrik arıza tespiti, akü, şarj dinamoları, inverter, sintine ve seyir elektroniği teknik servisi. DM MARİN bağımsız özel servis.",
+    keyword: "marin elektrik servisi",
+    canonical: "https://dmmarin.com/marin-elektrik-elektronik.html",
+    indexed: true
+  },
+  {
+    id: "marin-yedek-parca",
+    url: "marin-yedek-parca.html",
+    name: "Marin Yedek Parça",
+    type: "Hizmet Sayfası",
+    title: "Marin Yedek Parça Tedariği ve Danışmanlığı | DM MARİN",
+    description: "İstanbul ve Marmara'da tekne motoru ve marin jeneratörler için orijinal ve kaliteli muadil yedek parça tedariği. DM MARİN bağımsız özel servis.",
+    keyword: "marin yedek parça",
+    canonical: "https://dmmarin.com/marin-yedek-parca.html",
+    indexed: true
+  },
+  {
+    id: "periyodik-bakim",
+    url: "tekne-periyodik-bakim.html",
+    name: "Tekne Periyodik Bakım",
+    type: "Hizmet Sayfası",
+    title: "Tekne Periyodik Bakım Servisi | DM MARİN",
+    description: "İstanbul ve Marmara'da tekne motoru, marin jeneratör ve yardımcı sistemler için planlı periyodik bakım servisi. DM MARİN bağımsız özel servis.",
+    keyword: "tekne periyodik bakım",
+    canonical: "https://dmmarin.com/tekne-periyodik-bakim.html",
+    indexed: true
+  },
+  {
+    id: "volvo-penta",
+    url: "volvo-penta-d4-d6-ozel-servis.html",
+    name: "Volvo Penta D4 / D6",
+    type: "Marka Sayfası",
+    title: "Volvo Penta D4 D6 Özel Servis İstanbul | DM MARİN",
+    description: "İstanbul ve Marmara'da Volvo Penta D4 ve D6 motorlar için bağımsız özel servis: bakım, cihazlı arıza tespiti, soğutma ve yakıt sistemi kontrolü.",
+    keyword: "Volvo Penta özel servis",
+    canonical: "https://dmmarin.com/volvo-penta-d4-d6-ozel-servis.html",
+    indexed: true
+  },
+  {
+    id: "yanmar",
+    url: "yanmar-4jh-6ly-ozel-servis.html",
+    name: "Yanmar 4JH / 6LY",
+    type: "Marka Sayfası",
+    title: "Yanmar 4JH 6LY Özel Servis İstanbul | DM MARİN",
+    description: "İstanbul ve Marmara'da Yanmar 4JH ve 6LY marin motorlar için bağımsız özel servis, periyodik bakım, soğutma-yakıt kontrolü ve arıza tespiti.",
+    keyword: "Yanmar marin servis",
+    canonical: "https://dmmarin.com/yanmar-4jh-6ly-ozel-servis.html",
+    indexed: true
+  },
+  {
+    id: "cat",
+    url: "cat-marine-ozel-servis.html",
+    name: "CAT Marine",
+    type: "Marka Sayfası",
+    title: "CAT Marine Motor Özel Servis İstanbul | DM MARİN",
+    description: "İstanbul ve Marmara'da CAT Marine motorlar için bağımsız özel servis; yağlama, yakıt, soğutma sistemi kontrolü, bakım ve arıza tespiti.",
+    keyword: "CAT Marine özel servis",
+    canonical: "https://dmmarin.com/cat-marine-ozel-servis.html",
+    indexed: true
+  },
+  {
+    id: "man",
+    url: "man-marine-v8-v12-ozel-servis.html",
+    name: "MAN Marine V8 / V12",
+    type: "Marka Sayfası",
+    title: "MAN Marine V8 V12 Özel Servis İstanbul | DM MARİN",
+    description: "İstanbul ve Marmara'da MAN Marine V8 ve V12 dizel motorlar için bağımsız özel servis: periyodik bakım, soğutma-yakıt hattı kontrolü ve arıza tespiti.",
+    keyword: "MAN Marine özel servis",
+    canonical: "https://dmmarin.com/man-marine-v8-v12-ozel-servis.html",
+    indexed: true
+  },
+  {
+    id: "mtu",
+    url: "mtu-series-2000-ozel-servis.html",
+    name: "MTU Series 2000",
+    type: "Marka Sayfası",
+    title: "MTU Series 2000 Özel Servis İstanbul | DM MARİN",
+    description: "İstanbul ve Marmara'da MTU Series 2000 deniz motorları için bağımsız özel servis: bakım planlama, soğutma-yağlama kontrolü ve teknik arıza değerlendirmesi.",
+    keyword: "MTU Series 2000 servis",
+    canonical: "https://dmmarin.com/mtu-series-2000-ozel-servis.html",
+    indexed: true
+  },
+  {
+    id: "kohler-onan",
+    url: "kohler-onan-marin-jenerator-servisi.html",
+    name: "Kohler & Onan Jeneratör",
+    type: "Marka Sayfası",
+    title: "Kohler Onan Marin Jeneratör Özel Servisi | DM MARİN",
+    description: "İstanbul ve Marmara'da Kohler ve Cummins Onan marin jeneratörleri için bağımsız özel servis: arıza tespiti, periyodik bakım, elektrik testi ve yedek parça.",
+    keyword: "Kohler Onan marin servis",
+    canonical: "https://dmmarin.com/kohler-onan-marin-jenerator-servisi.html",
+    indexed: true
+  },
+  {
+    id: "kalamis",
+    url: "kalamis-fenerbahce-marin-servis.html",
+    name: "Kalamış & Fenerbahçe",
+    type: "Bölge Sayfası",
+    title: "Kalamış ve Fenerbahçe Marin Servis | DM MARİN Mobil Destek",
+    description: "Kalamış Marina, Fenerbahçe ve Kadıköy bağlama noktalarında 7/24 mobil marin servis: tekne motor tamiri, marin jeneratör bakımı ve elektrik-elektronik arıza tespiti.",
+    keyword: "Kalamış marina marin servis",
+    canonical: "https://dmmarin.com/kalamis-fenerbahce-marin-servis.html",
+    indexed: true
+  },
+  {
+    id: "atakoy",
+    url: "atakoy-west-istanbul-marina-servis.html",
+    name: "Ataköy & West İstanbul",
+    type: "Bölge Sayfası",
+    title: "Ataköy ve West İstanbul Marina Servis | DM MARİN Mobil Bakım",
+    description: "Ataköy Marina ve West İstanbul Marina (Beylikdüzü) yat ve teknelerine yerinde mobil marin servis: motor tamiri, jeneratör bakımı ve acil teknik destek.",
+    keyword: "Ataköy marina tekne servisi",
+    canonical: "https://dmmarin.com/atakoy-west-istanbul-marina-servis.html",
+    indexed: true
+  },
+  {
+    id: "tuzla",
+    url: "tuzla-pendik-marinturk-marin-servis.html",
+    name: "Tuzla & Pendik Marintürk",
+    type: "Bölge Sayfası",
+    title: "Tuzla ve Pendik Marintürk Tekne Servisi | DM MARİN",
+    description: "Viaport Marina Tuzla, Pendik Marintürk ve Tuzla tersaneler bölgesinde tekne motor bakımı, marin jeneratör tamiri, elektrik arıza ve mobil servis desteği.",
+    keyword: "Tuzla Viaport Marina tekne bakımı",
+    canonical: "https://dmmarin.com/tuzla-pendik-marinturk-marin-servis.html",
+    indexed: true
+  }
+];
+
+let pagesSeoState = savedState.pagesSeo || defaultPagesSeo;
+
+// Ensure every default page exists in state
+defaultPagesSeo.forEach(defPage => {
+  if (!pagesSeoState.find(p => p.id === defPage.id)) {
+    pagesSeoState.push(defPage);
+  }
+});
+
+const pageSelect = document.querySelector('#seo-page-select');
+const pageBadge = document.querySelector('#selected-page-badge');
+const titleInput = document.querySelector('#page-seo-title');
+const descInput = document.querySelector('#page-seo-description');
+const keywordInput = document.querySelector('#page-seo-keyword');
+const canonicalInput = document.querySelector('#page-seo-canonical');
+const indexToggle = document.querySelector('#page-seo-indexed');
+const titleCounter = document.querySelector('#page-title-counter');
+const descCounter = document.querySelector('#page-desc-counter');
+const seoSummaryBody = document.querySelector('#seo-summary-table-body');
+
+function updateCharCounters() {
+  titleCounter.textContent = `${titleInput.value.length} / 70 karakter`;
+  descCounter.textContent = `${descInput.value.length} / 170 karakter`;
+}
+
+titleInput.addEventListener('input', updateCharCounters);
+descInput.addEventListener('input', updateCharCounters);
+
+function loadPageSeo(pageId) {
+  const page = pagesSeoState.find(p => p.id === pageId) || pagesSeoState[0];
+  pageSelect.value = page.id;
+  pageBadge.textContent = page.name;
+  titleInput.value = page.title || '';
+  descInput.value = page.description || '';
+  keywordInput.value = page.keyword || '';
+  canonicalInput.value = page.canonical || '';
+  indexToggle.checked = page.indexed !== false;
+  updateCharCounters();
+}
+
+function saveCurrentPageSeo() {
+  const pageId = pageSelect.value;
+  const page = pagesSeoState.find(p => p.id === pageId);
+  if (page) {
+    page.title = titleInput.value.trim();
+    page.description = descInput.value.trim();
+    page.keyword = keywordInput.value.trim();
+    page.canonical = canonicalInput.value.trim();
+    page.indexed = indexToggle.checked;
+    renderSeoSummaryTable();
+    autoSave();
+    flash(`${page.name} SEO ayarları güncellendi.`);
+  }
+}
+
+document.querySelector('#update-page-seo').addEventListener('click', saveCurrentPageSeo);
+
+pageSelect.addEventListener('change', () => {
+  loadPageSeo(pageSelect.value);
+});
+
+function renderSeoSummaryTable() {
+  seoSummaryBody.innerHTML = '';
+  pagesSeoState.forEach(page => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${page.name}</strong><br><small style="color:var(--muted)">${page.url}</small></td>
+      <td><span class="pill badge">${page.type}</span></td>
+      <td>${page.keyword || '-'}</td>
+      <td>${page.indexed ? '<span class="pill ok">Index</span>' : '<span class="pill">Noindex</span>'}</td>
+      <td><button class="btn" style="padding:4px 10px;min-height:30px;font-size:12px" type="button">Düzenle</button></td>
+    `;
+    tr.querySelector('button').addEventListener('click', () => {
+      loadPageSeo(page.id);
+      window.scrollTo({ top: pageSelect.offsetTop - 100, behavior: 'smooth' });
+    });
+    seoSummaryBody.appendChild(tr);
+  });
+}
+
+// 3. PERSISTENCE (SAVE / RESTORE / EXPORT)
+function collectAll() {
+  const fields = {};
+  document.querySelectorAll('[data-key]').forEach(el => fields[el.dataset.key] = el.value);
+  const services = {};
+  document.querySelectorAll('[data-service]').forEach(el => services[el.dataset.service] = el.checked);
+
+  return {
+    version: 3,
+    savedAt: new Date().toISOString(),
+    fields,
+    services,
+    brands: brandState.filter(x => x.name.trim()),
+    pagesSeo: pagesSeoState
+  };
+}
+
+function autoSave() {
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(collectAll()));
+  } catch(e) {}
+}
+
+document.querySelector('#save').addEventListener('click', () => {
+  saveCurrentPageSeo();
+  autoSave();
+  flash('Tüm taslaklar tarayıcınızda (localStorage) kaydedildi.');
+});
+
+document.querySelector('#export').addEventListener('click', () => {
+  const data = collectAll();
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'dm-marin-yonetim-taslagi.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  flash('Taslak JSON olarak indirildi.');
+});
+
+function restoreFields() {
+  if (savedState.fields) {
+    document.querySelectorAll('[data-key]').forEach(el => {
+      if (savedState.fields[el.dataset.key] != null) el.value = savedState.fields[el.dataset.key];
+    });
+  }
+  if (savedState.services) {
+    document.querySelectorAll('[data-service]').forEach(el => {
+      if (savedState.services[el.dataset.service] != null) el.checked = savedState.services[el.dataset.service];
+    });
+  }
+}
+
+// INITIALIZE
+restoreFields();
+renderBrands();
+renderSeoSummaryTable();
+loadPageSeo('index');
+showView(location.hash.slice(1) in labels ? location.hash.slice(1) : 'dashboard');
 </script>
-<script>
-labels.brands='Marka Yönetimi';
-const defaultBrands=['Volvo Penta','MAN Marine','MTU','CAT','Yamaha Marine','Yanmar','Suzuki Marine','Kubota','Mercedes-Benz / Daimler','Mitsubishi','Cummins Onan','Kohler','Fischer Panda','Northern Lights','Northstar','Coelmo','Baudouin'];
-const defaultKeywords=['İstanbul marin servis','mobil marin servis','tekne motor bakımı','marin jeneratör servisi','Volvo Penta özel servis','Yanmar marin servis','Marmara acil marin servis','marin yedek parça'];
-let savedExtra={};try{savedExtra=JSON.parse(localStorage.getItem(storageKey)||'{}')}catch{}
-let brandState=(savedExtra.brands||defaultBrands.map(name=>({name,visible:true}))).map(item=>typeof item==='string'?{name:item,visible:true}:item);
-let keywordState=savedExtra.keywords||defaultKeywords;
-const brandEditor=document.querySelector('#brand-editor');
-function renderBrands(){brandEditor.innerHTML='';brandState.forEach((brand,index)=>{const row=document.createElement('div');row.className='brand-edit-row';row.innerHTML='<input aria-label="Marka adı"><label class="switch" aria-label="Marka görünürlüğü"><input type="checkbox"><span></span></label><button class="btn danger" type="button">Sil</button>';const input=row.querySelector('input[type="text"],input:not([type])');input.value=brand.name;input.addEventListener('input',()=>brand.name=input.value);const toggle=row.querySelector('input[type="checkbox"]');toggle.checked=brand.visible!==false;toggle.addEventListener('change',()=>brand.visible=toggle.checked);row.querySelector('button').addEventListener('click',()=>{brandState.splice(index,1);renderBrands()});brandEditor.appendChild(row)})}
-document.querySelector('#add-brand').addEventListener('click',()=>{const input=document.querySelector('#new-brand'),name=input.value.trim();if(!name)return flash('Marka adı yazın.');brandState.push({name,visible:true});input.value='';renderBrands();flash('Marka taslağa eklendi.')});
-const seo=document.querySelector('#seo');seo.insertAdjacentHTML('beforeend','<div class="grid"><article class="panel"><div class="panel-head"><h3>SEO hazırlık puanı</h3></div><div class="panel-body seo-overview"><div class="seo-score" id="seo-score" style="--score:0"><b>0</b></div><p>Bu puan taslak alanlarının doluluk ve uzunluk kontrolüdür; Google sıralaması garantisi değildir. Search Console ve GA4 bağlantıları alan adı yayına geçtiğinde tamamlanacak.</p></div></article><article class="panel"><div class="panel-head"><h3>Hedef anahtar kelimeler</h3></div><div class="panel-body"><div class="keyword-tools"><input id="new-keyword" placeholder="Yeni anahtar kelime"><button class="btn primary" id="add-keyword">Ekle</button></div><div class="keyword-editor" id="keyword-editor"></div></div></article></div><article class="panel" style="margin-top:18px"><div class="panel-head"><h3>Öncelikli içerik planı</h3><span class="pill">SEO yol haritası</span></div><div class="panel-body"><table class="priority-table"><thead><tr><th>Sayfa</th><th>Hedef arama</th><th>Durum</th></tr></thead><tbody><tr><td>Mobil Marin Servis</td><td>İstanbul mobil marin servis</td><td>Yayında</td></tr><tr><td>Marin Jeneratör</td><td>marin jeneratör servisi</td><td>Yayında</td></tr><tr><td>Motor marka sayfaları</td><td>Volvo Penta, Yanmar, MAN, MTU, CAT</td><td>6 sayfa yayında</td></tr><tr><td>Hizmet bölgeleri</td><td>Kalamış, Ataköy, Tuzla, Pendik</td><td>Sıradaki sprint</td></tr></tbody></table></div></article>');
-const keywordEditor=document.querySelector('#keyword-editor');function renderKeywords(){keywordEditor.innerHTML='';keywordState.forEach((value,index)=>{const row=document.createElement('div');row.className='keyword-row';row.innerHTML='<input aria-label="Anahtar kelime"><button class="btn danger" type="button">Sil</button>';row.querySelector('input').value=value;row.querySelector('input').addEventListener('input',e=>keywordState[index]=e.target.value);row.querySelector('button').addEventListener('click',()=>{keywordState.splice(index,1);renderKeywords();updateScore()});keywordEditor.appendChild(row)})}
-document.querySelector('#add-keyword').addEventListener('click',()=>{const input=document.querySelector('#new-keyword'),value=input.value.trim();if(!value)return;keywordState.push(value);input.value='';renderKeywords();updateScore()});
-function updateScore(){const t=document.querySelector('#seo-title').value.trim(),d=document.querySelector('#seo-description').value.trim(),c=document.querySelector('#canonical').value.trim(),f=document.querySelector('#seo-focus').value.trim(),l=document.querySelector('#seo-locations').value.trim();let score=45+(t.length>=30&&t.length<=60?10:0)+(d.length>=110&&d.length<=170?10:0)+(c.startsWith('https://')?10:0)+(keywordState.length>=6?5:0)+(f.length>=8?10:0)+(l.split(',').filter(Boolean).length>=3?10:0);score=Math.min(score,100);const el=document.querySelector('#seo-score');el.style.setProperty('--score',score);el.querySelector('b').textContent=score}
-['seo-title','seo-description','canonical','seo-focus','seo-locations'].forEach(id=>document.querySelector('#'+id).addEventListener('input',updateScore));
-const baseCollect=collect;collect=function(){const data=baseCollect();data.version=2;data.brands=brandState.filter(x=>x.name.trim());data.keywords=keywordState.filter(Boolean);return data};
-renderBrands();renderKeywords();updateScore();if(location.hash==='#brands')showView('brands');
-</script>
-</body></html>
+</body>
+</html>
