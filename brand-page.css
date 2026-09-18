@@ -1,0 +1,8 @@
+.notice {
+  margin-top: 22px !important;
+  padding: 16px 18px;
+  border-left: 4px solid #13b8d1;
+  border-radius: 8px;
+  background: #eef9fb;
+  font-size: 14px !important;
+}

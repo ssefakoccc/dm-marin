@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://dmmarin.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://dmmarin.com/motor-mekanik-bakim.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://dmmarin.com/marin-jenerator-servisi.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://dmmarin.com/acil-mobil-marin-servis.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://dmmarin.com/marin-elektrik-elektronik.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://dmmarin.com/marin-yedek-parca.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://dmmarin.com/tekne-periyodik-bakim.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://ssefakoccc.github.io/dm-marin/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://ssefakoccc.github.io/dm-marin/motor-mekanik-bakim.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://ssefakoccc.github.io/dm-marin/marin-jenerator-servisi.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://ssefakoccc.github.io/dm-marin/acil-mobil-marin-servis.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://ssefakoccc.github.io/dm-marin/marin-elektrik-elektronik.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://ssefakoccc.github.io/dm-marin/marin-yedek-parca.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://ssefakoccc.github.io/dm-marin/tekne-periyodik-bakim.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://ssefakoccc.github.io/dm-marin/volvo-penta-d4-d6-ozel-servis.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://ssefakoccc.github.io/dm-marin/yanmar-4jh-6ly-ozel-servis.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://ssefakoccc.github.io/dm-marin/kohler-onan-marin-jenerator-servisi.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 </urlset>
