@@ -113,7 +113,8 @@ module.exports = async (req, res) => {
           preferred_contact: preferredContact,
           source_page: sourcePage,
           status: 'new',
-          consent
+          consent,
+          ip_hash: ipHash
         }
       ])
       .select('id, created_at')

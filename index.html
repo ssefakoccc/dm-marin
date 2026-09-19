@@ -95,7 +95,7 @@ if(serviceForm){
         body:JSON.stringify(payload)
       });
       const data=await res.json();
-      if(res.ok&&data.ok){
+      if(res.ok&&(data.success||data.ok)){
         feedback.style.display='block';
         feedback.style.background='#f0fdf4';
         feedback.style.color='#166534';

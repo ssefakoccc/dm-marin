@@ -57,7 +57,10 @@ module.exports = async (req, res) => {
         });
       }
 
-      const updatePayload = { status };
+      const updatePayload = { 
+        status,
+        updated_at: new Date().toISOString()
+      };
       if (req.body.admin_notes !== undefined) {
         updatePayload.admin_notes = req.body.admin_notes;
       }

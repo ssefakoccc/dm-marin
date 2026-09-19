@@ -872,10 +872,19 @@ function renderBrands() {
     input.addEventListener('input', () => { brand.name = input.value; autoSave(); });
     const toggle = row.querySelector('input[type="checkbox"]');
     toggle.addEventListener('change', () => { brand.visible = toggle.checked; autoSave(); });
-    row.querySelector('button').addEventListener('click', () => {
+    row.querySelector('button').addEventListener('click', async () => {
+      const removedBrand = brandState[index];
       brandState.splice(index, 1);
       renderBrands();
       autoSave();
+      if (currentSession && removedBrand && removedBrand.name) {
+        try {
+          await fetch('/api/admin/brands?name=' + encodeURIComponent(removedBrand.name), {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + currentSession.access_token }
+          });
+        } catch (e) {}
+      }
       flash('Marka silindi.');
     });
     brandEditor.appendChild(row);
