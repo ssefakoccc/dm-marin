@@ -25,5 +25,5 @@
 - **Marmara Bölgesi:** Yalova, Bursa, Balıkesir, Tekirdağ ve Çanakkale kıyı marinaları ve tersaneleri.
 
 ## Özel Servis Verilen Motor ve Jeneratör Markaları
-Volvo Penta, MAN Marine, MTU, CAT (Caterpillar Marine), Yanmar, Yamaha Marine, Suzuki Marine, Cummins Onan, Kohler, Fischer Panda, Northern Lights, Baudouin, Mitsubishi Marine, Kubota.
+Volvo Penta, MAN Marine, MTU, CAT (Caterpillar Marine), Yanmar, Yamaha Marine, Suzuki Marine, Cummins Onan, Kohler, Fischer Panda, Northern Lights, Baudouin, Nanni Diesel, Mitsubishi Marine, Kubota.
 *(Not: DM MARİN bağımsız bir özel servistir; adı geçen markaların resmî yetkili servisi değildir.)*

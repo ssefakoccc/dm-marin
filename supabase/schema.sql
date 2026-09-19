@@ -98,6 +98,7 @@ VALUES
     ('Northern Lights', true, 14),
     ('Northstar', true, 15),
     ('Coelmo', true, 16),
-    ('Baudouin', true, 17)
+    ('Baudouin', true, 17),
+    ('Nanni Diesel', true, 18)
 ON CONFLICT (name) DO UPDATE 
 SET visible = EXCLUDED.visible, order_index = EXCLUDED.order_index;
