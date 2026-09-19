@@ -207,6 +207,11 @@
 </div>
 
 <div class="field">
+<label for="page-seo-keywords">Meta Keywords (Virgülle ayırın)</label>
+<input id="page-seo-keywords" placeholder="Örn. marin servis, tekne motor tamiri, yat servisi">
+</div>
+
+<div class="field">
 <label for="page-seo-canonical">Canonical URL</label>
 <input id="page-seo-canonical" placeholder="https://dmmarin.com/...">
 </div>
@@ -270,8 +275,9 @@
     <h2>Servis Talepleri</h2>
     <p>Web sitesi servis formundan gelen tüm talepler Supabase veritabanında saklanır ve burada gerçek zamanlı yönetilir.</p>
   </div>
-  <div style="display:flex;gap:10px;align-items:center">
-    <select id="request-filter-status" style="width:auto;background:#fff;font-weight:700" aria-label="Duruma göre filtrele">
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <input id="request-search-input" type="search" placeholder="İsim, telefon veya tekne ara..." style="width:230px;background:#fff;padding:8px 12px;font-size:13px" aria-label="Taleplerde ara">
+    <select id="request-filter-status" style="width:auto;background:#fff;font-weight:700;padding:8px 12px;font-size:13px" aria-label="Duruma göre filtrele">
       <option value="">Tüm Durumlar</option>
       <option value="new">Yeni</option>
       <option value="contacted">İletişime Geçildi</option>
@@ -407,15 +413,40 @@ let currentSession = null;
 let currentUser = null;
 let allServiceRequests = [];
 
+let dbConfigured = false;
+
 async function initSupabase() {
+  const noticeTitle = document.getElementById("notice-title");
+  const noticeDesc = document.getElementById("notice-desc");
+  const authNotice = document.getElementById("auth-notice");
+
   try {
-    const res = await fetch('/api/config');
+    const res = await fetch("/api/config");
     const cfg = await res.json();
+    dbConfigured = Boolean(cfg.configured);
+
+    if (!dbConfigured) {
+      if (authNotice) {
+        authNotice.style.background = "#fffbeb";
+        authNotice.style.borderColor = "#fef3c7";
+      }
+      if (noticeTitle) noticeTitle.textContent = "Veritabanı Bağlantısı Bekleniyor (Supabase Env Gerekli)";
+      if (noticeDesc) noticeDesc.textContent = "Canlı veritabanı aktif değil. Vercel dashboard ortam değişkenlerinde SUPABASE_URL, SUPABASE_ANON_KEY ve SUPABASE_SERVICE_ROLE_KEY tanımlandığında canlı yönetim paneli otomatik devreye girecektir. Şu an yapılan değişiklikler cihazınızda taslak olarak saklanır.";
+      
+      const tbody = document.getElementById("requests-table-body");
+      if (tbody) {
+        tbody.innerHTML = "<tr><td colspan=\"7\" style=\"text-align:center;padding:48px 20px;color:#b45309;background:#fffbeb;font-weight:600\">⚠️ Veritabanı bağlantısı bekleniyor. Canlı servis taleplerini görmek için Vercel üzerinde Supabase ortam değişkenlerini tanımlayınız.</td></tr>";
+      }
+      return;
+    }
+
     if (cfg.supabaseUrl && cfg.supabaseAnonKey && window.supabase) {
       supabaseClient = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (session) {
         handleAuthSuccess(session);
+      } else {
+        handleAuthLogout();
       }
       supabaseClient.auth.onAuthStateChange((event, session) => {
         if (session) {
@@ -426,7 +457,8 @@ async function initSupabase() {
       });
     }
   } catch (err) {
-    console.warn('Backend config yüklenemedi:', err);
+    console.warn("Backend config yüklenemedi:", err);
+    if (noticeTitle) noticeTitle.textContent = "Veritabanı Bağlantısı Bekleniyor";
   }
 }
 
@@ -488,8 +520,7 @@ async function loadServiceRequests(statusFilter = '') {
     const data = await res.json();
     if (res.ok && data.success) {
       allServiceRequests = data.data || [];
-      renderRequestsTable(allServiceRequests);
-      document.getElementById('request-count-badge').textContent = allServiceRequests.length + ' Talep';
+      filterAndRenderRequests();
     } else {
       if (tbody) {
         tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:36px;color:var(--danger)">${data.error || 'Talepler yüklenemedi. Yetkiniz bulunmuyor olabilir.'}</td></tr>`;
@@ -509,6 +540,25 @@ const statusMap = {
   'completed': { text: 'Tamamlandı', class: 'pill-completed' },
   'cancelled': { text: 'İptal Edildi', class: 'pill-cancelled' }
 };
+
+function filterAndRenderRequests() {
+  const q = (document.getElementById("request-search-input") ? document.getElementById("request-search-input").value.trim().toLowerCase() : "");
+  let filtered = allServiceRequests;
+  if (q) {
+    filtered = filtered.filter(r => 
+      (r.name && r.name.toLowerCase().includes(q)) ||
+      (r.phone && r.phone.toLowerCase().includes(q)) ||
+      (r.email && r.email.toLowerCase().includes(q)) ||
+      (r.boat && r.boat.toLowerCase().includes(q)) ||
+      (r.location && r.location.toLowerCase().includes(q)) ||
+      (r.service_type && r.service_type.toLowerCase().includes(q))
+    );
+  }
+  renderRequestsTable(filtered);
+  if (document.getElementById("request-count-badge")) {
+    document.getElementById("request-count-badge").textContent = filtered.length + " / " + allServiceRequests.length + " Talep";
+  }
+}
 
 function renderRequestsTable(list) {
   const tbody = document.getElementById('requests-table-body');
@@ -549,7 +599,8 @@ function renderRequestsTable(list) {
           <option value="cancelled" ${req.status==='cancelled'?'selected':''}>İptal</option>
         </select>
       </td>
-      <td>
+      <td style="white-space:nowrap">
+        <a href="https://wa.me/${(req.phone || "").replace(/[^0-9]/g, "")}?text=${encodeURIComponent("Merhaba Sn. " + (req.name || "") + ", DM MARİN servis talebiniz hk:")}" class="btn" style="padding:4px 8px;min-height:30px;font-size:12px;border-color:#86efac;background:#f0fdf4;color:#166534;margin-right:6px" target="_blank" rel="noopener" title="WhatsApp Mesajı Gönder">💬 WA</a>
         <button class="btn view-detail-btn" data-id="${req.id}" style="padding:4px 10px;min-height:30px;font-size:12px" type="button">Detay</button>
       </td>
     `;
@@ -682,7 +733,15 @@ document.getElementById('modal-delete-btn').addEventListener('click', async () =
 // LOGIN OVERLAY HANDLERS
 function openLoginOverlay() {
   document.getElementById('login-overlay').style.display = 'flex';
-  document.getElementById('login-feedback').style.display = 'none';
+  const fb = document.getElementById('login-feedback');
+  if (!dbConfigured) {
+    fb.style.display = 'block';
+    fb.style.background = '#fffbeb';
+    fb.style.color = '#b45309';
+    fb.textContent = 'Veritabanı bağlantısı bekleniyor. Giriş yapabilmek için Vercel üzerinde Supabase ortam değişkenleri (SUPABASE_URL, SUPABASE_ANON_KEY) tanımlanmalıdır.';
+  } else {
+    fb.style.display = 'none';
+  }
 }
 function closeLoginOverlay() {
   document.getElementById('login-overlay').style.display = 'none';
@@ -751,6 +810,10 @@ document.getElementById('refresh-requests-btn').addEventListener('click', () => 
 document.getElementById('request-filter-status').addEventListener('change', (e) => {
   loadServiceRequests(e.target.value);
 });
+const searchEl = document.getElementById('request-search-input');
+if (searchEl) {
+  searchEl.addEventListener('input', filterAndRenderRequests);
+}
 
 // REMOTE BRANDS SYNC
 async function loadRemoteBrands() {
@@ -1097,6 +1160,7 @@ const titleInput = document.querySelector('#page-seo-title');
 const descInput = document.querySelector('#page-seo-description');
 const keywordInput = document.querySelector('#page-seo-keyword');
 const canonicalInput = document.querySelector('#page-seo-canonical');
+const keywordsInput = document.querySelector('#page-seo-keywords');
 const indexToggle = document.querySelector('#page-seo-indexed');
 const titleCounter = document.querySelector('#page-title-counter');
 const descCounter = document.querySelector('#page-desc-counter');
@@ -1117,6 +1181,7 @@ function loadPageSeo(pageId) {
   titleInput.value = page.title || '';
   descInput.value = page.description || '';
   keywordInput.value = page.keyword || '';
+  if (keywordsInput) keywordsInput.value = page.keywords || '';
   canonicalInput.value = page.canonical || '';
   indexToggle.checked = page.indexed !== false;
   updateCharCounters();
@@ -1129,6 +1194,7 @@ function saveCurrentPageSeo() {
     page.title = titleInput.value.trim();
     page.description = descInput.value.trim();
     page.keyword = keywordInput.value.trim();
+    if (keywordsInput) page.keywords = keywordsInput.value.trim();
     page.canonical = canonicalInput.value.trim();
     page.indexed = indexToggle.checked;
     renderSeoSummaryTable();
