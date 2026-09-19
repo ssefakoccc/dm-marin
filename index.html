@@ -107,6 +107,7 @@ if(serviceForm){
         feedback.style.color='#166534';
         feedback.style.border='1px solid #86efac';
         feedback.textContent='✓ Servis talebiniz başarıyla veritabanımıza kaydedildi! Ekibimiz en kısa sürede iletişime geçecektir.';
+        if(typeof trackDmEvent === "function") trackDmEvent("generate_lead", { service: (form.service ? form.service.value : ""), location: (form.location ? form.location.value : "") });
         form.reset();
         waLink.href=waUrl;
         waWrap.style.display='block';
@@ -154,9 +155,27 @@ if(serviceForm){
       function gtag(){dataLayer.push(arguments);}
       gtag("js", new Date());
       gtag("config", cfg.gaMeasurementId, { anonymize_ip: true });
+      window.gtag = gtag;
     }
   } catch(e) {}
 })();
+</script>
+<script>
+function trackDmEvent(eventName, params) {
+  if (typeof window.gtag === "function") {
+    window.gtag("event", eventName, params || {});
+  }
+}
+document.addEventListener("click", function(e) {
+  const a = e.target.closest("a");
+  if (!a) return;
+  const href = a.getAttribute("href") || "";
+  if (href.startsWith("tel:")) {
+    trackDmEvent("click_phone", { phone_number: href.replace("tel:", ""), link_text: (a.textContent || "").trim() });
+  } else if (href.includes("wa.me") || href.includes("whatsapp.com")) {
+    trackDmEvent("click_whatsapp", { link_url: href, link_text: (a.textContent || "").trim() });
+  }
+});
 </script>
 </body>
 </html>

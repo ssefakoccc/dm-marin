@@ -1301,5 +1301,22 @@ loadPageSeo('index');
 showView(location.hash.slice(1) in labels ? location.hash.slice(1) : 'dashboard');
 initSupabase();
 </script>
+<script>
+function trackDmEvent(eventName, params) {
+  if (typeof window.gtag === "function") {
+    window.gtag("event", eventName, params || {});
+  }
+}
+document.addEventListener("click", function(e) {
+  const a = e.target.closest("a");
+  if (!a) return;
+  const href = a.getAttribute("href") || "";
+  if (href.startsWith("tel:")) {
+    trackDmEvent("click_phone", { phone_number: href.replace("tel:", ""), link_text: (a.textContent || "").trim() });
+  } else if (href.includes("wa.me") || href.includes("whatsapp.com")) {
+    trackDmEvent("click_whatsapp", { link_url: href, link_text: (a.textContent || "").trim() });
+  }
+});
+</script>
 </body>
 </html>

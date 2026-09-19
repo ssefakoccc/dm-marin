@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>404 - Sayfa Bulunamadı | DM MARİN</title>
+<meta name="robots" content="noindex,follow">
+<meta name="theme-color" content="#071b2b">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+:root{--navy:#071b2b;--deep:#061522;--cyan:#22d3ee;--cyan2:#0d91a5;--ink:#0b2231;--muted:#61727d;--line:#dbe7eb}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--navy);color:#fff;display:flex;flex-direction:column;min-height:100vh;justify-content:space-between;line-height:1.6}
+header{padding:24px 20px;border-bottom:1px solid rgba(255,255,255,.1)}
+.container{width:min(680px,calc(100% - 40px));margin:auto}
+.logo-wrap{display:inline-flex;background:#fff;padding:6px 14px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.logo-wrap img{height:46px;width:auto;display:block}
+main{padding:60px 20px;text-align:center}
+.code{font-size:clamp(72px,15vw,130px);font-weight:900;line-height:1;color:var(--cyan);letter-spacing:-.05em;margin:0 0 10px;text-shadow:0 10px 30px rgba(34,211,238,.2)}
+h1{font-size:clamp(24px,4vw,36px);margin:0 0 16px;font-weight:800}
+p{color:rgba(255,255,255,.75);font-size:16px;max-width:520px;margin:0 auto 32px}
+.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 24px;border-radius:999px;font-weight:750;font-size:15px;text-decoration:none;transition:.2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--cyan);color:#052236;box-shadow:0 10px 25px rgba(34,211,238,.2)}
+.btn-outline{border:1px solid rgba(255,255,255,.3);color:#fff;background:rgba(255,255,255,.06);backdrop-filter:blur(8px)}
+.btn-wa{background:#1fc86a;color:#fff}
+footer{padding:24px 20px;border-top:1px solid rgba(255,255,255,.1);text-align:center;color:rgba(255,255,255,.5);font-size:13px}
+</style>
+</head>
+<body>
+<header>
+<div class="container" style="text-align:center">
+<a href="/" class="logo-wrap" aria-label="DM MARİN Ana Sayfa">
+<img src="assets/dm-marin-logo-v2.webp" alt="DM MARİN" width="544" height="190">
+</a>
+</div>
+</header>
+<main>
+<div class="container">
+<div class="code">404</div>
+<h1>Aradığınız Sayfa Rotadan Çıktı</h1>
+<p>Ulaşmaya çalıştığınız sayfa kaldırılmış, adı değiştirilmiş veya geçici olarak erişilemiyor olabilir.</p>
+<div class="actions">
+<a href="/" class="btn btn-primary">Ana Sayfaya Dön →</a>
+<a href="tel:+905437240992" class="btn btn-outline" data-ga="click_phone">☎ +90 543 724 09 92</a>
+<a href="https://wa.me/905437240992?text=Merhaba%20DM%20MAR%C4%B0N%2C%20servis%20talebi%20olu%C5%9Fturmak%20istiyorum." target="_blank" rel="noopener" class="btn btn-wa" data-ga="click_whatsapp">💬 WhatsApp</a>
+</div>
+</div>
+</main>
+<footer>
+<div class="container">
+© 2026 DM MARİN · İstanbul & Marmara 7/24 Mobil Marin Servisi
+</div>
+</footer>
+<script>
+(async function(){
+  try {
+    const res = await fetch("/api/config");
+    if (!res.ok) return;
+    const cfg = await res.json();
+    if (cfg.gaMeasurementId && cfg.gaMeasurementId.startsWith("G-")) {
+      const s1 = document.createElement("script");
+      s1.async = true;
+      s1.src = "https://www.googletagmanager.com/gtag/js?id=" + cfg.gaMeasurementId;
+      document.head.appendChild(s1);
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag("js", new Date());
+      gtag("config", cfg.gaMeasurementId, { anonymize_ip: true });
+      window.gtag = gtag;
+      window.gtag = gtag;
+    }
+  } catch(e) {}
+})();
+</script>
+<script>
+function trackDmEvent(eventName, params) {
+  if (typeof window.gtag === "function") {
+    window.gtag("event", eventName, params || {});
+  }
+}
+document.addEventListener("click", function(e) {
+  const a = e.target.closest("a");
+  if (!a) return;
+  const href = a.getAttribute("href") || "";
+  if (href.startsWith("tel:")) {
+    trackDmEvent("click_phone", { phone_number: href.replace("tel:", ""), link_text: (a.textContent || "").trim() });
+  } else if (href.includes("wa.me") || href.includes("whatsapp.com")) {
+    trackDmEvent("click_whatsapp", { link_url: href, link_text: (a.textContent || "").trim() });
+  }
+});
+</script>
+</body>
+</html>
