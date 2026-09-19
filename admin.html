@@ -2,11 +2,27 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DM MARİN Yönetim Paneli · Taslak / Önizleme</title>
+<title>DM MARİN Yönetim Paneli</title>
 <meta name="robots" content="noindex,nofollow,noarchive"><meta name="theme-color" content="#071b2b">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--navy:#071b2b;--deep:#061522;--cyan:#19c7df;--cyan2:#087f93;--ink:#102734;--muted:#6b7b84;--paper:#f3f7f8;--line:#dce7ea;--white:#fff;--ok:#129a66;--warn:#d99b31;--danger:#e04848;--shadow:0 18px 50px rgba(3,22,35,.1)}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,textarea,select{font:inherit}button,a{color:inherit}a{text-decoration:none}.app{min-height:100vh;display:grid;grid-template-columns:260px 1fr}.sidebar{position:sticky;top:0;height:100vh;padding:22px 16px;background:var(--navy);color:#fff;overflow-y:auto}.brand{display:flex;align-items:center;min-height:72px;padding:8px 12px;border-radius:15px;background:#fff}.brand img{display:block;width:100%;height:56px;object-fit:contain}.mode{display:flex;align-items:center;gap:8px;margin:18px 8px 22px;padding:10px 12px;border:1px solid rgba(255,255,255,.13);border-radius:12px;color:rgba(255,255,255,.75);font-size:12px}.mode:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 5px rgba(217,155,49,.12)}.nav{display:grid;gap:5px}.nav button{display:flex;align-items:center;gap:12px;width:100%;min-height:46px;padding:0 14px;border:0;border-radius:12px;background:transparent;color:rgba(255,255,255,.7);text-align:left;cursor:pointer;transition:.15s}.nav button:hover,.nav button.active{background:rgba(255,255,255,.12);color:#fff}.nav .icon{display:grid;place-items:center;width:26px;font-size:18px}.side-foot{margin-top:30px;padding:14px;border:1px solid rgba(255,255,255,.12);border-radius:14px;color:rgba(255,255,255,.58);font-size:12px}.side-foot a{display:block;margin-top:8px;color:#b7f4fb;font-weight:800}.main{min-width:0}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:20px;height:78px;padding:0 34px;border-bottom:1px solid var(--line);background:rgba(243,247,248,.94);backdrop-filter:blur(16px)}.topbar h1{margin:0;font-size:22px}.top-actions{display:flex;align-items:center;gap:10px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:43px;padding:0 16px;border:1px solid var(--line);border-radius:11px;background:#fff;font-weight:800;cursor:pointer;transition:.15s}.btn:hover{transform:translateY(-1px)}.btn.primary{border-color:var(--cyan2);background:var(--cyan2);color:#fff}.btn.danger{border-color:#f8d7da;background:#fff2f2;color:var(--danger)}.btn.danger:hover{background:#fee2e2}.mobile-menu{display:none;width:43px;padding:0}.content{width:min(1180px,calc(100% - 68px));margin:0 auto;padding:34px 0 70px}.notice{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;margin-bottom:24px;padding:17px 19px;border:1px solid #f1d59d;border-radius:15px;background:#fff9ec}.notice strong,.notice small{display:block}.notice small{margin-top:3px;color:#7d6b48}.notice .ico{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;background:#ffedc7;font-weight:900;color:#9a6511}.notice a{font-weight:850;color:#9a6511}.view{display:none}.view.active{display:block}.head{display:flex;align-items:end;justify-content:space-between;gap:28px;margin-bottom:24px}.head h2{margin:0;font-size:32px;letter-spacing:-.035em}.head p{max-width:650px;margin:7px 0 0;color:var(--muted)}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.metric{min-height:150px;padding:22px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 10px 35px rgba(3,22,35,.04)}.metric .metric-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#e8fafd;color:#08788b;font-size:18px}.metric b{display:block;margin-top:20px;font-size:24px}.metric span{color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:18px}.panel{border:1px solid var(--line);border-radius:20px;background:#fff;box-shadow:0 12px 40px rgba(3,22,35,.05)}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:21px 23px;border-bottom:1px solid var(--line)}.panel-head h3{margin:0;font-size:18px}.panel-body{padding:23px}.status-list{display:grid;gap:16px}.status{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}.status-dot{width:10px;height:10px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 5px rgba(18,154,102,.1)}.status-dot.warn{background:var(--warn);box-shadow:0 0 0 5px rgba(217,155,49,.1)}.status strong,.status small{display:block}.status small{color:var(--muted)}.status em{font-style:normal;color:var(--muted);font-size:12px}.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px}.quick a,.quick button{display:flex;align-items:center;gap:10px;min-height:58px;padding:0 15px;border:1px solid var(--line);border-radius:13px;background:#fbfdfe;text-align:left;font-weight:800;cursor:pointer}.quick a:hover,.quick button:hover{border-color:#9fdfe7;background:#f1fcfd}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:13px;font-weight:800}.field small{color:var(--muted)}input,textarea,select{width:100%;border:1px solid #cbd9de;border-radius:11px;background:#fbfdfe;padding:12px 13px;color:var(--ink)}input:focus,textarea:focus,select:focus{outline:3px solid rgba(25,199,223,.16);border-color:var(--cyan2)}.char{align-self:flex-end;color:var(--muted);font-size:12px}.service-list{display:grid;gap:10px}.service-row{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:15px 16px;border:1px solid var(--line);border-radius:14px;background:#fff}.drag{color:#9aabb2;font-size:20px}.service-row b,.service-row small{display:block}.service-row small{color:var(--muted)}.switch{position:relative;width:46px;height:26px;display:inline-block}.switch input{position:absolute;opacity:0}.switch span{position:absolute;inset:0;border-radius:999px;background:#cbd6da;cursor:pointer;transition:.2s}.switch span:after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:.2s}.switch input:checked+span{background:var(--ok)}.switch input:checked+span:after{transform:translateX(20px)}.media-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.media{overflow:hidden;border:1px solid var(--line);border-radius:15px;background:#fff}.media img{display:block;width:100%;height:150px;object-fit:cover}.media div{padding:12px}.media b,.media small{display:block}.media small{color:var(--muted)}.checklist{display:grid;gap:10px}.check{display:flex;align-items:center;gap:11px;padding:13px 14px;border:1px solid var(--line);border-radius:12px}.check:before{content:"✓";display:grid;place-items:center;width:25px;height:25px;border-radius:50%;background:#e9f8f2;color:var(--ok);font-weight:900}.check.warn:before{content:"!";background:#fff3da;color:#a76b08}.empty{display:grid;place-items:center;min-height:360px;padding:40px;text-align:center}.empty .empty-icon{display:grid;place-items:center;width:72px;height:72px;border-radius:22px;background:#e8fafd;color:#08788b;font-size:30px}.empty h3{margin:22px 0 7px;font-size:24px}.empty p{max-width:520px;margin:0;color:var(--muted)}.domain{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:18px;border:1px solid var(--line);border-radius:14px;background:#fbfdfe}.domain b,.domain small{display:block}.domain small{color:var(--muted)}.pill{padding:6px 10px;border-radius:999px;background:#fff3da;color:#8d5b08;font-size:12px;font-weight:850}.pill.ok{background:#e8f8f1;color:#0d7a50}.pill.badge{background:#e9f7fa;color:#08788b}.toast{position:fixed;right:24px;bottom:24px;z-index:60;transform:translateY(100px);padding:14px 18px;border-radius:12px;background:var(--navy);color:#fff;box-shadow:var(--shadow);opacity:0;transition:.25s}.toast.show{transform:none;opacity:1}
+:root{--navy:#071b2b;--deep:#061522;--cyan:#19c7df;--cyan2:#087f93;--ink:#102734;--muted:#6b7b84;--paper:#f3f7f8;--line:#dce7ea;--white:#fff;--ok:#129a66;--warn:#d99b31;--danger:#e04848;--shadow:0 18px 50px rgba(3,22,35,.1)}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,textarea,select{font:inherit}button,a{color:inherit}a{text-decoration:none}.app{min-height:100vh;display:grid;grid-template-columns:260px 1fr}.sidebar{position:sticky;top:0;height:100vh;padding:22px 16px;background:var(--navy);color:#fff;overflow-y:auto}.brand{display:flex;align-items:center;min-height:72px;padding:8px 12px;border-radius:15px;background:#fff}.brand img{display:block;width:100%;height:56px;object-fit:contain}.mode{display:flex;align-items:center;gap:8px;margin:18px 8px 22px;padding:10px 12px;border:1px solid rgba(255,255,255,.13);border-radius:12px;color:rgba(255,255,255,.75);font-size:12px}.mode:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 5px rgba(217,155,49,.12)}.mode.auth-ok:before{background:var(--ok);box-shadow:0 0 0 5px rgba(18,154,102,.2)}.nav{display:grid;gap:5px}.nav button{display:flex;align-items:center;gap:12px;width:100%;min-height:46px;padding:0 14px;border:0;border-radius:12px;background:transparent;color:rgba(255,255,255,.7);text-align:left;cursor:pointer;transition:.15s}.nav button:hover,.nav button.active{background:rgba(255,255,255,.12);color:#fff}.nav .icon{display:grid;place-items:center;width:26px;font-size:18px}.side-foot{margin-top:30px;padding:14px;border:1px solid rgba(255,255,255,.12);border-radius:14px;color:rgba(255,255,255,.58);font-size:12px}.side-foot a{display:block;margin-top:8px;color:#b7f4fb;font-weight:800}.main{min-width:0}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:20px;height:78px;padding:0 34px;border-bottom:1px solid var(--line);background:rgba(243,247,248,.94);backdrop-filter:blur(16px)}.topbar h1{margin:0;font-size:22px}.top-actions{display:flex;align-items:center;gap:10px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:43px;padding:0 16px;border:1px solid var(--line);border-radius:11px;background:#fff;font-weight:800;cursor:pointer;transition:.15s}.btn:hover{transform:translateY(-1px)}.btn.primary{border-color:var(--cyan2);background:var(--cyan2);color:#fff}.btn.danger{border-color:#f8d7da;background:#fff2f2;color:var(--danger)}.btn.danger:hover{background:#fee2e2}.mobile-menu{display:none;width:43px;padding:0}.content{width:min(1180px,calc(100% - 68px));margin:0 auto;padding:34px 0 70px}.notice{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;margin-bottom:24px;padding:17px 19px;border:1px solid #f1d59d;border-radius:15px;background:#fff9ec}.notice strong,.notice small{display:block}.notice small{margin-top:3px;color:#7d6b48}.notice .ico{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;background:#ffedc7;font-weight:900;color:#9a6511}.notice a{font-weight:850;color:#9a6511}.view{display:none}.view.active{display:block}.head{display:flex;align-items:end;justify-content:space-between;gap:28px;margin-bottom:24px}.head h2{margin:0;font-size:32px;letter-spacing:-.035em}.head p{max-width:650px;margin:7px 0 0;color:var(--muted)}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.metric{min-height:150px;padding:22px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 10px 35px rgba(3,22,35,.04)}.metric .metric-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#e8fafd;color:#08788b;font-size:18px}.metric b{display:block;margin-top:20px;font-size:24px}.metric span{color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:18px}.panel{border:1px solid var(--line);border-radius:20px;background:#fff;box-shadow:0 12px 40px rgba(3,22,35,.05)}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:21px 23px;border-bottom:1px solid var(--line)}.panel-head h3{margin:0;font-size:18px}.panel-body{padding:23px}.status-list{display:grid;gap:16px}.status{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}.status-dot{width:10px;height:10px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 5px rgba(18,154,102,.1)}.status-dot.warn{background:var(--warn);box-shadow:0 0 0 5px rgba(217,155,49,.1)}.status strong,.status small{display:block}.status small{color:var(--muted)}.status em{font-style:normal;color:var(--muted);font-size:12px}.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px}.quick a,.quick button{display:flex;align-items:center;gap:10px;min-height:58px;padding:0 15px;border:1px solid var(--line);border-radius:13px;background:#fbfdfe;text-align:left;font-weight:800;cursor:pointer}.quick a:hover,.quick button:hover{border-color:#9fdfe7;background:#f1fcfd}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:13px;font-weight:800}.field small{color:var(--muted)}input,textarea,select{width:100%;border:1px solid #cbd9de;border-radius:11px;background:#fbfdfe;padding:12px 13px;color:var(--ink)}input:focus,textarea:focus,select:focus{outline:3px solid rgba(25,199,223,.16);border-color:var(--cyan2)}.char{align-self:flex-end;color:var(--muted);font-size:12px}.service-list{display:grid;gap:10px}.service-row{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:15px 16px;border:1px solid var(--line);border-radius:14px;background:#fff}.drag{color:#9aabb2;font-size:20px}.service-row b,.service-row small{display:block}.service-row small{color:var(--muted)}.switch{position:relative;width:46px;height:26px;display:inline-block}.switch input{position:absolute;opacity:0}.switch span{position:absolute;inset:0;border-radius:999px;background:#cbd6da;cursor:pointer;transition:.2s}.switch span:after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:.2s}.switch input:checked+span{background:var(--ok)}.switch input:checked+span:after{transform:translateX(20px)}.media-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.media{overflow:hidden;border:1px solid var(--line);border-radius:15px;background:#fff}.media img{display:block;width:100%;height:150px;object-fit:cover}.media div{padding:12px}.media b,.media small{display:block}.media small{color:var(--muted)}.checklist{display:grid;gap:10px}.check{display:flex;align-items:center;gap:11px;padding:13px 14px;border:1px solid var(--line);border-radius:12px}.check:before{content:"✓";display:grid;place-items:center;width:25px;height:25px;border-radius:50%;background:#e9f8f2;color:var(--ok);font-weight:900}.check.warn:before{content:"!";background:#fff3da;color:#a76b08}.empty{display:grid;place-items:center;min-height:360px;padding:40px;text-align:center}.empty .empty-icon{display:grid;place-items:center;width:72px;height:72px;border-radius:22px;background:#e8fafd;color:#08788b;font-size:30px}.empty h3{margin:22px 0 7px;font-size:24px}.empty p{max-width:520px;margin:0;color:var(--muted)}.domain{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:18px;border:1px solid var(--line);border-radius:14px;background:#fbfdfe}.domain b,.domain small{display:block}.domain small{color:var(--muted)}.pill{padding:6px 10px;border-radius:999px;background:#fff3da;color:#8d5b08;font-size:12px;font-weight:850}.pill.ok{background:#e8f8f1;color:#0d7a50}.pill.badge{background:#e9f7fa;color:#08788b}.pill.pill-new{background:#fef3c7;color:#92400e}.pill.pill-contacted{background:#e0f2fe;color:#0369a1}.pill.pill-in_progress{background:#fef9c3;color:#854d0e}.pill.pill-completed{background:#dcfce7;color:#166534}.pill.pill-cancelled{background:#fee2e2;color:#991b1b}.toast{position:fixed;right:24px;bottom:24px;z-index:60;transform:translateY(100px);padding:14px 18px;border-radius:12px;background:var(--navy);color:#fff;box-shadow:var(--shadow);opacity:0;transition:.25s}.toast.show{transform:none;opacity:1}
+.modal-backdrop{position:fixed;inset:0;background:rgba(7,27,43,.6);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-backdrop.open{display:flex}
+.modal-box{background:#fff;border-radius:20px;box-shadow:0 25px 60px rgba(0,0,0,.25);width:min(640px,100%);max-height:90vh;overflow-y:auto;padding:28px}
+.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.modal-head h3{margin:0;font-size:20px}
+.modal-close{background:none;border:none;font-size:24px;cursor:pointer;color:var(--muted)}
+.modal-detail-row{display:grid;grid-template-columns:140px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.modal-detail-row b{color:var(--muted)}
+.login-overlay{position:fixed;inset:0;background:linear-gradient(135deg,rgba(7,27,43,.95),rgba(6,21,34,.98));backdrop-filter:blur(10px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.login-card{background:#fff;border-radius:24px;padding:36px 32px;width:min(440px,100%);box-shadow:0 30px 70px rgba(0,0,0,.4);text-align:center}
+.login-card img{width:180px;height:auto;margin-bottom:20px}
+.login-card h2{margin:0 0 8px;font-size:22px;color:var(--navy)}
+.login-card p{margin:0 0 24px;color:var(--muted);font-size:14px}
+.login-card form{display:grid;gap:14px;text-align:left}
+.login-feedback{display:none;padding:12px;border-radius:10px;font-size:13px;font-weight:700;text-align:center}
 .brand-tools,.keyword-tools{display:flex;gap:10px;margin-bottom:14px}.brand-tools input,.keyword-tools input{flex:1}.brand-editor,.keyword-editor{display:grid;gap:9px}.brand-edit-row,.keyword-row{display:grid;grid-template-columns:1fr auto auto;gap:9px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:14px;background:#fbfdfe}.brand-edit-row input{border:1px solid #d0dee3;background:#fff}
 .seo-page-box{padding:18px;border:1px solid var(--line);border-radius:16px;background:#f8fbfc;margin-bottom:20px}
 .seo-table-wrap{overflow-x:auto;margin-top:16px}
@@ -22,7 +38,7 @@
 <div class="app">
 <aside class="sidebar" id="sidebar">
 <a class="brand" href="index.html" aria-label="DM MARİN sitesine dön"><img src="assets/dm-marin-logo-v2.webp" alt="DM MARİN" width="544" height="190"></a>
-<div class="mode">Taslak paneli · Bu cihazda saklanır</div>
+<div class="mode" id="auth-indicator">Giriş Yapılmadı · Salt Okunur</div>
 <nav class="nav" aria-label="Yönetim paneli">
 <button class="active" data-view="dashboard"><span class="icon">⌂</span>Genel Bakış</button>
 <button data-view="content"><span class="icon">✎</span>Site İçeriği</button>
@@ -33,22 +49,29 @@
 <button data-view="inbox"><span class="icon">✉</span>Servis Talepleri</button>
 <button data-view="settings"><span class="icon">◉</span>Ayarlar</button>
 </nav>
-<div class="side-foot">⚠️ <strong>Önemli:</strong> Bu panel istemci taraflı taslak (localStorage) modundadır. Harici sunucu veritabanı bağlantısı henüz kurulmamıştır.<a href="index.html" target="_blank" rel="noopener">Canlı siteyi aç →</a></div>
+<div class="side-foot">
+  <div id="admin-user-info" style="margin-bottom:8px;font-size:11px;word-break:break-all">Yönetici oturumu bekleniyor...</div>
+  <a href="index.html" target="_blank" rel="noopener">Canlı siteyi aç →</a>
+</div>
 </aside>
 <main class="main">
 <header class="topbar">
 <div style="display:flex;align-items:center;gap:12px"><button class="btn mobile-menu" id="menu" aria-label="Menüyü aç">☰</button><h1 id="page-title">Genel Bakış</h1></div>
-<div class="top-actions"><button class="btn" id="export">JSON dışa aktar</button><button class="btn primary" id="save">Taslağı kaydet</button></div>
+<div class="top-actions">
+  <button class="btn" id="login-toggle-btn" type="button">🔐 Yönetici Girişi</button>
+  <button class="btn" id="export">JSON dışa aktar</button>
+  <button class="btn primary" id="save">Taslağı kaydet</button>
+</div>
 </header>
 <div class="content">
 
-<div class="notice">
+<div class="notice" id="auth-notice">
 <span class="ico">!</span>
 <div>
-<strong>Önizleme & Taslak Modu (Local)</strong>
-<small>Bu paneldeki tüm değişiklikler sadece tarayıcınızın yerel depolama alanında (localStorage) saklanır. Harici bir veritabanı veya canlı API henüz bağlı değildir.</small>
+<strong id="notice-title">Supabase & Vercel Backend Hazır</strong>
+<small id="notice-desc">Servis taleplerini yönetmek ve marka/SEO ayarlarını veritabanına kalıcı kaydetmek için lütfen sağ üstten "Yönetici Girişi" yapın.</small>
 </div>
-<a href="#settings" data-jump="settings">Altyapı durumu →</a>
+<a href="#inbox" data-jump="inbox">Servis Taleplerini Gör →</a>
 </div>
 
 <!-- DASHBOARD VIEW -->
@@ -242,15 +265,98 @@
 
 <!-- INBOX VIEW -->
 <section class="view" id="inbox">
-<div class="head"><div><h2>Servis Talepleri</h2><p>Form ve iletişim talepleri merkezi veritabanı bağlandığında burada listelenecek.</p></div></div>
-<article class="panel empty">
-<div>
-<span class="empty-icon">✉</span>
-<h3>Merkezi Talep Kaydı Bekleniyor</h3>
-<p>Mevcut sitedeki servis formu doğrudan işletme WhatsApp hattınıza mesaj oluşturmaktadır. Taleplerin tarayıcıdan bağımsız bir yönetim panelinde listelenmesi için güvenli bir backend (API & Veritabanı) entegrasyonu gerekmektedir.</p>
+<div class="head">
+  <div>
+    <h2>Servis Talepleri</h2>
+    <p>Web sitesi servis formundan gelen tüm talepler Supabase veritabanında saklanır ve burada gerçek zamanlı yönetilir.</p>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center">
+    <select id="request-filter-status" style="width:auto;background:#fff;font-weight:700" aria-label="Duruma göre filtrele">
+      <option value="">Tüm Durumlar</option>
+      <option value="new">Yeni</option>
+      <option value="contacted">İletişime Geçildi</option>
+      <option value="in_progress">İşlemde</option>
+      <option value="completed">Tamamlandı</option>
+      <option value="cancelled">İptal Edildi</option>
+    </select>
+    <button class="btn" id="refresh-requests-btn" type="button">🔄 Yenile</button>
+  </div>
 </div>
+
+<article class="panel">
+  <div class="panel-head">
+    <h3>Gelen Talepler Listesi</h3>
+    <span class="pill badge" id="request-count-badge">0 Talep</span>
+  </div>
+  <div class="panel-body" style="padding:0">
+    <div class="seo-table-wrap" style="margin-top:0">
+      <table class="seo-table" id="requests-table">
+        <thead>
+          <tr>
+            <th>Tarih</th>
+            <th>Ad Soyad</th>
+            <th>İletişim</th>
+            <th>Tekne / Konum</th>
+            <th>Hizmet</th>
+            <th>Durum</th>
+            <th>İşlem</th>
+          </tr>
+        </thead>
+        <tbody id="requests-table-body">
+          <tr>
+            <td colspan="7" style="text-align:center;padding:36px;color:var(--muted)">
+              Yükleniyor... Lütfen yönetici girişi yapınız.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </article>
 </section>
+
+<!-- TALEP DETAY MODALI -->
+<div class="modal-backdrop" id="request-modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="modal-title">Talep Detayı</h3>
+      <button class="modal-close" id="modal-close-btn" type="button">&times;</button>
+    </div>
+    <div id="modal-content">
+      <!-- Injected dynamically -->
+    </div>
+    <div style="margin-top:24px;display:flex;gap:10px;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:16px">
+      <button class="btn danger" id="modal-delete-btn" type="button">Talebi Sil</button>
+      <div style="display:flex;gap:10px">
+        <a id="modal-call-btn" class="btn" href="#">☎ Ara</a>
+        <a id="modal-wa-btn" class="btn" style="border-color:#86efac;background:#f0fdf4;color:#166534" target="_blank" rel="noopener">💬 WhatsApp</a>
+        <button class="btn primary" id="modal-save-btn" type="button">Kaydet</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- YÖNETİCİ GİRİŞ OVERLAY -->
+<div class="login-overlay" id="login-overlay">
+  <div class="login-card">
+    <img src="assets/dm-marin-logo-v2.webp" alt="DM MARİN">
+    <h2>Yönetici Girişi</h2>
+    <p>Yetkili DM MARİN yöneticileri için güvenli Supabase Auth paneli.</p>
+    <div class="login-feedback" id="login-feedback"></div>
+    <form id="login-form">
+      <div>
+        <label style="font-size:13px;font-weight:700;display:block;margin-bottom:6px" for="admin-email">E-posta</label>
+        <input type="email" id="admin-email" required placeholder="admin@dmmarin.com" autocomplete="username">
+      </div>
+      <div>
+        <label style="font-size:13px;font-weight:700;display:block;margin-bottom:6px" for="admin-password">Şifre</label>
+        <input type="password" id="admin-password" required placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="btn primary" id="login-submit-btn" type="submit" style="margin-top:8px">Giriş Yap →</button>
+      <button class="btn ghost" id="login-cancel-btn" type="button" style="border:none;color:var(--muted)">Kapat / Taslak Olarak Devam Et</button>
+    </form>
+  </div>
+</div>
 
 <!-- SETTINGS VIEW -->
 <section class="view" id="settings">
@@ -294,6 +400,416 @@ const storageKey = 'dm-marin-admin-draft-v1';
 const sidebar = document.querySelector('#sidebar');
 const title = document.querySelector('#page-title');
 const toast = document.querySelector('#toast');
+
+// AUTH & BACKEND STATE
+let supabaseClient = null;
+let currentSession = null;
+let currentUser = null;
+let allServiceRequests = [];
+
+async function initSupabase() {
+  try {
+    const res = await fetch('/api/config');
+    const cfg = await res.json();
+    if (cfg.supabaseUrl && cfg.supabaseAnonKey && window.supabase) {
+      supabaseClient = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session) {
+        handleAuthSuccess(session);
+      }
+      supabaseClient.auth.onAuthStateChange((event, session) => {
+        if (session) {
+          handleAuthSuccess(session);
+        } else {
+          handleAuthLogout();
+        }
+      });
+    }
+  } catch (err) {
+    console.warn('Backend config yüklenemedi:', err);
+  }
+}
+
+function handleAuthSuccess(session) {
+  currentSession = session;
+  currentUser = session.user;
+  const ind = document.getElementById('auth-indicator');
+  const uinfo = document.getElementById('admin-user-info');
+  const btn = document.getElementById('login-toggle-btn');
+  const noticeTitle = document.getElementById('notice-title');
+  const noticeDesc = document.getElementById('notice-desc');
+  if (ind) {
+    ind.textContent = 'Yönetici: ' + (currentUser.email || 'Giriş Yapıldı');
+    ind.classList.add('auth-ok');
+  }
+  if (uinfo) uinfo.textContent = 'Oturum: ' + currentUser.email;
+  if (btn) btn.textContent = '🚪 Çıkış Yap';
+  if (noticeTitle) noticeTitle.textContent = 'Yönetici Oturumu Açık';
+  if (noticeDesc) noticeDesc.textContent = 'Veritabanı bağlantısı aktif. Servis taleplerini yönetebilir, markaları ve SEO ayarlarını canlı kaydedebilirsiniz.';
+  loadServiceRequests();
+  loadRemoteBrands();
+  loadRemoteSeo();
+}
+
+function handleAuthLogout() {
+  currentSession = null;
+  currentUser = null;
+  const ind = document.getElementById('auth-indicator');
+  const uinfo = document.getElementById('admin-user-info');
+  const btn = document.getElementById('login-toggle-btn');
+  const noticeTitle = document.getElementById('notice-title');
+  const noticeDesc = document.getElementById('notice-desc');
+  if (ind) {
+    ind.textContent = 'Giriş Yapılmadı · Salt Okunur';
+    ind.classList.remove('auth-ok');
+  }
+  if (uinfo) uinfo.textContent = 'Yönetici oturumu bekleniyor...';
+  if (btn) btn.textContent = '🔐 Yönetici Girişi';
+  if (noticeTitle) noticeTitle.textContent = 'Supabase & Vercel Backend Hazır';
+  if (noticeDesc) noticeDesc.textContent = 'Servis taleplerini yönetmek ve marka/SEO ayarlarını veritabanına kalıcı kaydetmek için lütfen sağ üstten "Yönetici Girişi" yapın.';
+  renderRequestsTable([]);
+}
+
+// REQUESTS MANAGEMENT
+async function loadServiceRequests(statusFilter = '') {
+  if (!currentSession) {
+    renderRequestsTable([]);
+    return;
+  }
+  const tbody = document.getElementById('requests-table-body');
+  if (tbody) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:36px;color:var(--muted)">Talepler veritabanından alınıyor...</td></tr>';
+  }
+  try {
+    const url = '/api/admin/service-requests' + (statusFilter ? '?status=' + encodeURIComponent(statusFilter) : '');
+    const res = await fetch(url, {
+      headers: { 'Authorization': 'Bearer ' + currentSession.access_token }
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      allServiceRequests = data.data || [];
+      renderRequestsTable(allServiceRequests);
+      document.getElementById('request-count-badge').textContent = allServiceRequests.length + ' Talep';
+    } else {
+      if (tbody) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:36px;color:var(--danger)">${data.error || 'Talepler yüklenemedi. Yetkiniz bulunmuyor olabilir.'}</td></tr>`;
+      }
+    }
+  } catch (err) {
+    if (tbody) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:36px;color:var(--danger)">Bağlantı hatası: ${err.message}</td></tr>`;
+    }
+  }
+}
+
+const statusMap = {
+  'new': { text: 'Yeni', class: 'pill-new' },
+  'contacted': { text: 'İletişime Geçildi', class: 'pill-contacted' },
+  'in_progress': { text: 'İşlemde', class: 'pill-in_progress' },
+  'completed': { text: 'Tamamlandı', class: 'pill-completed' },
+  'cancelled': { text: 'İptal Edildi', class: 'pill-cancelled' }
+};
+
+function renderRequestsTable(list) {
+  const tbody = document.getElementById('requests-table-body');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  if (!list.length) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" style="text-align:center;padding:48px 20px;color:var(--muted)">
+          ${currentSession ? 'Kayıtlı servis talebi bulunamadı.' : 'Servis taleplerini görmek için lütfen yönetici girişi yapınız.'}
+        </td>
+      </tr>
+    `;
+    return;
+  }
+  list.forEach(req => {
+    const tr = document.createElement('tr');
+    const dateStr = req.created_at ? new Date(req.created_at).toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
+    const st = statusMap[req.status] || { text: req.status, class: 'badge' };
+    tr.innerHTML = `
+      <td><small style="color:var(--muted);white-space:nowrap">${dateStr}</small></td>
+      <td><strong>${escapeHtml(req.name)}</strong></td>
+      <td>
+        <a href="tel:${escapeHtml(req.phone)}" style="font-weight:700;color:var(--navy)">${escapeHtml(req.phone)}</a><br>
+        <small style="color:var(--muted)">${escapeHtml(req.email)}</small>
+      </td>
+      <td>
+        <span>${escapeHtml(req.boat || '-')}</span><br>
+        <small style="color:var(--muted)">${escapeHtml(req.location || '-')}</small>
+      </td>
+      <td><span class="pill badge" style="white-space:nowrap">${escapeHtml(req.service_type || req.service || '-')}</span></td>
+      <td>
+        <select class="req-status-select" data-id="${req.id}" style="padding:4px 8px;font-size:12px;font-weight:700;border-radius:8px">
+          <option value="new" ${req.status==='new'?'selected':''}>Yeni</option>
+          <option value="contacted" ${req.status==='contacted'?'selected':''}>İletişime Geçildi</option>
+          <option value="in_progress" ${req.status==='in_progress'?'selected':''}>İşlemde</option>
+          <option value="completed" ${req.status==='completed'?'selected':''}>Tamamlandı</option>
+          <option value="cancelled" ${req.status==='cancelled'?'selected':''}>İptal</option>
+        </select>
+      </td>
+      <td>
+        <button class="btn view-detail-btn" data-id="${req.id}" style="padding:4px 10px;min-height:30px;font-size:12px" type="button">Detay</button>
+      </td>
+    `;
+    tr.querySelector('.req-status-select').addEventListener('change', async (e) => {
+      await updateRequestStatus(req.id, e.target.value);
+    });
+    tr.querySelector('.view-detail-btn').addEventListener('click', () => {
+      openRequestModal(req);
+    });
+    tbody.appendChild(tr);
+  });
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m]);
+}
+
+async function updateRequestStatus(id, newStatus, notes) {
+  if (!currentSession) return flash('Önce yönetici girişi yapmalısınız.');
+  try {
+    const payload = { status: newStatus };
+    if (notes !== undefined) payload.admin_notes = notes;
+    const res = await fetch('/api/admin/service-requests?id=' + id, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + currentSession.access_token
+      },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      flash('Talep durumu güncellendi.');
+      const itm = allServiceRequests.find(r => r.id === id);
+      if (itm) {
+        itm.status = newStatus;
+        if (notes !== undefined) itm.admin_notes = notes;
+      }
+    } else {
+      flash(data.error || 'Durum güncellenemedi.');
+      loadServiceRequests(document.getElementById('request-filter-status').value);
+    }
+  } catch (err) {
+    flash('Güncelleme hatası: ' + err.message);
+  }
+}
+
+// REQUEST DETAIL MODAL
+let activeModalReq = null;
+function openRequestModal(req) {
+  activeModalReq = req;
+  const modal = document.getElementById('request-modal');
+  const content = document.getElementById('modal-content');
+  const callBtn = document.getElementById('modal-call-btn');
+  const waBtn = document.getElementById('modal-wa-btn');
+  const dateStr = req.created_at ? new Date(req.created_at).toLocaleString('tr-TR') : '-';
+  
+  callBtn.href = 'tel:' + req.phone;
+  const waText = `Merhaba Sn. ${req.name}, DM MARİN servis talebiniz hk:`;
+  waBtn.href = `https://wa.me/${req.phone.replace(/[^0-9]/g,'')}?text=${encodeURIComponent(waText)}`;
+
+  content.innerHTML = `
+    <div class="modal-detail-row"><b>Talep ID</b><small style="color:var(--muted)">${req.id}</small></div>
+    <div class="modal-detail-row"><b>Tarih</b><span>${dateStr}</span></div>
+    <div class="modal-detail-row"><b>Ad Soyad</b><strong>${escapeHtml(req.name)}</strong></div>
+    <div class="modal-detail-row"><b>Telefon</b><a href="tel:${escapeHtml(req.phone)}">${escapeHtml(req.phone)}</a></div>
+    <div class="modal-detail-row"><b>E-posta</b><a href="mailto:${escapeHtml(req.email)}">${escapeHtml(req.email)}</a></div>
+    <div class="modal-detail-row"><b>Tekne / Motor</b><span>${escapeHtml(req.boat || '-')}</span></div>
+    <div class="modal-detail-row"><b>Konum</b><span>${escapeHtml(req.location || '-')}</span></div>
+    <div class="modal-detail-row"><b>Hizmet Türü</b><span>${escapeHtml(req.service_type || req.service || '-')}</span></div>
+    <div class="modal-detail-row"><b>Geri Arama</b><span>${req.callback ? '✓ Evet' : 'Hayır'}</span></div>
+    <div class="modal-detail-row"><b>Müşteri Notu</b><p style="margin:0;white-space:pre-wrap;background:#f8fbfc;padding:10px;border-radius:8px">${escapeHtml(req.message || '-')}</p></div>
+    <div class="modal-detail-row">
+      <b>Durum</b>
+      <select id="modal-status-select" style="background:#fff;font-weight:700">
+        <option value="new" ${req.status==='new'?'selected':''}>Yeni</option>
+        <option value="contacted" ${req.status==='contacted'?'selected':''}>İletişime Geçildi</option>
+        <option value="in_progress" ${req.status==='in_progress'?'selected':''}>İşlemde</option>
+        <option value="completed" ${req.status==='completed'?'selected':''}>Tamamlandı</option>
+        <option value="cancelled" ${req.status==='cancelled'?'selected':''}>İptal</option>
+      </select>
+    </div>
+    <div class="modal-detail-row">
+      <b>Yönetici Notu</b>
+      <textarea id="modal-admin-notes" rows="3" placeholder="Bu servis talebiyle ilgili şirket içi notlarınız...">${escapeHtml(req.admin_notes || '')}</textarea>
+    </div>
+  `;
+
+  modal.classList.add('open');
+}
+
+function closeRequestModal() {
+  const modal = document.getElementById('request-modal');
+  modal.classList.remove('open');
+  activeModalReq = null;
+}
+
+document.getElementById('modal-close-btn').addEventListener('click', closeRequestModal);
+document.getElementById('modal-save-btn').addEventListener('click', async () => {
+  if (!activeModalReq) return;
+  const newStatus = document.getElementById('modal-status-select').value;
+  const adminNotes = document.getElementById('modal-admin-notes').value.trim();
+  await updateRequestStatus(activeModalReq.id, newStatus, adminNotes);
+  closeRequestModal();
+  loadServiceRequests(document.getElementById('request-filter-status').value);
+});
+
+document.getElementById('modal-delete-btn').addEventListener('click', async () => {
+  if (!activeModalReq) return;
+  if (!confirm('Bu servis talebini kalıcı olarak silmek istediğinize emin misiniz?')) return;
+  try {
+    const res = await fetch('/api/admin/service-requests?id=' + activeModalReq.id, {
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer ' + currentSession.access_token }
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      flash('Talep silindi.');
+      closeRequestModal();
+      loadServiceRequests(document.getElementById('request-filter-status').value);
+    } else {
+      flash(data.error || 'Silme işlemi başarısız.');
+    }
+  } catch (err) {
+    flash('Silme hatası: ' + err.message);
+  }
+});
+
+// LOGIN OVERLAY HANDLERS
+function openLoginOverlay() {
+  document.getElementById('login-overlay').style.display = 'flex';
+  document.getElementById('login-feedback').style.display = 'none';
+}
+function closeLoginOverlay() {
+  document.getElementById('login-overlay').style.display = 'none';
+}
+
+document.getElementById('login-toggle-btn').addEventListener('click', () => {
+  if (currentSession) {
+    if (confirm('Yönetici oturumunu kapatmak istediğinize emin misiniz?')) {
+      if (supabaseClient) supabaseClient.auth.signOut();
+      else handleAuthLogout();
+    }
+  } else {
+    openLoginOverlay();
+  }
+});
+
+document.getElementById('login-cancel-btn').addEventListener('click', closeLoginOverlay);
+
+document.getElementById('login-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('admin-email').value.trim();
+  const password = document.getElementById('admin-password').value;
+  const submitBtn = document.getElementById('login-submit-btn');
+  const fb = document.getElementById('login-feedback');
+  
+  if (!supabaseClient) {
+    fb.style.display = 'block';
+    fb.style.background = '#fef2f2';
+    fb.style.color = '#991b1b';
+    fb.textContent = 'Supabase istemcisi yüklenemedi. Sunucu yapılandırmasını kontrol edin.';
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Giriş yapılıyor...';
+  fb.style.display = 'none';
+
+  try {
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    if (error) {
+      fb.style.display = 'block';
+      fb.style.background = '#fef2f2';
+      fb.style.color = '#991b1b';
+      fb.textContent = error.message === 'Invalid login credentials' ? 'Geçersiz e-posta veya şifre.' : error.message;
+    } else if (data && data.session) {
+      closeLoginOverlay();
+      flash('Hoş geldiniz! Yönetici girişi başarılı.');
+      handleAuthSuccess(data.session);
+    }
+  } catch (err) {
+    fb.style.display = 'block';
+    fb.style.background = '#fef2f2';
+    fb.style.color = '#991b1b';
+    fb.textContent = 'Giriş hatası: ' + err.message;
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Giriş Yap →';
+  }
+});
+
+document.getElementById('refresh-requests-btn').addEventListener('click', () => {
+  loadServiceRequests(document.getElementById('request-filter-status').value);
+  flash('Talepler yenilendi.');
+});
+
+document.getElementById('request-filter-status').addEventListener('change', (e) => {
+  loadServiceRequests(e.target.value);
+});
+
+// REMOTE BRANDS SYNC
+async function loadRemoteBrands() {
+  if (!currentSession) return;
+  try {
+    const res = await fetch('/api/admin/brands', {
+      headers: { 'Authorization': 'Bearer ' + currentSession.access_token }
+    });
+    const data = await res.json();
+    if (res.ok && data.success && Array.isArray(data.data) && data.data.length > 0) {
+      brandState = data.data.map(b => ({ name: b.name, visible: b.visible !== false, id: b.id }));
+      renderBrands();
+    }
+  } catch (e) {}
+}
+
+async function syncBrandsToDb() {
+  if (!currentSession) return;
+  try {
+    await fetch('/api/admin/brands', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + currentSession.access_token
+      },
+      body: JSON.stringify({ brands: brandState })
+    });
+  } catch (e) {}
+}
+
+// REMOTE SEO SYNC
+async function loadRemoteSeo() {
+  if (!currentSession) return;
+  try {
+    const res = await fetch('/api/admin/seo', {
+      headers: { 'Authorization': 'Bearer ' + currentSession.access_token }
+    });
+    const data = await res.json();
+    if (res.ok && data.success && Array.isArray(data.data)) {
+      pagesSeoState = data.data;
+      renderSeoSummaryTable();
+      loadPageSeo(pageSelect.value || 'index');
+    }
+  } catch (e) {}
+}
+
+async function syncSeoToDb() {
+  if (!currentSession) return;
+  try {
+    await fetch('/api/admin/seo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + currentSession.access_token
+      },
+      body: JSON.stringify({ pagesSeo: pagesSeoState })
+    });
+  } catch (e) {}
+}
 
 const labels = {
   dashboard: 'Genel Bakış',
@@ -658,12 +1174,20 @@ function autoSave() {
   try {
     localStorage.setItem(storageKey, JSON.stringify(collectAll()));
   } catch(e) {}
+  if (currentSession) {
+    syncBrandsToDb();
+  }
 }
 
-document.querySelector('#save').addEventListener('click', () => {
+document.querySelector('#save').addEventListener('click', async () => {
   saveCurrentPageSeo();
   autoSave();
-  flash('Tüm taslaklar tarayıcınızda (localStorage) kaydedildi.');
+  if (currentSession) {
+    await Promise.all([syncBrandsToDb(), syncSeoToDb()]);
+    flash('✓ Değişiklikler hem tarayıcıya hem de veritabanına başarıyla kaydedildi.');
+  } else {
+    flash('Tüm taslaklar tarayıcınızda (localStorage) kaydedildi. Canlı DB için giriş yapın.');
+  }
 });
 
 document.querySelector('#export').addEventListener('click', () => {
@@ -697,6 +1221,7 @@ renderBrands();
 renderSeoSummaryTable();
 loadPageSeo('index');
 showView(location.hash.slice(1) in labels ? location.hash.slice(1) : 'dashboard');
+initSupabase();
 </script>
 </body>
 </html>

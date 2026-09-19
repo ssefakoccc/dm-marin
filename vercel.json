@@ -1,0 +1,25 @@
+{
+  "redirects": [
+    {
+      "source": "/kalamis-anadolu-yakasi-marin-servis.html",
+      "destination": "/kalamis-fenerbahce-marin-servis.html",
+      "permanent": true
+    },
+    {
+      "source": "/atakoy-west-istanbul-marin-servis.html",
+      "destination": "/atakoy-west-istanbul-marina-servis.html",
+      "permanent": true
+    },
+    {
+      "source": "/tuzla-pendik-marin-servis.html",
+      "destination": "/tuzla-pendik-marinturk-marin-servis.html",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/admin/service-requests/:id",
+      "destination": "/api/admin/service-requests?id=:id"
+    }
+  ]
+}

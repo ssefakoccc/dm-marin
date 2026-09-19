@@ -1,0 +1,23 @@
+{
+  "name": "dm-marin-repo",
+  "version": "1.0.0",
+  "description": "İstanbul ve Marmara Bölgesi için mobil marin servis web sitesi.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ssefakoccc/dm-marin.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ssefakoccc/dm-marin/issues"
+  },
+  "homepage": "https://github.com/ssefakoccc/dm-marin#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.116.0"
+  }
+}
