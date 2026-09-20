@@ -2010,6 +2010,31 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
 </div>
 
 
+
+<!-- 9. VESSEL SERVICE LOGBOOK (TEKNE DİJİTAL BAKIM KARNESİ) MODAL -->
+<div class="modal-overlay" id="modal-boat-logbook">
+  <div class="modal-box" style="max-width:960px;width:95vw">
+    <div class="modal-head" style="justify-content:space-between">
+      <h3 id="logbook-modal-title">📋 Tekne Dijital Bakım Karnesi (Service Logbook)</h3>
+      <button class="modal-close" onclick="closeModal('modal-boat-logbook')">✕</button>
+    </div>
+    <div class="modal-body" id="logbook-modal-content">
+      <!-- DYNAMIC CONTENT -->
+    </div>
+    <div class="modal-foot" style="justify-content:space-between">
+      <button class="btn outline" onclick="closeModal('modal-boat-logbook')">Kapat</button>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button class="btn" style="background:#25d366;border-color:#25d366;color:#071b2b;font-weight:800" onclick="sendWhatsAppLogbookReview()">
+          💬 WhatsApp Servis Bildirimi & Puanlama İste
+        </button>
+        <button class="btn primary" onclick="printBoatLogbook()">
+          🖨️ Resmi Tekne Karnesi Yazdır / PDF
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- 8. BARCODE LABEL PRINTING MODAL -->
 <div class="modal-overlay" id="modal-barcode-print">
   <div class="modal-box" style="max-width:960px;width:95vw">
@@ -3764,8 +3789,9 @@ function renderCustomers() {
       <td>📍 ${escapeHtml(c.marina)}</td>
       <td>📞 ${escapeHtml(c.phone)}</td>
       <td style="font-weight:800;color:${c.balance>0?'#ef4444':'#10b981'}">₺ ${Number(c.balance).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
-      <td style="text-align:right">
-        <button class="btn primary sm" onclick="openSaleForCustomer('${c.id}')">🛒 Servis Faturası</button>
+      <td style="text-align:right;white-space:nowrap">
+        <button class="btn success sm" onclick="openBoatLogbook('${c.id}')" title="Tekne Dijital Servis & Bakım Karnesi">📋 Bakım Karnesi</button>
+        <button class="btn primary sm" onclick="openSaleForCustomer('${c.id}')">🛒 Servis</button>
       </td>
     </tr>
   `).join("");
@@ -3804,6 +3830,156 @@ function collectReceivable(custId) {
   saveAll();
   renderDashboard();
   flash(`✓ ₺${amount} tahsilat kaydedildi.`);
+}
+
+
+// =========================================================================
+// 📋 VESSEL DIGITAL SERVICE LOGBOOK & SMART WHATSAPP REVIEW FUNNEL
+// =========================================================================
+let currentLogbookCust = null;
+
+function openBoatLogbook(custId) {
+  const c = customersState.find(x => x.id === custId);
+  if (!c) return;
+  currentLogbookCust = c;
+
+  const modalTitle = document.getElementById("logbook-modal-title");
+  if (modalTitle) {
+    modalTitle.innerHTML = `📋 <b>${escapeHtml(c.boatName)}</b> — Tekne Dijital Bakım Karnesi`;
+  }
+
+  // Find all service invoices for this customer
+  const boatSales = salesState.filter(s => s.customerId === c.id || (s.boatName && s.boatName.toLowerCase() === c.boatName.toLowerCase()));
+
+  // Count replaced parts
+  let totalPartsCount = 0;
+  boatSales.forEach(s => {
+    (s.items || []).forEach(i => totalPartsCount += (Number(i.qty) || 1));
+  });
+
+  const lastService = boatSales.length > 0 ? boatSales[0].date : 'Kayıtlı Servis Yok';
+
+  const container = document.getElementById("logbook-modal-content");
+  if (!container) return;
+
+  container.innerHTML = `
+    <!-- VESSEL PASSPORT CARD -->
+    <div style="background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:20px;display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:14px">
+      <div>
+        <span style="font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase">Tekne Adı & Sahibi</span>
+        <b style="font-size:15px;color:var(--navy);display:block;margin-top:2px">⛵ ${escapeHtml(c.boatName)}</b>
+        <span style="font-size:12.5px;color:#475569">${escapeHtml(c.name)}</span>
+      </div>
+      <div>
+        <span style="font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase">Tekne & Motor Modeli</span>
+        <b style="font-size:13.5px;color:var(--navy);display:block;margin-top:2px">⚙️ ${escapeHtml(c.boatModel || 'Belirtilmedi')}</b>
+      </div>
+      <div>
+        <span style="font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase">Bağlı Olduğu Marina</span>
+        <b style="font-size:13.5px;color:var(--navy);display:block;margin-top:2px">📍 ${escapeHtml(c.marina || 'İstanbul')}</b>
+        <span style="font-size:12px;color:#0284c7">📞 ${escapeHtml(c.phone || '-')}</span>
+      </div>
+    </div>
+
+    <!-- LOGBOOK STATS STRIP -->
+    <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:10px;margin-bottom:22px">
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;padding:12px;border-radius:10px;text-align:center">
+        <span style="font-size:10.5px;font-weight:800;color:#166534">TOPLAM SERVİS</span>
+        <b style="font-size:18px;color:#15803d;display:block">${boatSales.length} Kayıt</b>
+      </div>
+      <div style="background:#f0f9ff;border:1px solid #bae6fd;padding:12px;border-radius:10px;text-align:center">
+        <span style="font-size:10.5px;font-weight:800;color:#0369a1">DEĞİŞEN PARÇA</span>
+        <b style="font-size:18px;color:#0284c7;display:block">${totalPartsCount} Adet</b>
+      </div>
+      <div style="background:#fefce8;border:1px solid #fef08a;padding:12px;border-radius:10px;text-align:center">
+        <span style="font-size:10.5px;font-weight:800;color:#854d0e">SON BAKIM</span>
+        <b style="font-size:13.5px;color:#a16207;display:block;margin-top:4px">${lastService}</b>
+      </div>
+      <div style="background:#faf5ff;border:1px solid #e9d5ff;padding:12px;border-radius:10px;text-align:center">
+        <span style="font-size:10.5px;font-weight:800;color:#6b21a8">BİR SONRAKİ BAKIM</span>
+        <b style="font-size:13.5px;color:#7e22ce;display:block;margin-top:4px">+100 Saat / 6 Ay</b>
+      </div>
+    </div>
+
+    <!-- CHRONOLOGICAL SERVICE RECORDS TABLE -->
+    <h4 style="margin:0 0 10px;font-size:14px;color:var(--navy)">📜 Yapılan Bakımlar & Parça Değişim Geçmişi</h4>
+    <div style="overflow-x:auto">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Tarih & Fiş No</th>
+            <th>Uygulanan Parçalar & İşçilik</th>
+            <th>İşlemi Yapan Teknisyen</th>
+            <th>Tutar</th>
+            <th>Ödeme</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${boatSales.length === 0 ? `
+            <tr>
+              <td colspan="5" style="text-align:center;padding:24px;color:#94a3b8">
+                Bu tekne için henüz kayıtlı servis faturası bulunmamaktadır.
+              </td>
+            </tr>
+          ` : boatSales.map(s => `
+            <tr>
+              <td>
+                <b>#${s.id}</b><br>
+                <small style="color:var(--text-muted)">📅 ${s.date}</small>
+              </td>
+              <td>
+                ${(s.items || []).map(i => `
+                  <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+                    <span style="font-weight:700">• ${escapeHtml(i.name)}</span>
+                    <span style="background:#f1f5f9;color:#475569;font-size:10.5px;padding:1px 5px;border-radius:4px">x${i.qty}</span>
+                  </div>
+                `).join('')}
+                ${s.laborCost ? `<span style="color:#0284c7;font-size:11.5px;font-weight:700">⚙️ Mobil Teknik Servis İşçiliği Dahil</span>` : ''}
+              </td>
+              <td>
+                <span style="background:#e0f2fe;color:#0369a1;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:750">
+                  👤 ${escapeHtml(s.operator || 'Ahmet Usta')}
+                </span>
+              </td>
+              <td style="font-weight:800;color:#059669">₺ ${Number(s.total).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
+              <td>
+                <span class="badge-pill ${s.status === 'paid' ? 'green' : 'yellow'}">
+                  ${s.payType || (s.status === 'paid' ? 'Ödendi' : 'Açık Hesap')}
+                </span>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  openModal("modal-boat-logbook");
+}
+
+function sendWhatsAppLogbookReview() {
+  if (!currentLogbookCust) return;
+  const c = currentLogbookCust;
+  const phone = (c.phone || '').replace(/[^0-9]/g, '');
+
+  const boatSales = salesState.filter(s => s.customerId === c.id);
+  const lastSale = boatSales.length > 0 ? boatSales[0] : null;
+  const refNo = lastSale ? lastSale.id : 'SRV-DM';
+  const techName = lastSale ? (lastSale.operator || 'Ahmet Usta') : 'Teknik Ekibimiz';
+
+  const partsList = lastSale ? (lastSale.items || []).map(i => `• ${i.name} (x${i.qty})`).join('%0A') : '• Periyodik Sezonluk Bakım & Kontroller';
+
+  const ratingUrl = `https://dmmarin.com/puanla.html?boat=${encodeURIComponent(c.boatName)}&ref=${encodeURIComponent(refNo)}`;
+
+  const msg = `Sayın ${encodeURIComponent(c.name)},%0A%0ADM MARİN Mobil Teknik Servis ekibi olarak *${encodeURIComponent(c.boatName)}* teknenizin servis ve bakım işlemlerini *${encodeURIComponent(techName)}* tarafından başarıyla tamamladık. ⚓%0A%0A📋 *Yapılan İşlemler & Değişen Parçalar:*%0A${partsList}%0A%0A⭐ *Hizmet Kalitemizi Değerlendirin:*%0AServis deneyiminizi 1 dakikada puanlamak için lütfen tıklayınız:%0A${encodeURIComponent(ratingUrl)}%0A%0A_Puanınız 4 veya 5 yıldız olduğunda doğrudan Google Haritalar profilimize yönlendirileceksiniz._%0A%0Aİyi seyirler dileriz!%0ADM MARİN | ☎ +90 543 724 09 92`;
+
+  const waLink = phone ? `https://wa.me/${phone.startsWith('90') ? phone : '90' + phone}?text=${msg}` : `https://wa.me/905437240992?text=${msg}`;
+  window.open(waLink, '_blank');
+  flash("💬 WhatsApp bakım bildirimi ve akıllı puanlama bağlantısı oluşturuldu.");
+}
+
+function printBoatLogbook() {
+  window.print();
 }
 
 function renderSuppliers() {

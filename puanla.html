@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2Q19CJBPQB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-2Q19CJBPQB");
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Servis Deneyiminizi Değerlendirin | DM MARİN</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+:root {
+  --navy: #071b2b;
+  --cyan: #0284c7;
+  --gold: #f59e0b;
+  --bg: #0b1523;
+  --card: #132235;
+  --line: rgba(255,255,255,0.12);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 20%, #172d47 0%, #071b2b 100%);
+  color: #f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.rating-card {
+  background: rgba(19, 34, 53, 0.95);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 36px 30px;
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 25px 70px rgba(0,0,0,0.5);
+  backdrop-filter: blur(16px);
+}
+.logo {
+  width: 180px;
+  height: auto;
+  margin-bottom: 20px;
+}
+h1 {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0 0 8px;
+  color: #fff;
+}
+p.sub {
+  color: #94a3b8;
+  font-size: 14px;
+  margin: 0 0 24px;
+  line-height: 1.5;
+}
+.stars-wrap {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.star-btn {
+  background: none;
+  border: none;
+  font-size: 42px;
+  color: #475569;
+  cursor: pointer;
+  transition: transform .15s ease, color .15s ease;
+  padding: 0;
+}
+.star-btn:hover, .star-btn.active {
+  color: #f59e0b;
+  transform: scale(1.15);
+}
+.funnel-box {
+  display: none;
+  animation: fadeIn .25s ease-out;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.high-score-box {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.low-score-box {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  text-align: left;
+}
+.btn-google {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 20px;
+  background: #ffffff;
+  color: #1e293b;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 800;
+  text-decoration: none;
+  margin-top: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  transition: transform .15s;
+}
+.btn-google:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.35);
+}
+.btn-feedback {
+  width: 100%;
+  padding: 12px;
+  background: var(--cyan);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 750;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+textarea {
+  width: 100%;
+  border: 1px solid #334155;
+  background: #0b1523;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 13.5px;
+  resize: vertical;
+  margin-top: 8px;
+}
+</style>
+</head>
+<body>
+
+<div class="rating-card">
+  <img src="assets/dm-marin-logo-v2.webp" alt="DM MARİN" class="logo">
+  <h1 id="rating-title">Servis Deneyiminizi Nasıl Buldunuz?</h1>
+  <p class="sub" id="rating-sub">Teknenizde gerçekleştirilen teknik servis ve parça değişim işlemlerini değerlendirmeniz bizim için çok değerlidir.</p>
+
+  <div class="stars-wrap" id="stars-container">
+    <button type="button" class="star-btn" data-star="1" onclick="handleRate(1)">★</button>
+    <button type="button" class="star-btn" data-star="2" onclick="handleRate(2)">★</button>
+    <button type="button" class="star-btn" data-star="3" onclick="handleRate(3)">★</button>
+    <button type="button" class="star-btn" data-star="4" onclick="handleRate(4)">★</button>
+    <button type="button" class="star-btn" data-star="5" onclick="handleRate(5)">★</button>
+  </div>
+
+  <!-- 4 & 5 STARS: GOOGLE REVIEW REDIRECT -->
+  <div class="funnel-box high-score-box" id="high-score-box">
+    <div style="font-size:32px;margin-bottom:6px">🎉 ⭐⭐⭐⭐⭐</div>
+    <b style="color:#10b981;font-size:16px;display:block">Harika! Memnuniyetiniz Bizim İçin Gurur Kaynağı.</b>
+    <p style="color:#cbd5e1;font-size:13px;margin:8px 0 14px;line-height:1.4">
+      Deneyiminizi Google Haritalar profilimizde 5 yıldızla paylaşarak diğer yat sahiplerine ve kaptanlara rehberlik edebilir misiniz?
+    </p>
+    <a href="https://search.google.com/local/writereview?placeid=ChIJ0wW1n9q7yhQRE9k4hZtG3qE" target="_blank" rel="noopener" class="btn-google" id="google-review-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+      Google’da 5 Yıldızlı Yorum Bırak →
+    </a>
+  </div>
+
+  <!-- 1, 2, 3 STARS: INTERNAL PRIVATE FEEDBACK -->
+  <div class="funnel-box low-score-box" id="low-score-box">
+    <b style="color:#f59e0b;font-size:15px;display:block">Geri Bildiriminiz Bizim İçin Çok Değerli.</b>
+    <p style="color:#94a3b8;font-size:12.5px;margin:4px 0 10px">
+      Hizmetimizde veya teknisyenimizin çalışmasında memnun kalmadığınız noktaları lütfen yönetime doğrudan iletiniz.
+    </p>
+    <textarea id="feedback-text" rows="3" placeholder="Örn: Servis saatinde gecikme oldu / Parça temin süresi uzadı..."></textarea>
+    <button type="button" class="btn-feedback" onclick="submitPrivateFeedback()">Geri Bildirimi Yönetime İlet →</button>
+  </div>
+</div>
+
+<script>
+let selectedStar = 0;
+const urlParams = new URLSearchParams(window.location.search);
+const boatName = urlParams.get("boat") || "Tekneniz";
+const refNo = urlParams.get("ref") || "";
+
+if (boatName) {
+  document.getElementById("rating-title").textContent = decodeURIComponent(boatName) + " Servis Değerlendirmesi";
+}
+
+function handleRate(star) {
+  selectedStar = star;
+  const btns = document.querySelectorAll(".star-btn");
+  btns.forEach((b, idx) => {
+    b.classList.toggle("active", idx < star);
+  });
+
+  const highBox = document.getElementById("high-score-box");
+  const lowBox = document.getElementById("low-score-box");
+
+  if (star >= 4) {
+    highBox.style.display = "block";
+    lowBox.style.display = "none";
+  } else {
+    highBox.style.display = "none";
+    lowBox.style.display = "block";
+  }
+}
+
+function submitPrivateFeedback() {
+  const text = document.getElementById("feedback-text").value.trim();
+  if (!text) {
+    alert("Lütfen görüşünüzü kısaca belirtiniz.");
+    return;
+  }
+  const waMsg = "Sayın Yönetici,%0A%0A" + encodeURIComponent(boatName) + " teknesi için " + selectedStar + " yıldız verildi.%0AGeri Bildirim: " + encodeURIComponent(text) + "%0Aİş Emri: " + encodeURIComponent(refNo);
+  window.open("https://wa.me/905437240992?text=" + waMsg, "_blank");
+  alert("Geri bildiriminiz için teşekkür ederiz. Konu yönetimimiz tarafından derhal incelenecektir.");
+}
+</script>
+</body>
+</html>
