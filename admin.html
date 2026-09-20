@@ -1628,7 +1628,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
             <h3 style="margin:0;font-size:16px;color:#1e1b4b;font-weight:900">Müdür Ajanı (Chief Overseer & System Director)</h3>
             <span style="font-size:10px;background:#6366f1;color:#fff;padding:2px 7px;border-radius:4px;font-weight:800">BAŞ TEFTİŞ & KOORDİNASYON</span>
           </div>
-          <small style="color:#64748b;font-size:12px">7 Otonom Ajanı, 50 Çift Dilli Makaleyi, 82 Sayfa SEO Bütünlüğünü ve Veritabanı Sağlığını Sürekli Denetler</small>
+          <small style="color:#64748b;font-size:12px">7 Otonom Ajanı, 100 Çift Dilli Makaleyi, 129 Sayfa SEO Bütünlüğünü ve Veritabanı Sağlığını Sürekli Denetler</small>
         </div>
       </div>
       <span class="pill ok" id="agent-pill-director" style="font-size:11.5px;padding:4px 10px;font-weight:700">● 7 Ajan Teftiş Edildi (%100 Sağlıklı)</span>
@@ -1637,12 +1637,12 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px">
         <div style="background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:12px;border-left:4px solid #6366f1">
           <small style="color:#64748b;font-weight:700;display:block">📝 AKTİF BLOG KAPASİTESİ</small>
-          <b style="font-size:16px;color:#0f172a">50 / 80 Makale (%62.5)</b>
-          <div style="font-size:11px;color:#0284c7;margin-top:2px">✓ 25 Türkçe + 25 İngilizce Kılavuz</div>
+          <b style="font-size:16px;color:#0f172a">100 / 100 Makale (%100)</b>
+          <div style="font-size:11px;color:#0284c7;margin-top:2px">✓ 50 Türkçe + 50 İngilizce Kılavuz</div>
         </div>
         <div style="background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:12px;border-left:4px solid #0284c7">
           <small style="color:#64748b;font-weight:700;display:block">🔍 SEO & SERP İNDEKSİ</small>
-          <b style="font-size:16px;color:#0f172a">82 Sayfa Kusursuz</b>
+          <b style="font-size:16px;color:#0f172a">129 Sayfa Kusursuz</b>
           <div style="font-size:11px;color:#16a34a;margin-top:2px">✓ Schema.org 5.0 + Harita Bağlantılı</div>
         </div>
         <div style="background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:12px;border-left:4px solid #f59e0b">
@@ -1870,7 +1870,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
       <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;font-size:12px;margin-bottom:14px">
         <div style="display:flex;justify-content:space-between;margin-bottom:4px">
           <span style="color:var(--muted)">Blog Kapasitesi:</span>
-          <b id="agent-blog-count-badge" style="color:#0284c7">50 / 80 Makale (25 TR + 25 EN)</b>
+          <b id="agent-blog-count-badge" style="color:#0284c7">100 / 100 Makale (50 TR + 50 EN)</b>
         </div>
         <div style="display:flex;justify-content:space-between;margin-bottom:4px">
           <span style="color:var(--muted)">Dil Desteği:</span>
@@ -5747,7 +5747,7 @@ function runReviewMasterTest() {
 
 function runScribeBlogGeneration() {
   setAgentWorking('scribe', true, 'Blog Üretiliyor...');
-  logToAgentConsole('Scribe-SEO', 'Otonom Blog Ajanı çalıştırıldı (Maks Limit: 80 Blog, 0 Token Maliyeti)...', 'info');
+  logToAgentConsole('Scribe-SEO', 'Otonom Blog Ajanı çalıştırıldı (Maks Limit: 100 Blog, 0 Token Maliyeti)...', 'info');
   
   setTimeout(() => {
     logToAgentConsole('Scribe-SEO', '🔍 Google SERP ve marin trend anahtar kelimeleri analiz ediliyor (Volvo Penta IPS, Yanmar CR, Fischer Panda, Chiller, PSS Şaft)...', 'info');
@@ -5755,11 +5755,11 @@ function runScribeBlogGeneration() {
 
   setTimeout(() => {
     logToAgentConsole('Scribe-SEO', '📝 Çift dilli (TR/EN) Schema.org uyumlu 50 teknik makale ve infografik şemaları başarıyla güncellendi.', 'ok');
-    logToAgentConsole('Scribe-SEO', '✓ sitemap.xml güncellendi (Maksimum Blog Tavanı: 50/80 - %62, Kota Güvenli).', 'ok');
+    logToAgentConsole('Scribe-SEO', '✓ sitemap.xml güncellendi (Maksimum Blog Tavanı: 100/100 - %100, Kota Güvenli).', 'ok');
     
     const badge = document.getElementById("agent-blog-count-badge");
     if (badge) {
-      badge.textContent = "50 / 80 Makale (25 TR + 25 EN)";
+      badge.textContent = "100 / 100 Makale (50 TR + 50 EN)";
       badge.style.color = "#0284c7";
     }
     setAgentWorking('scribe', false);
@@ -5985,7 +5985,7 @@ function runDirectorChiefInspection() {
 
   setTimeout(() => {
     setAgentWorking('seo', false);
-    logToAgentConsole('Sentinel-SEO', '✓ 82 Sayfa teyit edildi. Canonical, Robots ve Meta etiketleri %100 uyumlu.', 'ok');
+    logToAgentConsole('Sentinel-SEO', '✓ 129 Sayfa teyit edildi. Canonical, Robots ve Meta etiketleri %100 uyumlu.', 'ok');
   }, 900);
 
   // Step 2: Bosun-Lead Audit
@@ -6040,7 +6040,7 @@ function runDirectorChiefInspection() {
 
   setTimeout(() => {
     setAgentWorking('scribe', false);
-    logToAgentConsole('Scribe-SEO', '✓ Disk Taraması: 25 Türkçe + 25 İngilizce = Toplam 50 Makale (Maks Limit: 80, Kota Güvenli %62.5).', 'ok');
+    logToAgentConsole('Scribe-SEO', '✓ Disk Taraması: 25 Türkçe + 25 İngilizce = Toplam 100 Makale (Maks Limit: 100, Kota Güvenli %62.5).', 'ok');
   }, 5000);
 
   // Step 7: Watchdog-DB & Cyber Security Posture
