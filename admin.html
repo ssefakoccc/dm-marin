@@ -3792,6 +3792,9 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
+function showToast(msg) { flash(msg); }
+window.showToast = showToast;
+
 function flash(message) {
   toast.textContent = message;
   toast.classList.add('show');
@@ -4582,7 +4585,7 @@ const DEFAULT_STAFF_USERS = [
 
 function getStaffUsers() {
   try {
-    const raw = localStorage.getItem("dm_erp_staff");
+    const raw = localStorage.getItem("dm_erp_staff") || localStorage.getItem("dm_staff_users");
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -4593,6 +4596,7 @@ function getStaffUsers() {
 
 function saveStaffUsers(list) {
   localStorage.setItem("dm_erp_staff", JSON.stringify(list));
+  localStorage.setItem("dm_staff_users", JSON.stringify(list));
 }
 
 function checkBirthdays() {
@@ -4669,14 +4673,25 @@ function renderAdminUsersTable() {
 }
 
 function openAdminUserModal() {
-  document.getElementById("form-admin-user").reset();
-  document.getElementById("adm-user-id").value = "";
-  document.getElementById("admin-user-modal-title").textContent = "👤 Yeni Kullanıcı / Personel Tanımla";
-  document.getElementById("modal-admin-user").classList.add("open");
+  const form = document.getElementById("form-admin-user");
+  if (form) form.reset();
+  const idEl = document.getElementById("adm-user-id");
+  if (idEl) idEl.value = "";
+  const titleEl = document.getElementById("admin-user-modal-title");
+  if (titleEl) titleEl.textContent = "👤 Yeni Kullanıcı / Personel Tanımla";
+  const modal = document.getElementById("modal-admin-user");
+  if (modal) {
+    modal.classList.add("open");
+    modal.style.display = "flex";
+  }
 }
 
 function closeAdminUserModal() {
-  document.getElementById("modal-admin-user").classList.remove("open");
+  const modal = document.getElementById("modal-admin-user");
+  if (modal) {
+    modal.classList.remove("open");
+    modal.style.display = "none";
+  }
 }
 
 function editAdminUser(id) {
@@ -4684,29 +4699,67 @@ function editAdminUser(id) {
   const u = users.find(x => x.id === id);
   if (!u) return;
 
-  document.getElementById("adm-user-id").value = u.id;
-  document.getElementById("adm-user-name").value = u.name || "";
-  document.getElementById("adm-user-username").value = u.username || "";
-  document.getElementById("adm-user-role").value = u.role || "";
-  document.getElementById("adm-user-phone").value = u.phone || "";
-  document.getElementById("adm-user-birthdate").value = u.birthDate || "";
-  document.getElementById("adm-user-pin").value = u.pin || "";
-  document.getElementById("adm-user-active").value = u.active ? "true" : "false";
+  const idEl = document.getElementById("adm-user-id");
+  const nameEl = document.getElementById("adm-user-name");
+  const userEl = document.getElementById("adm-user-username");
+  const roleEl = document.getElementById("adm-user-role");
+  const phoneEl = document.getElementById("adm-user-phone");
+  const birthEl = document.getElementById("adm-user-birthdate");
+  const pinEl = document.getElementById("adm-user-pin");
+  const actEl = document.getElementById("adm-user-active");
 
-  document.getElementById("admin-user-modal-title").textContent = `✏️ Personel Düzenle: ${u.name}`;
-  document.getElementById("modal-admin-user").classList.add("open");
+  if (idEl) idEl.value = u.id;
+  if (nameEl) nameEl.value = u.name || "";
+  if (userEl) userEl.value = u.username || "";
+  if (roleEl) roleEl.value = u.role || "";
+  if (phoneEl) phoneEl.value = u.phone || "";
+  if (birthEl) birthEl.value = u.birthDate || "";
+  if (pinEl) pinEl.value = u.pin || "1998";
+  if (actEl) actEl.value = u.active ? "true" : "false";
+
+  const titleEl = document.getElementById("admin-user-modal-title");
+  if (titleEl) titleEl.textContent = `✏️ Personel Düzenle: ${u.name}`;
+  
+  const modal = document.getElementById("modal-admin-user");
+  if (modal) {
+    modal.classList.add("open");
+    modal.style.display = "flex";
+  }
 }
 
 function saveAdminUser(e) {
-  e.preventDefault();
-  const id = document.getElementById("adm-user-id").value;
-  const name = document.getElementById("adm-user-name").value.trim();
-  const username = document.getElementById("adm-user-username").value.trim() || name.toLowerCase().replace(/\s+/g, '.');
-  const role = document.getElementById("adm-user-role").value.trim();
-  const phone = document.getElementById("adm-user-phone").value.trim();
-  const birthDate = document.getElementById("adm-user-birthdate").value;
-  const pin = document.getElementById("adm-user-pin").value.trim() || "1998";
-  const active = document.getElementById("adm-user-active").value === "true";
+  if (e && e.preventDefault) e.preventDefault();
+  
+  const idEl = document.getElementById("adm-user-id");
+  const nameEl = document.getElementById("adm-user-name");
+  const userEl = document.getElementById("adm-user-username");
+  const roleEl = document.getElementById("adm-user-role");
+  const phoneEl = document.getElementById("adm-user-phone");
+  const birthEl = document.getElementById("adm-user-birthdate");
+  const pinEl = document.getElementById("adm-user-pin");
+  const actEl = document.getElementById("adm-user-active");
+
+  if (!nameEl || !nameEl.value.trim()) {
+    alert("Lütfen personelin adını ve soyadını giriniz.");
+    return false;
+  }
+  if (!roleEl || !roleEl.value.trim()) {
+    alert("Lütfen personelin görevini / rolünü giriniz.");
+    return false;
+  }
+  if (!pinEl || !pinEl.value.trim()) {
+    alert("Lütfen personele ait bir giriş PIN kodu belirleyiniz (Örn: 1998).");
+    return false;
+  }
+
+  const id = idEl ? idEl.value : "";
+  const name = nameEl.value.trim();
+  const username = (userEl && userEl.value.trim()) ? userEl.value.trim() : name.toLowerCase().replace(/\s+/g, '.');
+  const role = roleEl.value.trim();
+  const phone = phoneEl ? phoneEl.value.trim() : "";
+  const birthDate = birthEl ? birthEl.value : "";
+  const pin = pinEl.value.trim() || "1998";
+  const active = actEl ? actEl.value === "true" : true;
 
   let users = getStaffUsers();
 
@@ -4714,6 +4767,8 @@ function saveAdminUser(e) {
     const idx = users.findIndex(x => x.id === id);
     if (idx !== -1) {
       users[idx] = { ...users[idx], name, username, role, phone, birthDate, pin, active };
+    } else {
+      users.push({ id: id || ("st-" + Date.now()), name, username, role, phone, birthDate, pin, active });
     }
   } else {
     users.push({
@@ -4731,7 +4786,9 @@ function saveAdminUser(e) {
   saveStaffUsers(users);
   closeAdminUserModal();
   renderAdminUsersTable();
-  showToast(`✓ Kullanıcı ${name} kaydedildi (PIN: ${pin})`);
+  if (typeof initAgentDashboard === "function") initAgentDashboard();
+  flash(`✓ Kullanıcı "${name}" başarıyla kaydedildi (PIN: ${pin})`);
+  return false;
 }
 
 function deleteAdminUser(id) {
@@ -4746,7 +4803,8 @@ function deleteAdminUser(id) {
   users = users.filter(x => x.id !== id);
   saveStaffUsers(users);
   renderAdminUsersTable();
-  showToast("✓ Kullanıcı silindi.");
+  if (typeof initAgentDashboard === "function") initAgentDashboard();
+  flash("✓ Kullanıcı silindi.");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
