@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="tr">
 <head>
-<!-- Google tag (gtag.js) - Optimized async loader for 95+ PageSpeed -->
+<!-- Google tag (gtag.js) - Ultra-performance lazy loader -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -16,14 +16,11 @@
       s.async = true;
       document.head.appendChild(s);
     }
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(function(){ setTimeout(loadGtag, 1000); });
-    } else {
-      window.addEventListener('load', function(){ setTimeout(loadGtag, 1500); });
-    }
-    ['touchstart', 'scroll', 'mousemove', 'keydown'].forEach(function(e){
+    // Load immediately on any user gesture, or fallback after 4.5s
+    ['touchstart', 'scroll', 'mousemove', 'mousedown', 'click', 'keydown'].forEach(function(e){
       window.addEventListener(e, loadGtag, { once: true, passive: true });
     });
+    setTimeout(loadGtag, 4500);
   })();
 </script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -67,18 +64,31 @@
 @media(max-width:760px){.model-grid,.location-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn,.gallery img{transition:none}}
 </style>
-<!-- Vercel Web Analytics -->
+<!-- Vercel Web Analytics - Deferred for 98+ PageSpeed -->
 <script>
 window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+(function(){
+  function loadVa(){
+    if (window._vaLoaded) return;
+    window._vaLoaded = true;
+    var s = document.createElement('script');
+    s.src = '/_vercel/insights/script.js';
+    s.defer = true;
+    document.head.appendChild(s);
+  }
+  ['touchstart', 'scroll', 'mousemove', 'mousedown', 'click', 'keydown'].forEach(function(e){
+    window.addEventListener(e, loadVa, { once: true, passive: true });
+  });
+  setTimeout(loadVa, 4500);
+})();
 </script>
-<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <a class="skip" href="#icerik" data-i18n="skip_link">İçeriğe geç</a>
 <header class="header" id="anasayfa">
   <div class="container header-in">
     <a class="logo" href="#anasayfa" aria-label="DM MARİN ana sayfa">
-      <img src="assets/dm-marin-logo-v2.webp" alt="DM MARİN Profesyonel Marin Teknik Çözümleri" width="544" height="190">
+      <img src="assets/dm-marin-logo-v2.webp" alt="DM MARİN Profesyonel Marin Teknik Çözümleri" width="544" height="190" decoding="async">
     </a>
     <button class="menu" type="button" aria-label="Menüyü aç" aria-expanded="false">☰</button>
     <nav class="nav" aria-label="Ana menü">
@@ -156,7 +166,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
     </div>
     <div class="services">
       <article class="service">
-        <div class="service-media"><img src="assets/dm-marin-atolye.webp" alt="DM MARİN organize marin atölyesinde motor revizyon ve parça hazırlık çalışması" width="1920" height="1080" loading="lazy"></div>
+        <div class="service-media"><img src="assets/dm-marin-atolye.webp" alt="DM MARİN organize marin atölyesinde motor revizyon ve parça hazırlık çalışması" width="1920" height="1080" loading="lazy" decoding="async"></div>
         <span class="service-no">01</span>
         <div class="service-body">
           <p class="label" data-i18n="serv1_badge">Planlı servis</p>
@@ -170,7 +180,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
         </div>
       </article>
       <article class="service">
-        <div class="service-media"><img src="assets/dm-marin-servis-araci.webp" alt="Yat rıhtımında donanımlı mobil marin servis aracı ve teknik ekipmanlar" width="1920" height="1080" loading="lazy"></div>
+        <div class="service-media"><img src="assets/dm-marin-servis-araci.webp" alt="Yat rıhtımında donanımlı mobil marin servis aracı ve teknik ekipmanlar" width="1920" height="1080" loading="lazy" decoding="async"></div>
         <span class="service-no">02</span>
         <div class="service-body">
           <p class="label" data-i18n="serv2_badge">Yerinde müdahale</p>
@@ -201,7 +211,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
       <a class="btn ghost" href="#randevu" data-i18n="diag_btn">Teknik destek isteyin →</a>
     </div>
     <div class="diagnostics-media">
-      <img src="assets/dm-marin-ariza-tespit.webp" alt="Yat makine dairesinde dijital teşhis tableti ile marin motor ve ECU arıza tespiti" width="1920" height="1080" loading="lazy">
+      <img src="assets/dm-marin-ariza-tespit.webp" alt="Yat makine dairesinde dijital teşhis tableti ile marin motor ve ECU arıza tespiti" width="1920" height="1080" loading="lazy" decoding="async">
       <p class="diagnostics-note" data-i18n="diag_note">“Doğru teşhis, güvenli ve kesintisiz seyir.”</p>
     </div>
   </div>
@@ -214,7 +224,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
     </div>
     <div class="field-showcase">
       <article class="field-card">
-        <div class="field-media"><img src="assets/dm-marin-servis-noktasi.webp" alt="Marina pontonunda teknik donanımla motoryata yerinde mobil marin servis desteği" width="1920" height="1080" loading="lazy"></div>
+        <div class="field-media"><img src="assets/dm-marin-servis-noktasi.webp" alt="Marina pontonunda teknik donanımla motoryata yerinde mobil marin servis desteği" width="1920" height="1080" loading="lazy" decoding="async"></div>
         <div class="field-content">
           <span class="field-badge" data-i18n="fc1_badge">01 · Marina & Rıhtım</span>
           <h3 data-i18n="fc1_title">Mobil Müdahale ve Hızlı İntikal</h3>
@@ -223,7 +233,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
         </div>
       </article>
       <article class="field-card">
-        <div class="field-media"><img src="assets/dm-marin-motor-bakim-sahada.webp" alt="Tekne makine dairesinde marin motor mekanik bakım ve parça kontrolü" width="1920" height="1080" loading="lazy"></div>
+        <div class="field-media"><img src="assets/dm-marin-motor-bakim-sahada.webp" alt="Tekne makine dairesinde marin motor mekanik bakım ve parça kontrolü" width="1920" height="1080" loading="lazy" decoding="async"></div>
         <div class="field-content">
           <span class="field-badge" data-i18n="fc2_badge">02 · Makine Dairesi</span>
           <h3 data-i18n="fc2_title">Motor ve Mekanik Sistem Bakımı</h3>
@@ -232,7 +242,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
         </div>
       </article>
       <article class="field-card">
-        <div class="field-media"><img src="assets/dm-marin-jenerator-elektrik-sahada.webp" alt="Marin jeneratör kontrol paneli ve marin elektrik sisteminde multimetre ve teşhis testi" width="1920" height="1080" loading="lazy"></div>
+        <div class="field-media"><img src="assets/dm-marin-jenerator-elektrik-sahada.webp" alt="Marin jeneratör kontrol paneli ve marin elektrik sisteminde multimetre ve teşhis testi" width="1920" height="1080" loading="lazy" decoding="async"></div>
         <div class="field-content">
           <span class="field-badge" data-i18n="fc3_badge">03 · Enerji & Teşhis</span>
           <h3 data-i18n="fc3_title">Jeneratör ve Elektrik Teşhisi</h3>
@@ -241,7 +251,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
         </div>
       </article>
       <article class="field-card">
-        <div class="field-media"><img src="assets/dm-marin-musteri-teslim.webp" alt="Motoryat güvertesinde bakım kontrol listesi ile tekne sahibine yazılı seyir teslimi" width="1920" height="1080" loading="lazy"></div>
+        <div class="field-media"><img src="assets/dm-marin-musteri-teslim.webp" alt="Motoryat güvertesinde bakım kontrol listesi ile tekne sahibine yazılı seyir teslimi" width="1920" height="1080" loading="lazy" decoding="async"></div>
         <div class="field-content">
           <span class="field-badge" data-i18n="fc4_badge">04 · Rapor & Seyir</span>
           <h3 data-i18n="fc4_title">Kontrol, Raporlama ve Güvenli Teslimat</h3>
