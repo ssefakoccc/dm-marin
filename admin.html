@@ -4849,6 +4849,97 @@ function getStaffUsers() {
 function saveStaffUsers(list) {
   localStorage.setItem("dm_erp_staff", JSON.stringify(list));
   localStorage.setItem("dm_staff_users", JSON.stringify(list));
+  // 🌐 Cloud Sync — Farklı PC'den de erişilebilsin
+  syncSettingToCloud("erp_staff", list);
+}
+
+// 🌐 Tek bir ayarı Supabase site_settings tablosuna yaz (arka planda, sessizce)
+async function syncSettingToCloud(key, value) {
+  try {
+    const token = await getValidAdminToken();
+    await fetch('/api/admin/settings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({ key, value })
+    });
+  } catch(e) {
+    // Sessizce başarısız ol — offline modda sorun değil
+  }
+}
+
+// 🌐 Cloud'dan bir ayarı oku (yoksa null döner)
+async function loadSettingFromCloud(key) {
+  try {
+    const token = await getValidAdminToken();
+    const res = await fetch('/api/admin/settings', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data.success && data.data && data.data[key] !== undefined) {
+      return data.data[key];
+    }
+  } catch(e) {}
+  return null;
+}
+
+// 🌐 Uygulama başlangıcında cloud'dan kritik verileri çek ve localStorage'ı güncelle
+async function loadCriticalDataFromCloud() {
+  try {
+    const token = await getValidAdminToken();
+    const res = await fetch('/api/admin/settings', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.success || !data.data) return;
+
+    const settings = data.data;
+
+    // 1. Personel verisi
+    if (settings.erp_staff && Array.isArray(settings.erp_staff) && settings.erp_staff.length > 0) {
+      const localRaw = localStorage.getItem("dm_erp_staff");
+      const localStaff = localRaw ? JSON.parse(localRaw) : [];
+      // Cloud daha fazla kullanıcı içeriyorsa veya local boşsa cloud'u al
+      if (!localStaff.length || settings.erp_staff.length >= localStaff.length) {
+        localStorage.setItem("dm_erp_staff", JSON.stringify(settings.erp_staff));
+        localStorage.setItem("dm_staff_users", JSON.stringify(settings.erp_staff));
+        console.log("✅ Cloud Sync: Personel verisi cloud'dan yüklendi (" + settings.erp_staff.length + " kişi)");
+      }
+    }
+
+    // 2. Quartermaster öğrenilen bilgi
+    if (settings.qm_learned && typeof settings.qm_learned === 'object') {
+      const localRaw = localStorage.getItem("dm_qm_learned_knowledge");
+      const localLearned = localRaw ? JSON.parse(localRaw) : {};
+      // Merge: cloud + local (local üste gelir — offline öğrenme korunur)
+      const merged = Object.assign({}, settings.qm_learned, localLearned);
+      localStorage.setItem("dm_qm_learned_knowledge", JSON.stringify(merged));
+      // Merged versiyonu da cloud'a geri yaz (bidirectional sync)
+      if (Object.keys(merged).length > Object.keys(settings.qm_learned).length) {
+        syncSettingToCloud("qm_learned", merged);
+      }
+      console.log("✅ Cloud Sync: QM bilgisi cloud'dan yüklendi (" + Object.keys(merged).length + " OEM)");
+    }
+
+    // 3. Scribe blog sayacı
+    if (settings.scribe_blog_count !== undefined) {
+      const cloudCount = parseInt(settings.scribe_blog_count, 10) || 0;
+      const localCount = parseInt(localStorage.getItem("dm_scribe_extra_blog_count") || "0", 10);
+      // En yüksek sayıyı al
+      if (cloudCount > localCount) {
+        localStorage.setItem("dm_scribe_extra_blog_count", String(cloudCount));
+        if (typeof updateScribeUI === 'function') updateScribeUI();
+        console.log("✅ Cloud Sync: Scribe blog sayacı cloud'dan yüklendi (" + cloudCount + " extra)");
+      }
+    }
+
+  } catch(e) {
+    console.warn("Cloud sync başarısız (offline mod):", e);
+  }
 }
 
 function checkBirthdays() {
@@ -13636,6 +13727,8 @@ function addExtra25Blogs() {
     
     // Save new count
     localStorage.setItem("dm_scribe_extra_blog_count", String(newCount - 100));
+    // 🌐 Cloud Sync — Scribe sayacını cloud'a yaz
+    syncSettingToCloud("scribe_blog_count", newCount - 100);
     updateScribeUI();
 
     logToAgentConsole('Scribe-SEO', `🎯 İŞLEM TAMAMLANDI: +25 Yeni Blog Başarıyla Eklendi! (Güncel Portföy: ${newCount} Makale | Depolama: ${mbNew} MB).`, 'ok');
@@ -13714,6 +13807,11 @@ function saveQuartermasterLearnedKnowledge(oem, data) {
     parsed[oem] = data;
     localStorage.setItem("dm_qm_learned_knowledge", JSON.stringify(parsed));
     logToAgentConsole('Quartermaster', `🧠 Yeni OEM Bilgisi Öğrenildi ve Hafızaya Kaydedildi: [${oem}] -> ${data.brand} (${data.name})`, 'ok');
+    // 🌐 Cloud Sync — Tüm öğrenilen bilgiyi cloud'a yaz (debounce ile 5 sn)
+    clearTimeout(window._qmCloudSyncTimer);
+    window._qmCloudSyncTimer = setTimeout(() => {
+      syncSettingToCloud("qm_learned", parsed);
+    }, 5000);
   } catch(e) {}
 }
 
@@ -13957,6 +14055,8 @@ function runQuartermasterSelfAudit(userInitiated = false) {
     }
     if (newlyLearned > 0) {
       localStorage.setItem("dm_qm_learned_knowledge", JSON.stringify(learnedVault));
+      // 🌐 Cloud Sync — Toplu öğrenme sonrası cloud'a yaz
+      syncSettingToCloud("qm_learned", learnedVault);
     }
   }
 
@@ -14301,6 +14401,15 @@ window.addEventListener("DOMContentLoaded", () => {
   initAgentDashboard();
   initQuartermasterBackgroundWorker();
   if (typeof updateScribeUI === 'function') updateScribeUI();
+  // 🌐 Cloud Sync: Sayfa açılışında cloud'dan kritik verileri çek
+  // (1.5 sn gecikme ile — auth token hazır olsun diye)
+  setTimeout(() => {
+    loadCriticalDataFromCloud().then(() => {
+      // Staff tablosunu yenile (cloud'dan yeni data gelmiş olabilir)
+      if (typeof renderStaffTable === 'function') renderStaffTable();
+      if (typeof updateScribeUI === 'function') updateScribeUI();
+    });
+  }, 1500);
 });
 
 </script>
