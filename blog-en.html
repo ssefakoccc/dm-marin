@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2Q19CJBPQB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2Q19CJBPQB');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Marine Engineering Blog & Yacht Guides | DM MARIN Turkey</title>
+<meta name="description" content="Technical knowledge base for captains and yacht owners: Volvo Penta, MAN, MTU diesel maintenance, Cummins Onan/Kohler generator troubleshooting, Seakeeper gyro service, lithium conversions, and winterization in Turkish marinas.">
+<link rel="canonical" href="https://dmmarin.com/blog-en.html">
+<link rel="alternate" hreflang="tr" href="https://dmmarin.com/blog.html">
+<link rel="alternate" hreflang="en" href="https://dmmarin.com/blog-en.html">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="keywords" content="yacht service turkey, marine engineer bodrum, yacht maintenance marmaris, gocek marine repair, volvo penta turkey, seakeeper service turkey">
+<meta name="theme-color" content="#071b2b">
+<link rel="stylesheet" href="service-page.css">
+<link rel="stylesheet" href="brand-page.css">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Marine Engineering Blog & Yacht Technical Guides | DM MARIN">
+<meta property="og:description" content="Expert marine engineering guides for motor yachts and sailing vessels across Istanbul, Bodrum, Marmaris, and Gocek.">
+<meta property="og:url" content="https://dmmarin.com/blog-en.html">
+<meta property="og:image" content="https://dmmarin.com/assets/dm-marin-logo-v2.webp">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "name": "DM MARIN Yacht Engineering Knowledge Base",
+      "description": "Marine diesel engines, generators, stabilization, and electrical systems engineering guides.",
+      "url": "https://dmmarin.com/blog-en.html"
+    },
+    {
+      "@type": ["LocalBusiness", "ProfessionalService"],
+      "@id": "https://dmmarin.com/#business",
+      "name": "DM MARIN",
+      "telephone": "+905437240992",
+      "email": "servis@dmmarin.com",
+      "url": "https://dmmarin.com/",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "İstanbul",
+        "addressCountry": "TR"
+      },
+      "hasMap": "https://maps.google.com/?cid=12028604724976771691",
+      "sameAs": [
+        "https://dmmarin.com",
+        "https://maps.google.com/?q=DM+Marin+Gemi+ve+Deniz+Teknolojisi+Mühendisi+İstanbul",
+        "https://wa.me/905437240992",
+        "https://www.instagram.com/dmmarin_servis"
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5.0",
+        "reviewCount": "24",
+        "bestRating": "5",
+        "worstRating": "1"
+      }
+    }
+  ]
+}
+</script>
+<style>
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  margin-top: 30px;
+}
+.blog-card {
+  background: #fff;
+  border: 1px solid #dce7ea;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(3,22,35,0.04);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.blog-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(3,22,35,0.1);
+}
+.blog-card-img {
+  position: relative;
+  height: 200px;
+  background: #071b2b;
+  overflow: hidden;
+}
+.blog-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.blog-card:hover .blog-card-img img {
+  transform: scale(1.04);
+}
+.blog-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(7,27,43,0.85);
+  color: #19c7df;
+  backdrop-filter: blur(8px);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 800;
+  border: 1px solid rgba(25,199,223,0.3);
+}
+.blog-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.blog-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.blog-card h3 {
+  margin: 0 0 10px;
+  font-size: 17px;
+  line-height: 1.4;
+  font-weight: 800;
+  color: #071b2b;
+}
+.blog-card h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+.blog-card h3 a:hover {
+  color: #087f93;
+}
+.blog-card p {
+  margin: 0 0 16px;
+  color: #475569;
+  font-size: 13.5px;
+  line-height: 1.6;
+  flex: 1;
+}
+.blog-read-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #087f93;
+  font-weight: 800;
+  font-size: 13px;
+  text-decoration: none;
+  margin-top: auto;
+}
+.blog-read-link:hover {
+  text-decoration: underline;
+}
+.filter-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.filter-btn {
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.filter-btn.active, .filter-btn:hover {
+  background: #071b2b;
+  color: #fff;
+  border-color: #071b2b;
+}
+</style>
+<!-- Vercel Web Analytics -->
+<script>
+window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<header class="header">
+  <div class="container header-in">
+    <a class="logo" href="index.html"><img src="assets/dm-marin-logo-v2.webp" alt="DM MARIN Marine Technical Services" width="260" height="80"></a>
+    <nav class="nav">
+      <a href="index.html#hizmetler">Services</a>
+      <a href="index.html#markalar">Brands</a>
+      <a href="blog-en.html" style="color:#087f93;font-weight:700">Blog & Guides</a>
+      <div class="lang-switch" style="display:flex;gap:4px">
+        <a href="blog.html" class="lang-btn" style="text-decoration:none;padding:3px 8px;border-radius:4px;border:1px solid #cbd5e1;font-size:11px;font-weight:700;background:#fff;color:#071b2b">TR</a>
+        <a href="blog-en.html" class="lang-btn active" style="text-decoration:none;padding:3px 8px;border-radius:4px;border:1px solid #cbd5e1;font-size:11px;font-weight:700;background:#071b2b;color:#fff">EN</a>
+      </div>
+      <a class="cta" href="index.html#randevu">Request Service</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section class="hero" style="min-height:360px">
+  <img src="assets/motor-mekanik-bakim.webp" alt="DM MARIN Technical Blog" width="1672" height="941" fetchpriority="high">
+  <div class="container hero-copy">
+    <span class="eyebrow">Marine Knowledge Hub · Yacht Engineering</span>
+    <h1>Marine Engineering Blog & Technical Guides</h1>
+    <p>In-depth technical guides for captains, yacht managers, and boat owners across Turkish waters: engines, gensets, gyros, lithium, and winterizing.</p>
+  </div>
+</section>
+
+<section class="section" style="background:var(--paper);padding:40px 0 80px">
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px">
+      <h2 style="margin:0;font-size:24px">All Technical Guides (8 Guides)</h2>
+      <div class="filter-tabs">
+        <button class="filter-btn active" onclick="filterBlog('all', this)">All Topics</button>
+        <button class="filter-btn" onclick="filterBlog('Engine & Mechanical', this)">Engines</button>
+        <button class="filter-btn" onclick="filterBlog('Generators & Power', this)">Generators</button>
+        <button class="filter-btn" onclick="filterBlog('Marine Electrical', this)">Electrical & Lithium</button>
+        <button class="filter-btn" onclick="filterBlog('Stabilization & Gyro', this)">Stabilizers & Gyro</button>
+        <button class="filter-btn" onclick="filterBlog('Winterizing & Care', this)">Winterizing</button>
+      </div>
+    </div>
+
+    <div class="blog-grid" id="blog-grid-container">
+      
+<article class="blog-card" data-category="Engine & Mechanical">
+  <div class="blog-card-img">
+    <img src="assets/volvo-penta-d4-d6-ozel-servis.webp" alt="Volvo Penta D4, D6 & D13 Marine Engine Maintenance & Diagnostics" loading="lazy">
+    <span class="blog-badge">Engine & Mechanical</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 7 min read</span>
+      <span>•</span>
+      <span>Engineering Guide</span>
+    </div>
+    <h3><a href="blog-volvo-penta-d4-d6-d13-maintenance-and-faults.html">Volvo Penta D4, D6 & D13 Marine Engine Maintenance & Diagnostics</a></h3>
+    <p>Comprehensive maintenance schedule, compressor oil, aftercooler servicing, and EVC diagnostic troubleshooting for Volvo Penta D4, D6 and D13 common rail diesel engines.</p>
+    <a class="blog-read-link" href="blog-volvo-penta-d4-d6-d13-maintenance-and-faults.html">Read Full Guide →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Generators & Power">
+  <div class="blog-card-img">
+    <img src="assets/cummins-onan-jenerator-servisi.webp" alt="Marine Generator Diagnostics & Raw Water Cooling Troubleshooting" loading="lazy">
+    <span class="blog-badge">Generators & Power</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 6 min read</span>
+      <span>•</span>
+      <span>Engineering Guide</span>
+    </div>
+    <h3><a href="blog-marine-generator-faults-sea-water-cooling.html">Marine Generator Diagnostics & Raw Water Cooling Troubleshooting</a></h3>
+    <p>Expert troubleshooting guide for Cummins Onan, Kohler, and Fischer Panda marine generators: overheating, raw water flow failure, fault codes, and AVR voltage regulation.</p>
+    <a class="blog-read-link" href="blog-marine-generator-faults-sea-water-cooling.html">Read Full Guide →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Marine Electrical">
+  <div class="blog-card-img">
+    <img src="assets/marin-elektrik-elektronik.webp" alt="Marine Battery Systems & LiFePO4 Lithium Conversion Guide" loading="lazy">
+    <span class="blog-badge">Marine Electrical</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 8 min read</span>
+      <span>•</span>
+      <span>Engineering Guide</span>
+    </div>
+    <h3><a href="blog-marine-battery-selection-lifepo4-lithium-conversion.html">Marine Battery Systems & LiFePO4 Lithium Conversion Guide</a></h3>
+    <p>Complete yacht electrical guide for service and starter banks: comparing Flooded, AGM, Gel, and LiFePO4 Lithium, charger profiles, BMS safety, and alternator protection.</p>
+    <a class="blog-read-link" href="blog-marine-battery-selection-lifepo4-lithium-conversion.html">Read Full Guide →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Winterizing & Care">
+  <div class="blog-card-img">
+    <img src="assets/motor-mekanik-bakim.webp" alt="Yacht Engine Winterizing & Freeze Protection Guide" loading="lazy">
+    <span class="blog-badge">Winterizing & Care</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 6 min read</span>
+      <span>•</span>
+      <span>Engineering Guide</span>
+    </div>
+    <h3><a href="blog-yacht-winterizing-antifreeze-engine-protection.html">Yacht Engine Winterizing & Freeze Protection Guide</a></h3>
+    <p>Comprehensive marine winterizing checklist: raw water circuit antifreeze flushing, fuel stabilization, domestic water system freeze protection, and lay-up care.</p>
+    <a class="blog-read-link" href="blog-yacht-winterizing-antifreeze-engine-protection.html">Read Full Guide →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Diagnostics & Repair">
+  <div class="blog-card-img">
+    <img src="assets/yanmar-4jh-6ly-ozel-servis.webp" alt="Marine Diesel Smoke Diagnostics: Black, White & Blue Smoke Analysis" loading="lazy">
+    <span class="blog-badge">Diagnostics & Repair</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 5 min read</span>
+      <span>•</span>
+      <span>Engineering Guide</span>
+    </div>
+    <h3><a href="blog-marine-diesel-exhaust-smoke-color-diagnostics.html">Marine Diesel Smoke Diagnostics: Black, White & Blue Smoke Analysis</a></h3>
+    <p>Troubleshooting guide for marine diesel exhaust smoke: diagnosing black (overfueling/restricted air), white (unburnt fuel/water ingress), and blue (oil burning) smoke.</p>
+    <a class="blog-read-link" href="blog-marine-diesel-exhaust-smoke-color-diagnostics.html">Read Full Guide →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Stabilization & Gyro">
+  <div class="blog-card-img">
+    <img src="assets/marin-elektrik-elektronik.webp" alt="Seakeeper Gyro Stabilizer Maintenance & Cooling Circuit Servicing" loading="lazy">
+    <span class="blog-badge">Stabilization & Gyro</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 7 min read</span>
+      <span>•</span>
+      <span>Engineering Guide</span>
+    </div>
+    <h3><a href="blog-seakeeper-gyro-stabilizer-maintenance-cooling.html">Seakeeper Gyro Stabilizer Maintenance & Cooling Circuit Servicing</a></h3>
+    <p>Annual scheduled service for Seakeeper gyro stabilizers: closed-loop glycol flush, hydraulic brake pressure test, raw water cooling pump, and zinc anode renewal.</p>
+    <a class="blog-read-link" href="blog-seakeeper-gyro-stabilizer-maintenance-cooling.html">Read Full Guide →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Maneuvering & Thrusters">
+  <div class="blog-card-img">
+    <img src="assets/marin-elektrik-elektronik.webp" alt="Bow & Stern Thruster Maintenance & Overhaul Guide" loading="lazy">
+    <span class="blog-badge">Maneuvering & Thrusters</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 6 min read</span>
+      <span>•</span>
+      <span>Engineering Guide</span>
+    </div>
+    <h3><a href="blog-bow-stern-thruster-maintenance-yacht.html">Bow & Stern Thruster Maintenance & Overhaul Guide</a></h3>
+    <p>Comprehensive yacht thruster guide for Sleipner Side-Power, Quick, and Max Power: gearleg oil seals, anode replacement, tunnel antifouling, and DC motor carbon brushes.</p>
+    <a class="blog-read-link" href="blog-bow-stern-thruster-maintenance-yacht.html">Read Full Guide →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Plumbing & Hardware">
+  <div class="blog-card-img">
+    <img src="assets/marin-elektrik-elektronik.webp" alt="Marine Reverse Osmosis Watermaker Maintenance & Membrane Preservation" loading="lazy">
+    <span class="blog-badge">Plumbing & Hardware</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 6 min read</span>
+      <span>•</span>
+      <span>Engineering Guide</span>
+    </div>
+    <h3><a href="blog-marine-watermaker-maintenance-winterizing.html">Marine Reverse Osmosis Watermaker Maintenance & Membrane Preservation</a></h3>
+    <p>Essential maintenance for marine reverse osmosis watermakers: chemical membrane descaling, pre-filter replacement, high-pressure pump oil, and biocide pickling preservation.</p>
+    <a class="blog-read-link" href="blog-marine-watermaker-maintenance-winterizing.html">Read Full Guide →</a>
+  </div>
+</article>
+
+    </div>
+  </div>
+</section>
+
+<section class="contact">
+  <div class="container contact-in">
+    <h2>Book certified on-site yacht engineering and emergency mobile service.</h2>
+    <a class="btn" href="index.html#randevu">Book Service Visit →</a>
+  </div>
+</section>
+</main>
+<footer class="footer">
+  <div class="container footer-in">
+    <span>© 2026 DM MARİN</span>
+    <span>Independent multi-brand marine service. Fast mobile dispatch to all marinas in Turkey.</span>
+  </div>
+</footer>
+<div class="mobile-bar">
+  <a class="mobile-call" href="tel:+905437240992">☎ Call Now</a>
+  <a class="mobile-wa" href="https://wa.me/905437240992?text=Hello%20DM%20MARIN%2C%20I%20would%20like%20to%20request%20yacht%20service." target="_blank" rel="noopener">WhatsApp</a>
+</div>
+
+<script>
+function filterBlog(category, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const cards = document.querySelectorAll('.blog-card');
+  cards.forEach(card => {
+    if (category === 'all' || card.dataset.category === category) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+</body>
+</html>
