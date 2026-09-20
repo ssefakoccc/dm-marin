@@ -295,15 +295,6 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 
 <div class="content">
 
-<div class="notice" id="auth-notice">
-<span class="ico">!</span>
-<div>
-<strong id="notice-title">Supabase & Vercel Backend Hazır</strong>
-<small id="notice-desc">Servis taleplerini yönetmek ve marka/SEO ayarlarını veritabanına kalıcı kaydetmek için lütfen sağ üstten "Yönetici Girişi" yapın.</small>
-</div>
-<a href="#inbox" data-jump="inbox">Servis Taleplerini Gör →</a>
-</div>
-
 <!-- DASHBOARD VIEW -->
 <section class="view active" id="dashboard">
 <div class="head">
@@ -1290,23 +1281,12 @@ let allServiceRequests = [];
 let dbConfigured = false;
 
 async function initSupabase() {
-  const noticeTitle = document.getElementById("notice-title");
-  const noticeDesc = document.getElementById("notice-desc");
-  const authNotice = document.getElementById("auth-notice");
-
   try {
     const res = await fetch("/api/config");
     const cfg = await res.json();
     dbConfigured = Boolean(cfg.configured);
 
     if (!dbConfigured) {
-      if (authNotice) {
-        authNotice.style.background = "#fffbeb";
-        authNotice.style.borderColor = "#fef3c7";
-      }
-      if (noticeTitle) noticeTitle.textContent = "Veritabanı Bağlantısı Bekleniyor (Supabase Env Gerekli)";
-      if (noticeDesc) noticeDesc.textContent = "Canlı veritabanı aktif değil. Vercel dashboard ortam değişkenlerinde SUPABASE_URL, SUPABASE_ANON_KEY ve SUPABASE_SERVICE_ROLE_KEY tanımlandığında canlı yönetim paneli otomatik devreye girecektir. Şu an yapılan değişiklikler cihazınızda taslak olarak saklanır.";
-      
       const tbody = document.getElementById("requests-table-body");
       if (tbody) {
         tbody.innerHTML = "<tr><td colspan=\"7\" style=\"text-align:center;padding:48px 20px;color:#b45309;background:#fffbeb;font-weight:600\">⚠️ Veritabanı bağlantısı bekleniyor. Canlı servis taleplerini görmek için Vercel üzerinde Supabase ortam değişkenlerini tanımlayınız.</td></tr>";
@@ -1332,7 +1312,6 @@ async function initSupabase() {
     }
   } catch (err) {
     console.warn("Backend config yüklenemedi:", err);
-    if (noticeTitle) noticeTitle.textContent = "Veritabanı Bağlantısı Bekleniyor";
   }
 }
 
@@ -1343,14 +1322,12 @@ function handleAuthSuccess(session) {
   const ind = document.getElementById('auth-indicator');
   const uinfo = document.getElementById('admin-user-info');
   const btn = document.getElementById('login-toggle-btn');
-  const authNotice = document.getElementById('auth-notice');
   if (ind) {
     ind.textContent = 'Yönetici: ' + (currentUser.email || 'Giriş Yapıldı');
     ind.classList.add('auth-ok');
   }
   if (uinfo) uinfo.textContent = 'Oturum: ' + currentUser.email;
   if (btn) btn.textContent = '🚪 Çıkış Yap';
-  if (authNotice) authNotice.style.display = 'none';
   loadServiceRequests();
   loadRemoteBrands();
   loadRemoteSeo();
@@ -1365,18 +1342,12 @@ function handleAuthLogout() {
   const ind = document.getElementById('auth-indicator');
   const uinfo = document.getElementById('admin-user-info');
   const btn = document.getElementById('login-toggle-btn');
-  const noticeTitle = document.getElementById('notice-title');
-  const noticeDesc = document.getElementById('notice-desc');
   if (ind) {
     ind.textContent = 'Giriş Yapılmadı · Kilitli';
     ind.classList.remove('auth-ok');
   }
   if (uinfo) uinfo.textContent = 'Yönetici oturumu bekleniyor...';
   if (btn) btn.textContent = '🔐 Yönetici Girişi';
-  if (noticeTitle) noticeTitle.textContent = 'Yönetici Girişi Gerekli';
-  if (noticeDesc) noticeDesc.textContent = 'Yönetim paneline erişmek ve canlı verileri yönetmek için lütfen giriş yapın.';
-  const authNotice = document.getElementById('auth-notice');
-  if (authNotice) authNotice.style.display = 'flex';
   if (typeof updateBrandSyncPill === 'function') {
     updateBrandSyncPill('locked');
   }
