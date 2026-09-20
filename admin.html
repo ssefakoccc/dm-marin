@@ -2015,8 +2015,12 @@ async function testNotificationAlert() {
       }
     });
     const data = await res.json();
-    if (res.ok && data.success) {
-      flash('✓ ' + data.message);
+    if (res.ok) {
+      if (data.success) {
+        flash('✓ ' + data.message, 8000);
+      } else {
+        flash('⚠️ ' + (data.message || data.error || 'Test bildirimi başarısız.'), 8000);
+      }
     } else {
       flash(data.error || 'Test bildirimi gönderilemedi.');
     }

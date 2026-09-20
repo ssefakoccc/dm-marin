@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
   if (!adminUser) return;
 
   try {
-    await sendNotification({
+    const result = await sendNotification({
       id: 'TEST-' + Math.floor(1000 + Math.random() * 9000),
       name: 'Test Müşteri (Admin Panel Denemesi)',
       phone: '+90 543 724 09 92',
@@ -26,11 +26,57 @@ module.exports = async (req, res) => {
       source_page: '/admin.html [Test Bildirimi]'
     });
 
+    const summaryParts = [];
+    let hasAnyConfigured = false;
+    let hasSuccess = false;
+
+    if (result.email && result.email.configured) {
+      hasAnyConfigured = true;
+      if (result.email.ok) {
+        summaryParts.push('📧 E-posta: Başarılı');
+        hasSuccess = true;
+      } else {
+        summaryParts.push(`📧 E-posta Hatası: ${result.email.error}`);
+      }
+    } else {
+      summaryParts.push('📧 E-posta: Yapılandırılmadı (Resend API Key giriniz)');
+    }
+
+    if (result.telegram && result.telegram.configured) {
+      hasAnyConfigured = true;
+      if (result.telegram.ok) {
+        summaryParts.push('📱 Telegram: Başarılı');
+        hasSuccess = true;
+      } else {
+        summaryParts.push(`📱 Telegram Hatası: ${result.telegram.error}`);
+      }
+    }
+
+    if (result.webhook && result.webhook.configured) {
+      hasAnyConfigured = true;
+      if (result.webhook.ok) {
+        summaryParts.push('🔗 Webhook: Başarılı');
+        hasSuccess = true;
+      } else {
+        summaryParts.push(`🔗 Webhook Hatası: ${result.webhook.error}`);
+      }
+    }
+
+    if (!hasAnyConfigured) {
+      return res.status(200).json({
+        success: false,
+        result,
+        message: 'Hiçbir bildirim kanalı (E-posta, Telegram veya Webhook) yapılandırılmamış. Lütfen ayarları kaydedin.'
+      });
+    }
+
     return res.status(200).json({
-      success: true,
-      message: 'Test bildirimi başarıyla tetiklendi (Telegram / Webhook yapılandırmanızı kontrol edin).'
+      success: hasSuccess,
+      result,
+      message: summaryParts.join(' | ')
     });
   } catch (err) {
     return res.status(500).json({ error: 'Test bildirimi gönderilirken hata: ' + err.message });
   }
 };
+
