@@ -2007,19 +2007,22 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
             <label style="font-size:11.5px;font-weight:700;color:var(--navy);display:block;margin-bottom:8px">👁️ Etikette Gösterilecek Alanlar</label>
             <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
               <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
-                <input type="checkbox" id="bc-opt-brand" checked onchange="renderBarcodePreview()"> DM MARIN Başlığı
+                <input type="checkbox" id="bc-opt-brand" checked onchange="renderBarcodePreview()"> ⚓ DM MARIN Başlığı
               </label>
               <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
-                <input type="checkbox" id="bc-opt-name" checked onchange="renderBarcodePreview()"> Ürün Adı & Marka
+                <input type="checkbox" id="bc-opt-name" checked onchange="renderBarcodePreview()"> 🏷️ Ürün Adı & Marka
+              </label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;color:#0284c7;font-weight:700">
+                <input type="checkbox" id="bc-opt-oem" checked onchange="renderBarcodePreview()"> ⭐ Orijinal OEM / Ref No (11111234)
+              </label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;color:#7c3aed;font-weight:700">
+                <input type="checkbox" id="bc-opt-muadil" checked onchange="renderBarcodePreview()"> 🔄 Muadil / Çapraz Kodlar
               </label>
               <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
-                <input type="checkbox" id="bc-opt-oem" checked onchange="renderBarcodePreview()"> OEM / Parça Kodu
+                <input type="checkbox" id="bc-opt-price" checked onchange="renderBarcodePreview()"> 💰 Satış Fiyatı (₺)
               </label>
               <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
-                <input type="checkbox" id="bc-opt-price" checked onchange="renderBarcodePreview()"> Satış Fiyatı (₺)
-              </label>
-              <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
-                <input type="checkbox" id="bc-opt-loc" checked onchange="renderBarcodePreview()"> Depo / Raf Lokasyonu
+                <input type="checkbox" id="bc-opt-loc" checked onchange="renderBarcodePreview()"> 📍 Depo / Raf Lokasyonu
               </label>
             </div>
           </div>
@@ -2130,15 +2133,23 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
         <div class="form-grid-2">
           <div class="field-wrap full">
             <label>Ürün Adı *</label>
-            <input type="text" id="prod-name" placeholder="Örn: Volvo Penta D4/D6 Yağ Filtresi" required>
+            <input type="text" id="prod-name" placeholder="Örn: Volvo Penta D4/D6 Yakıt/Yağ Filtresi" required>
           </div>
           <div class="field-wrap">
-            <label>OEM / Parça Kodu *</label>
-            <input type="text" id="prod-code" placeholder="Örn: 22030848" required>
+            <label style="color:#0284c7;font-weight:800">⭐ Orijinal Ürün No / OEM Referans *</label>
+            <input type="text" id="prod-oem-ref" placeholder="Örn: 11111234 veya 22030848" required>
           </div>
           <div class="field-wrap">
-            <label>Barkod (EAN / Kod)</label>
-            <input type="text" id="prod-barcode" placeholder="Örn: 8690000123456">
+            <label style="color:#7c3aed;font-weight:800">🔄 Muadil / Çapraz Kodlar (Cross-Ref)</label>
+            <input type="text" id="prod-cross-ref" placeholder="Örn: Mann WK820, Donaldson P550881, Fleetguard FF5706">
+          </div>
+          <div class="field-wrap">
+            <label>Dahili Ürün / Stok Kodu</label>
+            <input type="text" id="prod-code" placeholder="Örn: DM-FLT-101">
+          </div>
+          <div class="field-wrap">
+            <label>Barkod (EAN-13 / Code-128)</label>
+            <input type="text" id="prod-barcode" placeholder="Örn: 8690000123456 (Boşsa OEM no kullanılır)">
           </div>
           <div class="field-wrap">
             <label>Marka *</label>
@@ -3186,7 +3197,7 @@ function printCountSheet() {
 }
 
 function renderProducts() {
-  const q = (document.getElementById("prod-search")?.value || "").toLowerCase();
+  const q = (document.getElementById("prod-search")?.value || "").toLowerCase().trim();
   const cat = document.getElementById("prod-cat-filter")?.value || "all";
   const loc = document.getElementById("prod-loc-filter")?.value || "all";
   const tbody = document.getElementById("products-tbody");
@@ -3240,18 +3251,30 @@ function renderProducts() {
     if (cat !== 'all' && p.category !== cat) return false;
     if (loc !== 'all' && p.location !== loc) return false;
     if (q) {
-      const match = p.name.toLowerCase().includes(q) || p.code.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q) || (p.barcode || '').includes(q);
+      const oem = (p.oemRef || p.code || '').toLowerCase();
+      const cross = (p.crossRef || '').toLowerCase();
+      const code = (p.code || '').toLowerCase();
+      const name = (p.name || '').toLowerCase();
+      const brand = (p.brand || '').toLowerCase();
+      const barcode = (p.barcode || '').toLowerCase();
+
+      const match = name.includes(q) || oem.includes(q) || cross.includes(q) || code.includes(q) || brand.includes(q) || barcode.includes(q);
       if (!match) return false;
     }
     return true;
   });
 
-  tbody.innerHTML = filtered.map(p => `
+  tbody.innerHTML = filtered.map(p => {
+    const oem = p.oemRef || p.code || '-';
+    return `
     <tr>
       <td>
-        <b style="color:var(--navy)">${escapeHtml(p.name)}</b><br>
-        <span style="font-family:monospace;background:#e0f2fe;color:#0369a1;padding:1px 5px;border-radius:4px;font-size:11px">📋 OEM: ${escapeHtml(p.code)}</span>
-        ${p.barcode ? `<span style="font-family:monospace;background:#f1f5f9;color:#475569;padding:1px 5px;border-radius:4px;font-size:11px;margin-left:4px">🏷️ ${escapeHtml(p.barcode)}</span>` : ''}
+        <b style="color:var(--navy);font-size:14px">${escapeHtml(p.name)}</b><br>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:3px">
+          <span style="font-family:monospace;background:#e0f2fe;color:#0369a1;padding:1px 6px;border-radius:4px;font-size:11px;font-weight:700" title="Orijinal OEM Referans No">⭐ OEM: ${escapeHtml(oem)}</span>
+          ${p.crossRef ? `<span style="font-family:monospace;background:#f5f3ff;color:#6d28d9;padding:1px 6px;border-radius:4px;font-size:11px" title="Muadil / Çapraz Kodlar">🔄 Muadil: ${escapeHtml(p.crossRef)}</span>` : ''}
+          ${p.barcode ? `<span style="font-family:monospace;background:#f1f5f9;color:#475569;padding:1px 6px;border-radius:4px;font-size:11px">🏷️ ${escapeHtml(p.barcode)}</span>` : ''}
+        </div>
       </td>
       <td><b>${escapeHtml(p.brand)}</b><br><small style="color:var(--text-muted)">${escapeHtml(p.category)}</small></td>
       <td>📍 ${escapeHtml(p.location)}</td>
@@ -3259,48 +3282,37 @@ function renderProducts() {
       <td style="font-weight:800;color:#059669">₺ ${Number(p.sellPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
       <td><span class="badge-pill ${p.qty<=p.minQty?'red':'green'}">${p.qty} Adet</span></td>
       <td style="text-align:right">
-        <button class="btn outline sm" onclick="openSingleBarcodePrint('${p.id}')" title="Barkod Etiketi Yazdır">🏷️ Barkod</button>
+        <button class="btn success sm" onclick="openSingleBarcodePrint('${p.id}')" title="Sadece Barkod Çıktısı Al (Ürünün üzerine yapıştırmak için)">🏷️ Barkod Bas</button>
         <button class="btn outline sm" onclick="openProductHistory('${p.id}')" title="Alış/Satış Geçmişi">🔍 Geçmiş</button>
         <button class="btn outline sm" onclick="openEditProductModal('${p.id}')">✏️</button>
       </td>
     </tr>
-  `).join("");
+    `;
+  }).join("");
 }
 
 function openProductHistory(prodId) {
   const p = productsState.find(x => x.id === prodId);
   if (!p) return;
-
   document.getElementById("modal-hist-title").innerHTML = `🔍 Ürün Geçmişi: ${escapeHtml(p.name)}`;
-  
   const margin = p.sellPrice - p.buyPrice;
   const marginPct = p.sellPrice ? ((margin / p.sellPrice) * 100).toFixed(1) : 0;
-
   document.getElementById("modal-hist-summary").innerHTML = `
     <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:10px;font-size:12px">
-      <div><span>OEM & Barkod:</span><br><b>${escapeHtml(p.code)} (${p.barcode || '-'})</b></div>
+      <div><span>⭐ Orijinal OEM:</span><br><b>${escapeHtml(p.oemRef || p.code || "-")}</b></div>
       <div><span>Mevcut Stok:</span><br><b style="color:#0284c7">${p.qty} Adet</b></div>
-      <div><span>Birim Alış:</span><br><b>₺ ${Number(p.buyPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})}</b></div>
-      <div><span>Satış / Brüt Kâr:</span><br><b style="color:#059669">₺ ${Number(p.sellPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})} (%${marginPct} Kâr)</b></div>
+      <div><span>Birim Alış:</span><br><b>₺ ${Number(p.buyPrice).toLocaleString("tr-TR", {minimumFractionDigits:2})}</b></div>
+      <div><span>Satış / Brüt Kâr:</span><br><b style="color:#059669">₺ ${Number(p.sellPrice).toLocaleString("tr-TR", {minimumFractionDigits:2})} (%${marginPct} Kâr)</b></div>
     </div>
+    ${p.crossRef ? `<div style="margin-top:8px;font-size:11.5px;color:#6d28d9"><b>🔄 Muadil / Çapraz Kodlar:</b> ${escapeHtml(p.crossRef)}</div>` : ""}
   `;
-
   const purchases = purchasesState.filter(x => x.prodId === p.id || x.prodName === p.name);
   const purchTbody = document.getElementById("hist-purchases-tbody");
   if (purchases.length === 0) {
     purchTbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-muted)">Kayıtlı alış faturası bulunmuyor.</td></tr>`;
   } else {
-    purchTbody.innerHTML = purchases.map(pu => `
-      <tr>
-        <td>${pu.date}</td>
-        <td><b>${escapeHtml(pu.supplierName)}</b></td>
-        <td>${pu.qty} Adet</td>
-        <td>₺ ${Number(pu.unitPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
-        <td style="font-weight:700">₺ ${Number(pu.totalTL).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
-      </tr>
-    `).join("");
+    purchTbody.innerHTML = purchases.map(pu => `<tr><td>${pu.date}</td><td><b>${escapeHtml(pu.supplierName)}</b></td><td>${pu.qty} Adet</td><td>₺ ${Number(pu.unitPrice).toLocaleString("tr-TR", {minimumFractionDigits:2})}</td><td style="font-weight:700">₺ ${Number(pu.totalTL).toLocaleString("tr-TR", {minimumFractionDigits:2})}</td></tr>`).join("");
   }
-
   const salesWithItem = [];
   salesState.forEach(s => {
     s.items.forEach(it => {
@@ -3309,28 +3321,20 @@ function openProductHistory(prodId) {
       }
     });
   });
-
   const salesTbody = document.getElementById("hist-sales-tbody");
   if (salesWithItem.length === 0) {
     salesTbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-muted)">Kayıtlı servis/satış çıkışı bulunmuyor.</td></tr>`;
   } else {
-    salesTbody.innerHTML = salesWithItem.map(sl => `
-      <tr>
-        <td>${sl.date}</td>
-        <td><b>${escapeHtml(sl.customerName)}</b> (${escapeHtml(sl.boatName)})</td>
-        <td>${sl.qty} Adet</td>
-        <td>₺ ${Number(sl.price).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
-        <td style="font-weight:700">₺ ${(sl.qty * sl.price).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
-      </tr>
-    `).join("");
+    salesTbody.innerHTML = salesWithItem.map(sl => `<tr><td>${sl.date}</td><td><b>${escapeHtml(sl.customerName)}</b> (${escapeHtml(sl.boatName)})</td><td>${sl.qty} Adet</td><td>₺ ${Number(sl.price).toLocaleString("tr-TR", {minimumFractionDigits:2})}</td><td style="font-weight:700">₺ ${(sl.qty * sl.price).toLocaleString("tr-TR", {minimumFractionDigits:2})}</td></tr>`).join("");
   }
-
   openModal("modal-product-history");
 }
 
 function openProductModal() {
   document.getElementById("form-product").reset();
   document.getElementById("prod-id").value = "";
+  document.getElementById("prod-oem-ref").value = "";
+  document.getElementById("prod-cross-ref").value = "";
   populateProductFormDropdowns();
   document.getElementById("modal-prod-title").textContent = "📦 Yeni Ürün Tanımla";
   openModal("modal-product");
@@ -3342,7 +3346,9 @@ function openEditProductModal(id) {
   populateProductFormDropdowns();
   document.getElementById("prod-id").value = p.id;
   document.getElementById("prod-name").value = p.name;
-  document.getElementById("prod-code").value = p.code;
+  document.getElementById("prod-oem-ref").value = p.oemRef || p.code || "";
+  document.getElementById("prod-cross-ref").value = p.crossRef || "";
+  document.getElementById("prod-code").value = p.code || "";
   document.getElementById("prod-barcode").value = p.barcode || "";
   document.getElementById("prod-brand").value = p.brand;
   document.getElementById("prod-category").value = p.category;
@@ -3370,8 +3376,10 @@ function saveProduct(e) {
   e.preventDefault();
   const id = document.getElementById("prod-id").value;
   const name = document.getElementById("prod-name").value.trim();
-  const code = document.getElementById("prod-code").value.trim();
-  const barcode = document.getElementById("prod-barcode").value.trim();
+  const oemRef = document.getElementById("prod-oem-ref").value.trim();
+  const crossRef = document.getElementById("prod-cross-ref").value.trim();
+  const code = (document.getElementById("prod-code").value.trim()) || oemRef;
+  const barcode = (document.getElementById("prod-barcode").value.trim()) || oemRef;
   const brand = document.getElementById("prod-brand").value;
   const category = document.getElementById("prod-category").value;
   const location = document.getElementById("prod-location").value;
@@ -3383,12 +3391,12 @@ function saveProduct(e) {
   if (id) {
     const idx = productsState.findIndex(x => x.id === id);
     if (idx !== -1) {
-      productsState[idx] = { ...productsState[idx], name, code, barcode, brand, category, location, buyPrice, sellPrice, qty, minQty };
-      flash("✓ Ürün kartı güncellendi.");
+      productsState[idx] = { ...productsState[idx], name, oemRef, crossRef, code, barcode, brand, category, location, buyPrice, sellPrice, qty, minQty };
+      flash("✓ Ürün kartı (Orijinal OEM & Muadiller) güncellendi.");
     }
   } else {
-    productsState.unshift({ id: "p-" + Date.now(), name, code, barcode, brand, category, location, buyPrice, sellPrice, qty, minQty });
-    flash("✓ Yeni ürün kaydedildi.");
+    productsState.unshift({ id: "p-" + Date.now(), name, oemRef, crossRef, code, barcode, brand, category, location, buyPrice, sellPrice, qty, minQty });
+    flash("✓ Yeni ürün ve referans kodları kaydedildi.");
   }
 
   saveAll();
@@ -4255,6 +4263,7 @@ function renderBarcodePreview() {
   const showBrand = document.getElementById('bc-opt-brand')?.checked ?? true;
   const showName = document.getElementById('bc-opt-name')?.checked ?? true;
   const showOem = document.getElementById('bc-opt-oem')?.checked ?? true;
+  const showMuadil = document.getElementById('bc-opt-muadil')?.checked ?? true;
   const showPrice = document.getElementById('bc-opt-price')?.checked ?? true;
   const showLoc = document.getElementById('bc-opt-loc')?.checked ?? true;
 
@@ -4265,7 +4274,8 @@ function renderBarcodePreview() {
     const p = productsState.find(x => x.id === item.prodId);
     if (!p) return;
 
-    const barcodeValue = (p.barcode && p.barcode.trim()) ? p.barcode.trim() : (p.code || 'DM-001');
+    const oemNumber = p.oemRef || p.code || '11111234';
+    const barcodeValue = (p.barcode && p.barcode.trim()) ? p.barcode.trim() : oemNumber;
 
     for (let i = 0; i < item.qty; i++) {
       const svgId = `bc-svg-${barcodeIndex++}`;
@@ -4279,13 +4289,29 @@ function renderBarcodePreview() {
           ` : ''}
           
           ${showName ? `
-            <div class="label-title" title="${escapeHtml(p.name)}">${escapeHtml(p.name)}</div>
+            <div class="label-title" title="${escapeHtml(p.name)}">
+              <b>${escapeHtml(p.name)}</b> <small style="font-weight:600;color:#334155">(${escapeHtml(p.brand)})</small>
+            </div>
           ` : ''}
 
           <svg id="${svgId}" class="label-barcode-svg"></svg>
 
-          <div class="label-meta-row">
-            ${showOem ? `<span>OEM: <b>${escapeHtml(p.code)}</b></span>` : '<span></span>'}
+          <!-- OEM & MUADİL REFERANS BİLGİLERİ -->
+          <div style="width:100%;text-align:left;padding:0 2px;line-height:1.2;margin:1px 0">
+            ${showOem ? `
+              <div style="font-size:9.5px;font-weight:800;color:#000">
+                ⭐ Orijinal OEM: <span style="font-family:monospace;font-size:10.5px">${escapeHtml(oemNumber)}</span>
+              </div>
+            ` : ''}
+            ${showMuadil && p.crossRef ? `
+              <div style="font-size:7.5px;color:#334155;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${escapeHtml(p.crossRef)}">
+                🔄 Muadil: <b>${escapeHtml(p.crossRef)}</b>
+              </div>
+            ` : ''}
+          </div>
+
+          <div class="label-meta-row" style="border-top:0.5px solid #000;padding-top:1px;margin-top:1px">
+            <span style="font-size:8px;font-family:monospace">DM: ${escapeHtml(p.code || oemNumber)}</span>
             ${showPrice ? `<span class="label-price-tag">₺ ${Number(p.sellPrice || 0).toLocaleString('tr-TR', {minimumFractionDigits:2})}</span>` : ''}
           </div>
         </div>
@@ -4301,7 +4327,8 @@ function renderBarcodePreview() {
     barcodeQueue.forEach(item => {
       const p = productsState.find(x => x.id === item.prodId);
       if (!p) return;
-      const barcodeValue = (p.barcode && p.barcode.trim()) ? p.barcode.trim() : (p.code || 'DM-001');
+      const oemNumber = p.oemRef || p.code || '11111234';
+      const barcodeValue = (p.barcode && p.barcode.trim()) ? p.barcode.trim() : oemNumber;
 
       for (let i = 0; i < item.qty; i++) {
         const svgEl = document.getElementById(`bc-svg-${barcodeIndex++}`);
@@ -4309,10 +4336,10 @@ function renderBarcodePreview() {
           try {
             JsBarcode(svgEl, barcodeValue, {
               format: "CODE128",
-              width: sizeClass === 'size-40x25' ? 1.1 : (sizeClass === 'size-80x50' ? 2.0 : 1.4),
-              height: sizeClass === 'size-40x25' ? 22 : (sizeClass === 'size-80x50' ? 48 : 30),
+              width: sizeClass === 'size-40x25' ? 1.0 : (sizeClass === 'size-80x50' ? 1.8 : 1.3),
+              height: sizeClass === 'size-40x25' ? 18 : (sizeClass === 'size-80x50' ? 40 : 25),
               displayValue: true,
-              fontSize: sizeClass === 'size-40x25' ? 8 : (sizeClass === 'size-80x50' ? 12 : 9.5),
+              fontSize: sizeClass === 'size-40x25' ? 8 : (sizeClass === 'size-80x50' ? 11 : 9),
               margin: 1
             });
           } catch(err) {
