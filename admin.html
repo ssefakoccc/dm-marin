@@ -254,6 +254,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
   <div class="nav-section-title">Operasyon</div>
   <button class="active" data-view="dashboard" title="Alt+1"><span class="icon">📊</span>Genel Bakış & Trafik</button>
   <button data-view="inbox" title="Alt+2"><span class="icon">✉️</span>Servis Talepleri <span class="nav-badge-count" id="sidebar-inbox-badge" style="display:none">0</span></button>
+  <button data-view="users"><span class="icon">👥</span>Kullanıcılar & Personel</button>
   <a href="stok.html" target="_blank" style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:linear-gradient(135deg,rgba(25,199,223,0.12),rgba(8,127,147,0.22));color:#38bdf8;border-radius:8px;font-weight:700;margin-top:4px;border:1px solid rgba(56,189,248,0.25);text-decoration:none"><span class="icon">📦</span>Stok & Mobil Depo ↗</a>
 
   <div class="nav-section-title">İçerik & Marka</div>
@@ -295,6 +296,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
   <div class="quick-tabs-container" role="tablist">
     <button type="button" class="qtab active" data-view="dashboard">📊 Genel Bakış</button>
     <button type="button" class="qtab" data-view="inbox">✉️ Servis Talepleri <span class="qtab-badge" id="qtab-inbox-badge" style="display:none">0</span></button>
+    <button type="button" class="qtab" data-view="users">👥 Kullanıcılar</button>
     <button type="button" class="qtab" data-view="brands">🏷️ Markalar</button>
     <button type="button" class="qtab" data-view="services">🛠️ Hizmetler</button>
     <button type="button" class="qtab" data-view="content">📝 İçerik</button>
@@ -1069,169 +1071,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 
 
 
-<!-- 👥 KULLANICI & PERSONEL YÖNETİMİ (PİNLER VE DOĞUM GÜNLERİ) -->
-<article class="panel" style="grid-column: 1 / -1; border-left: 4px solid #0284c7">
-<div class="panel-head" style="justify-content:space-between;flex-wrap:wrap;gap:10px">
-  <div style="display:flex;align-items:center;gap:8px">
-    <span style="font-size:22px">👥</span>
-    <div>
-      <h3 style="margin:0">Kullanıcı & Personel Yönetimi</h3>
-      <small style="color:var(--muted)">Stok ve ERP sistemine giriş yapacak ustaları tanımlayın, kişiye özel PIN belirleyin ve doğum günlerini takip edin.</small>
-    </div>
-  </div>
-  <button type="button" class="btn primary" onclick="openAdminUserModal()">➕ Yeni Kullanıcı / Usta Aç</button>
-</div>
-<div class="panel-body">
-  <!-- BIRTHDAY ALERT BANNER IF APPLICABLE -->
-  <div id="admin-birthday-banner" style="display:none;margin-bottom:16px;background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(239,68,68,0.15));border:1px solid #f59e0b;padding:14px 18px;border-radius:12px;color:#92400e;align-items:center;gap:12px">
-    <span style="font-size:24px">🎂</span>
-    <div>
-      <b id="admin-birthday-text" style="font-size:14px;color:#78350f">Bugün Doğum Günü Olan Personelimiz Var!</b>
-      <small style="display:block;color:#92400e;margin-top:2px">Ekip arkadaşımızın doğum gününü kutlamayı unutmayınız. 🎉</small>
-    </div>
-  </div>
 
-  <div style="overflow-x:auto">
-    <table class="seo-table" style="width:100%">
-      <thead>
-        <tr>
-          <th>Personel Adı Soyadı</th>
-          <th>Kullanıcı Adı</th>
-          <th>Görevi / Ünvanı</th>
-          <th>Telefon</th>
-          <th>Doğum Tarihi</th>
-          <th>Giriş PIN'i</th>
-          <th>Durum</th>
-          <th style="text-align:right">İşlemler</th>
-        </tr>
-      </thead>
-      <tbody id="admin-users-tbody">
-      </tbody>
-    </table>
-  </div>
-</div>
-</article>
-
-<!-- ADD/EDIT USER MODAL IN ADMIN PANEL -->
-<div class="modal-backdrop" id="modal-admin-user">
-  <div class="modal-box" style="max-width:540px">
-    <div class="modal-head">
-      <h3 id="admin-user-modal-title">👤 Yeni Kullanıcı / Personel Tanımla</h3>
-      <button class="modal-close" onclick="closeAdminUserModal()">✕</button>
-    </div>
-    <form id="form-admin-user" onsubmit="saveAdminUser(event)" style="display:grid;gap:12px">
-      <input type="hidden" id="adm-user-id">
-      
-      <div class="form-grid">
-        <div class="field">
-          <label>Adı Soyadı *</label>
-          <input type="text" id="adm-user-name" placeholder="Örn: Ahmet Kaya" required>
-        </div>
-        <div class="field">
-          <label>Kullanıcı Adı / Kod</label>
-          <input type="text" id="adm-user-username" placeholder="Örn: ahmet.usta">
-        </div>
-        <div class="field">
-          <label>Görevi / Rolü *</label>
-          <input type="text" id="adm-user-role" placeholder="Örn: Baş Teknisyen / Mobil Servis" required>
-        </div>
-        <div class="field">
-          <label>Telefon Numarası</label>
-          <input type="tel" id="adm-user-phone" placeholder="0543 724 09 92">
-        </div>
-        <div class="field">
-          <label>Doğum Tarihi (Doğum Günü Takibi İçin) *</label>
-          <input type="date" id="adm-user-birthdate" required>
-        </div>
-        <div class="field">
-          <label>Kullanıcıya Özel Giriş PIN Kodu *</label>
-          <input type="text" id="adm-user-pin" placeholder="Örn: 1998, 3456" maxlength="12" required>
-        </div>
-        <div class="field full">
-          <label>Hesap Durumu</label>
-          <select id="adm-user-active">
-            <option value="true">Aktif (Sisteme Giriş Yapabilir)</option>
-            <option value="false">Pasif / İzinli (Giriş Yapamaz)</option>
-          </select>
-        </div>
-      </div>
-
-      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px">
-        <button type="button" class="btn" onclick="closeAdminUserModal()">İptal</button>
-        <button type="submit" class="btn primary">💾 Kullanıcıyı Kaydet</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- AUTONOMOUS SEO AGENT AUDIT PANEL -->
-<div class="panel" style="margin-top:24px;border-left:4px solid #10b981;box-shadow:0 8px 30px rgba(16,185,129,0.08)">
-  <div class="panel-head" style="justify-content:space-between;flex-wrap:wrap;gap:12px">
-    <div style="display:flex;align-items:center;gap:10px">
-      <span style="font-size:24px">🤖</span>
-      <div>
-        <h3 style="margin:0">DM MARİN Otonom SEO Ajanı (AI & Otomatik Denetim Motoru)</h3>
-        <small style="color:var(--muted)">Tüm Türkiye (Marmara, Ege, Akdeniz) geneli 26 sayfanın meta etiketlerini, JSON-LD şemalarını ve Google SERP uyumluluğunu otonom olarak denetler.</small>
-      </div>
-    </div>
-    <div style="display:flex;gap:10px;align-items:center">
-      <button type="button" class="btn primary" id="btn-run-seo-audit" onclick="runAutonomousSeoAudit()" style="background:#059669;border-color:#059669">
-        🚀 Canlı SEO Denetimi Başlat (26 Sayfa)
-      </button>
-    </div>
-  </div>
-
-  <div class="panel-body">
-    <!-- SCORE & METRIC BANNER -->
-    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:14px;margin-bottom:20px">
-      <div style="padding:16px;background:#f0fdf4;border-radius:14px;border:1px solid #bbf7d0">
-        <span style="font-size:11.5px;font-weight:800;color:#166534;text-transform:uppercase;letter-spacing:0.04em">Genel SEO Sağlık Skoru</span>
-        <div style="font-size:28px;font-weight:900;color:#15803d;margin-top:4px" id="seo-agent-score">98 / 100</div>
-        <small style="color:#166534">Mükemmel Arama Motoru Uyumu</small>
-      </div>
-
-      <div style="padding:16px;background:#f0f9ff;border-radius:14px;border:1px solid #bae6fd">
-        <span style="font-size:11.5px;font-weight:800;color:#0369a1;text-transform:uppercase;letter-spacing:0.04em">Denetlenen Sayfa Sayısı</span>
-        <div style="font-size:28px;font-weight:900;color:#0284c7;margin-top:4px" id="seo-agent-pages-count">26 / 26</div>
-        <small style="color:#0369a1">Tüm Alt Sayfalar + Anasayfa</small>
-      </div>
-
-      <div style="padding:16px;background:#fefce8;border-radius:14px;border:1px solid #fef08a">
-        <span style="font-size:11.5px;font-weight:800;color:#854d0e;text-transform:uppercase;letter-spacing:0.04em">Tüm Türkiye Kapsamı</span>
-        <div style="font-size:28px;font-weight:900;color:#a16207;margin-top:4px">100%</div>
-        <small style="color:#854d0e">Ege, Akdeniz, Marmara Marinaları</small>
-      </div>
-
-      <div style="padding:16px;background:#faf5ff;border-radius:14px;border:1px solid #e9d5ff">
-        <span style="font-size:11.5px;font-weight:800;color:#6b21a8;text-transform:uppercase;letter-spacing:0.04em">Schema.org JSON-LD</span>
-        <div style="font-size:28px;font-weight:900;color:#7e22ce;margin-top:4px">26 / 26</div>
-        <small style="color:#6b21a8">LocalBusiness, Service, FAQ</small>
-      </div>
-    </div>
-
-    <!-- SEO AGENT PROGRESS / LOG -->
-    <div id="seo-agent-log-box" style="display:none;background:#0f172a;color:#f8fafc;padding:14px 18px;border-radius:12px;font-family:monospace;font-size:12px;margin-bottom:18px;max-height:160px;overflow-y:auto">
-    </div>
-
-    <!-- SEO AUDIT RESULT TABLE -->
-    <div style="overflow-x:auto">
-      <table class="seo-table" style="width:100%">
-        <thead>
-          <tr>
-            <th>Sayfa Adresi (URL)</th>
-            <th>SEO Başlığı (Title)</th>
-            <th>Meta Description</th>
-            <th>Canonical & Robots</th>
-            <th>JSON-LD Şeması</th>
-            <th>Durum</th>
-          </tr>
-        </thead>
-        <tbody id="seo-agent-tbody">
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
 
 </section>
 
@@ -1737,6 +1577,141 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 
 
 <!-- AGENTS VIEW -->
+
+<!-- USERS & STAFF MANAGEMENT VIEW -->
+<section class="view" id="users">
+<div class="head">
+  <div>
+    <h2>👥 Kullanıcı & Personel Yönetimi</h2>
+    <p>Stok, mobil servis ve ERP sistemine giriş yapacak yetkilileri, ustaları ve teknisyenleri tanımlayın; kullanıcı adı, rol, telefon, doğum tarihi ve kişiye özel giriş PIN kodlarını tek ekrandan yönetin.</p>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <button type="button" class="btn primary" onclick="openAdminUserModal()" style="padding:0 18px;min-height:40px;font-size:13.5px">
+      ➕ Yeni Kullanıcı / Personel Tanımla
+    </button>
+  </div>
+</div>
+
+<!-- TOP KPI CARDS FOR USERS -->
+<div class="cards" style="margin-bottom:22px">
+  <article class="metric" style="border-left:4px solid #0284c7">
+    <span class="metric-icon" style="background:#f0f9ff;color:#0284c7">👥</span>
+    <b id="kpi-total-staff-count">0</b>
+    <span>Tanımlı Personel <small style="color:var(--ok);font-weight:700">Kayıtlı</small></span>
+  </article>
+  <article class="metric" style="border-left:4px solid #10b981">
+    <span class="metric-icon" style="background:#ecfdf5;color:#059669">🔐</span>
+    <b id="kpi-active-staff-count">0</b>
+    <span>Aktif Oturum Yetkisi <small style="color:var(--ok);font-weight:700">PIN Korumalı</small></span>
+  </article>
+  <article class="metric" style="border-left:4px solid #f59e0b">
+    <span class="metric-icon" style="background:#fffbeb;color:#d97706">🎂</span>
+    <b id="kpi-today-bday-count">0</b>
+    <span>Bugünkü Doğum Günü <small style="color:#d97706;font-weight:700" id="kpi-today-bday-sub">Nöbetçi Aktif</small></span>
+  </article>
+  <article class="metric" style="border-left:4px solid #8b5cf6">
+    <span class="metric-icon" style="background:#f5f3ff;color:#7c3aed">📦</span>
+    <b>Stok & ERP</b>
+    <span>Oturum Entegrasyonu <small style="color:#7c3aed;font-weight:700">stok.html Uyumlu</small></span>
+  </article>
+</div>
+
+<!-- BIRTHDAY CELEBRATION ALERT BANNER -->
+<div id="admin-birthday-banner" style="display:none;margin-bottom:20px;background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #f59e0b;padding:16px 20px;border-radius:14px;color:#92400e;align-items:center;gap:14px;box-shadow:0 6px 20px rgba(245,158,11,0.15)">
+  <span style="font-size:32px">🎂</span>
+  <div style="flex:1">
+    <b id="admin-birthday-text" style="font-size:15px;color:#78350f;display:block">Bugün Doğum Günü Olan Personelimiz Var!</b>
+    <small style="display:block;color:#92400e;margin-top:3px;font-size:12.5px">DM MARİN ailesi olarak ekip arkadaşımızın yeni yaşını kutlar, sağlıklı ve başarılı bir yıl dileriz! 🎉</small>
+  </div>
+</div>
+
+<!-- USERS LIST TABLE PANEL -->
+<article class="panel">
+  <div class="panel-head" style="justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <div>
+      <h3 style="margin:0;font-size:16px">Tanımlı Personel & Kullanıcı Listesi</h3>
+      <small style="color:var(--muted)">Sistemde tanımlı tüm ustalar, rolleri, kişisel PIN kodları ve doğum tarihleri</small>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button type="button" class="btn primary" onclick="openAdminUserModal()">➕ Personel Ekle</button>
+    </div>
+  </div>
+  <div class="panel-body">
+    <div style="overflow-x:auto">
+      <table class="seo-table" style="width:100%">
+        <thead>
+          <tr>
+            <th>Personel Adı Soyadı</th>
+            <th>Kullanıcı Adı / Kod</th>
+            <th>Görevi / Ünvanı</th>
+            <th>Telefon</th>
+            <th>Doğum Tarihi</th>
+            <th>Giriş PIN'i</th>
+            <th>Durum</th>
+            <th style="text-align:right">İşlemler</th>
+          </tr>
+        </thead>
+        <tbody id="admin-users-tbody">
+        </tbody>
+      </table>
+    </div>
+  </div>
+</article>
+
+<!-- ADD/EDIT USER MODAL -->
+<div class="modal-backdrop" id="modal-admin-user">
+  <div class="modal-box" style="max-width:540px">
+    <div class="modal-head">
+      <h3 id="admin-user-modal-title">👤 Yeni Kullanıcı / Personel Tanımla</h3>
+      <button class="modal-close" onclick="closeAdminUserModal()">✕</button>
+    </div>
+    <form id="form-admin-user" onsubmit="saveAdminUser(event)" style="display:grid;gap:12px">
+      <input type="hidden" id="adm-user-id">
+      
+      <div class="form-grid">
+        <div class="field">
+          <label>Adı Soyadı *</label>
+          <input type="text" id="adm-user-name" placeholder="Örn: Ahmet Kaya" required>
+        </div>
+        <div class="field">
+          <label>Kullanıcı Adı / Kod</label>
+          <input type="text" id="adm-user-username" placeholder="Örn: ahmet.usta">
+        </div>
+        <div class="field">
+          <label>Görevi / Rolü *</label>
+          <input type="text" id="adm-user-role" placeholder="Örn: Baş Teknisyen / Mobil Servis" required>
+        </div>
+        <div class="field">
+          <label>Telefon Numarası</label>
+          <input type="tel" id="adm-user-phone" placeholder="0543 724 09 92">
+        </div>
+        <div class="field">
+          <label>Doğum Tarihi (Doğum Günü Takibi İçin) *</label>
+          <input type="date" id="adm-user-birthdate" required>
+        </div>
+        <div class="field">
+          <label>Kullanıcıya Özel Giriş PIN Kodu *</label>
+          <input type="text" id="adm-user-pin" placeholder="Örn: 1998, 3456" maxlength="12" required>
+        </div>
+        <div class="field full">
+          <label>Hesap Durumu</label>
+          <select id="adm-user-active">
+            <option value="true">Aktif (Sisteme Giriş Yapabilir)</option>
+            <option value="false">Pasif / İzinli (Giriş Yapamaz)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px">
+        <button type="button" class="btn" onclick="closeAdminUserModal()">İptal</button>
+        <button type="submit" class="btn primary">💾 Kullanıcıyı Kaydet</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+</section>
+
 <section class="view" id="agents">
 <div class="head">
   <div>
@@ -3819,6 +3794,7 @@ document.getElementById('fb-save-btn')?.addEventListener('click', async () => {
 
 const labels = {
   dashboard: 'Genel Bakış',
+  users: 'Kullanıcılar & Personel',
   content: 'Site İçeriği',
   'form-builder': 'Talep Formu & Dil',
   services: 'Hizmetler',
@@ -3882,6 +3858,8 @@ function showView(id) {
       trafficSourcesChartInstance?.resize();
       deviceChartInstance?.resize();
     }
+  } else if (id === 'users') {
+    renderAdminUsersTable();
   } else if (id === 'agents') {
     if (typeof initAgentDashboard === 'function') initAgentDashboard();
   }
@@ -4743,6 +4721,23 @@ function checkBirthdays() {
 function renderAdminUsersTable() {
   const users = getStaffUsers();
   const tbody = document.getElementById("admin-users-tbody");
+  
+  // Update KPI counters
+  const totalStaffEl = document.getElementById("kpi-total-staff-count");
+  const activeStaffEl = document.getElementById("kpi-active-staff-count");
+  const todayBdayEl = document.getElementById("kpi-today-bday-count");
+  const todayBdaySub = document.getElementById("kpi-today-bday-sub");
+
+  if (totalStaffEl) totalStaffEl.textContent = users.length;
+  if (activeStaffEl) activeStaffEl.textContent = users.filter(u => u.active !== false).length;
+
+  const today = new Date();
+  const todayMMDD = String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+  const bdays = users.filter(u => u.birthDate && u.birthDate.endsWith(todayMMDD));
+
+  if (todayBdayEl) todayBdayEl.textContent = bdays.length;
+  if (todayBdaySub) todayBdaySub.textContent = bdays.length > 0 ? bdays.map(u => u.name).join(", ") : "Bugün doğum günü yok";
+
   if (!tbody) return;
 
   const today = new Date();
