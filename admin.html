@@ -28,11 +28,11 @@
 .modal-close{background:none;border:none;font-size:24px;cursor:pointer;color:var(--muted)}
 .modal-detail-row{display:grid;grid-template-columns:140px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
 .modal-detail-row b{color:var(--muted)}
-.login-overlay{position:fixed;inset:0;background:linear-gradient(135deg,rgba(7,27,43,.95),rgba(6,21,34,.98));backdrop-filter:blur(10px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
-.login-card{background:#fff;border-radius:24px;padding:36px 32px;width:min(440px,100%);box-shadow:0 30px 70px rgba(0,0,0,.4);text-align:center}
-.login-card img{width:180px;height:auto;margin-bottom:20px}
-.login-card h2{margin:0 0 8px;font-size:22px;color:var(--navy)}
-.login-card p{margin:0 0 24px;color:var(--muted);font-size:14px}
+.login-overlay{position:fixed;inset:0;background:linear-gradient(135deg,rgba(7,27,43,.97),rgba(6,21,34,.99));backdrop-filter:blur(12px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-card{background:#fff;border-radius:24px;padding:38px 34px;width:min(440px,100%);box-shadow:0 30px 80px rgba(0,0,0,.5);text-align:center}
+.login-card img{width:190px;height:auto;margin-bottom:20px}
+.login-card h2{margin:0 0 6px;font-size:23px;color:var(--navy);font-weight:800}
+.login-card p{margin:0 0 22px;color:var(--muted);font-size:14px}
 .login-card form{display:grid;gap:14px;text-align:left}
 .login-feedback{display:none;padding:12px;border-radius:10px;font-size:13px;font-weight:700;text-align:center}
 .brand-tools,.keyword-tools{display:flex;gap:10px;margin-bottom:14px}.brand-tools input,.keyword-tools input{flex:1}.brand-editor,.keyword-editor{display:grid;gap:9px}.brand-edit-row,.keyword-row{display:grid;grid-template-columns:1fr auto auto;gap:9px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:14px;background:#fbfdfe}.brand-edit-row input{border:1px solid #d0dee3;background:#fff}
@@ -537,9 +537,9 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 <!-- YÖNETİCİ GİRİŞ OVERLAY -->
 <div class="login-overlay" id="login-overlay">
   <div class="login-card">
-    <img src="assets/dm-marin-logo-v2.webp" alt="DM MARİN">
-    <h2>Yönetici Girişi</h2>
-    <p>Yetkili DM MARİN yöneticileri için güvenli Supabase Auth paneli.</p>
+    <img src="assets/dm-marin-logo-v2.webp" alt="DM MARİN" width="544" height="190">
+    <h2>DM MARİN Yönetici Portalı</h2>
+    <p>Yönetim paneline erişmek için yetkili yönetici hesabınızla giriş yapınız.</p>
     <div class="login-feedback" id="login-feedback"></div>
     <form id="login-form">
       <div>
@@ -550,8 +550,8 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
         <label style="font-size:13px;font-weight:700;display:block;margin-bottom:6px" for="admin-password">Şifre</label>
         <input type="password" id="admin-password" required placeholder="••••••••" autocomplete="current-password">
       </div>
-      <button class="btn primary" id="login-submit-btn" type="submit" style="margin-top:8px">Giriş Yap →</button>
-      <button class="btn ghost" id="login-cancel-btn" type="button" style="border:none;color:var(--muted)">Kapat / Taslak Olarak Devam Et</button>
+      <button class="btn primary" id="login-submit-btn" type="submit" style="margin-top:8px;width:100%;min-height:46px;font-size:15px">Giriş Yap →</button>
+      <a href="index.html" class="btn ghost" style="border:none;color:var(--muted);width:100%;margin-top:6px;font-size:13px;text-align:center">← Web Sitesine Dön</a>
     </form>
   </div>
 </div>
@@ -657,6 +657,7 @@ async function initSupabase() {
 function handleAuthSuccess(session) {
   currentSession = session;
   currentUser = session.user;
+  closeLoginOverlay();
   const ind = document.getElementById('auth-indicator');
   const uinfo = document.getElementById('admin-user-info');
   const btn = document.getElementById('login-toggle-btn');
@@ -679,19 +680,20 @@ function handleAuthSuccess(session) {
 function handleAuthLogout() {
   currentSession = null;
   currentUser = null;
+  openLoginOverlay();
   const ind = document.getElementById('auth-indicator');
   const uinfo = document.getElementById('admin-user-info');
   const btn = document.getElementById('login-toggle-btn');
   const noticeTitle = document.getElementById('notice-title');
   const noticeDesc = document.getElementById('notice-desc');
   if (ind) {
-    ind.textContent = 'Giriş Yapılmadı · Salt Okunur';
+    ind.textContent = 'Giriş Yapılmadı · Kilitli';
     ind.classList.remove('auth-ok');
   }
   if (uinfo) uinfo.textContent = 'Yönetici oturumu bekleniyor...';
   if (btn) btn.textContent = '🔐 Yönetici Girişi';
-  if (noticeTitle) noticeTitle.textContent = 'Supabase & Vercel Backend Hazır';
-  if (noticeDesc) noticeDesc.textContent = 'Servis taleplerini yönetmek ve marka/SEO ayarlarını veritabanına kalıcı kaydetmek için lütfen sağ üstten "Yönetici Girişi" yapın.';
+  if (noticeTitle) noticeTitle.textContent = 'Yönetici Girişi Gerekli';
+  if (noticeDesc) noticeDesc.textContent = 'Yönetim paneline erişmek ve canlı verileri yönetmek için lütfen giriş yapın.';
   renderRequestsTable([]);
 }
 
@@ -925,19 +927,29 @@ document.getElementById('modal-delete-btn').addEventListener('click', async () =
 
 // LOGIN OVERLAY HANDLERS
 function openLoginOverlay() {
-  document.getElementById('login-overlay').style.display = 'flex';
+  const overlay = document.getElementById('login-overlay');
+  if (overlay) overlay.style.display = 'flex';
   const fb = document.getElementById('login-feedback');
-  if (!dbConfigured) {
-    fb.style.display = 'block';
-    fb.style.background = '#fffbeb';
-    fb.style.color = '#b45309';
-    fb.textContent = 'Veritabanı bağlantısı bekleniyor. Giriş yapabilmek için Vercel üzerinde Supabase ortam değişkenleri (SUPABASE_URL, SUPABASE_ANON_KEY) tanımlanmalıdır.';
-  } else {
-    fb.style.display = 'none';
+  if (fb) {
+    if (!dbConfigured) {
+      fb.style.display = 'block';
+      fb.style.background = '#fffbeb';
+      fb.style.color = '#b45309';
+      fb.textContent = 'Veritabanı bağlantısı bekleniyor. Giriş yapabilmek için Vercel üzerinde Supabase ortam değişkenleri (SUPABASE_URL, SUPABASE_ANON_KEY) tanımlanmalıdır.';
+    } else {
+      fb.style.display = 'none';
+    }
   }
+  const pass = document.getElementById('admin-password');
+  if (pass) pass.value = '';
+  setTimeout(() => {
+    const em = document.getElementById('admin-email');
+    if (em && overlay && overlay.style.display === 'flex') em.focus();
+  }, 100);
 }
 function closeLoginOverlay() {
-  document.getElementById('login-overlay').style.display = 'none';
+  const overlay = document.getElementById('login-overlay');
+  if (overlay) overlay.style.display = 'none';
 }
 
 document.getElementById('login-toggle-btn').addEventListener('click', () => {
@@ -951,7 +963,8 @@ document.getElementById('login-toggle-btn').addEventListener('click', () => {
   }
 });
 
-document.getElementById('login-cancel-btn').addEventListener('click', closeLoginOverlay);
+const cancelBtn = document.getElementById('login-cancel-btn');
+if (cancelBtn) cancelBtn.addEventListener('click', closeLoginOverlay);
 
 document.getElementById('login-form').addEventListener('submit', async (e) => {
   e.preventDefault();
