@@ -1266,22 +1266,25 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
 <body>
 
 <!-- ERP USER LOGIN OVERLAY -->
-<div class="lock-overlay" id="erp-lock-overlay" style="display:none">
+<div class="lock-overlay" id="erp-lock-overlay" style="display:flex">
   <div class="lock-box" style="max-width:440px">
     <img src="assets/dm-marin-logo-v2.webp" alt="DM MARİN" class="lock-logo" onerror="this.src='assets/dm-marin-logo.webp'">
     <div class="lock-title">DM MARİN ERP GİRİŞİ</div>
-    <div class="lock-sub">Lütfen kullanıcı profilinizi seçip güvenlik PIN kodunuzu giriniz</div>
+    <div class="lock-sub">Lütfen kullanıcı adı ve şifrenizi girerek oturum açınız</div>
     <form onsubmit="handleUserLogin(event)" style="display:grid;gap:14px;text-align:left;margin-top:16px">
       <div>
-        <label style="font-size:12px;font-weight:800;color:#94a3b8;display:block;margin-bottom:6px">GİRİŞ YAPAN KULLANICI / TEKNİSYEN *</label>
-        <select id="login-user-select" style="width:100%;height:44px;background:#1e293b;border:1px solid #334155;border-radius:10px;color:#fff;font-size:14px;font-weight:700;padding:0 12px;outline:none" required>
-        </select>
+        <label style="font-size:12px;font-weight:800;color:#475569;display:block;margin-bottom:6px">KULLANICI ADI VEYA E-POSTA *</label>
+        <input type="text" id="login-username-input" class="form-control" style="width:100%;height:44px;background:#f8fafc;border:1.5px solid #cbd5e1;border-radius:10px;color:#0f172a;font-size:14px;font-weight:700;padding:0 14px;outline:none;box-sizing:border-box" placeholder="Örn: ahmet, mehmet veya admin" autocomplete="username" autofocus required>
       </div>
       <div>
-        <label style="font-size:12px;font-weight:800;color:#94a3b8;display:block;margin-bottom:6px">GÜVENLİK PIN KODU *</label>
-        <input type="password" id="erp-pin-input" class="lock-pin-input" style="width:100%;height:44px;background:#1e293b;border:1px solid #334155;border-radius:10px;color:#fff;font-size:18px;text-align:center;letter-spacing:4px" maxlength="12" placeholder="••••" autocomplete="off" autofocus required>
+        <label style="font-size:12px;font-weight:800;color:#475569;display:block;margin-bottom:6px">GÜVENLİK ŞİFRESİ / PIN *</label>
+        <input type="password" id="erp-pin-input" style="width:100%;height:44px;background:#f8fafc;border:1.5px solid #cbd5e1;border-radius:10px;color:#0f172a;font-size:18px;text-align:center;letter-spacing:3px;outline:none;box-sizing:border-box" placeholder="••••••••" autocomplete="current-password" required>
       </div>
-      <button type="submit" class="lock-btn" style="margin-top:6px">🔓 Giriş Yap</button>
+      <div id="login-error-msg" style="display:none;color:#ef4444;font-size:12.5px;font-weight:700;text-align:center;background:#fef2f2;padding:8px 12px;border-radius:8px;border:1px solid #fecaca"></div>
+      <button type="submit" class="lock-btn" style="margin-top:4px">🔓 Güvenli Giriş Yap</button>
+      <div style="text-align:center;margin-top:10px;padding-top:10px;border-top:1px dashed #e2e8f0;display:flex;justify-content:center;gap:12px">
+        <button type="button" onclick="clearSystemCacheAndReload()" style="background:none;border:none;color:#64748b;font-size:11.5px;cursor:pointer;font-weight:600;text-decoration:underline">🧹 Önbelleği & Çerezleri Temizle</button>
+      </div>
     </form>
   </div>
 </div>
@@ -2004,6 +2007,23 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
               </div>
             </div>
           </div>
+
+          <!-- SİSTEM ÖNBELLEĞİ & GÜVENLİK YÖNETİMİ -->
+          <div class="widget-card" style="grid-column: 1 / -1; border-left: 4px solid #f59e0b">
+            <div class="widget-head">
+              <b style="color:#d97706">🧹 SİSTEM ÖNBELLEĞİ, ÇEREZLER & OTURUM BAKIMI</b>
+            </div>
+            <div style="padding:18px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+              <div style="max-width:560px">
+                <b style="font-size:14px;color:#0f172a">Tarayıcı & Sistem Önbelleği Temizliği</b>
+                <p style="margin:4px 0 0;font-size:12px;color:#64748b">Tarayıcıda biriken geçici dosyaları, önbellekleri ve oturum artıklarını temizler. İşlem yapamadığınızda veya sistem yavaşladığında verilerinizi silmeden arayüzü ve oturumu tazeleyip sıfırlar.</p>
+              </div>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <button type="button" class="btn warning" onclick="clearSystemCacheAndReload()" style="background:#f59e0b;color:#fff;border:none">🧹 Önbelleği Temizle & Yeniden Yükle</button>
+                <button type="button" class="btn danger" onclick="resetAndPurgeStorage()">⚠️ Tüm Yerel Verileri Sıfırla (Fabrika Ayarı)</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -2327,6 +2347,14 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
             <label>Adı Soyadı *</label>
             <input type="text" id="staff-name" placeholder="Örn: Ahmet Usta" required>
           </div>
+          <div class="field-wrap">
+            <label>Kullanıcı Adı (Giriş İçin) *</label>
+            <input type="text" id="staff-username" placeholder="Örn: ahmet" required>
+          </div>
+          <div class="field-wrap">
+            <label>Giriş PIN / Şifresi *</label>
+            <input type="password" id="staff-pin" placeholder="Örn: 1998" required>
+          </div>
           <div class="field-wrap full">
             <label>Görevi / Pozisyonu *</label>
             <input type="text" id="staff-role" placeholder="Örn: Baş Teknisyen / Mobil Servis" required>
@@ -2631,10 +2659,10 @@ let expensesState = [
 // MULTI-USER PERSONNEL & STAFF MANAGEMENT
 // ----------------------------------------------------
 let staffState = [
-  { id: "st-1", name: "Ahmet Usta", role: "Baş Teknisyen / Mobil Servis", phone: "0543 724 09 92", active: true },
-  { id: "st-2", name: "Mehmet K.", role: "Depo & Mal Kabul Sorumlusu", phone: "0532 111 22 33", active: true },
-  { id: "st-3", name: "Can D.", role: "Saha Servis Teknisyeni", phone: "0541 222 33 44", active: true },
-  { id: "st-4", name: "Yönetici (Admin)", role: "Sistem Yöneticisi", phone: "", active: true }
+  { id: "st-1", name: "Ahmet Usta", username: "ahmet", pin: "1998", role: "Baş Teknisyen / Mobil Servis", phone: "0543 724 09 92", active: true },
+  { id: "st-2", name: "Mehmet K.", username: "mehmet", pin: "1998", role: "Depo & Mal Kabul Sorumlusu", phone: "0532 111 22 33", active: true },
+  { id: "st-3", name: "Can D.", username: "can", pin: "1998", role: "Saha Servis Teknisyeni", phone: "0541 222 33 44", active: true },
+  { id: "st-4", name: "Yönetici (Admin)", username: "admin", pin: "1998", role: "Sistem Yöneticisi", phone: "", active: true }
 ];
 
 let activeOperator = localStorage.getItem("dm_active_operator") || "Ahmet Usta (Baş Teknisyen)";
@@ -2654,11 +2682,12 @@ function renderStaff() {
   if (!tbody) return;
   tbody.innerHTML = staffState.map(st => `
     <tr>
-      <td><b>${escapeHtml(st.name)}</b></td>
+      <td><b>${escapeHtml(st.name)}</b> <small style="display:block;color:#64748b">Kullanıcı Adı: <code style="background:#f1f5f9;padding:1px 5px;border-radius:4px">${escapeHtml(st.username || st.name.toLowerCase().replace(/[^a-z0-9]/g, ''))}</code></small></td>
       <td><span style="background:#e0f2fe;color:#0369a1;padding:2px 8px;border-radius:6px;font-size:11.5px;font-weight:700">${escapeHtml(st.role)}</span></td>
       <td>${escapeHtml(st.phone || '-')}</td>
       <td><span class="badge-pill ${st.active ? 'green' : 'red'}">${st.active ? 'Aktif' : 'Pasif'}</span></td>
       <td style="text-align:right">
+        <button class="btn outline sm" onclick="editStaff('${st.id}')" title="Düzenle">✏️</button>
         <button class="btn danger sm" onclick="deleteStaff('${st.id}')" title="Personeli Sil">✕</button>
       </td>
     </tr>
@@ -2676,30 +2705,64 @@ function renderStaff() {
 function openNewStaffModal() {
   const form = document.getElementById("form-staff");
   if (form) form.reset();
+  const idEl = document.getElementById("staff-id");
+  if (idEl) idEl.value = "";
+  const title = document.getElementById("modal-staff-title");
+  if (title) title.textContent = "👤 Personel / Teknisyen Ekle";
+  openModal("modal-staff");
+}
+
+function editStaff(id) {
+  const st = staffState.find(s => s.id === id);
+  if (!st) return;
+  const form = document.getElementById("form-staff");
+  if (form) form.reset();
+  document.getElementById("staff-id").value = st.id;
+  document.getElementById("staff-name").value = st.name;
+  document.getElementById("staff-username").value = st.username || st.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  document.getElementById("staff-pin").value = st.pin || "1998";
+  document.getElementById("staff-role").value = st.role;
+  document.getElementById("staff-phone").value = st.phone || "";
+  document.getElementById("staff-active").value = st.active ? "true" : "false";
+  
+  const title = document.getElementById("modal-staff-title");
+  if (title) title.textContent = "✏️ Personel Bilgilerini Düzenle";
   openModal("modal-staff");
 }
 
 function saveStaff(e) {
   e.preventDefault();
+  const id = document.getElementById("staff-id").value;
   const name = document.getElementById("staff-name").value.trim();
+  const username = (document.getElementById("staff-username")?.value || name).trim().toLowerCase();
+  const pin = (document.getElementById("staff-pin")?.value || "1998").trim();
   const role = document.getElementById("staff-role").value.trim();
   const phone = document.getElementById("staff-phone").value.trim();
   const active = document.getElementById("staff-active").value === "true";
 
   if (!name || !role) return;
 
-  staffState.push({
-    id: "st-" + Date.now(),
-    name,
-    role,
-    phone,
-    active
-  });
+  if (id) {
+    const idx = staffState.findIndex(s => s.id === id);
+    if (idx >= 0) {
+      staffState[idx] = { ...staffState[idx], name, username, pin, role, phone, active };
+    }
+  } else {
+    staffState.push({
+      id: "st-" + Date.now(),
+      name,
+      username: username || name.toLowerCase().replace(/[^a-z0-9]/g, ''),
+      pin: pin || "1998",
+      role,
+      phone,
+      active
+    });
+  }
 
   saveAll();
   renderStaff();
   closeModal("modal-staff");
-  flash(`✓ Yeni personel eklendi: ${name}`);
+  flash(`✓ Personel kaydedildi: ${name}`);
 }
 
 function deleteStaff(id) {
@@ -2900,7 +2963,17 @@ function loadAll() {
     if (pu) purchasesState = JSON.parse(pu);
     const ex = localStorage.getItem("dm_erp_expenses");
     if (ex) expensesState = JSON.parse(ex);
-    const st = localStorage.getItem("dm_erp_staff"); if (st) staffState = JSON.parse(st);
+    const st = localStorage.getItem("dm_erp_staff");
+    if (st) {
+      const parsed = JSON.parse(st);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        staffState = parsed.map(s => ({
+          ...s,
+          username: s.username || s.name.toLowerCase().replace(/[^a-z0-9]/g, ''),
+          pin: s.pin || '1998'
+        }));
+      }
+    }
   } catch(e) {}
 }
 
@@ -4945,7 +5018,43 @@ function updateTopBarUserBadge() {
 }
 
 // =========================================================================
-// PER-USER PIN VALIDATION & BIRTHDAY SENTINEL
+// CACHE & STORAGE PURGE TOOLS
+// =========================================================================
+function clearSystemCacheAndReload() {
+  try {
+    sessionStorage.clear();
+    // Keep ERP databases in localStorage, but clear temporary tokens & caches
+    sessionStorage.removeItem('dm_erp_auth');
+    sessionStorage.removeItem('dm_erp_logged_user');
+    
+    // Clear browser cache if supported
+    if ('caches' in window) {
+      caches.keys().then(names => {
+        names.forEach(name => caches.delete(name));
+      });
+    }
+  } catch(e) {}
+  
+  flash("🧹 Önbellek ve geçici veriler temizlendi! Sayfa yenileniyor...");
+  setTimeout(() => {
+    window.location.reload(true);
+  }, 600);
+}
+
+function resetAndPurgeStorage() {
+  if (!confirm("DİKKAT: Tüm yerel ürünler, cariler ve ayarlar sıfırlanacaktır. Devam etmeden önce yedek aldığınızdan emin olun!\n\nTüm yerel verileri sıfırlamak istiyor musunuz?")) {
+    return;
+  }
+  try {
+    localStorage.clear();
+    sessionStorage.clear();
+  } catch(e) {}
+  alert("✓ Tüm yerel veriler ve önbellek sıfırlandı. Sistem varsayılan ayarlarla yeniden başlatılıyor.");
+  window.location.reload(true);
+}
+
+// =========================================================================
+// PER-USER USERNAME & PASSWORD/PIN VALIDATION
 // =========================================================================
 function checkStokBirthdayAlert() {
   const today = new Date();
@@ -4962,21 +5071,40 @@ function checkStokBirthdayAlert() {
 
 function handleUserLogin(e) {
   e.preventDefault();
-  const sel = document.getElementById('login-user-select');
-  const input = document.getElementById('erp-pin-input');
-  const val = input.value.trim();
+  const userInput = document.getElementById('login-username-input');
+  const pinInput = document.getElementById('erp-pin-input');
+  const errorEl = document.getElementById('login-error-msg');
+  
+  const rawUser = (userInput ? userInput.value : '').trim().toLowerCase();
+  const rawPin = (pinInput ? pinInput.value : '').trim();
 
-  const selectedStaff = staffState.find(s => s.id === sel.value);
-  const userPin = selectedStaff?.pin || "1998";
+  if (errorEl) {
+    errorEl.style.display = 'none';
+    errorEl.textContent = '';
+  }
+
   const masterPins = ['1998', 'dm1998', 'marin2026'];
 
-  // Check user specific PIN or master PIN override
-  if (val === userPin || masterPins.includes(val)) {
+  // Match by username, email or display name
+  const foundStaff = staffState.find(s => {
+    if (s.active === false) return false;
+    const sUsername = (s.username || '').trim().toLowerCase();
+    const sName = (s.name || '').trim().toLowerCase();
+    const sNameClean = sName.replace(/[^a-z0-9]/g, '');
+    return sUsername === rawUser || sName === rawUser || sNameClean === rawUser || (rawUser === 'admin');
+  });
+
+  const validPin = foundStaff?.pin || '1998';
+  const isMasterPin = masterPins.includes(rawPin);
+  const isPinValid = (rawPin === validPin) || isMasterPin;
+
+  if (foundStaff && isPinValid) {
     const userObj = {
-      id: selectedStaff ? selectedStaff.id : sel.value,
-      name: selectedStaff ? selectedStaff.name : sel.options[sel.selectedIndex].text,
-      role: selectedStaff ? selectedStaff.role : 'Teknisyen',
-      birthDate: selectedStaff ? selectedStaff.birthDate : ''
+      id: foundStaff.id,
+      name: foundStaff.name,
+      username: foundStaff.username || rawUser,
+      role: foundStaff.role,
+      birthDate: foundStaff.birthDate || ''
     };
     sessionStorage.setItem('dm_erp_auth', '1');
     sessionStorage.setItem('dm_erp_logged_user', JSON.stringify(userObj));
@@ -4984,41 +5112,70 @@ function handleUserLogin(e) {
 
     const overlay = document.getElementById('erp-lock-overlay');
     if (overlay) overlay.style.display = 'none';
-    input.value = '';
+    if (userInput) userInput.value = '';
+    if (pinInput) pinInput.value = '';
     updateTopBarUserBadge();
     flash(`✓ Hoş geldiniz, ${userObj.name}`);
     renderDashboard();
     checkStokBirthdayAlert();
+  } else if ((rawUser === 'admin' || rawUser === 'yonetici') && isMasterPin) {
+    // Direct admin login
+    const userObj = {
+      id: 'st-admin',
+      name: 'Yönetici (Admin)',
+      username: 'admin',
+      role: 'Sistem Yöneticisi',
+      birthDate: ''
+    };
+    sessionStorage.setItem('dm_erp_auth', '1');
+    sessionStorage.setItem('dm_erp_logged_user', JSON.stringify(userObj));
+    localStorage.setItem('dm_active_operator', 'Yönetici (Sistem Yöneticisi)');
+
+    const overlay = document.getElementById('erp-lock-overlay');
+    if (overlay) overlay.style.display = 'none';
+    if (userInput) userInput.value = '';
+    if (pinInput) pinInput.value = '';
+    updateTopBarUserBadge();
+    flash(`✓ Hoş geldiniz, Yönetici`);
+    renderDashboard();
   } else {
-    alert('Hatalı Güvenlik PIN Kodu! Lütfen bu kullanıcıya ait PIN kodunu giriniz.');
-    input.value = '';
-    input.focus();
+    if (errorEl) {
+      errorEl.textContent = 'Hatalı Kullanıcı Adı veya Güvenlik Şifresi! Lütfen tekrar deneyiniz.';
+      errorEl.style.display = 'block';
+    } else {
+      alert('Hatalı Kullanıcı Adı veya Güvenlik Şifresi!');
+    }
+    if (pinInput) {
+      pinInput.value = '';
+      pinInput.focus();
+    }
   }
 }
 
 function checkAuth() {
   const isAuth = sessionStorage.getItem('dm_erp_auth');
   const overlay = document.getElementById('erp-lock-overlay');
-  populateLoginUserSelect();
   if (overlay) {
     if (isAuth === '1') {
       overlay.style.display = 'none';
       updateTopBarUserBadge();
     } else {
       overlay.style.display = 'flex';
-      setTimeout(() => document.getElementById('erp-pin-input')?.focus(), 100);
+      setTimeout(() => {
+        const uInput = document.getElementById('login-username-input');
+        if (uInput) uInput.focus();
+      }, 100);
     }
   }
 }
 
 function logoutERP() {
-  if (confirm("ERP oturumundan çıkış yapmak ve kullanıcı değiştirmek istiyor musunuz?")) {
+  if (confirm("ERP oturumundan çıkış yapmak istiyor musunuz?")) {
     sessionStorage.removeItem('dm_erp_auth');
     sessionStorage.removeItem('dm_erp_logged_user');
     checkAuth();
-    flash("🔒 Oturum Kapatıldı. Yeni kullanıcı ile giriş yapabilirsiniz.");
+    flash("🔒 Oturum Kapatıldı. Tekrar giriş yapabilirsiniz.");
   }
-}
 }
 
 window.addEventListener("DOMContentLoaded", () => {
