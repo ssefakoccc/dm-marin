@@ -43,8 +43,38 @@
 .seo-table th,.seo-table td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left}
 .seo-table th{color:var(--muted);font-size:12px;font-weight:800;background:#fbfdfe}
 .seo-table tr:hover td{background:#f4f9fa}
+.report-paper{background:#fff;border:1px solid var(--line);border-radius:16px;padding:32px;box-shadow:var(--shadow);max-width:820px;margin:0 auto}
+.report-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
+.report-table th,.report-table td{padding:9px 12px;border:1px solid #dce7ea;text-align:left}
+.report-table th{background:#f0f8fa;color:var(--navy);font-weight:800}
 @media(max-width:1000px){.app{grid-template-columns:1fr}.sidebar{position:fixed;inset:0 auto 0 0;z-index:50;width:260px;transform:translateX(-100%);transition:.25s}.sidebar.open{transform:none}.mobile-menu{display:inline-flex}.cards{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.content{width:calc(100% - 36px)}.topbar{padding:0 18px}}
 @media(max-width:640px){.topbar h1{font-size:18px}.top-actions .btn:not(.primary){display:none}.content{padding-top:22px}.notice{grid-template-columns:auto 1fr}.notice a{grid-column:2}.head{display:block}.head h2{font-size:28px}.cards{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.media-grid{grid-template-columns:1fr}.quick{grid-template-columns:1fr}.domain{grid-template-columns:1fr}.panel-head{align-items:flex-start;flex-direction:column}.service-row{grid-template-columns:auto 1fr}.service-row .switch{grid-column:2}.brand-edit-row{grid-template-columns:1fr auto}.brand-tools{flex-direction:column}}
+@media print {
+  body { background: #fff !important; color: #071b2b !important; margin: 0 !important; }
+  .app, .sidebar, .topbar, .notice, .toast, .login-overlay, .modal-backdrop:not(#service-report-modal), .modal-head, .report-hide-print, .no-print {
+    display: none !important;
+  }
+  #service-report-modal {
+    position: static !important;
+    display: block !important;
+    background: #fff !important;
+    padding: 0 !important;
+  }
+  #service-report-modal .modal-box {
+    box-shadow: none !important;
+    padding: 0 !important;
+    max-height: none !important;
+    width: 100% !important;
+    border-radius: 0 !important;
+    max-width: 100% !important;
+  }
+  .report-paper {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+}
 </style>
 <!-- Vercel Web Analytics -->
 <script>
@@ -66,6 +96,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 <button data-view="seo"><span class="icon">⌕</span>SEO Yönetimi</button>
 <button data-view="media"><span class="icon">▧</span>Görseller</button>
 <button data-view="inbox"><span class="icon">✉</span>Servis Talepleri</button>
+<button data-view="notifications"><span class="icon">🔔</span>Bildirimler (Alerts)</button>
 <button data-view="settings"><span class="icon">◉</span>Ayarlar</button>
 </nav>
 <div class="side-foot">
@@ -487,6 +518,12 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 <option value="atakoy">Ataköy ve West İstanbul (atakoy-west-istanbul-marina-servis.html)</option>
 <option value="tuzla">Tuzla ve Pendik Marintürk (tuzla-pendik-marinturk-marin-servis.html)</option>
 </optgroup>
+<optgroup label="Marin Teknik Rehberler">
+<option value="rehber-kislik">Kışlık Tekne Motoru Bakımı (rehber-kislik-tekne-motoru-bakimi.html)</option>
+<option value="rehber-jenerator">Jeneratör Arıza Kodları (rehber-marin-jenerator-ariza-kodlari.html)</option>
+<option value="rehber-aku">Akü & Şarj Sistemi (rehber-tekne-aku-ve-sarj-sistemi.html)</option>
+<option value="rehber-volvo-bakim">Volvo Penta D4/D6 Bakım Çizelgesi (rehber-volvo-penta-d4-d6-periyodik-bakim.html)</option>
+</optgroup>
 </select>
 </div>
 
@@ -663,6 +700,223 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
       <button class="btn primary" id="login-submit-btn" type="submit" style="margin-top:8px;width:100%;min-height:46px;font-size:15px">Giriş Yap →</button>
       <a href="index.html" class="btn ghost" style="border:none;color:var(--muted);width:100%;margin-top:6px;font-size:13px;text-align:center">← Web Sitesine Dön</a>
     </form>
+  </div>
+</div>
+
+<!-- NOTIFICATIONS VIEW -->
+<section class="view" id="notifications">
+  <div class="head">
+    <div>
+      <h2>Otomatik Bildirimler & Webhook</h2>
+      <p>Yeni bir servis talebi geldiğinde Telegram, WhatsApp veya Webhook (Make / Zapier / Slack / Discord) üzerinden anında otomatik alert alın.</p>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn" id="test-notify-btn" type="button">🔔 Test Bildirimi Gönder</button>
+      <button class="btn primary" id="save-notify-settings-btn" type="button">💾 Bildirim Ayarlarını Kaydet</button>
+    </div>
+  </div>
+  
+  <div class="grid" style="grid-template-columns:1fr 1fr">
+    <article class="panel">
+      <div class="panel-head">
+        <div>
+          <h3 style="margin:0">Telegram Bot Bildirimleri</h3>
+          <small style="color:var(--muted)">Yönetici telefonuna anında push bildirim</small>
+        </div>
+        <span class="pill ok" id="tg-status-pill">Telegram API</span>
+      </div>
+      <div class="panel-body form-grid">
+        <div class="field full">
+          <label for="notify-tg-token">Telegram Bot Token</label>
+          <input type="password" id="notify-tg-token" placeholder="1234567890:ABCdefGHIjklMNOpqrSTUvwxYZ" autocomplete="off">
+          <small>@BotFather üzerinden oluşturulan Telegram botunuzun API token'ı.</small>
+        </div>
+        <div class="field full">
+          <label for="notify-tg-chat">Telegram Chat / Channel ID</label>
+          <input type="text" id="notify-tg-chat" placeholder="Örn: 987654321 veya -100123456789">
+          <small>Bildirimin iletileceği yönetici kullanıcı ID'si veya servis grubu chat ID'si.</small>
+        </div>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-head">
+        <div>
+          <h3 style="margin:0">Webhook & E-posta Bildirimleri</h3>
+          <small style="color:var(--muted)">Make.com, Zapier, Discord veya Webhook URL</small>
+        </div>
+        <span class="pill badge">HTTP Webhook</span>
+      </div>
+      <div class="panel-body form-grid">
+        <div class="field full">
+          <label for="notify-webhook-url">Webhook URL</label>
+          <input type="url" id="notify-webhook-url" placeholder="https://hook.eu1.make.com/... veya Discord Webhook URL">
+          <small>Her yeni talepte tüm müşteri & servis bilgileri bu adrese anında JSON POST edilir.</small>
+        </div>
+        <div class="field full">
+          <label for="notify-admin-email">Yönetici Bildirim E-postası</label>
+          <input type="email" id="notify-admin-email" placeholder="servis@dmmarin.com">
+          <small>Sistem bildirimlerinin kopyalanacağı teknik yönetici e-posta adresi.</small>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- KURUMSAL SERVİS RAPORU / PDF MODALI -->
+<div class="modal-backdrop" id="service-report-modal">
+  <div class="modal-box" style="width:min(880px, 100%);max-height:92vh">
+    <div class="modal-head report-hide-print">
+      <div>
+        <h3 style="margin:0">Kurumsal Müşteri Servis Raporu</h3>
+        <small style="color:var(--muted)">Tamamlanan veya süren servis işlemi için antetli A4 rapor oluşturun</small>
+      </div>
+      <button class="modal-close" id="report-modal-close-btn" type="button">&times;</button>
+    </div>
+
+    <!-- PRINTABLE REPORT PAPER -->
+    <div class="report-paper" id="print-service-report">
+      <!-- HEADER -->
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--navy);padding-bottom:16px;margin-bottom:20px">
+        <div style="display:flex;align-items:center;gap:14px">
+          <img src="assets/dm-marin-logo-v2.webp" alt="DM MARİN" style="width:160px;height:auto;display:block">
+        </div>
+        <div style="text-align:right;font-size:12px;color:var(--muted);line-height:1.4">
+          <b style="color:var(--navy);font-size:14px;display:block">DM MARİN TEKNİK SERVİS</b>
+          <span>Mobil Marin Servis · Motor & Jeneratör Uzmanı</span><br>
+          <span>☎ +90 543 724 09 92 · ✉ servis@dmmarin.com · 🌐 dmmarin.com</span>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;background:#f0f8fa;padding:10px 16px;border-radius:10px">
+        <div>
+          <span style="font-size:11px;font-weight:800;color:var(--cyan2);letter-spacing:.1em;text-transform:uppercase">RESMİ SERVİS RAPORU</span>
+          <h4 style="margin:2px 0 0;font-size:16px;color:var(--navy)" id="rep-title">TEKNİK MÜDAHALE & SEYİR TESLİM FORMU</h4>
+        </div>
+        <div style="text-align:right;font-size:12px">
+          <div><b>Rapor No:</b> <span id="rep-no">DM-2026-001</span></div>
+          <div><b>Tarih:</b> <span id="rep-date">20.09.2026</span></div>
+        </div>
+      </div>
+
+      <!-- CUSTOMER & VESSEL GRID -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;font-size:13px">
+        <div style="border:1px solid var(--line);border-radius:10px;padding:12px;background:#fbfdfe">
+          <b style="color:var(--navy);display:block;margin-bottom:8px;border-bottom:1px solid var(--line);padding-bottom:4px">MÜŞTERİ BİLGİLERİ</b>
+          <div style="display:grid;grid-template-columns:100px 1fr;gap:4px">
+            <span style="color:var(--muted)">Ad Soyad:</span> <strong id="rep-cust-name">-</strong>
+            <span style="color:var(--muted)">Telefon:</span> <span id="rep-cust-phone">-</span>
+            <span style="color:var(--muted)">E-posta:</span> <span id="rep-cust-email">-</span>
+          </div>
+        </div>
+        <div style="border:1px solid var(--line);border-radius:10px;padding:12px;background:#fbfdfe">
+          <b style="color:var(--navy);display:block;margin-bottom:8px;border-bottom:1px solid var(--line);padding-bottom:4px">TEKNE & KONUM BİLGİLERİ</b>
+          <div style="display:grid;grid-template-columns:100px 1fr;gap:4px">
+            <span style="color:var(--muted)">Tekne/Model:</span> <strong id="rep-boat-name">-</strong>
+            <span style="color:var(--muted)">Marina/Konum:</span> <span id="rep-location">-</span>
+            <span style="color:var(--muted)">Hizmet Türü:</span> <span id="rep-service-type">-</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TECHNICAL ENGINE DETAILS -->
+      <div style="border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:18px;background:#fbfdfe;font-size:13px">
+        <b style="color:var(--navy);display:block;margin-bottom:8px;border-bottom:1px solid var(--line);padding-bottom:4px">MAKİNE & JENERATÖR VERİLERİ</b>
+        <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:10px" class="report-hide-print">
+          <div>
+            <label style="font-size:11px;font-weight:700;color:var(--muted)">Motor/Jeneratör Marka-Model</label>
+            <input type="text" id="rep-engine-model" style="padding:6px 8px;font-size:12px" value="Volvo Penta D6-370 / Kohler 9EFOZD">
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:var(--muted)">Seri Numarası (ESN)</label>
+            <input type="text" id="rep-serial-no" style="padding:6px 8px;font-size:12px" placeholder="Örn: 2006048192">
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:var(--muted)">Çalışma Saati (Moto-saat)</label>
+            <input type="text" id="rep-hours" style="padding:6px 8px;font-size:12px" placeholder="Örn: 842 saat">
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPLETED PROCEDURES CHECKLIST -->
+      <div style="margin-bottom:18px">
+        <b style="color:var(--navy);font-size:13px;display:block;margin-bottom:8px">YAPILAN TEKNİK İŞLEMLER & KONTROLLER</b>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;background:#fbfdfe;border:1px solid var(--line);border-radius:10px;padding:12px">
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="rep-chk-1" checked> <span>Motor & Mekanik Periyodik Bakımı</span></label>
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="rep-chk-2" checked> <span>Motor Yağı ve Orijinal Filtre Değişimi</span></label>
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="rep-chk-3" checked> <span>Deniz Suyu Pompası & İmpeller Kontrolü/Değişimi</span></label>
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="rep-chk-4" checked> <span>Cihazlı ECU / Arıza Kodu Taraması & Sıfırlama</span></label>
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="rep-chk-5" checked> <span>Yakıt Separatör & Filtre Değişimi</span></label>
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="rep-chk-6" checked> <span>Şanzıman / Kuyruk Yağ Seviyesi & Tutya Kontrolü</span></label>
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="rep-chk-7" checked> <span>Jeneratör Yük & Voltaj Frekans Kalibrasyonu</span></label>
+          <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="rep-chk-8" checked> <span>Seyir Testi & Basınç / Hararet Parametre Kontrolü</span></label>
+        </div>
+      </div>
+
+      <!-- PARTS TABLE -->
+      <div style="margin-bottom:18px">
+        <b style="color:var(--navy);font-size:13px;display:block;margin-bottom:8px">KULLANILAN YEDEK PARÇA VE SARF MALZEMELER</b>
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th style="width:45%">Parça / Malzeme Tanımı</th>
+              <th style="width:25%">Referans / Parça Kodu</th>
+              <th style="width:15%">Miktar</th>
+              <th style="width:15%">Durum</th>
+            </tr>
+          </thead>
+          <tbody id="rep-parts-tbody">
+            <tr>
+              <td><input type="text" value="Marin Motor Yağı (15W-40 VDS-4.5)" style="padding:4px 6px;font-size:12px"></td>
+              <td><input type="text" value="OEM-OIL-15W40" style="padding:4px 6px;font-size:12px"></td>
+              <td><input type="text" value="20 Litre" style="padding:4px 6px;font-size:12px"></td>
+              <td><span class="pill ok">Orijinal Sıfır</span></td>
+            </tr>
+            <tr>
+              <td><input type="text" value="Yağ & Yakıt Filtresi Kiti" style="padding:4px 6px;font-size:12px"></td>
+              <td><input type="text" value="FLT-KIT-217" style="padding:4px 6px;font-size:12px"></td>
+              <td><input type="text" value="1 Takım" style="padding:4px 6px;font-size:12px"></td>
+              <td><span class="pill ok">Orijinal Sıfır</span></td>
+            </tr>
+            <tr>
+              <td><input type="text" value="Deniz Suyu İmpeller Lastiği" style="padding:4px 6px;font-size:12px"></td>
+              <td><input type="text" value="IMP-875-STD" style="padding:4px 6px;font-size:12px"></td>
+              <td><input type="text" value="1 Adet" style="padding:4px 6px;font-size:12px"></td>
+              <td><span class="pill ok">Orijinal Sıfır</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- TECHNICIAN NOTES & RECOMMENDATIONS -->
+      <div style="border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:18px;background:#fbfdfe;font-size:13px">
+        <b style="color:var(--navy);display:block;margin-bottom:4px">TEKNİSYEN NOTU & BİR SONRAKİ BAKIM TAVSİYESİ</b>
+        <textarea id="rep-tech-notes" rows="2" style="font-size:12px">Makinelerin rölanti, seyir devri, yağ basıncı ve hararet değerleri deniz testinde test edilmiş ve nominal değerlerde çalışmaktadır. Bir sonraki periyodik bakımın 100 moto-saat sonra veya sezon başında yapılması tavsiye edilir.</textarea>
+      </div>
+
+      <!-- SIGNATURES -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:24px;padding-top:16px;border-top:1px solid var(--line);font-size:12px">
+        <div>
+          <b style="color:var(--navy);display:block">SERVİSİ YÜRÜTEN TEKNİK SORUMLU</b>
+          <div style="margin-top:20px;color:var(--navy);font-weight:700">DM MARİN TEKNİK SERVİS</div>
+          <small style="color:var(--muted)">Kaşe & İsim İmza (Dijital Onaylı)</small>
+        </div>
+        <div style="text-align:right">
+          <b style="color:var(--navy);display:block">TEKNE SAHİBİ / TESLİM ALAN</b>
+          <div style="margin-top:20px;color:var(--navy);font-weight:700" id="rep-sign-cust-name">-</div>
+          <small style="color:var(--muted)">Tekne Teslim Onayı</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="report-hide-print" style="margin-top:20px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:16px">
+      <button class="btn ghost" id="report-cancel-btn" type="button">Kapat</button>
+      <div style="display:flex;gap:10px">
+        <button class="btn" id="report-wa-send-btn" type="button" style="border-color:#86efac;background:#f0fdf4;color:#166534">💬 WhatsApp ile Müşteriye Gönder</button>
+        <button class="btn primary" id="report-print-btn" type="button">🖨️ PDF İndir / Yazdır</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1151,12 +1405,16 @@ function renderRequestsTable(list) {
         </select>
       </td>
       <td style="white-space:nowrap">
+        <button class="btn print-report-btn" data-id="${req.id}" style="padding:4px 8px;min-height:30px;font-size:12px;margin-right:6px;border-color:var(--cyan2);background:#e8fafd;color:var(--cyan2)" type="button" title="Kurumsal Servis Raporu / PDF">📄 Rapor</button>
         <a href="https://wa.me/${(req.phone || "").replace(/[^0-9]/g, "")}?text=${encodeURIComponent("Merhaba Sn. " + (req.name || "") + ", DM MARİN servis talebiniz hk:")}" class="btn" style="padding:4px 8px;min-height:30px;font-size:12px;border-color:#86efac;background:#f0fdf4;color:#166534;margin-right:6px" target="_blank" rel="noopener" title="WhatsApp Mesajı Gönder">💬 WA</a>
         <button class="btn view-detail-btn" data-id="${req.id}" style="padding:4px 10px;min-height:30px;font-size:12px" type="button">Detay</button>
       </td>
     `;
     tr.querySelector('.req-status-select').addEventListener('change', async (e) => {
       await updateRequestStatus(req.id, e.target.value);
+    });
+    tr.querySelector('.print-report-btn').addEventListener('click', () => {
+      openServiceReportModal(req);
     });
     tr.querySelector('.view-detail-btn').addEventListener('click', () => {
       openRequestModal(req);
@@ -1198,6 +1456,75 @@ async function updateRequestStatus(id, newStatus, notes) {
   } catch (err) {
     flash('Güncelleme hatası: ' + err.message);
   }
+}
+
+// ==================== SERVICE REPORT / PDF GENERATOR ====================
+let activeReportReq = null;
+
+function openServiceReportModal(req) {
+  activeReportReq = req;
+  const modal = document.getElementById('service-report-modal');
+  if (!modal) return;
+
+  const dateObj = req.created_at ? new Date(req.created_at) : new Date();
+  const dateStr = dateObj.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const reportNo = 'DM-' + dateObj.getFullYear() + '-' + String(req.id || Math.floor(1000 + Math.random() * 9000)).slice(-4).toUpperCase();
+
+  document.getElementById('rep-no').textContent = reportNo;
+  document.getElementById('rep-date').textContent = dateStr;
+  document.getElementById('rep-cust-name').textContent = req.name || '-';
+  document.getElementById('rep-cust-phone').textContent = req.phone || '-';
+  document.getElementById('rep-cust-email').textContent = req.email || '-';
+  document.getElementById('rep-boat-name').textContent = req.boat_name || req.boat || 'Motoryat / Yelkenli';
+  document.getElementById('rep-location').textContent = req.marina_location || req.location || 'İstanbul & Marmara Marinaları';
+  document.getElementById('rep-service-type').textContent = req.service_type || req.service || 'Motor & Jeneratör Bakımı';
+  document.getElementById('rep-sign-cust-name').textContent = req.name || '-';
+
+  if (req.boat_name || req.boat) {
+    document.getElementById('rep-engine-model').value = req.boat_name || req.boat;
+  }
+
+  modal.classList.add('open');
+}
+
+function closeServiceReportModal() {
+  const modal = document.getElementById('service-report-modal');
+  if (modal) modal.classList.remove('open');
+  activeReportReq = null;
+}
+
+const repCloseBtn = document.getElementById('report-modal-close-btn');
+if (repCloseBtn) repCloseBtn.addEventListener('click', closeServiceReportModal);
+const repCancelBtn = document.getElementById('report-cancel-btn');
+if (repCancelBtn) repCancelBtn.addEventListener('click', closeServiceReportModal);
+
+const repPrintBtn = document.getElementById('report-print-btn');
+if (repPrintBtn) {
+  repPrintBtn.addEventListener('click', () => {
+    window.print();
+  });
+}
+
+const repWaBtn = document.getElementById('report-wa-send-btn');
+if (repWaBtn) {
+  repWaBtn.addEventListener('click', () => {
+    if (!activeReportReq) return;
+    const phoneClean = (activeReportReq.phone || '').replace(/[^0-9]/g, '');
+    const repNo = document.getElementById('rep-no').textContent;
+    const boat = document.getElementById('rep-boat-name').textContent;
+    const serv = document.getElementById('rep-service-type').textContent;
+    const techNote = document.getElementById('rep-tech-notes').value.trim();
+
+    const waMsg = `Merhaba Sn. ${activeReportReq.name},\n\n*DM MARİN TEKNİK SERVİS RAPORU* (${repNo})\n\n` +
+      `🚤 *Tekne:* ${boat}\n` +
+      `🛠 *Hizmet:* ${serv}\n` +
+      `📋 *Teknisyen Notu:* ${techNote}\n\n` +
+      `Teknenizin kontrolleri tamamlanmış olup seyre hazır durumdadır. Servis detaylarınızı ve basılı formunuzu DM MARİN ekibinden teslim alabilirsiniz.\n\n` +
+      `İyi seyirler dileriz.\nDM MARİN · 0543 724 09 92`;
+
+    const url = 'https://wa.me/' + phoneClean + '?text=' + encodeURIComponent(waMsg);
+    window.open(url, '_blank');
+  });
 }
 
 // REQUEST DETAIL MODAL
@@ -1462,12 +1789,93 @@ async function loadRemoteSettings() {
       if (data.data.form_config_en) {
         formConfigEN = Object.assign({}, defaultFormConfigEN, data.data.form_config_en);
       }
+      if (data.data.notification_config) {
+        const nc = data.data.notification_config;
+        const tgTok = document.getElementById('notify-tg-token');
+        const tgChat = document.getElementById('notify-tg-chat');
+        const whUrl = document.getElementById('notify-webhook-url');
+        const admEmail = document.getElementById('notify-admin-email');
+        if (tgTok && nc.telegram_bot_token) tgTok.value = nc.telegram_bot_token;
+        if (tgChat && nc.telegram_chat_id) tgChat.value = nc.telegram_chat_id;
+        if (whUrl && nc.webhook_url) whUrl.value = nc.webhook_url;
+        if (admEmail && nc.admin_email) admEmail.value = nc.admin_email;
+      }
       renderFormBuilder(activeFormLang);
     }
   } catch (e) {
     console.warn("Remote settings load error:", e);
   }
 }
+
+async function saveNotificationSettings() {
+  if (!currentSession) return flash('Lütfen önce yönetici girişi yapın.');
+  const token = (document.getElementById('notify-tg-token')?.value || '').trim();
+  const chatId = (document.getElementById('notify-tg-chat')?.value || '').trim();
+  const webhookUrl = (document.getElementById('notify-webhook-url')?.value || '').trim();
+  const adminEmail = (document.getElementById('notify-admin-email')?.value || '').trim();
+
+  const payload = {
+    telegram_bot_token: token,
+    telegram_chat_id: chatId,
+    webhook_url: webhookUrl,
+    admin_email: adminEmail
+  };
+
+  try {
+    const res = await fetch('/api/admin/settings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + currentSession.access_token
+      },
+      body: JSON.stringify({ key: 'notification_config', value: payload })
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      flash('✓ Bildirim ayarları başarıyla kaydedildi.');
+    } else {
+      flash(data.error || 'Bildirim ayarları kaydedilemedi.');
+    }
+  } catch (err) {
+    flash('Kayıt hatası: ' + err.message);
+  }
+}
+
+async function testNotificationAlert() {
+  if (!currentSession) return flash('Lütfen önce yönetici girişi yapın.');
+  const btn = document.getElementById('test-notify-btn');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'Gönderiliyor...';
+  }
+  try {
+    const res = await fetch('/api/admin/notify-test', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + currentSession.access_token
+      }
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      flash('✓ ' + data.message);
+    } else {
+      flash(data.error || 'Test bildirimi gönderilemedi.');
+    }
+  } catch (err) {
+    flash('Test hatası: ' + err.message);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = '🔔 Test Bildirimi Gönder';
+    }
+  }
+}
+
+const saveNotifyBtn = document.getElementById('save-notify-settings-btn');
+if (saveNotifyBtn) saveNotifyBtn.addEventListener('click', saveNotificationSettings);
+const testNotifyBtn = document.getElementById('test-notify-btn');
+if (testNotifyBtn) testNotifyBtn.addEventListener('click', testNotificationAlert);
 
 async function syncSettingsToDb() {
   if (!currentSession) return;
@@ -1787,6 +2195,7 @@ const labels = {
   seo: 'SEO Yönetimi',
   media: 'Görseller',
   inbox: 'Servis Talepleri',
+  notifications: 'Bildirimler (Alerts)',
   settings: 'Ayarlar'
 };
 
@@ -2056,6 +2465,50 @@ const defaultPagesSeo = [
     description: "Viaport Marina Tuzla, Pendik Marintürk ve Tuzla tersaneler bölgesinde tekne motor bakımı, marin jeneratör tamiri, elektrik arıza ve mobil servis desteği.",
     keyword: "Tuzla Viaport Marina tekne bakımı",
     canonical: "https://dmmarin.com/tuzla-pendik-marinturk-marin-servis.html",
+    indexed: true
+  },
+  {
+    id: "rehber-kislik",
+    url: "rehber-kislik-tekne-motoru-bakimi.html",
+    name: "Kışlık Motor Bakımı Rehberi",
+    type: "Marin Rehber",
+    title: "Kışlık Tekne Motoru Bakımı Nasıl Yapılır? | DM MARİN Teknik Rehber",
+    description: "Tekne motoru kışlama rehberi: Deniz suyu devresi antifrizleme, korozyon önleme, yakıt stabilizasyonu ve pervane-şaft kışlık bakım adımları.",
+    keyword: "kışlık tekne motoru bakımı",
+    canonical: "https://dmmarin.com/rehber-kislik-tekne-motoru-bakimi.html",
+    indexed: true
+  },
+  {
+    id: "rehber-jenerator",
+    url: "rehber-marin-jenerator-ariza-kodlari.html",
+    name: "Jeneratör Arıza Kodları",
+    type: "Marin Rehber",
+    title: "Marin Jeneratör Arıza Kodları ve Çözümleri | DM MARİN",
+    description: "Kohler, Cummins Onan, Fischer Panda ve Westerbeke jeneratör arıza kodları (LOC, Overheat, Fault 27, AC Voltaj hatası) ve saha çözüm yöntemleri.",
+    keyword: "marin jeneratör arıza kodları",
+    canonical: "https://dmmarin.com/rehber-marin-jenerator-ariza-kodlari.html",
+    indexed: true
+  },
+  {
+    id: "rehber-aku",
+    url: "rehber-tekne-aku-ve-sarj-sistemi.html",
+    name: "Akü & Şarj Sistemi Rehberi",
+    type: "Marin Rehber",
+    title: "Tekne Akü ve Şarj Sistemi Rehberi | AGM, Jel, Lityum | DM MARİN",
+    description: "Tekne akü grupları (servis, starter, bow thruster), alternatör şarj regülatörleri, redresör bakımı, sülfatlaşma önleme ve lityum dönüşüm kılavuzu.",
+    keyword: "tekne akü ve şarj sistemi",
+    canonical: "https://dmmarin.com/rehber-tekne-aku-ve-sarj-sistemi.html",
+    indexed: true
+  },
+  {
+    id: "rehber-volvo-bakim",
+    url: "rehber-volvo-penta-d4-d6-periyodik-bakim.html",
+    name: "Volvo Penta D4/D6 Bakım Çizelgesi",
+    type: "Marin Rehber",
+    title: "Volvo Penta D4 / D6 Periyodik Bakım Çizelgesi | DM MARİN",
+    description: "Volvo Penta D4 ve D6 marin motorların 100, 200, 500 ve 1000 saatlik periyodik bakım aralıkları, DPH kuyruk bakımı, impeller ve turbo kontrol tablosu.",
+    keyword: "Volvo Penta D4 D6 periyodik bakım",
+    canonical: "https://dmmarin.com/rehber-volvo-penta-d4-d6-periyodik-bakim.html",
     indexed: true
   }
 ];

@@ -1,6 +1,7 @@
 // api/service-requests.js
 const crypto = require('crypto');
 const { getServiceClient } = require('./_lib/supabase');
+const { sendNotification } = require('./_lib/notifier');
 
 // Basit in-memory rate limiting (Son 1 dakikada aynı hash'ten max 5 istek)
 const rateLimitMap = new Map();
@@ -124,6 +125,19 @@ module.exports = async (req, res) => {
       console.error('Supabase insert error:', error);
       return res.status(500).json({ error: 'Talep kaydedilirken veritabanı hatası oluştu: ' + error.message });
     }
+
+    // Asenkron bildirim gönder (Telegram / Webhook / Discord)
+    sendNotification({
+      id: data.id,
+      name,
+      phone,
+      email,
+      boat_name: boatName,
+      marina_location: marinaLocation,
+      service_type: serviceType,
+      message,
+      source_page: sourcePage
+    }).catch(e => console.error('Background notification dispatch error:', e));
 
     return res.status(201).json({
       success: true,
