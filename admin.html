@@ -272,7 +272,6 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 </div>
 <div class="top-actions">
   <button class="btn" id="login-toggle-btn" type="button">🔐 Yönetici Girişi</button>
-  <button class="btn" id="export">JSON Dışa Aktar</button>
   <button class="btn primary" id="save">Taslağı Kaydet</button>
 </div>
 </header>
@@ -719,16 +718,31 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 
 <!-- BRANDS VIEW -->
 <section class="view" id="brands">
-<div class="head"><div><h2>Marka Yönetimi</h2><p>Hizmet verdiğiniz motor ve jeneratör markalarını ekleyin, adını düzenleyin, görünürlüğünü açıp kapatın veya listeden silin.</p></div></div>
+<div class="head">
+  <div>
+    <h2>Marka Yönetimi</h2>
+    <p>Hizmet verdiğiniz motor ve jeneratör markalarını ekleyin, adını düzenleyin, sırasını ayarlayın, görünürlüğünü açıp kapatın veya listeden silin.</p>
+  </div>
+  <button type="button" class="btn primary" id="save-brands-btn" style="min-height:42px;padding:0 22px;font-size:13.5px">💾 Markaları Canlı Kaydet</button>
+</div>
 <article class="panel">
-<div class="panel-head"><h3>Özel Servis Markaları</h3><span class="pill ok" id="brands-sync-pill">Canlı DB Senkronize</span></div>
+<div class="panel-head">
+  <div>
+    <h3 style="margin:0">Özel Servis Markaları (<span id="brands-count-badge" style="color:var(--cyan2)">0 Marka</span>)</h3>
+    <small style="color:var(--muted)">Yaptığınız ekleme, çıkarma ve düzenlemeleri canlı siteye aktarmak için <b>"Markaları Canlı Kaydet"</b> butonuna basınız.</small>
+  </div>
+  <span class="pill ok" id="brands-sync-pill">Canlı DB Senkronize</span>
+</div>
 <div class="panel-body">
-<div class="brand-tools">
-<input id="new-brand" placeholder="Yeni marka adı yazın (Örn. Volvo Penta, Yanmar)" aria-label="Yeni marka">
-<button class="btn primary" id="add-brand" type="button">Marka Ekle</button>
+<div class="brand-tools" style="margin-bottom:16px">
+  <input id="new-brand" placeholder="Yeni marka adı yazın (Örn: Volvo Penta, Yanmar, Mercury, CAT)..." aria-label="Yeni marka">
+  <button class="btn primary" id="add-brand" type="button" style="min-height:42px;padding:0 20px">➕ Marka Ekle</button>
 </div>
 <div class="brand-editor" id="brand-editor"></div>
-<p style="color:var(--muted);margin:18px 0 0;font-size:13px">Bilgilendirme: DM MARİN bağımsız özel marin servistir; marka listelemek yetkili servis ilişkisi anlamına gelmez.</p>
+<div style="margin-top:22px;padding-top:16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+  <p style="color:var(--muted);margin:0;font-size:12.5px">Bilgilendirme: DM MARİN bağımsız özel marin servistir; marka listelemek yetkili servis ilişkisi anlamına gelmez.</p>
+  <button type="button" class="btn primary" id="save-brands-btn-bottom" style="min-height:40px;padding:0 20px">💾 Markaları Canlı Kaydet</button>
+</div>
 </div>
 </article>
 </section>
@@ -2867,53 +2881,156 @@ try { savedState = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch
 let brandState = (savedState.brands || defaultBrands.map(name => ({ name, visible: true })))
   .map(item => typeof item === 'string' ? { name: item, visible: true } : item);
 
+// BRANDS MANAGEMENT
 const brandEditor = document.querySelector('#brand-editor');
+
 function renderBrands() {
+  if (!brandEditor) return;
   brandEditor.innerHTML = '';
+  
+  const countBadge = document.getElementById('brands-count-badge');
+  if (countBadge) countBadge.textContent = `${brandState.length} Marka`;
+
   brandState.forEach((brand, index) => {
     const row = document.createElement('div');
     row.className = 'brand-edit-row';
+    row.style.cssText = 'display:grid;grid-template-columns:auto 1fr auto auto;gap:8px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fbfdfe;margin-bottom:6px';
     row.innerHTML = `
-      <input value="${brand.name}" aria-label="Marka adı">
-      <label class="switch" title="Görünürlük">
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <button type="button" class="btn brand-up-btn" title="Yukarı taşı" style="padding:0;width:24px;height:18px;min-height:0;font-size:10px;border-radius:4px" ${index === 0 ? 'disabled style="opacity:.3"' : ''}>▲</button>
+        <button type="button" class="btn brand-down-btn" title="Aşağı taşı" style="padding:0;width:24px;height:18px;min-height:0;font-size:10px;border-radius:4px" ${index === brandState.length - 1 ? 'disabled style="opacity:.3"' : ''}>▼</button>
+      </div>
+      <input type="text" value="${escapeHtml(brand.name)}" style="border:1px solid #cbd9de;background:#fff;padding:8px 11px;font-size:13.5px;font-weight:700;border-radius:8px" aria-label="Marka adı">
+      <label class="switch" title="Sitede Görünürlük" style="margin:0 4px">
         <input type="checkbox" ${brand.visible !== false ? 'checked' : ''}>
         <span></span>
       </label>
-      <button class="btn danger" type="button">Sil</button>
+      <button class="btn danger" type="button" style="padding:6px 12px;min-height:36px;font-size:12px">Sil</button>
     `;
-    const input = row.querySelector('input[type="text"], input:not([type="checkbox"])');
-    input.addEventListener('input', () => { brand.name = input.value; autoSave(); });
+
+    const input = row.querySelector('input[type="text"]');
+    input.addEventListener('input', () => {
+      brand.name = input.value;
+      autoSave();
+    });
+
     const toggle = row.querySelector('input[type="checkbox"]');
-    toggle.addEventListener('change', () => { brand.visible = toggle.checked; autoSave(); });
-    row.querySelector('button').addEventListener('click', async () => {
-      const removedBrand = brandState[index];
+    toggle.addEventListener('change', () => {
+      brand.visible = toggle.checked;
+      autoSave();
+    });
+
+    row.querySelector('.brand-up-btn')?.addEventListener('click', () => {
+      if (index > 0) {
+        const temp = brandState[index - 1];
+        brandState[index - 1] = brandState[index];
+        brandState[index] = temp;
+        renderBrands();
+        autoSave();
+      }
+    });
+
+    row.querySelector('.brand-down-btn')?.addEventListener('click', () => {
+      if (index < brandState.length - 1) {
+        const temp = brandState[index + 1];
+        brandState[index + 1] = brandState[index];
+        brandState[index] = temp;
+        renderBrands();
+        autoSave();
+      }
+    });
+
+    row.querySelector('button.danger').addEventListener('click', () => {
       brandState.splice(index, 1);
       renderBrands();
       autoSave();
-      if (currentSession && removedBrand && removedBrand.name) {
-        try {
-          await fetch('/api/admin/brands?name=' + encodeURIComponent(removedBrand.name), {
-            method: 'DELETE',
-            headers: { 'Authorization': 'Bearer ' + currentSession.access_token }
-          });
-        } catch (e) {}
-      }
-      flash('Marka silindi.');
+      flash('Marka listeden kaldırıldı. Canlı kaydetmek için "Markaları Canlı Kaydet" butonuna basınız.');
     });
+
     brandEditor.appendChild(row);
   });
 }
 
-document.querySelector('#add-brand').addEventListener('click', () => {
+function addBrandFromInput() {
   const input = document.querySelector('#new-brand');
-  const name = input.value.trim();
+  const name = (input ? input.value : '').trim();
   if (!name) return flash('Lütfen bir marka adı yazın.');
+  
+  if (brandState.some(b => (typeof b === 'string' ? b : b.name).toLowerCase() === name.toLowerCase())) {
+    return flash('Bu marka zaten listede ekli.');
+  }
+
   brandState.push({ name, visible: true });
-  input.value = '';
+  if (input) input.value = '';
   renderBrands();
   autoSave();
-  flash('Yeni marka eklendi.');
+  flash(`"${name}" eklendi. Canlı siteye aktarmak için "Markaları Canlı Kaydet" butonuna tıklayınız.`);
+}
+
+document.querySelector('#add-brand')?.addEventListener('click', addBrandFromInput);
+document.querySelector('#new-brand')?.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    addBrandFromInput();
+  }
 });
+
+async function saveBrandsToDb() {
+  const rows = document.querySelectorAll('#brand-editor .brand-edit-row');
+  const updatedBrands = [];
+  rows.forEach((row, idx) => {
+    const inp = row.querySelector('input[type="text"]');
+    const chk = row.querySelector('input[type="checkbox"]');
+    const name = inp ? inp.value.trim() : '';
+    const visible = chk ? chk.checked : true;
+    if (name) {
+      updatedBrands.push({ name, visible, order_index: idx + 1 });
+    }
+  });
+
+  if (updatedBrands.length > 0) {
+    brandState = updatedBrands;
+  }
+  renderBrands();
+  autoSave();
+
+  if (!currentSession) {
+    return flash('⚠️ Giriş yapılmadı! Markalar tarayıcı taslağına kaydedildi. Canlı veritabanı için yönetici girişi yapın.');
+  }
+
+  const btnTop = document.getElementById('save-brands-btn');
+  const btnBtm = document.getElementById('save-brands-btn-bottom');
+  [btnTop, btnBtm].forEach(b => { if (b) { b.disabled = true; b.textContent = 'Kaydediliyor...'; } });
+
+  try {
+    const res = await fetch('/api/admin/brands', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + currentSession.access_token
+      },
+      body: JSON.stringify({ brands: brandState })
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      flash(`✓ ${brandState.length} Marka veritabanına ve canlı siteye başarıyla kaydedildi.`);
+      const pill = document.getElementById('brands-sync-pill');
+      if (pill) {
+        pill.textContent = 'Canlı DB Senkronize ✓';
+        pill.className = 'pill ok';
+      }
+    } else {
+      flash(data.error || 'Markalar kaydedilemedi.');
+    }
+  } catch (err) {
+    flash('Kayıt hatası: ' + err.message);
+  } finally {
+    [btnTop, btnBtm].forEach(b => { if (b) { b.disabled = false; b.textContent = '💾 Markaları Canlı Kaydet'; } });
+  }
+}
+
+document.getElementById('save-brands-btn')?.addEventListener('click', saveBrandsToDb);
+document.getElementById('save-brands-btn-bottom')?.addEventListener('click', saveBrandsToDb);
 
 // 2. MULTI-PAGE SEO DEFINITIONS
 const defaultPagesSeo = [
@@ -3260,18 +3377,6 @@ document.querySelector('#save').addEventListener('click', async () => {
   } else {
     flash('Tüm taslaklar tarayıcınızda (localStorage) kaydedildi. Canlı DB için lütfen giriş yapın.');
   }
-});
-
-document.querySelector('#export').addEventListener('click', () => {
-  const data = collectAll();
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'dm-marin-yonetim-taslagi.json';
-  a.click();
-  URL.revokeObjectURL(url);
-  flash('Taslak JSON olarak indirildi.');
 });
 
 function restoreFields() {

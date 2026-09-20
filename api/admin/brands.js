@@ -63,7 +63,7 @@ module.exports = async (req, res) => {
             key: 'brands',
             value: brandsToInsert,
             updated_at: new Date().toISOString()
-          });
+          }, { onConflict: 'key' });
 
         // 2. brands tablosunu temizleyip yenilerini ekle
         try {
