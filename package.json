@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/ssefakoccc/dm-marin#readme",
   "dependencies": {
-    "@supabase/supabase-js": "^2.116.0"
+    "@supabase/supabase-js": "^2.116.0",
+    "@vercel/analytics": "^2.0.1"
   }
 }

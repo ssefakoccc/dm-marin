@@ -26,6 +26,11 @@
 <meta name="twitter:description" content="İstanbul ve Marmara'da tekne ve yatlarda marin elektrik arıza tespiti, akü, şarj dinamoları, inverter, sintine ve seyir elektroniği teknik servisi. DM MARİN bağımsız özel servis.">
 <meta name="twitter:image" content="https://dmmarin.com/assets/marin-elektrik-elektronik.webp">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["LocalBusiness","ProfessionalService"],"@id":"https://dmmarin.com/#business","name":"DM MARİN","telephone":"+905437240992","email":"servis@dmmarin.com","url":"https://dmmarin.com/","image":"https://dmmarin.com/assets/marin-elektrik-elektronik.webp","address":{"@type":"PostalAddress","addressLocality":"İstanbul","addressCountry":"TR"},"areaServed":[{"@type":"City","name":"İstanbul"},{"@type":"AdministrativeArea","name":"Marmara Bölgesi"},{"@type":"Place","name":"Kalamış Marina"},{"@type":"Place","name":"Ataköy Marina"},{"@type":"Place","name":"Viaport Marina Tuzla"},{"@type":"Place","name":"Pendik Marintürk"},{"@type":"Place","name":"West İstanbul Marina"}]},{"@type":"Service","name":"Marin Elektrik ve Elektronik Servisi","serviceType":"Tekne Elektrik ve Elektronik Bakımı","provider":{"@type":"LocalBusiness","name":"DM MARİN","telephone":"+905437240992","email":"servis@dmmarin.com","url":"https://dmmarin.com/"},"areaServed":["İstanbul","Marmara Bölgesi","Kalamış Marina","Ataköy Marina","Viaport Marina Tuzla","Pendik Marintürk"],"description":"Şarj, akü, inverter, pano kontrolü ve dağıtım sistemlerinde ölçüm odaklı profesyonel teknik çözüm."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Ana Sayfa","item":"https://dmmarin.com/"},{"@type":"ListItem","position":2,"name":"Marin Elektrik ve Elektronik","item":"https://dmmarin.com/marin-elektrik-elektronik.html"}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Tekne elektrik kaçaklarını ve korozyonu nasıl tespit ediyorsunuz?","acceptedAnswer":{"@type":"Answer","text":"Hassas multimetre ve galvanik izolatör kaçak akım test cihazlarıyla karina ve makine dairesindeki kaçakları kaynağında tespit ediyoruz."}},{"@type":"Question","name":"Akü ve inverter sistemlerini yeniliyor musunuz?","acceptedAnswer":{"@type":"Answer","text":"Evet, AGM, Jel ve Lityum LiFePO4 marin akü grupları ile Victron ve Mastervolt inverter şarj ünitelerinin kurulum ve bakımını yapıyoruz."}}]}]}</script>
+<!-- Vercel Web Analytics -->
+<script>
+window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </head><body>
 <header class="header"><div class="container header-in"><a class="logo" href="index.html"><img src="assets/dm-marin-logo-v2.webp" alt="DM MARİN Profesyonel Marin Servis" width="260" height="80"></a><nav class="nav"><a href="index.html#hizmetler">Hizmetler</a><a href="index.html#markalar">Markalar</a><a class="cta" href="index.html#randevu">Servis Talebi</a></nav></div></header>
 <main><section class="hero"><img src="assets/marin-elektrik-elektronik.webp" alt="Tekne elektrik panosunda multimetre ile hassas ölçüm yapan teknisyen" width="1672" height="941" fetchpriority="high" decoding="async"><div class="container hero-copy"><span class="eyebrow">Ölçüm odaklı teknik altyapı</span><h1>Marin elektrik ve elektronik servisi</h1><p>Şarj devreleri, akü grupları, kontrol panoları ve tesisat arızalarını ölçüme dayalı teşhisle inceliyor; denizde güvenli elektrik altyapısı sağlıyoruz.</p><div class="actions"><a class="btn" href="tel:+905437240992">☎ +90 543 724 09 92</a><a class="btn alt" href="https://wa.me/905437240992?text=Marin%20elektrik%20i%C3%A7in%20servis%20talebi%20olu%C5%9Fturmak%20istiyorum." target="_blank" rel="noopener">WhatsApp’tan yaz</a></div></div></section>
@@ -65,6 +70,11 @@
 function trackDmEvent(eventName, params) {
   if (typeof window.gtag === "function") {
     window.gtag("event", eventName, params || {});
+  }
+  if (typeof window.va === "function") {
+    window.va("event", { name: eventName, data: params || {} });
+  }
+});
   }
 }
 document.addEventListener("click", function(e) {

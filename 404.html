@@ -42,6 +42,11 @@ p{color:rgba(255,255,255,.8);font-size:14px;max-width:440px;margin:0 auto 22px;l
 }
 footer{padding:16px;border-top:1px solid var(--line);text-align:center;color:rgba(255,255,255,.5);font-size:12px;width:100%}
 </style>
+<!-- Vercel Web Analytics -->
+<script>
+window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <header>
@@ -419,6 +424,11 @@ footer{padding:16px;border-top:1px solid var(--line);text-align:center;color:rgb
 function trackDmEvent(eventName, params) {
   if (typeof window.gtag === "function") {
     window.gtag("event", eventName, params || {});
+  }
+  if (typeof window.va === "function") {
+    window.va("event", { name: eventName, data: params || {} });
+  }
+});
   }
 }
 document.addEventListener("click", function(e) {

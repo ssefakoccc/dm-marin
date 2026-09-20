@@ -36,6 +36,11 @@
 @media(max-width:1000px){.app{grid-template-columns:1fr}.sidebar{position:fixed;inset:0 auto 0 0;z-index:50;width:260px;transform:translateX(-100%);transition:.25s}.sidebar.open{transform:none}.mobile-menu{display:inline-flex}.cards{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.content{width:calc(100% - 36px)}.topbar{padding:0 18px}}
 @media(max-width:640px){.topbar h1{font-size:18px}.top-actions .btn:not(.primary){display:none}.content{padding-top:22px}.notice{grid-template-columns:auto 1fr}.notice a{grid-column:2}.head{display:block}.head h2{font-size:28px}.cards{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.media-grid{grid-template-columns:1fr}.quick{grid-template-columns:1fr}.domain{grid-template-columns:1fr}.panel-head{align-items:flex-start;flex-direction:column}.service-row{grid-template-columns:auto 1fr}.service-row .switch{grid-column:2}.brand-edit-row{grid-template-columns:1fr auto}.brand-tools{flex-direction:column}}
 </style>
+<!-- Vercel Web Analytics -->
+<script>
+window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <div class="app">
@@ -975,8 +980,8 @@ const defaultPagesSeo = [
     url: "index.html",
     name: "Ana Sayfa",
     type: "Ana Sayfa",
-    title: "DM MARİN | İstanbul ve Marmara Mobil Marin Servisi",
-    description: "İstanbul ve Marmara’da 26 yıllık deneyimle tekne motoru, marin jeneratör, elektrik, yedek parça ve 7/24 mobil marin servis.",
+    title: "İstanbul Marin Servis | Tekne Motoru & Jeneratör | DM MARİN",
+    description: "İstanbul ve Marmara’da 26 yıllık mobil marin servis. Tekne motoru, marin jeneratör, Volvo Penta, Yanmar, MAN bakımı, elektrik, yedek parça ve 7/24 acil servis.",
     keyword: "İstanbul mobil marin servis",
     canonical: "https://dmmarin.com/",
     indexed: true
@@ -1305,6 +1310,11 @@ initSupabase();
 function trackDmEvent(eventName, params) {
   if (typeof window.gtag === "function") {
     window.gtag("event", eventName, params || {});
+  }
+  if (typeof window.va === "function") {
+    window.va("event", { name: eventName, data: params || {} });
+  }
+});
   }
 }
 document.addEventListener("click", function(e) {

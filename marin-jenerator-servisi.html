@@ -26,6 +26,11 @@
 <meta name="twitter:description" content="İstanbul ve Marmara'da marin jeneratör arıza tespiti, bakım, onarım, elektrik kontrolü ve yedek parça desteği. DM MARİN bağımsız özel servis.">
 <meta name="twitter:image" content="https://dmmarin.com/assets/marin-jenerator-servisi.webp">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["LocalBusiness","ProfessionalService"],"@id":"https://dmmarin.com/#business","name":"DM MARİN","telephone":"+905437240992","email":"servis@dmmarin.com","url":"https://dmmarin.com/","image":"https://dmmarin.com/assets/marin-jenerator-servisi.webp","address":{"@type":"PostalAddress","addressLocality":"İstanbul","addressCountry":"TR"},"areaServed":[{"@type":"City","name":"İstanbul"},{"@type":"AdministrativeArea","name":"Marmara Bölgesi"},{"@type":"Place","name":"Kalamış Marina"},{"@type":"Place","name":"Ataköy Marina"},{"@type":"Place","name":"Viaport Marina Tuzla"},{"@type":"Place","name":"Pendik Marintürk"},{"@type":"Place","name":"West İstanbul Marina"}]},{"@type":"Service","name":"Marin Jeneratör Servisi ve Bakımı","serviceType":"Marin Jeneratör Bakım ve Onarım","provider":{"@type":"LocalBusiness","name":"DM MARİN","telephone":"+905437240992","email":"servis@dmmarin.com","url":"https://dmmarin.com/"},"areaServed":["İstanbul","Marmara Bölgesi","Kalamış Marina","Ataköy Marina","Viaport Marina Tuzla","Pendik Marintürk"],"description":"Jeneratör sistemlerinde cihazlı arıza tespiti, periyodik bakım, onarım ve devreye alma desteği."},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Ana Sayfa","item":"https://dmmarin.com/"},{"@type":"ListItem","position":2,"name":"Marin Jeneratör Servisi","item":"https://dmmarin.com/marin-jenerator-servisi.html"}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Marin jeneratör bakımı ne sıklıkla yapılmalıdır?","acceptedAnswer":{"@type":"Answer","text":"Genellikle her 100-150 çalışma saatinde bir veya sezonda en az bir kez motor yağı, yakıt filtresi, impeller ve çinko tutyalar kontrol edilmelidir."}},{"@type":"Question","name":"Jeneratör elektrik üretmiyor, sorun ne olabilir?","acceptedAnswer":{"@type":"Answer","text":"Otomatik voltaj regülatörü (AVR), diyot köprüsü veya alternatör sargı izolasyon arızaları yaygındır. Teknenizde yük ve sinyal ölçümleriyle teşhis ediyoruz."}}]}]}</script>
+<!-- Vercel Web Analytics -->
+<script>
+window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </head><body>
 <header class="header"><div class="container header-in"><a class="logo" href="index.html"><img src="assets/dm-marin-logo-v2.webp" alt="DM MARİN Profesyonel Marin Servis" width="260" height="80"></a><nav class="nav"><a href="index.html#hizmetler">Hizmetler</a><a href="index.html#markalar">Markalar</a><a class="cta" href="index.html#randevu">Servis Talebi</a></nav></div></header>
 <main><section class="hero"><img src="assets/marin-jenerator-servisi.webp" alt="Yatta marin jeneratör ve elektrik sisteminde cihazlı arıza tespiti" width="1672" height="941" fetchpriority="high" decoding="async"><div class="container hero-copy"><span class="eyebrow">Ölçüm odaklı teknik servis</span><h1>Marin jeneratör servisi</h1><p>Jeneratörünüzün mekanik, elektrik ve kontrol sistemlerini birlikte değerlendiriyor; bakım, arıza tespiti ve onarımı tek teknik süreçte yönetiyoruz.</p><div class="actions"><a class="btn" href="tel:+905437240992">☎ +90 543 724 09 92</a><a class="btn alt" href="https://wa.me/905437240992?text=Marin%20jenerat%C3%B6r%20i%C3%A7in%20servis%20talebi%20olu%C5%9Fturmak%20istiyorum." target="_blank" rel="noopener">WhatsApp’tan yaz</a></div></div></section>
@@ -65,6 +70,11 @@
 function trackDmEvent(eventName, params) {
   if (typeof window.gtag === "function") {
     window.gtag("event", eventName, params || {});
+  }
+  if (typeof window.va === "function") {
+    window.va("event", { name: eventName, data: params || {} });
+  }
+});
   }
 }
 document.addEventListener("click", function(e) {
