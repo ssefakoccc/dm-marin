@@ -743,21 +743,26 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
     <article class="panel">
       <div class="panel-head">
         <div>
-          <h3 style="margin:0">Webhook & E-posta Bildirimleri</h3>
-          <small style="color:var(--muted)">Make.com, Zapier, Discord veya Webhook URL</small>
+          <h3 style="margin:0">E-Posta & Webhook Bildirimleri</h3>
+          <small style="color:var(--muted)">Resend API, Make.com, Zapier veya Discord Webhook</small>
         </div>
-        <span class="pill badge">HTTP Webhook</span>
+        <span class="pill ok">E-Posta / Webhook</span>
       </div>
       <div class="panel-body form-grid">
         <div class="field full">
-          <label for="notify-webhook-url">Webhook URL</label>
-          <input type="url" id="notify-webhook-url" placeholder="https://hook.eu1.make.com/... veya Discord Webhook URL">
-          <small>Her yeni talepte tüm müşteri & servis bilgileri bu adrese anında JSON POST edilir.</small>
+          <label for="notify-admin-email">Bildirimin Gönderileceği Yönetici E-postası</label>
+          <input type="email" id="notify-admin-email" placeholder="servis@dmmarin.com">
+          <small>Yeni servis taleplerinin iletileceği ana e-posta adresiniz.</small>
         </div>
         <div class="field full">
-          <label for="notify-admin-email">Yönetici Bildirim E-postası</label>
-          <input type="email" id="notify-admin-email" placeholder="servis@dmmarin.com">
-          <small>Sistem bildirimlerinin kopyalanacağı teknik yönetici e-posta adresi.</small>
+          <label for="notify-resend-key">Resend E-Posta API Anahtarı (Opsiyonel / Ücretsiz)</label>
+          <input type="password" id="notify-resend-key" placeholder="re_123456789_abcdef..." autocomplete="off">
+          <small>resend.com üzerinden aldığınız ücretsiz API Key (aylık 3.000 e-posta ücretsiz).</small>
+        </div>
+        <div class="field full">
+          <label for="notify-webhook-url">Veya Webhook URL (Make / Zapier / Discord)</label>
+          <input type="url" id="notify-webhook-url" placeholder="https://hook.eu1.make.com/... veya Discord Webhook URL">
+          <small>Make.com veya Zapier webhook'u kullanıyorsanız URL adresini buraya yapıştırın.</small>
         </div>
       </div>
     </article>
@@ -1944,10 +1949,12 @@ async function loadRemoteSettings() {
         const tgChat = document.getElementById('notify-tg-chat');
         const whUrl = document.getElementById('notify-webhook-url');
         const admEmail = document.getElementById('notify-admin-email');
+        const resendKey = document.getElementById('notify-resend-key');
         if (tgTok && nc.telegram_bot_token) tgTok.value = nc.telegram_bot_token;
         if (tgChat && nc.telegram_chat_id) tgChat.value = nc.telegram_chat_id;
         if (whUrl && nc.webhook_url) whUrl.value = nc.webhook_url;
         if (admEmail && nc.admin_email) admEmail.value = nc.admin_email;
+        if (resendKey && nc.resend_api_key) resendKey.value = nc.resend_api_key;
       }
       renderFormBuilder(activeFormLang);
     }
@@ -1962,12 +1969,14 @@ async function saveNotificationSettings() {
   const chatId = (document.getElementById('notify-tg-chat')?.value || '').trim();
   const webhookUrl = (document.getElementById('notify-webhook-url')?.value || '').trim();
   const adminEmail = (document.getElementById('notify-admin-email')?.value || '').trim();
+  const resendKey = (document.getElementById('notify-resend-key')?.value || '').trim();
 
   const payload = {
     telegram_bot_token: token,
     telegram_chat_id: chatId,
     webhook_url: webhookUrl,
-    admin_email: adminEmail
+    admin_email: adminEmail,
+    resend_api_key: resendKey
   };
 
   try {
