@@ -111,6 +111,50 @@ async function sendNotification(requestData) {
       );
     }
 
+    // 3. Direct Email via Resend API
+    const resendApiKey = process.env.RESEND_API_KEY || (config && config.resend_api_key);
+    const adminEmail = (config && config.admin_email) || process.env.ADMIN_EMAIL || 'servis@dmmarin.com';
+
+    if (resendApiKey && adminEmail) {
+      promises.push(
+        fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${resendApiKey}`
+          },
+          body: JSON.stringify({
+            from: 'DM MARİN Servis <onboarding@resend.dev>',
+            to: [adminEmail],
+            subject: `🚨 Yeni Servis Talebi: ${name} (${boat_name})`,
+            html: `
+              <div style="font-family:sans-serif;max-width:600px;margin:0 auto;color:#102734">
+                <div style="background:#071b2b;padding:20px;text-align:center;border-radius:10px 10px 0 0">
+                  <h2 style="color:#fff;margin:0">🚨 Yeni Servis Talebi Alındı</h2>
+                </div>
+                <div style="border:1px solid #dce7ea;padding:24px;border-radius:0 0 10px 10px;background:#fff">
+                  <p>Web sitesinden yeni bir müşteri servis talebi iletti:</p>
+                  <table style="width:100%;border-collapse:collapse;font-size:14px">
+                    <tr style="border-bottom:1px solid #f0f4f6"><td style="padding:8px 0;color:#6b7b84;width:130px">Müşteri:</td><td style="padding:8px 0;font-weight:bold">${name}</td></tr>
+                    <tr style="border-bottom:1px solid #f0f4f6"><td style="padding:8px 0;color:#6b7b84">Telefon:</td><td style="padding:8px 0;font-weight:bold"><a href="tel:${phone}" style="color:#087f93">${phone}</a></td></tr>
+                    <tr style="border-bottom:1px solid #f0f4f6"><td style="padding:8px 0;color:#6b7b84">E-posta:</td><td style="padding:8px 0">${email}</td></tr>
+                    <tr style="border-bottom:1px solid #f0f4f6"><td style="padding:8px 0;color:#6b7b84">Tekne / Motor:</td><td style="padding:8px 0;font-weight:bold">${boat_name}</td></tr>
+                    <tr style="border-bottom:1px solid #f0f4f6"><td style="padding:8px 0;color:#6b7b84">Marina / Konum:</td><td style="padding:8px 0">${marina_location}</td></tr>
+                    <tr style="border-bottom:1px solid #f0f4f6"><td style="padding:8px 0;color:#6b7b84">Hizmet Türü:</td><td style="padding:8px 0;font-weight:bold">${service_type}</td></tr>
+                    <tr style="border-bottom:1px solid #f0f4f6"><td style="padding:8px 0;color:#6b7b84">Açıklama:</td><td style="padding:8px 0">${message}</td></tr>
+                    <tr><td style="padding:8px 0;color:#6b7b84">Kaynak Sayfa:</td><td style="padding:8px 0">${source_page}</td></tr>
+                  </table>
+                  <div style="margin-top:24px;text-align:center">
+                    <a href="https://dmmarin.com/admin.html" style="background:#087f93;color:#fff;padding:12px 24px;text-decoration:none;border-radius:8px;font-weight:bold;display:inline-block">Admin Paneline Git →</a>
+                  </div>
+                </div>
+              </div>
+            `
+          })
+        }).catch(err => console.error('Resend email notification error:', err.message))
+      );
+    }
+
     await Promise.allSettled(promises);
   } catch (e) {
     console.error('sendNotification exception:', e.message);
