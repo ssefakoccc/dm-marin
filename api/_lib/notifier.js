@@ -1,6 +1,30 @@
 // api/_lib/notifier.js
 const { getServiceClient } = require('./supabase');
 
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function isSafeWebhookUrl(urlStr) {
+  try {
+    const parsed = new URL(urlStr);
+    if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') return false;
+    const host = parsed.hostname.toLowerCase();
+    if (host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0' || host.startsWith('192.168.') || host.startsWith('10.') || host.startsWith('172.16.') || host === '169.254.169.254') {
+      return false;
+    }
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 async function sendNotification(requestData) {
   const result = {
     telegram: { configured: false, ok: false, error: null },
@@ -67,7 +91,7 @@ async function sendNotification(requestData) {
     }
 
     // 2. Webhook
-    if (webhookUrl && webhookUrl.startsWith('http')) {
+    if (webhookUrl && isSafeWebhookUrl(webhookUrl)) {
       result.webhook.configured = true;
       try {
         const whRes = await fetch(webhookUrl, {
@@ -158,39 +182,39 @@ https://dmmarin.com · servis@dmmarin.com`;
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="font-size:14px;line-height:1.5;">
                 <tr>
                   <td style="padding:10px 0;color:#64748b;width:130px;border-bottom:1px solid #f1f5f9;">Müşteri:</td>
-                  <td style="padding:10px 0;color:#0f172a;font-weight:700;border-bottom:1px solid #f1f5f9;">${name}</td>
+                  <td style="padding:10px 0;color:#0f172a;font-weight:700;border-bottom:1px solid #f1f5f9;">${escapeHtml(name)}</td>
                 </tr>
                 <tr>
                   <td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Telefon:</td>
                   <td style="padding:10px 0;font-weight:700;border-bottom:1px solid #f1f5f9;">
-                    <a href="tel:${phone}" style="color:#087f93;text-decoration:none;">${phone}</a>
+                    <a href="tel:${encodeURIComponent(phone)}" style="color:#087f93;text-decoration:none;">${escapeHtml(phone)}</a>
                   </td>
                 </tr>
                 <tr>
                   <td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">E-posta:</td>
                   <td style="padding:10px 0;color:#0f172a;border-bottom:1px solid #f1f5f9;">
-                    ${email !== '-' ? `<a href="mailto:${email}" style="color:#087f93;text-decoration:none;">${email}</a>` : '<span style="color:#94a3b8;">Belirtilmedi</span>'}
+                    ${email !== '-' ? `<a href="mailto:${encodeURIComponent(email)}" style="color:#087f93;text-decoration:none;">${escapeHtml(email)}</a>` : '<span style="color:#94a3b8;">Belirtilmedi</span>'}
                   </td>
                 </tr>
                 <tr>
                   <td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Tekne / Motor:</td>
-                  <td style="padding:10px 0;color:#0f172a;font-weight:700;border-bottom:1px solid #f1f5f9;">${boat_name}</td>
+                  <td style="padding:10px 0;color:#0f172a;font-weight:700;border-bottom:1px solid #f1f5f9;">${escapeHtml(boat_name)}</td>
                 </tr>
                 <tr>
                   <td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Marina / Konum:</td>
-                  <td style="padding:10px 0;color:#0f172a;border-bottom:1px solid #f1f5f9;">${marina_location}</td>
+                  <td style="padding:10px 0;color:#0f172a;border-bottom:1px solid #f1f5f9;">${escapeHtml(marina_location)}</td>
                 </tr>
                 <tr>
                   <td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Hizmet Türü:</td>
-                  <td style="padding:10px 0;color:#087f93;font-weight:700;border-bottom:1px solid #f1f5f9;">${service_type}</td>
+                  <td style="padding:10px 0;color:#087f93;font-weight:700;border-bottom:1px solid #f1f5f9;">${escapeHtml(service_type)}</td>
                 </tr>
                 <tr>
                   <td style="padding:10px 0;color:#64748b;vertical-align:top;border-bottom:1px solid #f1f5f9;">Açıklama:</td>
-                  <td style="padding:10px 0;color:#334155;border-bottom:1px solid #f1f5f9;">${message}</td>
+                  <td style="padding:10px 0;color:#334155;border-bottom:1px solid #f1f5f9;">${escapeHtml(message)}</td>
                 </tr>
                 <tr>
                   <td style="padding:10px 0;color:#64748b;">Kaynak Sayfa:</td>
-                  <td style="padding:10px 0;color:#64748b;font-size:12px;">${source_page}</td>
+                  <td style="padding:10px 0;color:#64748b;font-size:12px;">${escapeHtml(source_page)}</td>
                 </tr>
               </table>
 
