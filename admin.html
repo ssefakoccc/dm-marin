@@ -4793,39 +4793,6 @@ const DEFAULT_STAFF_USERS = [
     pin: "1998",
     active: true,
     permissions: ["admin", "stock_manage", "prices_view", "service_manage", "pos_sale", "user_manage", "db_backup"]
-  },
-  {
-    id: "st-ahmet",
-    name: "Ahmet Usta",
-    username: "ahmet",
-    role: "Baş Teknisyen / Mobil Servis",
-    phone: "0543 724 09 92",
-    birthDate: "1988-09-20",
-    pin: "1998",
-    active: true,
-    permissions: ["stock_manage", "prices_view", "service_manage", "pos_sale"]
-  },
-  {
-    id: "st-mehmet",
-    name: "Mehmet K.",
-    username: "mehmet",
-    role: "Depo & Mal Kabul Sorumlusu",
-    phone: "0532 111 22 33",
-    birthDate: "1992-04-15",
-    pin: "1998",
-    active: true,
-    permissions: ["stock_manage", "prices_view"]
-  },
-  {
-    id: "st-can",
-    name: "Can D.",
-    username: "can",
-    role: "Saha Servis Teknisyeni",
-    phone: "0541 222 33 44",
-    birthDate: "1995-11-08",
-    pin: "1998",
-    active: true,
-    permissions: ["service_manage", "pos_sale"]
   }
 ];
 
@@ -4901,9 +4868,14 @@ async function loadCriticalDataFromCloud() {
 
     // 1. Personel verisi — Bidirectional merge (username bazlı)
     {
+      const FAKE_PLACEHOLDER_USERS = ["ahmet", "mehmet", "can"]; // Eski örnek kullanıcılar — silinecek
       const localRaw = localStorage.getItem("dm_erp_staff") || localStorage.getItem("dm_staff_users");
-      const localStaff = localRaw ? (JSON.parse(localRaw) || []) : [];
-      const cloudStaff = (settings.erp_staff && Array.isArray(settings.erp_staff)) ? settings.erp_staff : [];
+      let localStaff = localRaw ? (JSON.parse(localRaw) || []) : [];
+      let cloudStaff = (settings.erp_staff && Array.isArray(settings.erp_staff)) ? settings.erp_staff : [];
+
+      // Eski sahte örnek kullanıcıları filtrele (her iki kaynaktan da)
+      localStaff = localStaff.filter(u => !FAKE_PLACEHOLDER_USERS.includes(u.username));
+      cloudStaff = cloudStaff.filter(u => !FAKE_PLACEHOLDER_USERS.includes(u.username));
 
       // Username bazında merge: her kullanıcıyı bir kez al (local önce, sonra cloud'daki eksikler)
       const mergedMap = {};
@@ -4918,13 +4890,9 @@ async function loadCriticalDataFromCloud() {
       localStorage.setItem("dm_erp_staff", JSON.stringify(merged));
       localStorage.setItem("dm_staff_users", JSON.stringify(merged));
 
-      // Eğer merged, cloud'dan farklıysa (local'de ekstra kullanıcı varsa) cloud'a yaz
-      if (merged.length !== cloudStaff.length) {
-        syncSettingToCloud("erp_staff", merged);
-        console.log("🔼 Cloud Sync: Personel verisi cloud'a yüklendi (" + merged.length + " kişi — local'deki eksikler eklendi)");
-      } else {
-        console.log("✅ Cloud Sync: Personel verisi senkron (" + merged.length + " kişi)");
-      }
+      // Her zaman cloud'a yaz (fake kullanıcılar temizlenmiş olabilir)
+      syncSettingToCloud("erp_staff", merged);
+      console.log("✅ Cloud Sync: Personel senkron (" + merged.length + " kişi). Eski örnek kullanıcılar (ahmet/mehmet/can) temizlendi.");
     }
 
     // 2. Quartermaster öğrenilen bilgi
