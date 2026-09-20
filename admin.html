@@ -603,8 +603,8 @@ function renderRequestsTable(list) {
         <small style="color:var(--muted)">${escapeHtml(req.email)}</small>
       </td>
       <td>
-        <span>${escapeHtml(req.boat || '-')}</span><br>
-        <small style="color:var(--muted)">${escapeHtml(req.location || '-')}</small>
+        <span>${escapeHtml(req.boat_name || req.boat || '-')}</span><br>
+        <small style="color:var(--muted)">${escapeHtml(req.marina_location || req.location || '-')}</small>
       </td>
       <td><span class="pill badge" style="white-space:nowrap">${escapeHtml(req.service_type || req.service || '-')}</span></td>
       <td>
@@ -686,8 +686,8 @@ function openRequestModal(req) {
     <div class="modal-detail-row"><b>Ad Soyad</b><strong>${escapeHtml(req.name)}</strong></div>
     <div class="modal-detail-row"><b>Telefon</b><a href="tel:${escapeHtml(req.phone)}">${escapeHtml(req.phone)}</a></div>
     <div class="modal-detail-row"><b>E-posta</b><a href="mailto:${escapeHtml(req.email)}">${escapeHtml(req.email)}</a></div>
-    <div class="modal-detail-row"><b>Tekne / Motor</b><span>${escapeHtml(req.boat || '-')}</span></div>
-    <div class="modal-detail-row"><b>Konum</b><span>${escapeHtml(req.location || '-')}</span></div>
+    <div class="modal-detail-row"><b>Tekne / Motor</b><span>${escapeHtml(req.boat_name || req.boat || '-')}</span></div>
+    <div class="modal-detail-row"><b>Konum</b><span>${escapeHtml(req.marina_location || req.location || '-')}</span></div>
     <div class="modal-detail-row"><b>Hizmet Türü</b><span>${escapeHtml(req.service_type || req.service || '-')}</span></div>
     <div class="modal-detail-row"><b>Geri Arama</b><span>${req.callback ? '✓ Evet' : 'Hayır'}</span></div>
     <div class="modal-detail-row"><b>Müşteri Notu</b><p style="margin:0;white-space:pre-wrap;background:#f8fbfc;padding:10px;border-radius:8px">${escapeHtml(req.message || '-')}</p></div>
