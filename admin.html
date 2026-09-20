@@ -59,6 +59,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 <nav class="nav" aria-label="Yönetim paneli">
 <button class="active" data-view="dashboard"><span class="icon">⌂</span>Genel Bakış</button>
 <button data-view="content"><span class="icon">✎</span>Site İçeriği</button>
+<button data-view="form-builder"><span class="icon">📋</span>Talep Formu & Dil</button>
 <button data-view="services"><span class="icon">⚙</span>Hizmetler</button>
 <button data-view="brands"><span class="icon">◇</span>Markalar</button>
 <button data-view="seo"><span class="icon">⌕</span>SEO Yönetimi</button>
@@ -136,6 +137,180 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 <div class="field"><label for="hours">Çalışma saatleri</label><input id="hours" data-key="hours" value="08:00–18:00 · Acil Hat 7/24"></div>
 </div>
 </article>
+</section>
+
+<!-- FORM BUILDER & LANGUAGE VIEW -->
+<section class="view" id="form-builder">
+<div class="head">
+  <div>
+    <h2>Servis Talebi Formu & Çok Dilli Yönetim (TR / EN)</h2>
+    <p>Web sitesindeki servis formunun tüm başlıklarını, alan etiketlerini, hizmet seçeneklerini ve çok dilli (Türkçe & İngilizce) karşılıklarını buradan yönetin.</p>
+  </div>
+  <div style="display:flex;gap:8px;background:rgba(7,27,43,.06);padding:6px;border-radius:14px">
+    <button type="button" class="btn primary" id="form-lang-tr-btn" style="min-height:38px;padding:0 16px;font-size:13px">🇹🇷 Türkçe Form</button>
+    <button type="button" class="btn" id="form-lang-en-btn" style="min-height:38px;padding:0 16px;font-size:13px">🇬🇧 English Form</button>
+  </div>
+</div>
+
+<div class="grid" style="grid-template-columns:1.2fr .8fr">
+<article class="panel">
+<div class="panel-head">
+  <h3>Form Metinleri ve Alan Yapılandırması (<span id="form-active-lang-badge">Türkçe</span>)</h3>
+  <span class="pill ok">Canlı DB Senkronize</span>
+</div>
+<div class="panel-body form-grid">
+
+<div class="field full">
+  <label for="fb-title">Form Ana Başlığı</label>
+  <input id="fb-title" placeholder="Servis bilgilerinizi paylaşın">
+</div>
+
+<div class="field full">
+  <label for="fb-subtitle">Form Alt Açıklaması</label>
+  <textarea id="fb-subtitle" rows="2" placeholder="Form veritabanımıza kaydedilir; anında teknik değerlendirme başlatılır."></textarea>
+</div>
+
+<div class="field">
+  <label for="fb-name-label">Ad Soyad Etiketi</label>
+  <input id="fb-name-label" placeholder="Ad Soyad *">
+</div>
+<div class="field">
+  <label for="fb-name-placeholder">Ad Soyad Placeholder</label>
+  <input id="fb-name-placeholder" placeholder="Adınız ve soyadınız">
+</div>
+
+<div class="field">
+  <label for="fb-phone-label">Telefon Etiketi</label>
+  <input id="fb-phone-label" placeholder="Telefon *">
+</div>
+<div class="field">
+  <label for="fb-phone-placeholder">Telefon Placeholder</label>
+  <input id="fb-phone-placeholder" placeholder="05xx xxx xx xx">
+</div>
+
+<div class="field">
+  <label for="fb-email-label">E-posta Etiketi</label>
+  <input id="fb-email-label" placeholder="E-posta *">
+</div>
+<div class="field">
+  <label for="fb-email-placeholder">E-posta Placeholder</label>
+  <input id="fb-email-placeholder" placeholder="ornek@alanadi.com">
+</div>
+
+<div class="field">
+  <label for="fb-boat-label">Tekne / Motor Etiketi</label>
+  <input id="fb-boat-label" placeholder="Tekne / Motor">
+</div>
+<div class="field">
+  <label for="fb-boat-placeholder">Tekne / Motor Placeholder</label>
+  <input id="fb-boat-placeholder" placeholder="Marka ve model">
+</div>
+
+<div class="field">
+  <label for="fb-location-label">Konum / Marina Etiketi</label>
+  <input id="fb-location-label" placeholder="Konum / Marina">
+</div>
+<div class="field">
+  <label for="fb-location-placeholder">Konum / Marina Placeholder</label>
+  <input id="fb-location-placeholder" placeholder="Kalamış, Ataköy, Tuzla vb.">
+</div>
+
+<div class="field">
+  <label for="fb-service-label">Servis İhtiyacı Başlığı</label>
+  <input id="fb-service-label" placeholder="Servis ihtiyacı">
+</div>
+<div class="field">
+  <label for="fb-service-placeholder">Seçim Kutusu İlk Satırı</label>
+  <input id="fb-service-placeholder" placeholder="Seçiniz">
+</div>
+
+<div class="field full">
+  <label>Servis İhtiyaç Seçenekleri (Açılır Liste Seçenekleri)</label>
+  <div style="display:flex;gap:8px;margin-bottom:10px">
+    <input id="fb-new-service-option" placeholder="Yeni servis seçeneği yazın..." style="flex:1">
+    <button type="button" class="btn primary" id="fb-add-service-option" style="min-height:43px">Seçenek Ekle</button>
+  </div>
+  <div id="fb-service-options-list" style="display:grid;gap:8px"></div>
+</div>
+
+<div class="field full">
+  <label for="fb-message-label">Açıklama Alanı Etiketi</label>
+  <input id="fb-message-label" placeholder="Açıklama">
+</div>
+<div class="field full">
+  <label for="fb-message-placeholder">Açıklama Alanı Placeholder</label>
+  <input id="fb-message-placeholder" placeholder="Arıza, bakım veya parça ihtiyacınızı kısaca yazın">
+</div>
+
+<div class="field full">
+  <label for="fb-callback-label">Geri Arama Onay Kutusu Metni</label>
+  <input id="fb-callback-label" placeholder="Ekibimiz çalışma saatleri içinde beni telefonla geri arasın.">
+</div>
+
+<div class="field">
+  <label for="fb-submit-text">Gönder Buton Metni</label>
+  <input id="fb-submit-text" placeholder="Servis Talebini İlet →">
+</div>
+<div class="field">
+  <label for="fb-submitting-text">Gönderiliyor Durum Metni</label>
+  <input id="fb-submitting-text" placeholder="Kaydediliyor...">
+</div>
+
+<div class="field full">
+  <label for="fb-wa-btn-text">WhatsApp Alternatif Buton Metni</label>
+  <input id="fb-wa-btn-text" placeholder="💬 WhatsApp’tan da Bilgi Gönder">
+</div>
+
+<div class="field full">
+  <label for="fb-wa-template">WhatsApp Mesaj Şablonu ({name}, {phone}, {email}, {boat}, {location}, {service}, {callback}, {message} etiketleri dinamik doldurulur)</label>
+  <textarea id="fb-wa-template" rows="4"></textarea>
+</div>
+
+<div class="field full">
+  <label for="fb-success-msg">Başarılı Gönderim Bildirim Metni</label>
+  <input id="fb-success-msg" placeholder="Servis talebiniz başarıyla alındı.">
+</div>
+<div class="field full">
+  <label for="fb-error-msg">Zorunlu Alan Eksik Uyarısı</label>
+  <input id="fb-error-msg" placeholder="Lütfen zorunlu alanları eksiksiz doldurun.">
+</div>
+
+</div>
+
+<div style="margin-top:24px;padding-top:16px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:space-between;align-items:center">
+  <button type="button" class="btn danger" id="fb-reset-btn">Varsayılanlara Sıfırla</button>
+  <button type="button" class="btn primary" id="fb-save-btn">Bu Dilin Form Ayarlarını Kaydet ✓</button>
+</div>
+</article>
+
+<!-- LIVE FORM PREVIEW -->
+<article class="panel">
+<div class="panel-head">
+  <h3>Canlı Form Önizlemesi</h3>
+  <span class="pill badge" id="preview-lang-badge">🇹🇷 TR</span>
+</div>
+<div class="panel-body" style="background:#f8fafc;border-radius:0 0 20px 20px">
+  <div style="background:#fff;padding:24px;border-radius:18px;border:1px solid var(--line);box-shadow:var(--shadow)">
+    <h3 id="prev-title" style="margin:0 0 4px;font-size:20px">Servis bilgilerinizi paylaşın</h3>
+    <p id="prev-subtitle" style="margin:0 0 16px;color:var(--muted);font-size:13px">Form veritabanımıza kaydedilir; anında teknik değerlendirme başlatılır.</p>
+    
+    <div style="display:grid;gap:12px;font-size:13px">
+      <div><b id="prev-name-lbl">Ad Soyad *</b><input id="prev-name-inp" disabled style="background:#f1f5f9;margin-top:4px"></div>
+      <div><b id="prev-phone-lbl">Telefon *</b><input id="prev-phone-inp" disabled style="background:#f1f5f9;margin-top:4px"></div>
+      <div><b id="prev-email-lbl">E-posta *</b><input id="prev-email-inp" disabled style="background:#f1f5f9;margin-top:4px"></div>
+      <div><b id="prev-boat-lbl">Tekne / Motor</b><input id="prev-boat-inp" disabled style="background:#f1f5f9;margin-top:4px"></div>
+      <div><b id="prev-loc-lbl">Konum / Marina</b><input id="prev-loc-inp" disabled style="background:#f1f5f9;margin-top:4px"></div>
+      <div><b id="prev-service-lbl">Servis İhtiyacı</b><select id="prev-service-sel" disabled style="background:#f1f5f9;margin-top:4px"><option>Seçiniz</option></select></div>
+      <div><b id="prev-msg-lbl">Açıklama</b><textarea id="prev-msg-inp" rows="2" disabled style="background:#f1f5f9;margin-top:4px"></textarea></div>
+      <label style="display:flex;gap:8px;align-items:center;margin-top:4px"><input type="checkbox" checked disabled><span id="prev-cb-lbl">Beni telefonla geri arasın.</span></label>
+      
+      <button class="btn full primary" id="prev-submit-btn" disabled style="margin-top:8px">Servis Talebini İlet →</button>
+      <button class="btn full ghost" id="prev-wa-btn" disabled style="border:1px solid #10b981;color:#047857;background:#ecfdf5">💬 WhatsApp’tan da Bilgi Gönder</button>
+    </div>
+  </div>
+</div>
+</article>
+</div>
 </section>
 
 <!-- SERVICES VIEW -->
@@ -912,6 +1087,13 @@ async function loadRemoteSettings() {
           if (el) el.checked = srv[k] !== false;
         });
       }
+      if (data.data.form_config_tr) {
+        formConfigTR = Object.assign({}, defaultFormConfigTR, data.data.form_config_tr);
+      }
+      if (data.data.form_config_en) {
+        formConfigEN = Object.assign({}, defaultFormConfigEN, data.data.form_config_en);
+      }
+      renderFormBuilder(activeFormLang);
     }
   } catch (e) {
     console.warn("Remote settings load error:", e);
@@ -942,16 +1124,295 @@ async function syncSettingsToDb() {
           'Authorization': 'Bearer ' + currentSession.access_token
         },
         body: JSON.stringify({ key: 'services', value: services })
-      })
+      }),
+      syncFormConfigToDb()
     ]);
   } catch (e) {
     console.warn("Settings sync error:", e);
   }
 }
 
+async function syncFormConfigToDb() {
+  if (!currentSession) return;
+  try {
+    await Promise.all([
+      fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + currentSession.access_token
+        },
+        body: JSON.stringify({ key: 'form_config_tr', value: formConfigTR })
+      }),
+      fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + currentSession.access_token
+        },
+        body: JSON.stringify({ key: 'form_config_en', value: formConfigEN })
+      })
+    ]);
+  } catch (e) {
+    console.warn("Form config sync error:", e);
+  }
+}
+
+// FORM BUILDER & LANGUAGE CONFIGURATION LOGIC
+const defaultFormConfigTR = {
+  title: 'Servis bilgilerinizi paylaşın',
+  subtitle: 'Form veritabanımıza kaydedilir; anında teknik değerlendirme başlatılır.',
+  nameLabel: 'Ad Soyad *',
+  namePlaceholder: 'Adınız ve soyadınız',
+  phoneLabel: 'Telefon *',
+  phonePlaceholder: '05xx xxx xx xx',
+  emailLabel: 'E-posta *',
+  emailPlaceholder: 'ornek@alanadi.com',
+  boatLabel: 'Tekne / Motor',
+  boatPlaceholder: 'Marka ve model',
+  locationLabel: 'Konum / Marina',
+  locationPlaceholder: 'Kalamış, Ataköy, Tuzla vb.',
+  serviceLabel: 'Servis İhtiyacı',
+  servicePlaceholder: 'Seçiniz',
+  serviceOptions: [
+    'Motor ve mekanik bakım',
+    'Marin jeneratör servisi',
+    'Elektrik ve elektronik',
+    'Yedek parça',
+    '7/24 acil mobil servis'
+  ],
+  messageLabel: 'Açıklama',
+  messagePlaceholder: 'Arıza, bakım veya parça ihtiyacınızı kısaca yazın',
+  callbackLabel: 'Ekibimiz çalışma saatleri içinde beni telefonla geri arasın.',
+  submitText: 'Servis Talebini İlet →',
+  submittingText: 'Kaydediliyor...',
+  waButtonText: '💬 WhatsApp’tan da Bilgi Gönder',
+  waTemplate: 'Merhaba DM MARİN, servis talebimi ilettim:\n\nAd Soyad: {name}\nTelefon: {phone}\nE-posta: {email}\nTekne / Motor: {boat}\nKonum: {location}\nHizmet: {service}\nGeri arama: {callback}\nTalep: {message}',
+  successMessage: '✓ Servis talebiniz başarıyla alındı. Ekibimiz en kısa sürede sizinle iletişime geçecektir.',
+  errorMessage: 'Lütfen zorunlu alanları (Ad Soyad, Telefon, E-posta) eksiksiz doldurun.'
+};
+
+const defaultFormConfigEN = {
+  title: 'Share Your Service Details',
+  subtitle: 'Your request is recorded directly in our database; technical evaluation begins immediately.',
+  nameLabel: 'Full Name *',
+  namePlaceholder: 'Your full name',
+  phoneLabel: 'Phone Number *',
+  phonePlaceholder: '+90 5xx xxx xx xx',
+  emailLabel: 'Email Address *',
+  emailPlaceholder: 'example@domain.com',
+  boatLabel: 'Boat / Engine',
+  boatPlaceholder: 'Brand and model',
+  locationLabel: 'Location / Marina',
+  locationPlaceholder: 'Kalamış, Ataköy, Tuzla etc.',
+  serviceLabel: 'Service Needed',
+  servicePlaceholder: 'Please select',
+  serviceOptions: [
+    'Engine & mechanical maintenance',
+    'Marine generator service',
+    'Electrical & electronics',
+    'Spare parts supply',
+    '24/7 emergency mobile service'
+  ],
+  messageLabel: 'Description / Message',
+  messagePlaceholder: 'Briefly describe your breakdown, maintenance, or spare part need',
+  callbackLabel: 'Please have your technical team call me back during business hours.',
+  submitText: 'Submit Service Request →',
+  submittingText: 'Submitting...',
+  waButtonText: '💬 Send via WhatsApp as well',
+  waTemplate: 'Hello DM MARIN, I submitted a service request:\n\nName: {name}\nPhone: {phone}\nEmail: {email}\nBoat / Engine: {boat}\nLocation: {location}\nService: {service}\nCallback: {callback}\nMessage: {message}',
+  successMessage: '✓ Your service request has been received. Our team will contact you shortly.',
+  errorMessage: 'Please fill in the required fields (Full Name, Phone, Email).'
+};
+
+let activeFormLang = 'tr';
+let formConfigTR = Object.assign({}, defaultFormConfigTR);
+let formConfigEN = Object.assign({}, defaultFormConfigEN);
+
+function getActiveConfig() {
+  return activeFormLang === 'en' ? formConfigEN : formConfigTR;
+}
+
+function renderFormBuilder(lang) {
+  activeFormLang = lang || 'tr';
+  const isTR = activeFormLang === 'tr';
+  const cfg = getActiveConfig();
+
+  // Language buttons toggle
+  document.getElementById('form-lang-tr-btn').className = isTR ? 'btn primary' : 'btn';
+  document.getElementById('form-lang-en-btn').className = !isTR ? 'btn primary' : 'btn';
+  document.getElementById('form-active-lang-badge').textContent = isTR ? 'Türkçe' : 'English';
+  document.getElementById('preview-lang-badge').textContent = isTR ? '🇹🇷 TR' : '🇬🇧 EN';
+
+  // Fill Inputs
+  document.getElementById('fb-title').value = cfg.title || '';
+  document.getElementById('fb-subtitle').value = cfg.subtitle || '';
+  document.getElementById('fb-name-label').value = cfg.nameLabel || '';
+  document.getElementById('fb-name-placeholder').value = cfg.namePlaceholder || '';
+  document.getElementById('fb-phone-label').value = cfg.phoneLabel || '';
+  document.getElementById('fb-phone-placeholder').value = cfg.phonePlaceholder || '';
+  document.getElementById('fb-email-label').value = cfg.emailLabel || '';
+  document.getElementById('fb-email-placeholder').value = cfg.emailPlaceholder || '';
+  document.getElementById('fb-boat-label').value = cfg.boatLabel || '';
+  document.getElementById('fb-boat-placeholder').value = cfg.boatPlaceholder || '';
+  document.getElementById('fb-location-label').value = cfg.locationLabel || '';
+  document.getElementById('fb-location-placeholder').value = cfg.locationPlaceholder || '';
+  document.getElementById('fb-service-label').value = cfg.serviceLabel || '';
+  document.getElementById('fb-service-placeholder').value = cfg.servicePlaceholder || '';
+  document.getElementById('fb-message-label').value = cfg.messageLabel || '';
+  document.getElementById('fb-message-placeholder').value = cfg.messagePlaceholder || '';
+  document.getElementById('fb-callback-label').value = cfg.callbackLabel || '';
+  document.getElementById('fb-submit-text').value = cfg.submitText || '';
+  document.getElementById('fb-submitting-text').value = cfg.submittingText || '';
+  document.getElementById('fb-wa-btn-text').value = cfg.waButtonText || '';
+  document.getElementById('fb-wa-template').value = cfg.waTemplate || '';
+  document.getElementById('fb-success-msg').value = cfg.successMessage || '';
+  document.getElementById('fb-error-msg').value = cfg.errorMessage || '';
+
+  // Render Service Options
+  renderServiceOptionsList();
+
+  // Update Live Preview
+  updateFormPreview();
+}
+
+function renderServiceOptionsList() {
+  const cfg = getActiveConfig();
+  const listEl = document.getElementById('fb-service-options-list');
+  listEl.innerHTML = '';
+  if (!Array.isArray(cfg.serviceOptions)) cfg.serviceOptions = [];
+
+  cfg.serviceOptions.forEach((opt, idx) => {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:8px;align-items:center';
+    row.innerHTML = `
+      <span style="color:var(--muted);font-weight:800;width:20px">${idx + 1}.</span>
+      <input value="${opt}" style="flex:1" aria-label="Seçenek adı">
+      <button type="button" class="btn danger" style="padding:6px 12px;min-height:36px;font-size:12px">Sil</button>
+    `;
+    const input = row.querySelector('input');
+    input.addEventListener('input', () => {
+      cfg.serviceOptions[idx] = input.value;
+      updateFormPreview();
+    });
+    row.querySelector('button').addEventListener('click', () => {
+      cfg.serviceOptions.splice(idx, 1);
+      renderServiceOptionsList();
+      updateFormPreview();
+    });
+    listEl.appendChild(row);
+  });
+}
+
+function updateFormPreview() {
+  const cfg = getActiveConfig();
+  document.getElementById('prev-title').textContent = cfg.title || '';
+  document.getElementById('prev-subtitle').textContent = cfg.subtitle || '';
+  document.getElementById('prev-name-lbl').textContent = cfg.nameLabel || '';
+  document.getElementById('prev-name-inp').placeholder = cfg.namePlaceholder || '';
+  document.getElementById('prev-phone-lbl').textContent = cfg.phoneLabel || '';
+  document.getElementById('prev-phone-inp').placeholder = cfg.phonePlaceholder || '';
+  document.getElementById('prev-email-lbl').textContent = cfg.emailLabel || '';
+  document.getElementById('prev-email-inp').placeholder = cfg.emailPlaceholder || '';
+  document.getElementById('prev-boat-lbl').textContent = cfg.boatLabel || '';
+  document.getElementById('prev-boat-inp').placeholder = cfg.boatPlaceholder || '';
+  document.getElementById('prev-loc-lbl').textContent = cfg.locationLabel || '';
+  document.getElementById('prev-loc-inp').placeholder = cfg.locationPlaceholder || '';
+  document.getElementById('prev-service-lbl').textContent = cfg.serviceLabel || '';
+  
+  const sel = document.getElementById('prev-service-sel');
+  sel.innerHTML = `<option value="">${cfg.servicePlaceholder || 'Seçiniz'}</option>` +
+    (cfg.serviceOptions || []).map(o => `<option>${o}</option>`).join('');
+    
+  document.getElementById('prev-msg-lbl').textContent = cfg.messageLabel || '';
+  document.getElementById('prev-msg-inp').placeholder = cfg.messagePlaceholder || '';
+  document.getElementById('prev-cb-lbl').textContent = cfg.callbackLabel || '';
+  document.getElementById('prev-submit-btn').textContent = cfg.submitText || '';
+  document.getElementById('prev-wa-btn').textContent = cfg.waButtonText || '';
+}
+
+function collectActiveFormConfigFromInputs() {
+  const cfg = getActiveConfig();
+  cfg.title = document.getElementById('fb-title').value.trim();
+  cfg.subtitle = document.getElementById('fb-subtitle').value.trim();
+  cfg.nameLabel = document.getElementById('fb-name-label').value.trim();
+  cfg.namePlaceholder = document.getElementById('fb-name-placeholder').value.trim();
+  cfg.phoneLabel = document.getElementById('fb-phone-label').value.trim();
+  cfg.phonePlaceholder = document.getElementById('fb-phone-placeholder').value.trim();
+  cfg.emailLabel = document.getElementById('fb-email-label').value.trim();
+  cfg.emailPlaceholder = document.getElementById('fb-email-placeholder').value.trim();
+  cfg.boatLabel = document.getElementById('fb-boat-label').value.trim();
+  cfg.boatPlaceholder = document.getElementById('fb-boat-placeholder').value.trim();
+  cfg.locationLabel = document.getElementById('fb-location-label').value.trim();
+  cfg.locationPlaceholder = document.getElementById('fb-location-placeholder').value.trim();
+  cfg.serviceLabel = document.getElementById('fb-service-label').value.trim();
+  cfg.servicePlaceholder = document.getElementById('fb-service-placeholder').value.trim();
+  cfg.messageLabel = document.getElementById('fb-message-label').value.trim();
+  cfg.messagePlaceholder = document.getElementById('fb-message-placeholder').value.trim();
+  cfg.callbackLabel = document.getElementById('fb-callback-label').value.trim();
+  cfg.submitText = document.getElementById('fb-submit-text').value.trim();
+  cfg.submittingText = document.getElementById('fb-submitting-text').value.trim();
+  cfg.waButtonText = document.getElementById('fb-wa-btn-text').value.trim();
+  cfg.waTemplate = document.getElementById('fb-wa-template').value;
+  cfg.successMessage = document.getElementById('fb-success-msg').value.trim();
+  cfg.errorMessage = document.getElementById('fb-error-msg').value.trim();
+}
+
+// Hook up input listeners on #form-builder fields for live preview
+document.querySelectorAll('#form-builder input:not(#fb-new-service-option), #form-builder textarea').forEach(el => {
+  el.addEventListener('input', () => {
+    collectActiveFormConfigFromInputs();
+    updateFormPreview();
+  });
+});
+
+document.getElementById('form-lang-tr-btn').addEventListener('click', () => {
+  collectActiveFormConfigFromInputs();
+  renderFormBuilder('tr');
+});
+
+document.getElementById('form-lang-en-btn').addEventListener('click', () => {
+  collectActiveFormConfigFromInputs();
+  renderFormBuilder('en');
+});
+
+document.getElementById('fb-add-service-option').addEventListener('click', () => {
+  const inp = document.getElementById('fb-new-service-option');
+  const val = inp.value.trim();
+  if (!val) return flash('Lütfen seçenek adı yazın.');
+  const cfg = getActiveConfig();
+  if (!Array.isArray(cfg.serviceOptions)) cfg.serviceOptions = [];
+  cfg.serviceOptions.push(val);
+  inp.value = '';
+  renderServiceOptionsList();
+  updateFormPreview();
+  flash('Yeni servis seçeneği eklendi.');
+});
+
+document.getElementById('fb-reset-btn').addEventListener('click', () => {
+  if (confirm(`Mevcut (${activeFormLang.toUpperCase()}) form ayarlarını varsayılana sıfırlamak istediğinize emin misiniz?`)) {
+    if (activeFormLang === 'en') formConfigEN = Object.assign({}, defaultFormConfigEN);
+    else formConfigTR = Object.assign({}, defaultFormConfigTR);
+    renderFormBuilder(activeFormLang);
+    flash('Form ayarları varsayılana sıfırlandı.');
+  }
+});
+
+document.getElementById('fb-save-btn').addEventListener('click', async () => {
+  collectActiveFormConfigFromInputs();
+  autoSave();
+  if (currentSession) {
+    await syncFormConfigToDb();
+    flash(`✓ ${activeFormLang.toUpperCase()} Form ayarları veritabanına kaydedildi.`);
+  } else {
+    flash('Form ayarları tarayıcı taslağına kaydedildi. Canlı DB için giriş yapın.');
+  }
+});
+
 const labels = {
   dashboard: 'Genel Bakış',
   content: 'Site İçeriği',
+  'form-builder': 'Talep Formu & Dil',
   services: 'Hizmetler',
   brands: 'Marka Yönetimi',
   seo: 'SEO Yönetimi',
@@ -1311,12 +1772,14 @@ function collectAll() {
   document.querySelectorAll('[data-service]').forEach(el => services[el.dataset.service] = el.checked);
 
   return {
-    version: 3,
+    version: 4,
     savedAt: new Date().toISOString(),
     fields,
     services,
     brands: brandState.filter(x => x.name.trim()),
-    pagesSeo: pagesSeoState
+    pagesSeo: pagesSeoState,
+    formConfigTR,
+    formConfigEN
   };
 }
 
@@ -1364,6 +1827,8 @@ function restoreFields() {
       if (savedState.services[el.dataset.service] != null) el.checked = savedState.services[el.dataset.service];
     });
   }
+  if (savedState.formConfigTR) formConfigTR = Object.assign({}, defaultFormConfigTR, savedState.formConfigTR);
+  if (savedState.formConfigEN) formConfigEN = Object.assign({}, defaultFormConfigEN, savedState.formConfigEN);
 }
 
 // Attach input listeners for instant drafting
@@ -1374,6 +1839,7 @@ document.querySelectorAll('[data-service]').forEach(el => el.addEventListener('c
 restoreFields();
 renderBrands();
 renderSeoSummaryTable();
+renderFormBuilder('tr');
 loadPageSeo('index');
 showView(location.hash.slice(1) in labels ? location.hash.slice(1) : 'dashboard');
 initSupabase();
