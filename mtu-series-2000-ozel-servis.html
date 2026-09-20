@@ -1,5 +1,14 @@
 <!doctype html>
-<html lang="tr"><head>
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2Q19CJBPQB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-2Q19CJBPQB');
+</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MTU Series 2000 Özel Servis İstanbul | DM MARİN</title>
 <meta name="description" content="İstanbul ve Marmara'da MTU Series 2000 deniz motorları için bağımsız özel servis: bakım planlama, soğutma-yağlama kontrolü ve teknik arıza değerlendirmesi.">
@@ -59,10 +68,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
       s1.async = true;
       s1.src = "https://www.googletagmanager.com/gtag/js?id=" + cfg.gaMeasurementId;
       document.head.appendChild(s1);
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
       gtag("js", new Date());
-      gtag("config", cfg.gaMeasurementId, { anonymize_ip: true });
       window.gtag = gtag;
     }
   } catch(e) {}
@@ -75,8 +81,6 @@ function trackDmEvent(eventName, params) {
   }
   if (typeof window.va === "function") {
     window.va("event", { name: eventName, data: params || {} });
-  }
-});
   }
 }
 document.addEventListener("click", function(e) {

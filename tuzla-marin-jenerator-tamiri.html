@@ -1,9 +1,18 @@
 <!doctype html>
-<html lang="tr"><head>
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2Q19CJBPQB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-2Q19CJBPQB');
+</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tuzla Marin Jeneratör Tamiri ve Servisi | DM MARİN</title>
 <meta name="description" content="Viaport Marina Tuzla ve çevresinde teknenizde yerinde marin jeneratör arıza tespiti, alternatör kontrolü, soğutma devresi bakımı ve mobil onarım desteği.">
-<link rel="canonical" href="https://dmmarin.com/">
+<link rel="canonical" href="https://dmmarin.com/tuzla-marin-jenerator-tamiri.html">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#071b2b">
 <link rel="stylesheet" href="service-page.css">
@@ -16,7 +25,7 @@
 <meta property="og:locale" content="tr_TR">
 <meta property="og:title" content="Tuzla Marin Jeneratör Tamiri ve Servisi | DM MARİN">
 <meta property="og:description" content="Viaport Marina Tuzla ve çevresinde teknenizde yerinde marin jeneratör arıza tespiti, alternatör kontrolü, soğutma devresi bakımı ve mobil onarım desteği.">
-<meta property="og:url" content="https://dmmarin.com/">
+<meta property="og:url" content="https://dmmarin.com/tuzla-marin-jenerator-tamiri.html">
 <meta property="og:image" content="https://dmmarin.com/assets/dm-marin-jenerator-elektrik-sahada.webp">
 <meta property="og:image:width" content="1672">
 <meta property="og:image:height" content="941">
@@ -59,10 +68,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
       s1.async = true;
       s1.src = "https://www.googletagmanager.com/gtag/js?id=" + cfg.gaMeasurementId;
       document.head.appendChild(s1);
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
       gtag("js", new Date());
-      gtag("config", cfg.gaMeasurementId, { anonymize_ip: true });
       window.gtag = gtag;
     }
   } catch(e) {}
@@ -75,8 +81,6 @@ function trackDmEvent(eventName, params) {
   }
   if (typeof window.va === "function") {
     window.va("event", { name: eventName, data: params || {} });
-  }
-});
   }
 }
 document.addEventListener("click", function(e) {
