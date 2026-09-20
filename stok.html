@@ -3096,8 +3096,7 @@ function renderReports() {
 }
 
 function exportProductSalesReport() {
-  let csv = "﻿Ürün Adı;OEM Kodu;Kategori;Satılan Adet;Toplam Ciro (TL);Birim Maliyet;Tahmini Maliyet (TL);Net Kar (TL)
-";
+  let csv = "\uFEFFÜrün Adı;OEM Kodu;Kategori;Satılan Adet;Toplam Ciro (TL);Birim Maliyet;Tahmini Maliyet (TL);Net Kar (TL)\n";
   productsState.forEach(p => {
     let sold = 0;
     let rev = 0;
@@ -3111,8 +3110,7 @@ function exportProductSalesReport() {
     });
     const cost = sold * p.buyPrice;
     const profit = rev - cost;
-    csv += `"${p.name}";"${p.code}";"${p.category}";${sold};${rev};${p.buyPrice};${cost};${profit}
-`;
+    csv += `"${p.name}";"${p.code}";"${p.category}";${sold};${rev};${p.buyPrice};${cost};${profit}\n`;
   });
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const a = document.createElement("a");
@@ -3206,11 +3204,9 @@ function deleteLocation(idx) {
 }
 
 function exportProductsCsv() {
-  let csv = "﻿Ürün Adı;OEM Kodu;Barkod;Marka;Kategori;Depo;Alış Fiyatı;Satış Fiyatı (TL);Stok
-";
+  let csv = "\uFEFFÜrün Adı;OEM Kodu;Barkod;Marka;Kategori;Depo;Alış Fiyatı;Satış Fiyatı (TL);Stok\n";
   productsState.forEach(p => {
-    csv += `"${p.name}";"${p.code}";"${p.barcode||''}";"${p.brand}";"${p.category}";"${p.location}";${p.buyPrice};${p.sellPrice};${p.qty}
-`;
+    csv += `"${p.name}";"${p.code}";"${p.barcode||''}";"${p.brand}";"${p.category}";"${p.location}";${p.buyPrice};${p.sellPrice};${p.qty}\n`;
   });
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const a = document.createElement("a");
