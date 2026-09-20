@@ -464,7 +464,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 <div class="head">
   <div>
     <h2>Servis Talebi Formu & Çok Dilli Yönetim (TR / EN)</h2>
-    <p>Web sitesindeki servis formunun tüm başlıklarını, alan etiketlerini, hizmet seçeneklerini ve çok dilli (Türkçe & İngilizce) karşılıklarını buradan yönetin.</p>
+    <p>Web sitesindeki servis formunun tüm başlıklarını, etiketlerini, hizmet seçeneklerini ve çok dilli (Türkçe & İngilizce) karşılıklarını buradan canlı düzenleyin ve test edin.</p>
   </div>
   <div style="display:flex;gap:8px;background:rgba(7,27,43,.06);padding:6px;border-radius:14px">
     <button type="button" class="btn primary" id="form-lang-tr-btn" style="min-height:38px;padding:0 16px;font-size:13px">🇹🇷 Türkçe Form</button>
@@ -472,13 +472,21 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
   </div>
 </div>
 
-<div class="grid" style="grid-template-columns:1.2fr .8fr">
+<div class="grid" style="grid-template-columns:1.2fr .8fr;gap:20px;align-items:start">
+<!-- LEFT: FORM CONFIGURATION EDITOR -->
 <article class="panel">
 <div class="panel-head">
-  <h3>Form Metinleri ve Alan Yapılandırması (<span id="form-active-lang-badge">Türkçe</span>)</h3>
+  <div>
+    <h3 style="margin:0">Form Alan Yapılandırması (<span id="form-active-lang-badge" style="color:var(--cyan2)">Türkçe</span>)</h3>
+    <small style="color:var(--muted)">Metinleri değiştirdiğinizde sağdaki canlı önizleme anında güncellenir.</small>
+  </div>
   <span class="pill ok">Canlı DB Senkronize</span>
 </div>
 <div class="panel-body form-grid">
+
+<div class="field full" style="border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:6px">
+  <span style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--cyan2);letter-spacing:.06em">1. Form Başlığı & Alt Açıklama</span>
+</div>
 
 <div class="field full">
   <label for="fb-title">Form Ana Başlığı</label>
@@ -488,6 +496,10 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 <div class="field full">
   <label for="fb-subtitle">Form Alt Açıklaması</label>
   <textarea id="fb-subtitle" rows="2" placeholder="Form veritabanımıza kaydedilir; anında teknik değerlendirme başlatılır."></textarea>
+</div>
+
+<div class="field full" style="border-bottom:1px solid var(--line);padding-bottom:12px;margin:12px 0 6px">
+  <span style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--cyan2);letter-spacing:.06em">2. İletişim & Tekne Alanları</span>
 </div>
 
 <div class="field">
@@ -535,6 +547,10 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
   <input id="fb-location-placeholder" placeholder="Kalamış, Ataköy, Tuzla vb.">
 </div>
 
+<div class="field full" style="border-bottom:1px solid var(--line);padding-bottom:12px;margin:12px 0 6px">
+  <span style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--cyan2);letter-spacing:.06em">3. Servis İhtiyaç Seçenekleri (Açılır Liste)</span>
+</div>
+
 <div class="field">
   <label for="fb-service-label">Servis İhtiyacı Başlığı</label>
   <input id="fb-service-label" placeholder="Servis ihtiyacı">
@@ -545,12 +561,16 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 </div>
 
 <div class="field full">
-  <label>Servis İhtiyaç Seçenekleri (Açılır Liste Seçenekleri)</label>
+  <label>Seçenek Listesi</label>
   <div style="display:flex;gap:8px;margin-bottom:10px">
-    <input id="fb-new-service-option" placeholder="Yeni servis seçeneği yazın..." style="flex:1">
-    <button type="button" class="btn primary" id="fb-add-service-option" style="min-height:43px">Seçenek Ekle</button>
+    <input id="fb-new-service-option" placeholder="Yeni servis seçeneği yazın (örn: Şanzıman Bakımı)..." style="flex:1">
+    <button type="button" class="btn primary" id="fb-add-service-option" style="min-height:38px;padding:0 14px">Ekle +</button>
   </div>
-  <div id="fb-service-options-list" style="display:grid;gap:8px"></div>
+  <div id="fb-service-options-list" style="display:grid;gap:6px"></div>
+</div>
+
+<div class="field full" style="border-bottom:1px solid var(--line);padding-bottom:12px;margin:12px 0 6px">
+  <span style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--cyan2);letter-spacing:.06em">4. Açıklama, Butonlar & WhatsApp Şablonu</span>
 </div>
 
 <div class="field full">
@@ -577,13 +597,18 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 </div>
 
 <div class="field full">
-  <label for="fb-wa-btn-text">WhatsApp Alternatif Buton Metni</label>
+  <label for="fb-wa-btn-text">WhatsApp Buton Metni</label>
   <input id="fb-wa-btn-text" placeholder="💬 WhatsApp’tan da Bilgi Gönder">
 </div>
 
 <div class="field full">
-  <label for="fb-wa-template">WhatsApp Mesaj Şablonu ({name}, {phone}, {email}, {boat}, {location}, {service}, {callback}, {message} etiketleri dinamik doldurulur)</label>
-  <textarea id="fb-wa-template" rows="4"></textarea>
+  <label for="fb-wa-template">WhatsApp Mesaj Şablonu</label>
+  <small style="color:var(--muted);display:block;margin-bottom:4px">Kullanabileceğiniz etiketler: <code>{name}</code>, <code>{phone}</code>, <code>{email}</code>, <code>{boat}</code>, <code>{location}</code>, <code>{service}</code>, <code>{callback}</code>, <code>{message}</code></small>
+  <textarea id="fb-wa-template" rows="4" style="font-family:monospace;font-size:12.5px"></textarea>
+</div>
+
+<div class="field full" style="border-bottom:1px solid var(--line);padding-bottom:12px;margin:12px 0 6px">
+  <span style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--cyan2);letter-spacing:.06em">5. Bildirim & Uyarı Mesajları</span>
 </div>
 
 <div class="field full">
@@ -597,36 +622,82 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 
 </div>
 
-<div style="margin-top:24px;padding-top:16px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:space-between;align-items:center">
+<div style="margin-top:20px;padding:16px 20px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:space-between;align-items:center;background:#fbfdfe;border-radius:0 0 18px 18px">
   <button type="button" class="btn danger" id="fb-reset-btn">Varsayılanlara Sıfırla</button>
-  <button type="button" class="btn primary" id="fb-save-btn">Bu Dilin Form Ayarlarını Kaydet ✓</button>
+  <button type="button" class="btn primary" id="fb-save-btn">💾 Bu Dilin Form Ayarlarını Canlı Kaydet</button>
 </div>
 </article>
 
-<!-- LIVE FORM PREVIEW -->
-<article class="panel">
+<!-- RIGHT: INTERACTIVE LIVE FORM PREVIEW -->
+<article class="panel" style="position:sticky;top:136px">
 <div class="panel-head">
-  <h3>Canlı Form Önizlemesi</h3>
+  <div>
+    <h3 style="margin:0">Canlı Form Önizlemesi & Test</h3>
+    <small style="color:var(--muted)">Kullanıcının sitede göreceği gerçek form simülasyonu</small>
+  </div>
   <span class="pill badge" id="preview-lang-badge">🇹🇷 TR</span>
 </div>
-<div class="panel-body" style="background:#f8fafc;border-radius:0 0 20px 20px">
-  <div style="background:#fff;padding:24px;border-radius:18px;border:1px solid var(--line);box-shadow:var(--shadow)">
-    <h3 id="prev-title" style="margin:0 0 4px;font-size:20px">Servis bilgilerinizi paylaşın</h3>
-    <p id="prev-subtitle" style="margin:0 0 16px;color:var(--muted);font-size:13px">Form veritabanımıza kaydedilir; anında teknik değerlendirme başlatılır.</p>
-    
-    <div style="display:grid;gap:12px;font-size:13px">
-      <div><b id="prev-name-lbl">Ad Soyad *</b><input id="prev-name-inp" disabled style="background:#f1f5f9;margin-top:4px"></div>
-      <div><b id="prev-phone-lbl">Telefon *</b><input id="prev-phone-inp" disabled style="background:#f1f5f9;margin-top:4px"></div>
-      <div><b id="prev-email-lbl">E-posta *</b><input id="prev-email-inp" disabled style="background:#f1f5f9;margin-top:4px"></div>
-      <div><b id="prev-boat-lbl">Tekne / Motor</b><input id="prev-boat-inp" disabled style="background:#f1f5f9;margin-top:4px"></div>
-      <div><b id="prev-loc-lbl">Konum / Marina</b><input id="prev-loc-inp" disabled style="background:#f1f5f9;margin-top:4px"></div>
-      <div><b id="prev-service-lbl">Servis İhtiyacı</b><select id="prev-service-sel" disabled style="background:#f1f5f9;margin-top:4px"><option>Seçiniz</option></select></div>
-      <div><b id="prev-msg-lbl">Açıklama</b><textarea id="prev-msg-inp" rows="2" disabled style="background:#f1f5f9;margin-top:4px"></textarea></div>
-      <label style="display:flex;gap:8px;align-items:center;margin-top:4px"><input type="checkbox" checked disabled><span id="prev-cb-lbl">Beni telefonla geri arasın.</span></label>
-      
-      <button class="btn full primary" id="prev-submit-btn" disabled style="margin-top:8px">Servis Talebini İlet →</button>
-      <button class="btn full ghost" id="prev-wa-btn" disabled style="border:1px solid #10b981;color:#047857;background:#ecfdf5">💬 WhatsApp’tan da Bilgi Gönder</button>
+<div class="panel-body" style="background:#f0f5f7;border-radius:0 0 18px 18px;padding:18px">
+  
+  <div style="background:#fff;padding:24px;border-radius:16px;border:1px solid var(--line);box-shadow:0 12px 35px rgba(7,27,43,.08)">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <span style="width:8px;height:8px;border-radius:50%;background:#10b981;box-shadow:0 0 0 3px rgba(16,185,129,.2)"></span>
+      <small style="font-weight:700;color:var(--navy);font-size:11.5px">CANLI ETKİLEŞİMLİ ÖNİZLEME</small>
     </div>
+
+    <h3 id="prev-title" style="margin:0 0 4px;font-size:19px;color:var(--navy);font-weight:800">Servis bilgilerinizi paylaşın</h3>
+    <p id="prev-subtitle" style="margin:0 0 16px;color:var(--muted);font-size:12.5px">Form veritabanımıza kaydedilir; anında teknik değerlendirme başlatılır.</p>
+    
+    <div style="display:grid;gap:11px;font-size:12.5px">
+      <div>
+        <label id="prev-name-lbl" style="font-weight:750;display:block;margin-bottom:3px;color:var(--navy)">Ad Soyad *</label>
+        <input id="prev-name-inp" placeholder="Adınız ve soyadınız" style="padding:9px 11px;font-size:13px">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <label id="prev-phone-lbl" style="font-weight:750;display:block;margin-bottom:3px;color:var(--navy)">Telefon *</label>
+          <input id="prev-phone-inp" placeholder="05xx xxx xx xx" style="padding:9px 11px;font-size:13px">
+        </div>
+        <div>
+          <label id="prev-email-lbl" style="font-weight:750;display:block;margin-bottom:3px;color:var(--navy)">E-posta *</label>
+          <input id="prev-email-inp" placeholder="ornek@alanadi.com" style="padding:9px 11px;font-size:13px">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <label id="prev-boat-lbl" style="font-weight:750;display:block;margin-bottom:3px;color:var(--navy)">Tekne / Motor</label>
+          <input id="prev-boat-inp" placeholder="Marka ve model" style="padding:9px 11px;font-size:13px">
+        </div>
+        <div>
+          <label id="prev-loc-lbl" style="font-weight:750;display:block;margin-bottom:3px;color:var(--navy)">Konum / Marina</label>
+          <input id="prev-loc-inp" placeholder="Kalamış, Ataköy, Tuzla vb." style="padding:9px 11px;font-size:13px">
+        </div>
+      </div>
+      <div>
+        <label id="prev-service-lbl" style="font-weight:750;display:block;margin-bottom:3px;color:var(--navy)">Servis İhtiyacı</label>
+        <select id="prev-service-sel" style="padding:9px 11px;font-size:13px"><option value="">Seçiniz</option></select>
+      </div>
+      <div>
+        <label id="prev-msg-lbl" style="font-weight:750;display:block;margin-bottom:3px;color:var(--navy)">Açıklama</label>
+        <textarea id="prev-msg-inp" rows="2" placeholder="Arıza, bakım veya parça ihtiyacınızı kısaca yazın" style="padding:9px 11px;font-size:13px"></textarea>
+      </div>
+      <label style="display:flex;gap:8px;align-items:center;cursor:pointer;user-select:none;font-size:12px;color:var(--ink)">
+        <input type="checkbox" id="prev-cb-inp" checked style="width:auto;cursor:pointer">
+        <span id="prev-cb-lbl">Ekibimiz çalışma saatleri içinde beni telefonla geri arasın.</span>
+      </label>
+      
+      <!-- SIMULATION FEEDBACK BOX -->
+      <div id="prev-sim-feedback" style="display:none;padding:10px 12px;border-radius:10px;font-size:12px;font-weight:700;text-align:center"></div>
+
+      <button type="button" class="btn primary" id="prev-submit-btn" style="width:100%;min-height:44px;margin-top:6px;font-size:13.5px;background:var(--navy);border-color:var(--navy)">Servis Talebini İlet →</button>
+      <button type="button" class="btn" id="prev-wa-btn" style="width:100%;min-height:42px;border-color:#86efac;color:#047857;background:#ecfdf5;font-size:13px">💬 WhatsApp’tan da Bilgi Gönder</button>
+    </div>
+  </div>
+
+  <!-- WHATSAPP MESSAGE TEMPLATE LIVE INSPECTOR -->
+  <div style="margin-top:14px;background:#fff;padding:14px;border-radius:14px;border:1px solid var(--line);font-size:12px">
+    <b style="color:var(--navy);display:block;margin-bottom:6px">📱 WhatsApp İletilecek Canlı Mesaj Önizlemesi:</b>
+    <pre id="prev-wa-inspector" style="margin:0;padding:10px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;white-space:pre-wrap;font-family:monospace;font-size:11.5px;color:#334155;max-height:160px;overflow-y:auto"></pre>
   </div>
 </div>
 </article>
@@ -2377,61 +2448,72 @@ function getActiveConfig() {
 }
 
 function renderFormBuilder(lang) {
-  activeFormLang = lang || 'tr';
+  if (lang) activeFormLang = lang;
   const isTR = activeFormLang === 'tr';
   const cfg = getActiveConfig();
 
   // Language buttons toggle
-  document.getElementById('form-lang-tr-btn').className = isTR ? 'btn primary' : 'btn';
-  document.getElementById('form-lang-en-btn').className = !isTR ? 'btn primary' : 'btn';
-  document.getElementById('form-active-lang-badge').textContent = isTR ? 'Türkçe' : 'English';
-  document.getElementById('preview-lang-badge').textContent = isTR ? '🇹🇷 TR' : '🇬🇧 EN';
+  const trBtn = document.getElementById('form-lang-tr-btn');
+  const enBtn = document.getElementById('form-lang-en-btn');
+  if (trBtn) trBtn.className = isTR ? 'btn primary' : 'btn';
+  if (enBtn) enBtn.className = !isTR ? 'btn primary' : 'btn';
+  
+  const langBadge = document.getElementById('form-active-lang-badge');
+  if (langBadge) langBadge.textContent = isTR ? 'Türkçe' : 'English';
+  const prevLangBadge = document.getElementById('preview-lang-badge');
+  if (prevLangBadge) prevLangBadge.textContent = isTR ? '🇹🇷 TR' : '🇬🇧 EN';
 
-  // Fill Inputs
-  document.getElementById('fb-title').value = cfg.title || '';
-  document.getElementById('fb-subtitle').value = cfg.subtitle || '';
-  document.getElementById('fb-name-label').value = cfg.nameLabel || '';
-  document.getElementById('fb-name-placeholder').value = cfg.namePlaceholder || '';
-  document.getElementById('fb-phone-label').value = cfg.phoneLabel || '';
-  document.getElementById('fb-phone-placeholder').value = cfg.phonePlaceholder || '';
-  document.getElementById('fb-email-label').value = cfg.emailLabel || '';
-  document.getElementById('fb-email-placeholder').value = cfg.emailPlaceholder || '';
-  document.getElementById('fb-boat-label').value = cfg.boatLabel || '';
-  document.getElementById('fb-boat-placeholder').value = cfg.boatPlaceholder || '';
-  document.getElementById('fb-location-label').value = cfg.locationLabel || '';
-  document.getElementById('fb-location-placeholder').value = cfg.locationPlaceholder || '';
-  document.getElementById('fb-service-label').value = cfg.serviceLabel || '';
-  document.getElementById('fb-service-placeholder').value = cfg.servicePlaceholder || '';
-  document.getElementById('fb-message-label').value = cfg.messageLabel || '';
-  document.getElementById('fb-message-placeholder').value = cfg.messagePlaceholder || '';
-  document.getElementById('fb-callback-label').value = cfg.callbackLabel || '';
-  document.getElementById('fb-submit-text').value = cfg.submitText || '';
-  document.getElementById('fb-submitting-text').value = cfg.submittingText || '';
-  document.getElementById('fb-wa-btn-text').value = cfg.waButtonText || '';
-  document.getElementById('fb-wa-template').value = cfg.waTemplate || '';
-  document.getElementById('fb-success-msg').value = cfg.successMessage || '';
-  document.getElementById('fb-error-msg').value = cfg.errorMessage || '';
+  // Fill Inputs from active config
+  const setVal = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val || '';
+  };
 
-  // Render Service Options
+  setVal('fb-title', cfg.title);
+  setVal('fb-subtitle', cfg.subtitle);
+  setVal('fb-name-label', cfg.nameLabel);
+  setVal('fb-name-placeholder', cfg.namePlaceholder);
+  setVal('fb-phone-label', cfg.phoneLabel);
+  setVal('fb-phone-placeholder', cfg.phonePlaceholder);
+  setVal('fb-email-label', cfg.emailLabel);
+  setVal('fb-email-placeholder', cfg.emailPlaceholder);
+  setVal('fb-boat-label', cfg.boatLabel);
+  setVal('fb-boat-placeholder', cfg.boatPlaceholder);
+  setVal('fb-location-label', cfg.locationLabel);
+  setVal('fb-location-placeholder', cfg.locationPlaceholder);
+  setVal('fb-service-label', cfg.serviceLabel);
+  setVal('fb-service-placeholder', cfg.servicePlaceholder);
+  setVal('fb-message-label', cfg.messageLabel);
+  setVal('fb-message-placeholder', cfg.messagePlaceholder);
+  setVal('fb-callback-label', cfg.callbackLabel);
+  setVal('fb-submit-text', cfg.submitText);
+  setVal('fb-submitting-text', cfg.submittingText);
+  setVal('fb-wa-btn-text', cfg.waButtonText);
+  setVal('fb-wa-template', cfg.waTemplate);
+  setVal('fb-success-msg', cfg.successMessage);
+  setVal('fb-error-msg', cfg.errorMessage);
+
+  // Render Service Options list in editor
   renderServiceOptionsList();
 
-  // Update Live Preview
+  // Update Live Preview Pane
   updateFormPreview();
 }
 
 function renderServiceOptionsList() {
   const cfg = getActiveConfig();
   const listEl = document.getElementById('fb-service-options-list');
+  if (!listEl) return;
   listEl.innerHTML = '';
   if (!Array.isArray(cfg.serviceOptions)) cfg.serviceOptions = [];
 
   cfg.serviceOptions.forEach((opt, idx) => {
     const row = document.createElement('div');
-    row.style.cssText = 'display:flex;gap:8px;align-items:center';
+    row.style.cssText = 'display:flex;gap:6px;align-items:center';
     row.innerHTML = `
-      <span style="color:var(--muted);font-weight:800;width:20px">${idx + 1}.</span>
-      <input value="${opt}" style="flex:1" aria-label="Seçenek adı">
-      <button type="button" class="btn danger" style="padding:6px 12px;min-height:36px;font-size:12px">Sil</button>
+      <span style="color:var(--muted);font-weight:800;width:20px;font-size:12px">${idx + 1}.</span>
+      <input type="text" value="${escapeHtml(opt)}" style="flex:1;padding:8px 10px;font-size:13px" aria-label="Seçenek adı">
+      <button type="button" class="btn danger" style="padding:6px 12px;min-height:34px;font-size:11.5px">Sil</button>
     `;
     const input = row.querySelector('input');
     input.addEventListener('input', () => {
@@ -2449,90 +2531,210 @@ function renderServiceOptionsList() {
 
 function updateFormPreview() {
   const cfg = getActiveConfig();
-  document.getElementById('prev-title').textContent = cfg.title || '';
-  document.getElementById('prev-subtitle').textContent = cfg.subtitle || '';
-  document.getElementById('prev-name-lbl').textContent = cfg.nameLabel || '';
-  document.getElementById('prev-name-inp').placeholder = cfg.namePlaceholder || '';
-  document.getElementById('prev-phone-lbl').textContent = cfg.phoneLabel || '';
-  document.getElementById('prev-phone-inp').placeholder = cfg.phonePlaceholder || '';
-  document.getElementById('prev-email-lbl').textContent = cfg.emailLabel || '';
-  document.getElementById('prev-email-inp').placeholder = cfg.emailPlaceholder || '';
-  document.getElementById('prev-boat-lbl').textContent = cfg.boatLabel || '';
-  document.getElementById('prev-boat-inp').placeholder = cfg.boatPlaceholder || '';
-  document.getElementById('prev-loc-lbl').textContent = cfg.locationLabel || '';
-  document.getElementById('prev-loc-inp').placeholder = cfg.locationPlaceholder || '';
-  document.getElementById('prev-service-lbl').textContent = cfg.serviceLabel || '';
+  
+  const setText = (id, text, fallback = '') => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text || fallback;
+  };
+  const setPlh = (id, plh) => {
+    const el = document.getElementById(id);
+    if (el) el.placeholder = plh || '';
+  };
+
+  setText('prev-title', cfg.title, 'Servis Talebi');
+  setText('prev-subtitle', cfg.subtitle, '');
+  setText('prev-name-lbl', cfg.nameLabel, 'Ad Soyad *');
+  setPlh('prev-name-inp', cfg.namePlaceholder);
+  setText('prev-phone-lbl', cfg.phoneLabel, 'Telefon *');
+  setPlh('prev-phone-inp', cfg.phonePlaceholder);
+  setText('prev-email-lbl', cfg.emailLabel, 'E-posta *');
+  setPlh('prev-email-inp', cfg.emailPlaceholder);
+  setText('prev-boat-lbl', cfg.boatLabel, 'Tekne / Motor');
+  setPlh('prev-boat-inp', cfg.boatPlaceholder);
+  setText('prev-loc-lbl', cfg.locationLabel, 'Konum / Marina');
+  setPlh('prev-loc-inp', cfg.locationPlaceholder);
+  setText('prev-service-lbl', cfg.serviceLabel, 'Servis İhtiyacı');
   
   const sel = document.getElementById('prev-service-sel');
-  sel.innerHTML = `<option value="">${cfg.servicePlaceholder || 'Seçiniz'}</option>` +
-    (cfg.serviceOptions || []).map(o => `<option>${o}</option>`).join('');
+  if (sel) {
+    const currentVal = sel.value;
+    sel.innerHTML = `<option value="">${escapeHtml(cfg.servicePlaceholder || 'Seçiniz')}</option>` +
+      (cfg.serviceOptions || []).map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join('');
+    if (currentVal) sel.value = currentVal;
+  }
     
-  document.getElementById('prev-msg-lbl').textContent = cfg.messageLabel || '';
-  document.getElementById('prev-msg-inp').placeholder = cfg.messagePlaceholder || '';
-  document.getElementById('prev-cb-lbl').textContent = cfg.callbackLabel || '';
-  document.getElementById('prev-submit-btn').textContent = cfg.submitText || '';
-  document.getElementById('prev-wa-btn').textContent = cfg.waButtonText || '';
+  setText('prev-msg-lbl', cfg.messageLabel, 'Açıklama');
+  setPlh('prev-msg-inp', cfg.messagePlaceholder);
+  setText('prev-cb-lbl', cfg.callbackLabel, 'Geri arama talep ediyorum.');
+  setText('prev-submit-btn', cfg.submitText, 'Servis Talebini İlet →');
+  setText('prev-wa-btn', cfg.waButtonText, '💬 WhatsApp’tan Bilgi Gönder');
+
+  updateWhatsAppInspector();
 }
 
-function collectActiveFormConfigFromInputs() {
+function updateWhatsAppInspector() {
   const cfg = getActiveConfig();
-  cfg.title = document.getElementById('fb-title').value.trim();
-  cfg.subtitle = document.getElementById('fb-subtitle').value.trim();
-  cfg.nameLabel = document.getElementById('fb-name-label').value.trim();
-  cfg.namePlaceholder = document.getElementById('fb-name-placeholder').value.trim();
-  cfg.phoneLabel = document.getElementById('fb-phone-label').value.trim();
-  cfg.phonePlaceholder = document.getElementById('fb-phone-placeholder').value.trim();
-  cfg.emailLabel = document.getElementById('fb-email-label').value.trim();
-  cfg.emailPlaceholder = document.getElementById('fb-email-placeholder').value.trim();
-  cfg.boatLabel = document.getElementById('fb-boat-label').value.trim();
-  cfg.boatPlaceholder = document.getElementById('fb-boat-placeholder').value.trim();
-  cfg.locationLabel = document.getElementById('fb-location-label').value.trim();
-  cfg.locationPlaceholder = document.getElementById('fb-location-placeholder').value.trim();
-  cfg.serviceLabel = document.getElementById('fb-service-label').value.trim();
-  cfg.servicePlaceholder = document.getElementById('fb-service-placeholder').value.trim();
-  cfg.messageLabel = document.getElementById('fb-message-label').value.trim();
-  cfg.messagePlaceholder = document.getElementById('fb-message-placeholder').value.trim();
-  cfg.callbackLabel = document.getElementById('fb-callback-label').value.trim();
-  cfg.submitText = document.getElementById('fb-submit-text').value.trim();
-  cfg.submittingText = document.getElementById('fb-submitting-text').value.trim();
-  cfg.waButtonText = document.getElementById('fb-wa-btn-text').value.trim();
-  cfg.waTemplate = document.getElementById('fb-wa-template').value;
-  cfg.successMessage = document.getElementById('fb-success-msg').value.trim();
-  cfg.errorMessage = document.getElementById('fb-error-msg').value.trim();
+  const insp = document.getElementById('prev-wa-inspector');
+  if (!insp) return;
+
+  const sampleName = document.getElementById('prev-name-inp')?.value || 'Ahmet Yılmaz';
+  const samplePhone = document.getElementById('prev-phone-inp')?.value || '+90 543 724 09 92';
+  const sampleEmail = document.getElementById('prev-email-inp')?.value || 'ahmet@dmmarin.com';
+  const sampleBoat = document.getElementById('prev-boat-inp')?.value || 'Sea Ray 320';
+  const sampleLoc = document.getElementById('prev-loc-inp')?.value || 'Kalamış Marina Ponton B-4';
+  const sampleServ = document.getElementById('prev-service-sel')?.value || (cfg.serviceOptions && cfg.serviceOptions[0]) || 'Motor Bakım';
+  const sampleCb = document.getElementById('prev-cb-inp')?.checked ? (activeFormLang === 'en' ? 'Yes (Please call)' : 'Evet (Aransın)') : (activeFormLang === 'en' ? 'No' : 'Hayır');
+  const sampleMsg = document.getElementById('prev-msg-inp')?.value || (activeFormLang === 'en' ? 'Annual service and oil check requested.' : 'Yıllık periyodik bakım ve impeller değişimi talep ediyorum.');
+
+  let text = cfg.waTemplate || '';
+  text = text
+    .replace(/{name}/g, sampleName)
+    .replace(/{phone}/g, samplePhone)
+    .replace(/{email}/g, sampleEmail)
+    .replace(/{boat}/g, sampleBoat)
+    .replace(/{location}/g, sampleLoc)
+    .replace(/{service}/g, sampleServ)
+    .replace(/{callback}/g, sampleCb)
+    .replace(/{message}/g, sampleMsg);
+
+  insp.textContent = text;
 }
 
-// Hook up input listeners on #form-builder fields for live preview
+function collectActiveFormConfigFromInputs(isSave = false) {
+  const cfg = getActiveConfig();
+  const getVal = (id) => {
+    const el = document.getElementById(id);
+    if (!el) return '';
+    return isSave ? el.value.trim() : el.value;
+  };
+
+  cfg.title = getVal('fb-title');
+  cfg.subtitle = getVal('fb-subtitle');
+  cfg.nameLabel = getVal('fb-name-label');
+  cfg.namePlaceholder = getVal('fb-name-placeholder');
+  cfg.phoneLabel = getVal('fb-phone-label');
+  cfg.phonePlaceholder = getVal('fb-phone-placeholder');
+  cfg.emailLabel = getVal('fb-email-label');
+  cfg.emailPlaceholder = getVal('fb-email-placeholder');
+  cfg.boatLabel = getVal('fb-boat-label');
+  cfg.boatPlaceholder = getVal('fb-boat-placeholder');
+  cfg.locationLabel = getVal('fb-location-label');
+  cfg.locationPlaceholder = getVal('fb-location-placeholder');
+  cfg.serviceLabel = getVal('fb-service-label');
+  cfg.servicePlaceholder = getVal('fb-service-placeholder');
+  cfg.messageLabel = getVal('fb-message-label');
+  cfg.messagePlaceholder = getVal('fb-message-placeholder');
+  cfg.callbackLabel = getVal('fb-callback-label');
+  cfg.submitText = getVal('fb-submit-text');
+  cfg.submittingText = getVal('fb-submitting-text');
+  cfg.waButtonText = getVal('fb-wa-btn-text');
+  cfg.waTemplate = document.getElementById('fb-wa-template')?.value || '';
+  cfg.successMessage = getVal('fb-success-msg');
+  cfg.errorMessage = getVal('fb-error-msg');
+}
+
+// Attach real-time input listeners to all form-builder fields
 document.querySelectorAll('#form-builder input:not(#fb-new-service-option), #form-builder textarea').forEach(el => {
   el.addEventListener('input', () => {
-    collectActiveFormConfigFromInputs();
+    collectActiveFormConfigFromInputs(false);
     updateFormPreview();
   });
 });
 
-document.getElementById('form-lang-tr-btn').addEventListener('click', () => {
-  collectActiveFormConfigFromInputs();
+// Update WhatsApp inspector live when typing inside preview inputs
+['prev-name-inp', 'prev-phone-inp', 'prev-email-inp', 'prev-boat-inp', 'prev-loc-inp', 'prev-service-sel', 'prev-msg-inp', 'prev-cb-inp'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.addEventListener('input', updateWhatsAppInspector);
+    el.addEventListener('change', updateWhatsAppInspector);
+  }
+});
+
+// Interactive Form Simulation in Preview
+const prevSubmitBtn = document.getElementById('prev-submit-btn');
+if (prevSubmitBtn) {
+  prevSubmitBtn.addEventListener('click', () => {
+    const cfg = getActiveConfig();
+    const fb = document.getElementById('prev-sim-feedback');
+    const nameVal = document.getElementById('prev-name-inp')?.value?.trim();
+    const phoneVal = document.getElementById('prev-phone-inp')?.value?.trim();
+    const emailVal = document.getElementById('prev-email-inp')?.value?.trim();
+
+    if (!nameVal || !phoneVal || !emailVal) {
+      if (fb) {
+        fb.style.display = 'block';
+        fb.style.background = '#fee2e2';
+        fb.style.color = '#991b1b';
+        fb.textContent = '⚠️ ' + (cfg.errorMessage || 'Lütfen zorunlu alanları (Ad Soyad, Telefon, E-posta) doldurun.');
+      }
+      return;
+    }
+
+    prevSubmitBtn.disabled = true;
+    prevSubmitBtn.textContent = cfg.submittingText || 'Kaydediliyor...';
+
+    setTimeout(() => {
+      prevSubmitBtn.disabled = false;
+      prevSubmitBtn.textContent = cfg.submitText || 'Servis Talebini İlet →';
+      if (fb) {
+        fb.style.display = 'block';
+        fb.style.background = '#dcfce7';
+        fb.style.color = '#166534';
+        fb.textContent = '✓ ' + (cfg.successMessage || 'Servis talebiniz başarıyla alındı.');
+        setTimeout(() => { fb.style.display = 'none'; }, 4000);
+      }
+    }, 500);
+  });
+}
+
+const prevWaBtn = document.getElementById('prev-wa-btn');
+if (prevWaBtn) {
+  prevWaBtn.addEventListener('click', () => {
+    const fb = document.getElementById('prev-sim-feedback');
+    if (fb) {
+      fb.style.display = 'block';
+      fb.style.background = '#e0f2fe';
+      fb.style.color = '#0369a1';
+      fb.textContent = 'ℹ️ Simülasyon: Aşağıdaki şablon metni WhatsApp ile açılacaktır.';
+      setTimeout(() => { fb.style.display = 'none'; }, 3000);
+    }
+  });
+}
+
+// Language Switch Handlers
+document.getElementById('form-lang-tr-btn')?.addEventListener('click', () => {
+  collectActiveFormConfigFromInputs(true);
   renderFormBuilder('tr');
 });
 
-document.getElementById('form-lang-en-btn').addEventListener('click', () => {
-  collectActiveFormConfigFromInputs();
+document.getElementById('form-lang-en-btn')?.addEventListener('click', () => {
+  collectActiveFormConfigFromInputs(true);
   renderFormBuilder('en');
 });
 
-document.getElementById('fb-add-service-option').addEventListener('click', () => {
+// Service Option Add Handler (Button click + Enter key)
+function addServiceOptionFromInput() {
   const inp = document.getElementById('fb-new-service-option');
-  const val = inp.value.trim();
+  const val = (inp?.value || '').trim();
   if (!val) return flash('Lütfen seçenek adı yazın.');
   const cfg = getActiveConfig();
   if (!Array.isArray(cfg.serviceOptions)) cfg.serviceOptions = [];
   cfg.serviceOptions.push(val);
-  inp.value = '';
+  if (inp) inp.value = '';
   renderServiceOptionsList();
   updateFormPreview();
   flash('Yeni servis seçeneği eklendi.');
+}
+
+document.getElementById('fb-add-service-option')?.addEventListener('click', addServiceOptionFromInput);
+document.getElementById('fb-new-service-option')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    addServiceOptionFromInput();
+  }
 });
 
-document.getElementById('fb-reset-btn').addEventListener('click', () => {
+document.getElementById('fb-reset-btn')?.addEventListener('click', () => {
   if (confirm(`Mevcut (${activeFormLang.toUpperCase()}) form ayarlarını varsayılana sıfırlamak istediğinize emin misiniz?`)) {
     if (activeFormLang === 'en') formConfigEN = Object.assign({}, defaultFormConfigEN);
     else formConfigTR = Object.assign({}, defaultFormConfigTR);
@@ -2541,8 +2743,8 @@ document.getElementById('fb-reset-btn').addEventListener('click', () => {
   }
 });
 
-document.getElementById('fb-save-btn').addEventListener('click', async () => {
-  collectActiveFormConfigFromInputs();
+document.getElementById('fb-save-btn')?.addEventListener('click', async () => {
+  collectActiveFormConfigFromInputs(true);
   autoSave();
   if (currentSession) {
     await syncFormConfigToDb();
