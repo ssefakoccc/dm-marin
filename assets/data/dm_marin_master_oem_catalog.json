@@ -179,6 +179,78 @@
     "interval": "500 Saat / 2 Yılda 1",
     "specs": "Yüksek Kapasiteli Yağ Buharı Ayırıcı Kartuş"
   },
+  "22536852": {
+    "brand": "Volvo Penta",
+    "category": "Yakıt Filtrasyonu",
+    "name": "D8 / D11 / D13 İkincil Yakıt Filtresi (Su Sensörlü)",
+    "models": "Volvo Penta D8, D11, D13 Marin Motorlar",
+    "cross": "Mann WK 1070 x, Donaldson P550880, Baldwin BF7814, Fleetguard FF5507",
+    "interval": "250-400 Saat / Sezonluk",
+    "specs": "3 Mikron Common Rail Yakıt Kartuşu, Sensör Soketli"
+  },
+  "21752943": {
+    "brand": "Volvo Penta",
+    "category": "Termostat & Soğutma",
+    "name": "D4 / D6 82°C Marin Çift Kademeli Termostat",
+    "models": "Volvo Penta D4-180..300, D6-280..435",
+    "cross": "Wahler 410182, Calorstat TH6982, Orbitrade 15943",
+    "interval": "500 Saat / 3 Sezonda Bir Değişim",
+    "specs": "82°C Açılma Sıcaklığı, Paslanmaz Çelik Gövde, Conta Dahil"
+  },
+  "3857576": {
+    "brand": "Volvo Penta",
+    "category": "Yakıt Filtrasyonu",
+    "name": "Volvo Penta Benzinli V6/V8 Su Ayırıcı Yakıt Filtresi",
+    "models": "Volvo Penta 3.0GS, 4.3GL/GXi, 5.0GL/GXi, 5.7Gi/GXi, 8.1Gi",
+    "cross": "Sierra 18-7846, Racor B32014, Fram PH30, Donaldson P551768",
+    "interval": "100 Saat / Sezonluk",
+    "specs": "10 Mikron Su Ayırıcı Spin-on Benzin Kartuşu (1-1/4-18 Diş)"
+  },
+  "858488": {
+    "brand": "Volvo Penta",
+    "category": "Tutya & Korozyon",
+    "name": "280 / 290 / DP-A / DP-B / DP-E Kuyruk Halka Anot",
+    "models": "Volvo Penta 280DP, 290DP, DP-A, DP-B, DP-C, DP-D, DP-E",
+    "cross": "Tecnoseal 00701, Martyr CM858488, Sierra 18-6015",
+    "interval": "Sezonluk Kontrol / %50 Erime Oranında Değişim",
+    "specs": "Tuzlu Su Yüksek Saflıkta Çinko Halka Anot"
+  },
+  "877400": {
+    "brand": "Volvo Penta",
+    "category": "Sürücü & Kuyruk",
+    "name": "SX / DPS-A / DPS-B Kuyruk Körük & Egzoz Seti",
+    "models": "Volvo Penta SX-M, SX-A, DPS-A, DPS-B Kuyruk Sistemleri",
+    "cross": "Sierra 18-2775, Orbitrade 15400, Mallory 9-72701",
+    "interval": "200 Saat / 2 Yılda 1 Değişim",
+    "specs": "Kardan Şaft Körügü, Egzoz Körügü, Su Hortumu ve Kelepçeler Dahil"
+  },
+  "3862228": {
+    "brand": "Volvo Penta",
+    "category": "İmpeller & Soğutma",
+    "name": "4.3L / 5.0L / 5.7L / 8.1L Krank Mili Kasnağı Su Pompası İmpelleri",
+    "models": "Volvo Penta V6 ve V8 Benzinli Marin Motorlar",
+    "cross": "Johnson 09-5000, Jabsco 1210-0001, Sierra 18-3081, CEF 500107",
+    "interval": "100-150 Saat / Sezonluk",
+    "specs": "12 Kanatlı Neopren İmpeller, Düz Mil ve Kamalı"
+  },
+  "21632666": {
+    "brand": "Volvo Penta",
+    "category": "Sensör & Elektronik",
+    "name": "D4 / D6 Common Rail Yakıt Rayı Basınç Sensörü",
+    "models": "Volvo Penta D4, D6 Tüm Yıllar (EVC-C..EVC-E)",
+    "cross": "Bosch 0281002937, Volvo 21632666",
+    "interval": "1000 Saat / Arıza Halinde",
+    "specs": "2000 Bar Yüksek Basınç CR Piezo Basınç Transmitteri"
+  },
+  "23075393": {
+    "brand": "Volvo Penta",
+    "category": "Kayış & Kasnak",
+    "name": "D4 / D6 Süperşarj Kompresör Tahrik Kayışı",
+    "models": "Volvo Penta Kompresörlü D4-260/300, D6-350/370/400/435",
+    "cross": "Gates 4PK1080, Continental 4PK1080, Dayco 4PK1080",
+    "interval": "400 Saat / 2 Sezonda Bir",
+    "specs": "4 Kanallı Kompresör Kavrama Kayışı"
+  },
   "119773-42570": {
     "brand": "Yanmar Marine",
     "category": "İmpeller & Soğutma",
@@ -287,6 +359,60 @@
     "interval": "100 Saat / %50 Eridiğinde Değiştirilir",
     "specs": "NPT 3/8 Dişli Pirinç Tapalı Çinko Anot Çubuğu"
   },
+  "129670-35150": {
+    "brand": "Yanmar Marine",
+    "category": "Yağlama & Filtre",
+    "name": "4JH / 4JH2 / 4JH3 / 4JH4 / 4JH5 Motor Yağ Filtresi",
+    "models": "Yanmar 4JH-E, 4JH-TE, 4JH2-TE, 4JH3-TE, 4JH4-TE, 4JH5-E",
+    "cross": "Mann W 68/1, Baldwin B1400, Donaldson P502015, Fleetguard LF3925",
+    "interval": "150-200 Saat / Sezon Başı",
+    "specs": "Spin-on Kompakt Yağ Filtresi (M20x1.5 Diş)"
+  },
+  "129900-55730": {
+    "brand": "Yanmar Marine",
+    "category": "Yakıt Filtrasyonu",
+    "name": "4JH / 4HLA / 6LP / 6LY İkincil Yakıt Filtresi Kartuşu",
+    "models": "Yanmar 4JH3-DTE, 4JH4-HTE, 4LHA-STP, 6LPA-STP, 6LY2A-STP",
+    "cross": "Mann WK 712/2, Baldwin BF940, Donaldson P550012, Fleetguard FF5135",
+    "interval": "200 Saat / Sezonluk",
+    "specs": "Spin-on Metal Dizel Filtresi, Dahili Su Boşaltma Tapalı"
+  },
+  "127610-42200": {
+    "brand": "Yanmar Marine",
+    "category": "İmpeller & Soğutma",
+    "name": "6LP / 6LPA-STP Ham Su Deniz Suyu İmpeller Kiti",
+    "models": "Yanmar 6LP-DTE, 6LP-STE, 6LPA-DTP, 6LPA-STP (250-315 HP)",
+    "cross": "Johnson 09-821B-1, Jabsco 17954-0001, CEF 500135, Sierra 18-3086",
+    "interval": "200-250 Saat / Sezonluk",
+    "specs": "12 Kanatlı Neopren, Spline Mil, Çap: 65mm, Genişlik: 50mm"
+  },
+  "129795-77800": {
+    "brand": "Yanmar Marine",
+    "category": "Ateşleme & Isıtma",
+    "name": "Yanmar 3JH / 4JH / 4LH Serisi Kızdırma Bujisi",
+    "models": "Yanmar 3JH3, 4JH3, 4JH4, 4LHA, 6LY Serileri",
+    "cross": "NGK Y-702U, Denso DG-198, Bosch 0250202089",
+    "interval": "500 Saat / İhtiyaç Halinde",
+    "specs": "12V Hızlı Ön Isıtma Bujisi, Paslanmaz Uçlu"
+  },
+  "119574-18790": {
+    "brand": "Yanmar Marine",
+    "category": "Egzoz & Turbo",
+    "name": "6LY / 6LY2 / 6LY3 Paslanmaz Egzoz Karıştırıcı Dirsek (Mixing Elbow)",
+    "models": "Yanmar 6LY-UTE/STE, 6LY2-STE, 6LY3 Serisi",
+    "cross": "HDI Marine Y6LY, Orbitrade 15790",
+    "interval": "500 Saat / 4 Yılda 1 Kontrol",
+    "specs": "316L Hassas Döküm Paslanmaz Çelik Marin Egzoz Dirseği"
+  },
+  "128270-42000": {
+    "brand": "Yanmar Marine",
+    "category": "İmpeller & Soğutma",
+    "name": "2QM / 3QM / SB Serisi Klasik Su Pompası İmpelleri",
+    "models": "Yanmar 2QM15, 2QM20, 3QM30, SB8, SB12",
+    "cross": "Jabsco 4528-0001, Johnson 09-801B, CEF 500106",
+    "interval": "150 Saat / Sezonluk",
+    "specs": "6 Bıçaklı Neopren İmpeller, Pim Geçme"
+  },
   "1R-0716": {
     "brand": "Caterpillar",
     "category": "Yağlama & Filtre",
@@ -322,6 +448,24 @@
     "cross": "Mann WK 11 002, Donaldson P550770, Baldwin BF1383-SPO, Fleetguard FF5624",
     "interval": "250-400 Saat",
     "specs": "4 Mikron Yüksek Debi İkincil Dizel Kartuşu"
+  },
+  "1R-0739": {
+    "brand": "Caterpillar",
+    "category": "Yağlama & Filtre",
+    "name": "CAT 3306 / 3406 / 3408 / 3412 Klasik Seri Motor Yağ Filtresi",
+    "models": "Caterpillar 3306, 3406B, 3408B, 3412C Marin Ana Makineler",
+    "cross": "Mann W 11 102/34, Donaldson P554004, Baldwin B76, Fleetguard LF691A",
+    "interval": "250 Saat / Sezon Başı",
+    "specs": "Ağır Hizmet Metal Gövde Spin-on Eleman (1-1/8-16 Diş)"
+  },
+  "1R-0751": {
+    "brand": "Caterpillar",
+    "category": "Yakıt Filtrasyonu",
+    "name": "CAT C9 / C12 / C15 / C18 Gelişmiş Yüksek Verimli Yakıt Filtresi",
+    "models": "Caterpillar C9 ACERT, C12 ACERT, C15, C18 Marin Motorlar",
+    "cross": "Mann WK 950/16, Donaldson P551315, Baldwin BF7634, Fleetguard FF5320",
+    "interval": "250-400 Saat",
+    "specs": "2 Mikron Ultra Yüksek Verimli Spin-on Eleman"
   },
   "1W-8845": {
     "brand": "Caterpillar",
@@ -359,6 +503,15 @@
     "interval": "1000 Saat / 2 Yılda 1",
     "specs": "İkincil Emniyet Korumalı Radyal Filtre"
   },
+  "4P-0710": {
+    "brand": "Caterpillar",
+    "category": "Hava Emiş",
+    "name": "CAT 3406 / C15 / C18 Kaset Tipi Marin Hava Filtresi",
+    "models": "Caterpillar 3406E, C15, C18 Marin Motorlar",
+    "cross": "Mann C 30 1500, Donaldson P533882, Baldwin PA3882, Fleetguard AF25414",
+    "interval": "500 Saat / Sezonluk",
+    "specs": "Radyal Contalı Kaset Filtresi, Yağ Buharı Dayanımlı"
+  },
   "133-5673": {
     "brand": "Caterpillar",
     "category": "Yakıt Filtrasyonu",
@@ -376,6 +529,15 @@
     "cross": "Tecnoseal 00801, Martyr CM6L2288, Sierra 18-6088",
     "interval": "100-150 Saat / %50 Eridiğinde Değişim",
     "specs": "1/2 NPT Pirinç Tapalı Motor Bloğu Çinko Anot Çubuğu"
+  },
+  "9M-2341": {
+    "brand": "Caterpillar",
+    "category": "Yağlama & Filtre",
+    "name": "CAT 3208 V8 Marin Motor Yağ Filtresi",
+    "models": "Caterpillar 3208 NA, 3208 Turbo (210 - 435 HP)",
+    "cross": "Mann W 11 102/4, Donaldson P554004, Baldwin B76, Fleetguard LF691A",
+    "interval": "150-200 Saat / Sezon Başı",
+    "specs": "Ağır Hizmet V8 Dizel Spin-on Yağ Filtresi"
   },
   "51.05504-0104": {
     "brand": "MAN Marine",
@@ -431,23 +593,23 @@
     "interval": "300 Saat / Sezon Başı",
     "specs": "12 Bıçaklı Ağır Hizmet Neopren, Çap: 95mm, Genişlik: 63mm, Spline Şaft"
   },
-  "51.01804-0015": {
+  "51.05501-7180": {
     "brand": "MAN Marine",
-    "category": "Krank Havalandırma",
-    "name": "MAN V8 / V12 Karter Havalandırma Yağ Separatörü",
-    "models": "MAN V8 ve V12 Serisi Common Rail Makineler",
-    "cross": "Mann LC 7002 x, Hengst EAS500M, Baldwin CV15004",
-    "interval": "500 Saat / 2 Yılda 1",
-    "specs": "Krank Gazı Filtresi Elemanı"
+    "category": "Yağlama & Filtre",
+    "name": "MAN D2866 / D2876 / D2848 / D2840 Klasik Seri Yağ Filtresi",
+    "models": "MAN D2866 LXE, D2876 LE401, D2848 LXE, D2840 LXE",
+    "cross": "Mann W 11 102/4, Hengst H20W01, Mahle OC 121, Baldwin B7030",
+    "interval": "200-250 Saat",
+    "specs": "Spin-on Metal Filtre (1-1/8-16 Diş)"
   },
-  "51.08405-0017": {
+  "51.08401-0168": {
     "brand": "MAN Marine",
     "category": "Kayış & Kasnak",
-    "name": "MAN V8 / V12 Devridaim & Alternatör Poly-V Kayışı",
-    "models": "MAN D2842, V8-900, V12-1360, V12-1550, V12-1800",
-    "cross": "Optibelt 10PK1750, Gates 10PK1750, Continental 10PK1750",
-    "interval": "500 Saat / 2 Sezonda Bir",
-    "specs": "10 Kanallı Ağır Hizmet EPDM Kayış"
+    "name": "MAN V8-900 / V12-1360 / V12-1550 Deniz Suyu Pompası Kayışı",
+    "models": "MAN V8-900, V12-1200, V12-1360, V12-1400, V12-1550",
+    "cross": "Optibelt 8PK1420, Gates 8PK1420, Continental 8PK1420",
+    "interval": "400 Saat / 2 Yılda 1",
+    "specs": "8 Kanallı EPDM Marin Pompa Kayışı"
   },
   "0020922801": {
     "brand": "MTU Marine",
@@ -494,14 +656,23 @@
     "interval": "300 Saat / Sezon Başı",
     "specs": "12 Bıçaklı Neopren, Çap: 95mm, Genişlik: 63mm"
   },
-  "5411800209": {
+  "5410900151": {
+    "brand": "MTU Marine",
+    "category": "Yakıt Filtrasyonu",
+    "name": "MTU Series 2000 M90..M96 İkincil Yakıt Filtresi Kartuşu",
+    "models": "MTU 8V2000, 10V2000, 12V2000, 16V2000",
+    "cross": "Mann PU 1059 x, Hengst E100KP D180, Mahle KX 208 D, Baldwin PF7934",
+    "interval": "250 Saat",
+    "specs": "Eko Kartuş Yakıt Elemanı, Contalarıyla Birlikte"
+  },
+  "5411800009": {
     "brand": "MTU Marine",
     "category": "Yağlama & Filtre",
-    "name": "MTU Series 60 / Series 2000 By-Pass Santrifüj Yağ Filtresi",
-    "models": "MTU Series 60, MTU Series 2000",
-    "cross": "Mann W 962, Donaldson P550388, Baldwin B7030, Fleetguard LF3883",
-    "interval": "300 Saat",
-    "specs": "Kurum Ayırıcı Mikro By-Pass Filtresi"
+    "name": "MTU Series 2000 Santrifüj Rotor Yağ Filtresi",
+    "models": "MTU Series 2000 8V/10V/12V/16V",
+    "cross": "Mann ZR 904 x, Hengst E162H, Baldwin CS41005",
+    "interval": "500 Saat / 2 Sezonda 1",
+    "specs": "Santrifüj Kurum Ayrıştırma Rotoru"
   },
   "3937736": {
     "brand": "Cummins Marine",
@@ -719,6 +890,24 @@
     "interval": "200 Saat / Sezonluk",
     "specs": "12 Bıçaklı Neopren, Spline Mil, 57mm Çap, 31.5mm Genişlik"
   },
+  "048500": {
+    "brand": "Westerbeke",
+    "category": "İmpeller & Soğutma",
+    "name": "Westerbeke 4.0kW - 12.5kW Marin Jeneratör İmpeller Kiti",
+    "models": "Westerbeke 4.0, 5.0, 6.0, 7.6, 8.0, 10.0, 12.5 BTG/BTD",
+    "cross": "Johnson 09-810B-1, Jabsco 18653-0001, Sierra 18-3081, CEF 500100",
+    "interval": "150-200 Saat / Sezonluk",
+    "specs": "6 Kanatlı Neopren, D-Mil Kovan, Contalı"
+  },
+  "036918": {
+    "brand": "Westerbeke",
+    "category": "Yağlama & Filtre",
+    "name": "Westerbeke Dizel Jeneratör Yağ Filtresi Kartuşu",
+    "models": "Westerbeke 5.0, 7.6, 8.0, 10.0, 12.5 kW Dizel Modeller",
+    "cross": "Mann W 68/1, Baldwin B1434, Donaldson P502015, Fleetguard LF3644",
+    "interval": "100-150 Saat",
+    "specs": "Spin-on Kompakt Yağ Filtresi (M20x1.5)"
+  },
   "69J-13440-03": {
     "brand": "Yamaha Marine",
     "category": "Yağlama & Filtre",
@@ -890,6 +1079,87 @@
     "interval": "100 Saat / %50 Eridiğinde Değiştirilir",
     "specs": "Silindir Kapağı ve Termostat Yuvası Çinko Anodu, O-Ringli"
   },
+  "1873016": {
+    "brand": "Scania Marine",
+    "category": "Yağlama & Filtre",
+    "name": "Scania DI09 / DI13 / DI16 Marin V8 Motor Yağ Filtresi",
+    "models": "Scania DI09, DI13, DI16 V8 (500 - 1150 HP) Marin Ana Makineler",
+    "cross": "Mann HU 1297 x, Donaldson P550453, Baldwin P7442, Fleetguard LF16175, Hengst E175H D129",
+    "interval": "250-400 Saat",
+    "specs": "Eko Kartuş Yağ Elemanı, Dış Çap: 114mm, Yükseklik: 236mm"
+  },
+  "1873018": {
+    "brand": "Scania Marine",
+    "category": "Yakıt Filtrasyonu",
+    "name": "Scania DI13 / DI16 Common Rail İkincil Yakıt Filtresi",
+    "models": "Scania DI13, DI16 Marin Motorlar",
+    "cross": "Mann PU 938/1 x, Donaldson P550881, Baldwin PF7949, Fleetguard FF5794",
+    "interval": "250-400 Saat",
+    "specs": "2 Mikron XPI Common Rail Hassas Yakıt Elemanı"
+  },
+  "26560201": {
+    "brand": "Perkins Marine",
+    "category": "Yakıt Filtrasyonu",
+    "name": "Perkins Sabre M92B / M130C / M216Ti / 4.236 Yakıt Filtresi",
+    "models": "Perkins Sabre 4.108, 4.236, M92B, M130C, M185C, M216Ti, M300Ti",
+    "cross": "Mann WK 842/2, Donaldson P556245, Baldwin BF7674-D, Fleetguard FF5380",
+    "interval": "200 Saat / Sezonluk",
+    "specs": "Hızlı Geçme Soketli Çift Kademeli Dizel Filtresi"
+  },
+  "2654403": {
+    "brand": "Perkins Marine",
+    "category": "Yağlama & Filtre",
+    "name": "Perkins Sabre M92 / M135 / M225Ti Motor Yağ Filtresi",
+    "models": "Perkins Sabre M65, M92, M115T, M130C, M135, M225Ti, 4.236",
+    "cross": "Mann W 940/25, Donaldson P554403, Baldwin B7030, Fleetguard LF16015",
+    "interval": "200-250 Saat",
+    "specs": "3/4-16 Diş Spin-on Yüksek Debi Yağ Filtresi"
+  },
+  "970302697": {
+    "brand": "Nanni Diesel",
+    "category": "Yağlama & Filtre",
+    "name": "Nanni Diesel N2 / N3 / N4 Serisi Motor Yağ Filtresi (Kubota/Toyota)",
+    "models": "Nanni N2.10, N2.14, N3.21, N3.30, N4.38, N4.50, N4.80, N4.115",
+    "cross": "Mann W 68/1, Baldwin B1434, Donaldson P502015, Fleetguard LF3644",
+    "interval": "150-200 Saat / Sezon Başı",
+    "specs": "M20x1.5 Dişli Spin-on Yağ Filtresi"
+  },
+  "970302742": {
+    "brand": "Nanni Diesel",
+    "category": "İmpeller & Soğutma",
+    "name": "Nanni Diesel N3 / N4 Ham Su Deniz Suyu İmpeller Kiti",
+    "models": "Nanni N3.30, N4.38, N4.40, N4.50, N4.60, N4.80 (Jabsco Pompa)",
+    "cross": "Jabsco 18653-0001, Johnson 09-810B-1, Sierra 18-3081, CEF 500100",
+    "interval": "150-200 Saat / Sezonluk",
+    "specs": "10 Bıçaklı Neopren İmpeller, D-Mil Kovan"
+  },
+  "15241410": {
+    "brand": "Baudouin Marine",
+    "category": "Yağlama & Filtre",
+    "name": "Baudouin 6M26 / 8M26 / 12M26 Ağır Hizmet Yağ Filtresi",
+    "models": "Baudouin 6M26, 8M26, 12M26, 6M33, 12M33 (450 - 1650 HP)",
+    "cross": "Mann W 11 102/34, Donaldson P550372, Baldwin B7685, Fleetguard LF667",
+    "interval": "300-500 Saat",
+    "specs": "Yüksek Kapasite Spin-on Yağ Filtresi (1-1/8-16 Diş)"
+  },
+  "13811010": {
+    "brand": "Solé Diesel",
+    "category": "Yağlama & Filtre",
+    "name": "Solé Diesel Mini-17 / Mini-29 / Mini-33 / Mini-44 Yağ Filtresi",
+    "models": "Solé Diesel Mini-17, Mini-26, Mini-29, Mini-33, Mini-44, Mini-55 (Mitsubishi)",
+    "cross": "Mann W 68/1, Baldwin B1400, Donaldson P502015, Fleetguard LF3925",
+    "interval": "150-200 Saat / Sezonluk",
+    "specs": "Kompakt Spin-on Yağ Filtresi (M20x1.5 Diş)"
+  },
+  "31211008": {
+    "brand": "Solé Diesel",
+    "category": "İmpeller & Soğutma",
+    "name": "Solé Diesel Mini-17..55 Ham Su İmpeller Kiti",
+    "models": "Solé Diesel Mini-17, Mini-29, Mini-33, Mini-44, Mini-55",
+    "cross": "Johnson 09-810B-1, Jabsco 18653-0001, Sierra 18-3081, CEF 500100",
+    "interval": "150-200 Saat / Sezon Başı",
+    "specs": "6 Kanatlı Neopren İmpeller, D-Mil Kovan"
+  },
   "2010PM-OR": {
     "brand": "Parker Racor",
     "category": "Yakıt Filtrasyonu",
@@ -907,6 +1177,15 @@
     "cross": "Baldwin PF7889-10, Fleetguard FS20102, Donaldson P552011, Mann P 715/1",
     "interval": "200-250 Saat",
     "specs": "10 Mikron Aquabloc II Su Tutucu Eleman"
+  },
+  "2010SM-OR": {
+    "brand": "Parker Racor",
+    "category": "Yakıt Filtrasyonu",
+    "name": "Racor 500FG / 500FH Türbin Seri 2 Mikron Hassas Separatör Elemanı",
+    "models": "Racor 500FG, 500FH Common Rail Ön Filtreler",
+    "cross": "Baldwin PF7889-02, Fleetguard FS20101, Donaldson P552012",
+    "interval": "200-250 Saat",
+    "specs": "2 Mikron Ultra Hassas Common Rail Aquabloc Elemanı"
   },
   "2020PM-OR": {
     "brand": "Parker Racor",
@@ -926,6 +1205,15 @@
     "interval": "250-300 Saat",
     "specs": "10 Mikron Aquabloc Filtre Elemanı"
   },
+  "2020SM-OR": {
+    "brand": "Parker Racor",
+    "category": "Yakıt Filtrasyonu",
+    "name": "Racor 1000FG / 1000FH Türbin Seri 2 Mikron Separatör Elemanı",
+    "models": "Racor 1000FG, 1000FH, 751000 Serisi",
+    "cross": "Baldwin PF7890-02, Fleetguard FS20201, Donaldson P552022",
+    "interval": "250-300 Saat",
+    "specs": "2 Mikron Yüksek Debi Common Rail Filtresi"
+  },
   "2040PM-OR": {
     "brand": "Parker Racor",
     "category": "Yakıt Filtrasyonu",
@@ -934,6 +1222,15 @@
     "cross": "Volvo Penta 889419, Baldwin PF7891-30, Fleetguard FS20403, Donaldson P552040",
     "interval": "250 Saat",
     "specs": "30 Mikron Aquabloc Medya, Orta Boy Türbin Elemanı"
+  },
+  "2040TM-OR": {
+    "brand": "Parker Racor",
+    "category": "Yakıt Filtrasyonu",
+    "name": "Racor 900FG / 900FH Türbin Seri 10 Mikron Separatör Elemanı",
+    "models": "Racor 900FG, 900FH, 759000MAX",
+    "cross": "Baldwin PF7891-10, Fleetguard FS20402, Donaldson P552041",
+    "interval": "250 Saat",
+    "specs": "10 Mikron Aquabloc Medya Elemanı"
   },
   "R12T": {
     "brand": "Parker Racor",
@@ -970,6 +1267,15 @@
     "cross": "Baldwin PF7856, Donaldson P550731, Fleetguard FS19731, Mann P 811",
     "interval": "250-300 Saat",
     "specs": "30 Mikron Yüksek Kapasite Santrifüj Marin Yakıt Elemanı"
+  },
+  "01830": {
+    "brand": "Separ Filter",
+    "category": "Yakıt Filtrasyonu",
+    "name": "Separ 2000/18 Serisi 30 Mikron Ağır Hizmet Santrifüj Elemanı",
+    "models": "Separ SWK-2000/18, SWK-2000/18/50 Mega Yat & Ticari Gemi",
+    "cross": "Baldwin PF7857, Donaldson P550732, Fleetguard FS19733, Mann P 912",
+    "interval": "300-400 Saat",
+    "specs": "30 Mikron Ultra Yüksek Debi (18 Litre/Dk) Separatör"
   },
   "1210-0001": {
     "brand": "Jabsco",
@@ -1025,211 +1331,31 @@
     "interval": "200-250 Saat / Sezonluk",
     "specs": "12 Bıçaklı MC97 Kompozit Kauçuk, Spline Şaft, 57x48.2mm"
   },
-  "22536852": {
-    "brand": "Volvo Penta",
-    "category": "Yakıt Filtrasyonu",
-    "name": "D8 / D11 / D13 İkincil Yakıt Filtresi (Su Sensörlü)",
-    "models": "Volvo Penta D8, D11, D13 Marin Motorlar",
-    "cross": "Mann WK 1070 x, Donaldson P550880, Baldwin BF7814, Fleetguard FF5507",
-    "interval": "250-400 Saat / Sezonluk",
-    "specs": "3 Mikron Common Rail Yakıt Kartuşu, Sensör Soketli"
-  },
-  "21752943": {
-    "brand": "Volvo Penta",
-    "category": "Termostat & Soğutma",
-    "name": "D4 / D6 82°C Marin Çift Kademeli Termostat",
-    "models": "Volvo Penta D4-180..300, D6-280..435",
-    "cross": "Wahler 410182, Calorstat TH6982, Orbitrade 15943",
-    "interval": "500 Saat / 3 Sezonda Bir Değişim",
-    "specs": "82°C Açılma Sıcaklığı, Paslanmaz Çelik Gövde, Conta Dahil"
-  },
-  "3857576": {
-    "brand": "Volvo Penta",
-    "category": "Yakıt Filtrasyonu",
-    "name": "Volvo Penta Benzinli V6/V8 Su Ayırıcı Yakıt Filtresi",
-    "models": "Volvo Penta 3.0GS, 4.3GL/GXi, 5.0GL/GXi, 5.7Gi/GXi, 8.1Gi",
-    "cross": "Sierra 18-7846, Racor B32014, Fram PH30, Donaldson P551768",
-    "interval": "100 Saat / Sezonluk",
-    "specs": "10 Mikron Su Ayırıcı Spin-on Benzin Kartuşu (1-1/4-18 Diş)"
-  },
-  "858488": {
-    "brand": "Volvo Penta",
-    "category": "Tutya & Korozyon",
-    "name": "280 / 290 / DP-A / DP-B / DP-E Kuyruk Halka Anot",
-    "models": "Volvo Penta 280DP, 290DP, DP-A, DP-B, DP-C, DP-D, DP-E",
-    "cross": "Tecnoseal 00701, Martyr CM858488, Sierra 18-6015",
-    "interval": "Sezonluk Kontrol / %50 Erime Oranında Değişim",
-    "specs": "Tuzlu Su Yüksek Saflıkta Çinko Halka Anot"
-  },
-  "877400": {
-    "brand": "Volvo Penta",
-    "category": "Sürücü & Kuyruk",
-    "name": "SX / DPS-A / DPS-B Kuyruk Körük & Egzoz Seti",
-    "models": "Volvo Penta SX-M, SX-A, DPS-A, DPS-B Kuyruk Sistemleri",
-    "cross": "Sierra 18-2775, Orbitrade 15400, Mallory 9-72701",
-    "interval": "200 Saat / 2 Yılda 1 Değişim",
-    "specs": "Kardan Şaft Körügü, Egzoz Körügü, Su Hortumu ve Kelepçeler Dahil"
-  },
-  "129670-35150": {
-    "brand": "Yanmar Marine",
-    "category": "Yağlama & Filtre",
-    "name": "4JH / 4JH2 / 4JH3 / 4JH4 / 4JH5 Motor Yağ Filtresi",
-    "models": "Yanmar 4JH-E, 4JH-TE, 4JH2-TE, 4JH3-TE, 4JH4-TE, 4JH5-E",
-    "cross": "Mann W 68/1, Baldwin B1400, Donaldson P502015, Fleetguard LF3925",
-    "interval": "150-200 Saat / Sezon Başı",
-    "specs": "Spin-on Kompakt Yağ Filtresi (M20x1.5 Diş)"
-  },
-  "129900-55730": {
-    "brand": "Yanmar Marine",
-    "category": "Yakıt Filtrasyonu",
-    "name": "4JH / 4HLA / 6LP / 6LY İkincil Yakıt Filtresi Kartuşu",
-    "models": "Yanmar 4JH3-DTE, 4JH4-HTE, 4LHA-STP, 6LPA-STP, 6LY2A-STP",
-    "cross": "Mann WK 712/2, Baldwin BF940, Donaldson P550012, Fleetguard FF5135",
-    "interval": "200 Saat / Sezonluk",
-    "specs": "Spin-on Metal Dizel Filtresi, Dahili Su Boşaltma Tapalı"
-  },
-  "127610-42200": {
-    "brand": "Yanmar Marine",
+  "09-819B": {
+    "brand": "Johnson Pump",
     "category": "İmpeller & Soğutma",
-    "name": "6LP / 6LPA-STP Ham Su Deniz Suyu İmpeller Kiti",
-    "models": "Yanmar 6LP-DTE, 6LP-STE, 6LPA-DTP, 6LPA-STP (250-315 HP)",
-    "cross": "Johnson 09-821B-1, Jabsco 17954-0001, CEF 500135, Sierra 18-3086",
-    "interval": "200-250 Saat / Sezonluk",
-    "specs": "12 Kanatlı Neopren, Spline Mil, Çap: 65mm, Genişlik: 50mm"
+    "name": "Johnson 09-819B Ağır Hizmet Büyük Pompa İmpelleri",
+    "models": "MAN V8/V12, MTU 2000, CAT C12/C18, Scania DI13/16",
+    "cross": "Jabsco 17954-0001, Sherwood 27000K, CEF 500160, MAN 51.06630-0130",
+    "interval": "300 Saat / Sezon Başı",
+    "specs": "12 Kanatlı MC97 Kompozit Kauçuk, 95x63mm"
   },
-  "129795-77800": {
-    "brand": "Yanmar Marine",
-    "category": "Ateşleme & Isıtma",
-    "name": "Yanmar 3JH / 4JH / 4LH Serisi Kızdırma Bujisi",
-    "models": "Yanmar 3JH3, 4JH3, 4JH4, 4LHA, 6LY Serileri",
-    "cross": "NGK Y-702U, Denso DG-198, Bosch 0250202089",
-    "interval": "500 Saat / İhtiyaç Halinde",
-    "specs": "12V Hızlı Ön Isıtma Bujisi, Paslanmaz Uçlu"
-  },
-  "1R-0739": {
-    "brand": "Caterpillar",
-    "category": "Yağlama & Filtre",
-    "name": "CAT 3306 / 3406 / 3408 / 3412 Klasik Seri Motor Yağ Filtresi",
-    "models": "Caterpillar 3306, 3406B, 3408B, 3412C Marin Ana Makineler",
-    "cross": "Mann W 11 102/34, Donaldson P554004, Baldwin B76, Fleetguard LF691A",
-    "interval": "250 Saat / Sezon Başı",
-    "specs": "Ağır Hizmet Metal Gövde Spin-on Eleman (1-1/8-16 Diş)"
-  },
-  "1R-0751": {
-    "brand": "Caterpillar",
-    "category": "Yakıt Filtrasyonu",
-    "name": "CAT C9 / C12 / C15 / C18 Gelişmiş Yüksek Verimli Yakıt Filtresi",
-    "models": "Caterpillar C9 ACERT, C12 ACERT, C15, C18 Marin Motorlar",
-    "cross": "Mann WK 950/16, Donaldson P551315, Baldwin BF7634, Fleetguard FF5320",
-    "interval": "250-400 Saat",
-    "specs": "2 Mikron Ultra Yüksek Verimli Spin-on Eleman"
-  },
-  "4P-0710": {
-    "brand": "Caterpillar",
-    "category": "Hava Emiş",
-    "name": "CAT 3406 / C15 / C18 Kaset Tipi Marin Hava Filtresi",
-    "models": "Caterpillar 3406E, C15, C18 Marin Motorlar",
-    "cross": "Mann C 30 1500, Donaldson P533882, Baldwin PA3882, Fleetguard AF25414",
-    "interval": "500 Saat / Sezonluk",
-    "specs": "Radyal Contalı Kaset Filtresi, Yağ Buharı Dayanımlı"
-  },
-  "51.05501-7180": {
-    "brand": "MAN Marine",
-    "category": "Yağlama & Filtre",
-    "name": "MAN D2866 / D2876 / D2848 / D2840 Klasik Seri Yağ Filtresi",
-    "models": "MAN D2866 LXE, D2876 LE401, D2848 LXE, D2840 LXE",
-    "cross": "Mann W 11 102/4, Hengst H20W01, Mahle OC 121, Baldwin B7030",
-    "interval": "200-250 Saat",
-    "specs": "Spin-on Metal Filtre (1-1/8-16 Diş)"
-  },
-  "51.08401-0168": {
-    "brand": "MAN Marine",
-    "category": "Kayış & Kasnak",
-    "name": "MAN V8-900 / V12-1360 / V12-1550 Deniz Suyu Pompası Kayışı",
-    "models": "MAN V8-900, V12-1200, V12-1360, V12-1400, V12-1550",
-    "cross": "Optibelt 8PK1420, Gates 8PK1420, Continental 8PK1420",
-    "interval": "400 Saat / 2 Yılda 1",
-    "specs": "8 Kanallı EPDM Marin Pompa Kayışı"
-  },
-  "5410900151": {
-    "brand": "MTU Marine",
-    "category": "Yakıt Filtrasyonu",
-    "name": "MTU Series 2000 M90..M96 İkincil Yakıt Filtresi Kartuşu",
-    "models": "MTU 8V2000, 10V2000, 12V2000, 16V2000",
-    "cross": "Mann PU 1059 x, Hengst E100KP D180, Mahle KX 208 D, Baldwin PF7934",
-    "interval": "250 Saat",
-    "specs": "Eko Kartuş Yakıt Elemanı, Contalarıyla Birlikte"
-  },
-  "5411800009": {
-    "brand": "MTU Marine",
-    "category": "Yağlama & Filtre",
-    "name": "MTU Series 2000 Santrifüj Rotor Yağ Filtresi",
-    "models": "MTU Series 2000 8V/10V/12V/16V",
-    "cross": "Mann ZR 904 x, Hengst E162H, Baldwin CS41005",
-    "interval": "500 Saat / 2 Sezonda 1",
-    "specs": "Santrifüj Kurum Ayrıştırma Rotoru"
-  },
-  "26560201": {
-    "brand": "Perkins Marine",
-    "category": "Yakıt Filtrasyonu",
-    "name": "Perkins Sabre M92B / M130C / M216Ti / 4.236 Yakıt Filtresi",
-    "models": "Perkins Sabre 4.108, 4.236, M92B, M130C, M185C, M216Ti, M300Ti",
-    "cross": "Mann WK 842/2, Donaldson P556245, Baldwin BF7674-D, Fleetguard FF5380",
-    "interval": "200 Saat / Sezonluk",
-    "specs": "Hızlı Geçme Soketli Çift Kademeli Dizel Filtresi"
-  },
-  "2654403": {
-    "brand": "Perkins Marine",
-    "category": "Yağlama & Filtre",
-    "name": "Perkins Sabre M92 / M135 / M225Ti Motor Yağ Filtresi",
-    "models": "Perkins Sabre M65, M92, M115T, M130C, M135, M225Ti, 4.236",
-    "cross": "Mann W 940/25, Donaldson P554403, Baldwin B7030, Fleetguard LF16015",
-    "interval": "200-250 Saat",
-    "specs": "3/4-16 Diş Spin-on Yüksek Debi Yağ Filtresi"
-  },
-  "970302697": {
-    "brand": "Nanni Diesel",
-    "category": "Yağlama & Filtre",
-    "name": "Nanni Diesel N2 / N3 / N4 Serisi Motor Yağ Filtresi (Kubota/Toyota)",
-    "models": "Nanni N2.10, N2.14, N3.21, N3.30, N4.38, N4.50, N4.80, N4.115",
-    "cross": "Mann W 68/1, Baldwin B1434, Donaldson P502015, Fleetguard LF3644",
-    "interval": "150-200 Saat / Sezon Başı",
-    "specs": "M20x1.5 Dişli Spin-on Yağ Filtresi"
-  },
-  "970302742": {
-    "brand": "Nanni Diesel",
+  "17000K": {
+    "brand": "Sherwood",
     "category": "İmpeller & Soğutma",
-    "name": "Nanni Diesel N3 / N4 Ham Su Deniz Suyu İmpeller Kiti",
-    "models": "Nanni N3.30, N4.38, N4.40, N4.50, N4.60, N4.80 (Jabsco Pompa)",
+    "name": "Sherwood 17000K Cummins QSB & CAT 3126 İmpeller Kiti",
+    "models": "Cummins 6BTA, 6CTA, QSB 5.9/6.7, QSC 8.3, CAT 3116/3126",
+    "cross": "Jabsco 17937-0001, Johnson 09-1028B, CEF 500130, Cummins 3973232, CAT 1W-8845",
+    "interval": "250 Saat / Sezonluk",
+    "specs": "10 Kanatlı Neopren, Dişli Şaft, Çap: 65mm"
+  },
+  "10077K": {
+    "brand": "Sherwood",
+    "category": "İmpeller & Soğutma",
+    "name": "Sherwood 10077K Jeneratör Ham Su İmpelleri",
+    "models": "Kohler 5E-9EFOZD, Onan MDK, Northern Lights, Westerbeke",
     "cross": "Jabsco 18653-0001, Johnson 09-810B-1, Sierra 18-3081, CEF 500100",
     "interval": "150-200 Saat / Sezonluk",
-    "specs": "10 Bıçaklı Neopren İmpeller, D-Mil Kovan"
-  },
-  "1873016": {
-    "brand": "Scania Marine",
-    "category": "Yağlama & Filtre",
-    "name": "Scania DI09 / DI13 / DI16 Marin V8 Motor Yağ Filtresi",
-    "models": "Scania DI09, DI13, DI16 V8 (500 - 1150 HP) Marin Ana Makineler",
-    "cross": "Mann HU 1297 x, Donaldson P550453, Baldwin P7442, Fleetguard LF16175, Hengst E175H D129",
-    "interval": "250-400 Saat",
-    "specs": "Eko Kartuş Yağ Elemanı, Dış Çap: 114mm, Yükseklik: 236mm"
-  },
-  "1873018": {
-    "brand": "Scania Marine",
-    "category": "Yakıt Filtrasyonu",
-    "name": "Scania DI13 / DI16 Common Rail İkincil Yakıt Filtresi",
-    "models": "Scania DI13, DI16 Marin Motorlar",
-    "cross": "Mann PU 938/1 x, Donaldson P550881, Baldwin PF7949, Fleetguard FF5794",
-    "interval": "250-400 Saat",
-    "specs": "2 Mikron XPI Common Rail Hassas Yakıt Elemanı"
-  },
-  "15241410": {
-    "brand": "Baudouin Marine",
-    "category": "Yağlama & Filtre",
-    "name": "Baudouin 6M26 / 8M26 / 12M26 Ağır Hizmet Yağ Filtresi",
-    "models": "Baudouin 6M26, 8M26, 12M26, 6M33, 12M33 (450 - 1650 HP)",
-    "cross": "Mann W 11 102/34, Donaldson P550372, Baldwin B7685, Fleetguard LF667",
-    "interval": "300-500 Saat",
-    "specs": "Yüksek Kapasite Spin-on Yağ Filtresi (1-1/8-16 Diş)"
+    "specs": "10 Kanatlı Neopren İmpeller, D-Mil"
   }
 }
