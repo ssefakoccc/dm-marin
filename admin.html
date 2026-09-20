@@ -1532,57 +1532,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
   </div>
 </article>
 
-<!-- ADD/EDIT USER MODAL -->
-<div class="modal-backdrop" id="modal-admin-user">
-  <div class="modal-box" style="max-width:540px">
-    <div class="modal-head">
-      <h3 id="admin-user-modal-title">👤 Yeni Kullanıcı / Personel Tanımla</h3>
-      <button class="modal-close" onclick="closeAdminUserModal()">✕</button>
-    </div>
-    <form id="form-admin-user" onsubmit="saveAdminUser(event)" style="display:grid;gap:12px">
-      <input type="hidden" id="adm-user-id">
-      
-      <div class="form-grid">
-        <div class="field">
-          <label>Adı Soyadı *</label>
-          <input type="text" id="adm-user-name" placeholder="Örn: Ahmet Kaya" required>
-        </div>
-        <div class="field">
-          <label>Kullanıcı Adı / Kod</label>
-          <input type="text" id="adm-user-username" placeholder="Örn: ahmet.usta">
-        </div>
-        <div class="field">
-          <label>Görevi / Rolü *</label>
-          <input type="text" id="adm-user-role" placeholder="Örn: Baş Teknisyen / Mobil Servis" required>
-        </div>
-        <div class="field">
-          <label>Telefon Numarası</label>
-          <input type="tel" id="adm-user-phone" placeholder="0543 724 09 92">
-        </div>
-        <div class="field">
-          <label>Doğum Tarihi (Doğum Günü Takibi İçin) *</label>
-          <input type="date" id="adm-user-birthdate" required>
-        </div>
-        <div class="field">
-          <label>Kullanıcıya Özel Giriş PIN Kodu *</label>
-          <input type="text" id="adm-user-pin" placeholder="Örn: 1998, 3456" maxlength="12" required>
-        </div>
-        <div class="field full">
-          <label>Hesap Durumu</label>
-          <select id="adm-user-active">
-            <option value="true">Aktif (Sisteme Giriş Yapabilir)</option>
-            <option value="false">Pasif / İzinli (Giriş Yapamaz)</option>
-          </select>
-        </div>
-      </div>
 
-      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px">
-        <button type="button" class="btn" onclick="closeAdminUserModal()">İptal</button>
-        <button type="submit" class="btn primary">💾 Kullanıcıyı Kaydet</button>
-      </div>
-    </form>
-  </div>
-</div>
 
 </section>
 
@@ -4718,6 +4668,7 @@ function openAdminUserModal() {
   if (idEl) idEl.value = "";
   const titleEl = document.getElementById("admin-user-modal-title");
   if (titleEl) titleEl.textContent = "👤 Yeni Kullanıcı / Personel Tanımla";
+  
   const modal = document.getElementById("modal-admin-user");
   if (modal) {
     modal.classList.add("open");
@@ -4767,7 +4718,10 @@ function editAdminUser(id) {
 }
 
 function saveAdminUser(e) {
-  if (e && e.preventDefault) e.preventDefault();
+  if (e) {
+    if (e.preventDefault) e.preventDefault();
+    if (e.stopPropagation) e.stopPropagation();
+  }
   
   const idEl = document.getElementById("adm-user-id");
   const nameEl = document.getElementById("adm-user-name");
@@ -4778,27 +4732,31 @@ function saveAdminUser(e) {
   const pinEl = document.getElementById("adm-user-pin");
   const actEl = document.getElementById("adm-user-active");
 
-  if (!nameEl || !nameEl.value.trim()) {
+  const name = nameEl ? nameEl.value.trim() : "";
+  const role = roleEl ? roleEl.value.trim() : "";
+  const pin = pinEl ? pinEl.value.trim() : "";
+
+  if (!name) {
     alert("Lütfen personelin adını ve soyadını giriniz.");
+    if (nameEl) nameEl.focus();
     return false;
   }
-  if (!roleEl || !roleEl.value.trim()) {
+  if (!role) {
     alert("Lütfen personelin görevini / rolünü giriniz.");
+    if (roleEl) roleEl.focus();
     return false;
   }
-  if (!pinEl || !pinEl.value.trim()) {
+  if (!pin) {
     alert("Lütfen personele ait bir giriş PIN kodu belirleyiniz (Örn: 1998).");
+    if (pinEl) pinEl.focus();
     return false;
   }
 
   const id = idEl ? idEl.value : "";
-  const name = nameEl.value.trim();
   const username = (userEl && userEl.value.trim()) ? userEl.value.trim() : name.toLowerCase().replace(/\s+/g, '.');
-  const role = roleEl.value.trim();
   const phone = phoneEl ? phoneEl.value.trim() : "";
   const birthDate = birthEl ? birthEl.value : "";
-  const pin = pinEl.value.trim() || "1998";
-  const active = actEl ? actEl.value === "true" : true;
+  const active = actEl ? (actEl.value === "true") : true;
 
   let users = getStaffUsers();
 
@@ -4845,10 +4803,25 @@ function deleteAdminUser(id) {
   if (typeof initAgentDashboard === "function") initAgentDashboard();
   flash("✓ Kullanıcı silindi.");
 }
+  const u = users.find(x => x.id === id);
+  if (!confirm(`"${u?.name}" kullanıcısını silmek istediğinize emin misiniz?`)) return;
+
+  users = users.filter(x => x.id !== id);
+  saveStaffUsers(users);
+  renderAdminUsersTable();
+  if (typeof initAgentDashboard === "function") initAgentDashboard();
+  flash("✓ Kullanıcı silindi.");
+}
+
 
 document.addEventListener("DOMContentLoaded", () => {
   renderAdminUsersTable();
+  const uForm = document.getElementById("form-admin-user");
+  if (uForm) {
+    uForm.addEventListener("submit", saveAdminUser);
+  }
 });
+
 
 function loadErpSecuritySettings() {
   try {
@@ -5208,5 +5181,57 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 </script>
+
+<!-- ADD/EDIT USER MODAL -->
+<div class="modal-backdrop" id="modal-admin-user">
+  <div class="modal-box" style="max-width:540px">
+    <div class="modal-head">
+      <h3 id="admin-user-modal-title">👤 Yeni Kullanıcı / Personel Tanımla</h3>
+      <button class="modal-close" onclick="closeAdminUserModal()">✕</button>
+    </div>
+    <form id="form-admin-user" onsubmit="saveAdminUser(event)" style="display:grid;gap:12px">
+      <input type="hidden" id="adm-user-id">
+      
+      <div class="form-grid">
+        <div class="field">
+          <label>Adı Soyadı *</label>
+          <input type="text" id="adm-user-name" placeholder="Örn: Ahmet Kaya" required>
+        </div>
+        <div class="field">
+          <label>Kullanıcı Adı / Kod</label>
+          <input type="text" id="adm-user-username" placeholder="Örn: ahmet.usta">
+        </div>
+        <div class="field">
+          <label>Görevi / Rolü *</label>
+          <input type="text" id="adm-user-role" placeholder="Örn: Baş Teknisyen / Mobil Servis" required>
+        </div>
+        <div class="field">
+          <label>Telefon Numarası</label>
+          <input type="tel" id="adm-user-phone" placeholder="0543 724 09 92">
+        </div>
+        <div class="field">
+          <label>Doğum Tarihi (Doğum Günü Takibi İçin) *</label>
+          <input type="date" id="adm-user-birthdate" required>
+        </div>
+        <div class="field">
+          <label>Kullanıcıya Özel Giriş PIN Kodu *</label>
+          <input type="text" id="adm-user-pin" placeholder="Örn: 1998, 3456" maxlength="12" required>
+        </div>
+        <div class="field full">
+          <label>Hesap Durumu</label>
+          <select id="adm-user-active">
+            <option value="true">Aktif (Sisteme Giriş Yapabilir)</option>
+            <option value="false">Pasif / İzinli (Giriş Yapamaz)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px">
+        <button type="button" class="btn" onclick="closeAdminUserModal()">İptal</button>
+        <button type="submit" class="btn primary">💾 Kullanıcıyı Kaydet</button>
+      </div>
+    </form>
+  </div>
+</div>
 </body>
 </html>
