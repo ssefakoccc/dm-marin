@@ -448,51 +448,9 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
     </div>
   </article>
 
-<article class="panel" style="grid-column: 1 / -1; border-left: 4px solid #087f93">
-<div class="panel-head">
-  <h3>🔐 ERP & Stok Sistemi Güvenlik ve PIN Yönetimi</h3>
-  <span class="pill ok">Güvenli Korumalı</span>
-</div>
-<div class="panel-body">
-  <p style="margin:0 0 16px;color:var(--muted);font-size:13px">
-    Stok ve Ön Muhasebe sayfasına (stok.html) giriş yaparken veya kritik stok hareketleri yapılırken istenen güvenlik PIN kodlarını buradan değiştirebilirsiniz.
-  </p>
-  <div class="form-grid">
-    <div class="field">
-      <label for="erp-admin-pin">Yönetici (Master) PIN Kodu</label>
-      <input type="password" id="erp-admin-pin" placeholder="Varsayılan: 1998" maxlength="12">
-      <small>Tüm stok sıfırlama, mali rapor ve yetkili işlemler için geçerlidir.</small>
-    </div>
-    <div class="field">
-      <label for="erp-staff-pin">Personel / Teknisyen Giriş PIN Kodu</label>
-      <input type="password" id="erp-staff-pin" placeholder="Varsayılan: dm1998" maxlength="12">
-      <small>Saha teknisyenlerinin POS ve stok giriş erişimi için geçerlidir.</small>
-    </div>
-    <div class="field full" style="display:flex;justify-content:flex-end;gap:10px;margin-top:8px">
-      <button type="button" class="btn primary" onclick="saveErpSecuritySettings()">💾 PIN Kodlarını Güncelle ve Kaydet</button>
-    </div>
-  </div>
-</div>
-</article>
 
-<article class="panel" style="grid-column: 1 / -1; border-left: 4px solid #10b981">
-<div class="panel-head">
-  <h3>💾 Tam Sistem Veritabanı Yedeği & Geri Yükleme</h3>
-  <span class="pill ok">Yerel & Bulut Uyumlu</span>
-</div>
-<div class="panel-body">
-  <p style="margin:0 0 16px;color:var(--muted);font-size:13px">
-    Tüm ürünleri, stok envanterini, müşteri/tekne carilerini, servis fişlerini, web site ayarlarını ve SEO konfigürasyonlarını içeren tam sistem yedeğini tek tıkla indirin veya geri yükleyin.
-  </p>
-  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-    <button type="button" class="btn primary" onclick="exportAdminDatabaseJSON()">📥 Tam Sistem Veritabanı Yedeği İndir (.JSON)</button>
-    <label class="btn" style="cursor:pointer;margin:0;background:#f8fafc;border-color:var(--line)">
-      📤 Yedekten Geri Yükle (.JSON)
-      <input type="file" id="admin-db-restore-input" accept=".json" style="display:none" onchange="importAdminDatabaseJSON(this)">
-    </label>
-  </div>
-</div>
-</article>
+
+
 
 </div>
 </section>
@@ -756,51 +714,9 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 </div>
 </article>
 
-<article class="panel" style="grid-column: 1 / -1; border-left: 4px solid #087f93">
-<div class="panel-head">
-  <h3>🔐 ERP & Stok Sistemi Güvenlik ve PIN Yönetimi</h3>
-  <span class="pill ok">Güvenli Korumalı</span>
-</div>
-<div class="panel-body">
-  <p style="margin:0 0 16px;color:var(--muted);font-size:13px">
-    Stok ve Ön Muhasebe sayfasına (stok.html) giriş yaparken veya kritik stok hareketleri yapılırken istenen güvenlik PIN kodlarını buradan değiştirebilirsiniz.
-  </p>
-  <div class="form-grid">
-    <div class="field">
-      <label for="erp-admin-pin">Yönetici (Master) PIN Kodu</label>
-      <input type="password" id="erp-admin-pin" placeholder="Varsayılan: 1998" maxlength="12">
-      <small>Tüm stok sıfırlama, mali rapor ve yetkili işlemler için geçerlidir.</small>
-    </div>
-    <div class="field">
-      <label for="erp-staff-pin">Personel / Teknisyen Giriş PIN Kodu</label>
-      <input type="password" id="erp-staff-pin" placeholder="Varsayılan: dm1998" maxlength="12">
-      <small>Saha teknisyenlerinin POS ve stok giriş erişimi için geçerlidir.</small>
-    </div>
-    <div class="field full" style="display:flex;justify-content:flex-end;gap:10px;margin-top:8px">
-      <button type="button" class="btn primary" onclick="saveErpSecuritySettings()">💾 PIN Kodlarını Güncelle ve Kaydet</button>
-    </div>
-  </div>
-</div>
-</article>
 
-<article class="panel" style="grid-column: 1 / -1; border-left: 4px solid #10b981">
-<div class="panel-head">
-  <h3>💾 Tam Sistem Veritabanı Yedeği & Geri Yükleme</h3>
-  <span class="pill ok">Yerel & Bulut Uyumlu</span>
-</div>
-<div class="panel-body">
-  <p style="margin:0 0 16px;color:var(--muted);font-size:13px">
-    Tüm ürünleri, stok envanterini, müşteri/tekne carilerini, servis fişlerini, web site ayarlarını ve SEO konfigürasyonlarını içeren tam sistem yedeğini tek tıkla indirin veya geri yükleyin.
-  </p>
-  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-    <button type="button" class="btn primary" onclick="exportAdminDatabaseJSON()">📥 Tam Sistem Veritabanı Yedeği İndir (.JSON)</button>
-    <label class="btn" style="cursor:pointer;margin:0;background:#f8fafc;border-color:var(--line)">
-      📤 Yedekten Geri Yükle (.JSON)
-      <input type="file" id="admin-db-restore-input" accept=".json" style="display:none" onchange="importAdminDatabaseJSON(this)">
-    </label>
-  </div>
-</div>
-</article>
+
+
 
 </div>
 </section>
@@ -1086,51 +1002,9 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 <article class="media"><img src="assets/dm-marin-servis-araci.webp" alt="Servis aracı"><div><b>Mobil Araç</b><small>Yerinde servis donanımı</small></div></article>
 <article class="media"><img src="assets/dm-marin-servis-noktasi.webp" alt="Servis noktası"><div><b>Servis Noktası</b><small>Kalamış ve Fenerbahçe</small></div></article>
 
-<article class="panel" style="grid-column: 1 / -1; border-left: 4px solid #087f93">
-<div class="panel-head">
-  <h3>🔐 ERP & Stok Sistemi Güvenlik ve PIN Yönetimi</h3>
-  <span class="pill ok">Güvenli Korumalı</span>
-</div>
-<div class="panel-body">
-  <p style="margin:0 0 16px;color:var(--muted);font-size:13px">
-    Stok ve Ön Muhasebe sayfasına (stok.html) giriş yaparken veya kritik stok hareketleri yapılırken istenen güvenlik PIN kodlarını buradan değiştirebilirsiniz.
-  </p>
-  <div class="form-grid">
-    <div class="field">
-      <label for="erp-admin-pin">Yönetici (Master) PIN Kodu</label>
-      <input type="password" id="erp-admin-pin" placeholder="Varsayılan: 1998" maxlength="12">
-      <small>Tüm stok sıfırlama, mali rapor ve yetkili işlemler için geçerlidir.</small>
-    </div>
-    <div class="field">
-      <label for="erp-staff-pin">Personel / Teknisyen Giriş PIN Kodu</label>
-      <input type="password" id="erp-staff-pin" placeholder="Varsayılan: dm1998" maxlength="12">
-      <small>Saha teknisyenlerinin POS ve stok giriş erişimi için geçerlidir.</small>
-    </div>
-    <div class="field full" style="display:flex;justify-content:flex-end;gap:10px;margin-top:8px">
-      <button type="button" class="btn primary" onclick="saveErpSecuritySettings()">💾 PIN Kodlarını Güncelle ve Kaydet</button>
-    </div>
-  </div>
-</div>
-</article>
 
-<article class="panel" style="grid-column: 1 / -1; border-left: 4px solid #10b981">
-<div class="panel-head">
-  <h3>💾 Tam Sistem Veritabanı Yedeği & Geri Yükleme</h3>
-  <span class="pill ok">Yerel & Bulut Uyumlu</span>
-</div>
-<div class="panel-body">
-  <p style="margin:0 0 16px;color:var(--muted);font-size:13px">
-    Tüm ürünleri, stok envanterini, müşteri/tekne carilerini, servis fişlerini, web site ayarlarını ve SEO konfigürasyonlarını içeren tam sistem yedeğini tek tıkla indirin veya geri yükleyin.
-  </p>
-  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-    <button type="button" class="btn primary" onclick="exportAdminDatabaseJSON()">📥 Tam Sistem Veritabanı Yedeği İndir (.JSON)</button>
-    <label class="btn" style="cursor:pointer;margin:0;background:#f8fafc;border-color:var(--line)">
-      📤 Yedekten Geri Yükle (.JSON)
-      <input type="file" id="admin-db-restore-input" accept=".json" style="display:none" onchange="importAdminDatabaseJSON(this)">
-    </label>
-  </div>
-</div>
-</article>
+
+
 
 </div>
 </section>
