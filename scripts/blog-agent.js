@@ -116,6 +116,48 @@ const TOPIC_CATALOG = [
   }
 ];
 
+function generateInfographicSVG(topic, lang = "tr") {
+  const isTr = lang === "tr";
+  const title = isTr ? topic.h1_tr : topic.h1_en;
+  const cat = isTr ? topic.category_tr : topic.category_en;
+  
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#071b2b"/>
+      <stop offset="60%" stop-color="#0b2e47"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="cardGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1000" cy="150" r="300" fill="#0284c7" opacity="0.15"/>
+  <circle cx="200" cy="500" r="250" fill="#06b6d4" opacity="0.1"/>
+  
+  <rect x="80" y="80" width="1040" height="470" rx="20" fill="#ffffff" fill-opacity="0.05" stroke="#38bdf8" stroke-width="2" stroke-dasharray="8 4"/>
+  
+  <rect x="120" y="120" width="220" height="38" rx="19" fill="url(#cardGlow)"/>
+  <text x="230" y="145" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" letter-spacing="1">DM MARİN TEKNİK</text>
+  
+  <text x="120" y="200" fill="#38bdf8" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="600">${cat.toUpperCase()}</text>
+  
+  <foreignObject x="120" y="220" width="960" height="180">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="color:#ffffff;font-family:system-ui, -apple-system, sans-serif;font-size:34px;font-weight:800;line-height:1.25">
+      ${title}
+    </div>
+  </foreignObject>
+  
+  <line x1="120" y1="440" x2="1080" y2="440" stroke="#334155" stroke-width="2"/>
+  
+  <text x="120" y="490" fill="#94a3b8" font-family="system-ui, -apple-system, sans-serif" font-size="16">✓ Orijinal &amp; Muadil Parça Kılavuzu</text>
+  <text x="450" y="490" fill="#94a3b8" font-family="system-ui, -apple-system, sans-serif" font-size="16">✓ Lazerli &amp; Elektronik Teşhis</text>
+  <text x="780" y="490" fill="#94a3b8" font-family="system-ui, -apple-system, sans-serif" font-size="16">✓ 7/24 Mobil Acil Servis</text>
+</svg>`;
+}
+
 function getExistingBlogCount() {
   const files = fs.readdirSync(ROOT_DIR);
   return files.filter(f => f.startsWith("blog-") && f.endsWith(".html")).length;
@@ -130,6 +172,7 @@ function generateSingleArticleHTML(topic, lang = "tr") {
   const keywords = isTr ? topic.keywords_tr : topic.keywords_en;
   const category = isTr ? topic.category_tr : topic.category_en;
   const readTime = isTr ? topic.read_tr : topic.read_en;
+  const diagramImg = `assets/diagrams/${topic.id}-${lang}.svg`;
 
   const schemaObj = {
     "@context": "https://schema.org",
@@ -321,6 +364,9 @@ function runAgentCycle() {
   const currentCount = getExistingBlogCount();
   console.log(`📊 Mevcut Blog Makalesi Sayısı: ${currentCount} / ${MAX_BLOG_LIMIT}`);
 
+  const diagDir = path.join(ROOT_DIR, "assets", "diagrams");
+  if (!fs.existsSync(diagDir)) fs.mkdirSync(diagDir, { recursive: true });
+
   let createdCount = 0;
   for (const topic of TOPIC_CATALOG) {
     if (getExistingBlogCount() >= MAX_BLOG_LIMIT) {
@@ -330,6 +376,15 @@ function runAgentCycle() {
 
     const trPath = path.join(ROOT_DIR, topic.file_tr);
     const enPath = path.join(ROOT_DIR, topic.file_en);
+    const trDiagPath = path.join(diagDir, `${topic.id}-tr.svg`);
+    const enDiagPath = path.join(diagDir, `${topic.id}-en.svg`);
+
+    if (!fs.existsSync(trDiagPath)) {
+      fs.writeFileSync(trDiagPath, generateInfographicSVG(topic, "tr"), "utf-8");
+    }
+    if (!fs.existsSync(enDiagPath)) {
+      fs.writeFileSync(enDiagPath, generateInfographicSVG(topic, "en"), "utf-8");
+    }
 
     if (!fs.existsSync(trPath)) {
       fs.writeFileSync(trPath, generateSingleArticleHTML(topic, "tr"), "utf-8");
