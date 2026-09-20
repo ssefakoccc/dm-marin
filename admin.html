@@ -1706,14 +1706,17 @@ if (searchEl) {
 
 // REMOTE BRANDS SYNC
 async function loadRemoteBrands() {
-  if (!currentSession) return;
   try {
-    const res = await fetch('/api/admin/brands', {
-      headers: { 'Authorization': 'Bearer ' + currentSession.access_token }
-    });
+    const headers = {};
+    if (currentSession) headers['Authorization'] = 'Bearer ' + currentSession.access_token;
+    const res = await fetch('/api/admin/brands', { headers });
     const data = await res.json();
     if (res.ok && data.success && Array.isArray(data.data) && data.data.length > 0) {
-      brandState = data.data.map(b => ({ name: b.name, visible: b.visible !== false, id: b.id }));
+      brandState = data.data.map(b => ({
+        name: typeof b === 'string' ? b : b.name,
+        visible: typeof b === 'object' && b.visible !== undefined ? b.visible : true,
+        id: b.id
+      }));
       renderBrands();
     }
   } catch (e) {}
@@ -1722,14 +1725,24 @@ async function loadRemoteBrands() {
 async function syncBrandsToDb() {
   if (!currentSession) return;
   try {
-    await fetch('/api/admin/brands', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + currentSession.access_token
-      },
-      body: JSON.stringify({ brands: brandState })
-    });
+    await Promise.all([
+      fetch('/api/admin/brands', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + currentSession.access_token
+        },
+        body: JSON.stringify({ brands: brandState })
+      }),
+      fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + currentSession.access_token
+        },
+        body: JSON.stringify({ key: 'brands', value: brandState })
+      })
+    ]);
   } catch (e) {}
 }
 
@@ -1782,6 +1795,14 @@ async function loadRemoteSettings() {
           const el = document.querySelector(`[data-service="${k}"]`);
           if (el) el.checked = srv[k] !== false;
         });
+      }
+      if (data.data.brands && Array.isArray(data.data.brands) && data.data.brands.length > 0) {
+        brandState = data.data.brands.map(b => ({
+          name: typeof b === 'string' ? b : b.name,
+          visible: typeof b === 'object' && b.visible !== undefined ? b.visible : true,
+          id: b.id
+        }));
+        renderBrands();
       }
       if (data.data.form_config_tr) {
         formConfigTR = Object.assign({}, defaultFormConfigTR, data.data.form_config_tr);
@@ -2677,6 +2698,7 @@ initAnalyticsCharts();
 showView(location.hash.slice(1) in labels ? location.hash.slice(1) : 'dashboard');
 initSupabase();
 loadRemoteSettings();
+loadRemoteBrands();
 </script>
 <script>
 function trackDmEvent(eventName, params) {

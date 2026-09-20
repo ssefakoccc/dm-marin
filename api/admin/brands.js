@@ -5,9 +5,6 @@ const { verifyAdmin } = require('../_lib/auth');
 module.exports = async (req, res) => {
   res.setHeader('Content-Type', 'application/json');
 
-  const adminUser = await verifyAdmin(req, res);
-  if (!adminUser) return;
-
   const supabase = getServiceClient();
   if (!supabase) {
     return res.status(503).json({ error: 'Supabase servis bağlantısı yapılandırılmamış.' });
@@ -15,7 +12,7 @@ module.exports = async (req, res) => {
 
   const method = req.method;
 
-  // GET: Tüm markaları listele
+  // GET: Tüm markaları listele (Herkese açık)
   if (method === 'GET') {
     try {
       const { data, error } = await supabase
@@ -24,12 +21,27 @@ module.exports = async (req, res) => {
         .order('order_index', { ascending: true })
         .order('name', { ascending: true });
 
-      if (error) return res.status(500).json({ error: error.message });
+      if (error) {
+        // Fallback: site_settings'ten çek
+        const { data: setRow } = await supabase
+          .from('site_settings')
+          .select('value')
+          .eq('key', 'brands')
+          .maybeSingle();
+        if (setRow && Array.isArray(setRow.value)) {
+          return res.status(200).json({ success: true, data: setRow.value });
+        }
+        return res.status(500).json({ error: error.message });
+      }
       return res.status(200).json({ success: true, data });
     } catch (err) {
       return res.status(500).json({ error: 'Sunucu hatası: ' + err.message });
     }
   }
+
+  // POST ve DELETE için Admin doğrulaması zorunlu
+  const adminUser = await verifyAdmin(req, res);
+  if (!adminUser) return;
 
   // POST: Marka ekle, güncelle veya toplu senkronize et
   if (method === 'POST') {
@@ -38,20 +50,32 @@ module.exports = async (req, res) => {
 
       // Toplu senkronizasyon ({ brands: [...] })
       if (Array.isArray(body.brands)) {
-        // Mevcutları temizleyip yenilerini ekleyebilir veya upsert edebiliriz
         const brandsToInsert = body.brands.map((b, idx) => ({
-          name: typeof b === 'string' ? b.trim() : b.name.trim(),
+          name: typeof b === 'string' ? b.trim() : (b.name || '').trim(),
           visible: typeof b === 'object' && b.visible !== undefined ? b.visible : true,
           order_index: idx + 1
         })).filter(b => b.name);
 
-        const { data, error } = await supabase
-          .from('brands')
-          .upsert(brandsToInsert, { onConflict: 'name' })
-          .select();
+        // 1. site_settings tablosuna kaydet (hızlı global erişim için)
+        await supabase
+          .from('site_settings')
+          .upsert({
+            key: 'brands',
+            value: brandsToInsert,
+            updated_at: new Date().toISOString()
+          });
 
-        if (error) return res.status(500).json({ error: error.message });
-        return res.status(200).json({ success: true, data });
+        // 2. brands tablosunu temizleyip yenilerini ekle
+        try {
+          await supabase.from('brands').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+          if (brandsToInsert.length > 0) {
+            await supabase.from('brands').insert(brandsToInsert);
+          }
+        } catch (tblErr) {
+          console.warn("Brands table batch sync fallback:", tblErr);
+        }
+
+        return res.status(200).json({ success: true, data: brandsToInsert });
       }
 
       // Tek marka ekle

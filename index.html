@@ -977,6 +977,23 @@ if (serviceForm) {
     }
     renderServiceForm(currentLang);
 
+    // Brands hydration
+    const brandsData = json.data.brands;
+    if (Array.isArray(brandsData) && brandsData.length > 0) {
+      const brandListEl = document.querySelector('#markalar .brand-list');
+      if (brandListEl) {
+        const visibleBrands = brandsData.filter(b => {
+          if (typeof b === 'string') return b.trim().length > 0;
+          return b.visible !== false && (b.name || '').trim().length > 0;
+        });
+        if (visibleBrands.length > 0) {
+          brandListEl.innerHTML = visibleBrands
+            .map(b => `<span>${typeof b === 'string' ? b.trim() : b.name.trim()}</span>`)
+            .join('');
+        }
+      }
+    }
+
     const sc = json.data.site_content;
     if (sc) {
       if (sc.heroTitle) {

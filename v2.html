@@ -71,6 +71,32 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
     }
   } catch(e) {}
 })();
+
+// Dynamic brands and settings hydration
+(async function() {
+  try {
+    const res = await fetch('/api/admin/settings');
+    if (!res.ok) return;
+    const json = await res.json();
+    if (!json.success || !json.data) return;
+
+    const brandsData = json.data.brands;
+    if (Array.isArray(brandsData) && brandsData.length > 0) {
+      const brandListEl = document.querySelector('#markalar .brands');
+      if (brandListEl) {
+        const visibleBrands = brandsData.filter(b => {
+          if (typeof b === 'string') return b.trim().length > 0;
+          return b.visible !== false && (b.name || '').trim().length > 0;
+        });
+        if (visibleBrands.length > 0) {
+          brandListEl.innerHTML = visibleBrands
+            .map(b => `<span>${typeof b === 'string' ? b.trim() : b.name.trim()}</span>`)
+            .join('');
+        }
+      }
+    }
+  } catch(e) {}
+})();
 </script>
 <script>
 function trackDmEvent(eventName, params) {
