@@ -1014,20 +1014,41 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
         <span class="pill ok">E-Posta / Webhook</span>
       </div>
       <div class="panel-body form-grid">
-        <div class="field full">
+        <div class="field">
           <label for="notify-admin-email">Bildirimin Gönderileceği Yönetici E-postası</label>
           <input type="email" id="notify-admin-email" placeholder="servis@dmmarin.com">
-          <small>Yeni servis taleplerinin iletileceği ana e-posta adresiniz.</small>
+          <small>Yeni servis taleplerinin iletileceği ana e-posta adresiniz (Örn: dmmarin48@gmail.com veya servis@dmmarin.com).</small>
+        </div>
+        <div class="field">
+          <label for="notify-from-email">Gönderici E-Posta Adresi (From Header)</label>
+          <input type="text" id="notify-from-email" placeholder="DM MARİN Servis <onboarding@resend.dev>">
+          <small>Spam olmaması için Resend'e eklediğiniz alan adını yazın (Örn: <code>DM MARİN &lt;servis@dmmarin.com&gt;</code>).</small>
         </div>
         <div class="field full">
-          <label for="notify-resend-key">Resend E-Posta API Anahtarı (Opsiyonel / Ücretsiz)</label>
+          <label for="notify-resend-key">Resend E-Posta API Anahtarı (re_...)</label>
           <input type="password" id="notify-resend-key" placeholder="re_123456789_abcdef..." autocomplete="off">
-          <small>resend.com üzerinden aldığınız ücretsiz API Key (aylık 3.000 e-posta ücretsiz).</small>
+          <small>resend.com API Keys bölümünden aldığınız anahtar.</small>
         </div>
         <div class="field full">
           <label for="notify-webhook-url">Veya Webhook URL (Make / Zapier / Discord)</label>
           <input type="url" id="notify-webhook-url" placeholder="https://hook.eu1.make.com/... veya Discord Webhook URL">
           <small>Make.com veya Zapier webhook'u kullanıyorsanız URL adresini buraya yapıştırın.</small>
+        </div>
+
+        <!-- SPAM PREVENTION & DOMAIN VERIFICATION GUIDE -->
+        <div class="field full" style="margin-top:10px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px;padding:16px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <span style="font-size:18px">🛡️</span>
+            <b style="color:#0369a1;font-size:14px">E-Postaların Spam Kutusuna Düşmesini %100 Önleme Rehberi</b>
+          </div>
+          <p style="font-size:12.5px;color:#334155;margin:0 0 10px 0;line-height:1.5">
+            Gmail ve Outlook varsayılan test adresi olan <code>onboarding@resend.dev</code> adresini genel test havuzunda olduğu için şüpheli/spam olarak işaretleyebilir. E-postaların <b>doğrudan gelen kutusuna (inbox)</b> düşmesi için şu 3 adımı yapınız:
+          </p>
+          <ol style="font-size:12.5px;color:#334155;margin:0;padding-left:20px;line-height:1.6">
+            <li><b>Resend'e Domain Ekleyin:</b> <a href="https://resend.com/domains" target="_blank" rel="noopener" style="color:#0284c7;font-weight:700">resend.com/domains</a> adresine girip <code>dmmarin.com</code> alan adınızı ekleyin.</li>
+            <li><b>DNS Kayıtlarını Girin:</b> Resend'in size verdiği <b>DKIM (CNAME)</b>, <b>SPF (MX/TXT)</b> ve <b>DMARC (TXT)</b> kayıtlarını alan adı panelinize (Cloudflare / Natro / Turhost / GoDaddy) ekleyin.</li>
+            <li><b>Göndericiyi Güncelleyin:</b> Domain onaylandıktan sonra yukarıdaki Gönderici kutusuna <code>DM MARİN &lt;servis@dmmarin.com&gt;</code> yazıp kaydedin.</li>
+          </ol>
         </div>
       </div>
     </article>
@@ -2254,11 +2275,13 @@ async function loadRemoteSettings() {
         const tgChat = document.getElementById('notify-tg-chat');
         const whUrl = document.getElementById('notify-webhook-url');
         const admEmail = document.getElementById('notify-admin-email');
+        const fromEmail = document.getElementById('notify-from-email');
         const resendKey = document.getElementById('notify-resend-key');
         if (tgTok && nc.telegram_bot_token) tgTok.value = nc.telegram_bot_token;
         if (tgChat && nc.telegram_chat_id) tgChat.value = nc.telegram_chat_id;
         if (whUrl && nc.webhook_url) whUrl.value = nc.webhook_url;
         if (admEmail && nc.admin_email) admEmail.value = nc.admin_email;
+        if (fromEmail && nc.resend_from_email) fromEmail.value = nc.resend_from_email;
         if (resendKey && nc.resend_api_key) resendKey.value = nc.resend_api_key;
       }
       renderFormBuilder(activeFormLang);
@@ -2274,6 +2297,7 @@ async function saveNotificationSettings() {
   const chatId = (document.getElementById('notify-tg-chat')?.value || '').trim();
   const webhookUrl = (document.getElementById('notify-webhook-url')?.value || '').trim();
   const adminEmail = (document.getElementById('notify-admin-email')?.value || '').trim();
+  const fromEmail = (document.getElementById('notify-from-email')?.value || '').trim();
   const resendKey = (document.getElementById('notify-resend-key')?.value || '').trim();
 
   const payload = {
@@ -2281,6 +2305,7 @@ async function saveNotificationSettings() {
     telegram_chat_id: chatId,
     webhook_url: webhookUrl,
     admin_email: adminEmail,
+    resend_from_email: fromEmail,
     resend_api_key: resendKey
   };
 

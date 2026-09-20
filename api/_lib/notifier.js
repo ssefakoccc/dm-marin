@@ -93,6 +93,130 @@ async function sendNotification(requestData) {
     if (resendApiKey && adminEmail) {
       result.email.configured = true;
       try {
+        const replyTo = (email && email.includes('@') && !email.includes('example') && !email.includes('-')) 
+          ? email.trim() 
+          : adminEmail.trim();
+
+        const cleanSubject = `[DM MARİN] Yeni Servis Talebi: ${name} (${boat_name && boat_name !== '-' ? boat_name : 'Tekne Bakımı'})`;
+
+        const plainText = `DM MARİN - YENİ SERVİS TALEBİ BİLDİRİMİ
+============================================================
+Müşteri Ad Soyad : ${name}
+Telefon          : ${phone}
+E-posta          : ${email}
+Tekne / Motor    : ${boat_name}
+Marina / Konum   : ${marina_location}
+Hizmet Türü      : ${service_type}
+Açıklama / Not   : ${message}
+Kaynak Sayfa     : ${source_page}
+Talep ID         : ${id || '-'}
+Bildirim Tarihi  : ${new Date().toLocaleString('tr-TR', { timeZone: 'Europe/Istanbul' })}
+============================================================
+Talebi Görüntüleyin: https://dmmarin.com/admin.html
+
+DM MARİN Mobil Marin Servis · İstanbul ve Marmara
+https://dmmarin.com · servis@dmmarin.com`;
+
+        const htmlContent = `<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${cleanSubject}</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f4f7f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#102734;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#f4f7f9;padding:24px 12px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #dce7ea;box-shadow:0 4px 12px rgba(7,27,43,0.06);">
+          <!-- Header -->
+          <tr>
+            <td style="background:#071b2b;padding:24px 28px;text-align:left;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                <tr>
+                  <td>
+                    <h1 style="color:#ffffff;font-size:20px;margin:0 0 4px 0;font-weight:800;letter-spacing:-0.3px;">DM MARİN TEKNİK SERVİS</h1>
+                    <p style="color:#19c7df;font-size:13px;margin:0;font-weight:600;">Yeni Müşteri Servis Talebi Bildirimi</p>
+                  </td>
+                  <td align="right" style="color:#8ba5b5;font-size:12px;">
+                    ${new Date().toLocaleDateString('tr-TR')}
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Request Details -->
+          <tr>
+            <td style="padding:28px;">
+              <div style="background:#f8fafc;border-left:4px solid #087f93;padding:12px 16px;margin-bottom:20px;border-radius:0 8px 8px 0;">
+                <p style="margin:0;font-size:14px;color:#334155;font-weight:600;">
+                  Web sitesi üzerinden yeni bir servis veya bakım başvurusu yapıldı.
+                </p>
+              </div>
+
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="font-size:14px;line-height:1.5;">
+                <tr>
+                  <td style="padding:10px 0;color:#64748b;width:130px;border-bottom:1px solid #f1f5f9;">Müşteri:</td>
+                  <td style="padding:10px 0;color:#0f172a;font-weight:700;border-bottom:1px solid #f1f5f9;">${name}</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Telefon:</td>
+                  <td style="padding:10px 0;font-weight:700;border-bottom:1px solid #f1f5f9;">
+                    <a href="tel:${phone}" style="color:#087f93;text-decoration:none;">${phone}</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">E-posta:</td>
+                  <td style="padding:10px 0;color:#0f172a;border-bottom:1px solid #f1f5f9;">
+                    ${email !== '-' ? `<a href="mailto:${email}" style="color:#087f93;text-decoration:none;">${email}</a>` : '<span style="color:#94a3b8;">Belirtilmedi</span>'}
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Tekne / Motor:</td>
+                  <td style="padding:10px 0;color:#0f172a;font-weight:700;border-bottom:1px solid #f1f5f9;">${boat_name}</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Marina / Konum:</td>
+                  <td style="padding:10px 0;color:#0f172a;border-bottom:1px solid #f1f5f9;">${marina_location}</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Hizmet Türü:</td>
+                  <td style="padding:10px 0;color:#087f93;font-weight:700;border-bottom:1px solid #f1f5f9;">${service_type}</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 0;color:#64748b;vertical-align:top;border-bottom:1px solid #f1f5f9;">Açıklama:</td>
+                  <td style="padding:10px 0;color:#334155;border-bottom:1px solid #f1f5f9;">${message}</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 0;color:#64748b;">Kaynak Sayfa:</td>
+                  <td style="padding:10px 0;color:#64748b;font-size:12px;">${source_page}</td>
+                </tr>
+              </table>
+
+              <!-- Call to Action -->
+              <div style="margin-top:28px;text-align:center;">
+                <a href="https://dmmarin.com/admin.html" style="background:#087f93;color:#ffffff;padding:12px 28px;text-decoration:none;border-radius:8px;font-weight:700;font-size:14px;display:inline-block;box-shadow:0 2px 6px rgba(8,127,147,0.3);">
+                  Talebi Yönetim Panelinde Aç →
+                </a>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background:#f8fafc;padding:20px 28px;border-top:1px solid #e2e8f0;text-align:center;font-size:12px;color:#64748b;line-height:1.5;">
+              <p style="margin:0 0 4px 0;"><strong>DM MARİN</strong> · Mobil Marin Servis Hizmetleri</p>
+              <p style="margin:0;">Bu e-posta dmmarin.com iletişim formu üzerinden oluşturulan otomatik sistem bildirimidir.</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
         const emailRes = await fetch('https://api.resend.com/emails', {
           method: 'POST',
           headers: {
@@ -102,28 +226,16 @@ async function sendNotification(requestData) {
           body: JSON.stringify({
             from: fromEmail,
             to: [adminEmail.trim()],
-            subject: `🚨 Yeni Servis Talebi: ${name} (${boat_name})`,
-            html: `
-              <div style="font-family:sans-serif;max-width:600px;margin:0 auto;color:#102734">
-                <div style="background:#071b2b;padding:20px;text-align:center;border-radius:10px 10px 0 0">
-                  <h2 style="color:#fff;margin:0">🚨 Yeni Servis Talebi Alındı</h2>
-                </div>
-                <div style="border:1px solid #dce7ea;padding:24px;border-radius:0 0 10px 10px;background:#fff">
-                  <table style="width:100%;border-collapse:collapse;font-size:14px">
-                    <tr style="border-bottom:1px solid #f0f4f6"><td style="padding:8px 0;color:#6b7b84;width:130px">Müşteri:</td><td style="padding:8px 0;font-weight:bold">${name}</td></tr>
-                    <tr style="border-bottom:1px solid #f0f4f6"><td style="padding:8px 0;color:#6b7b84">Telefon:</td><td style="padding:8px 0;font-weight:bold"><a href="tel:${phone}" style="color:#087f93">${phone}</a></td></tr>
-                    <tr style="border-bottom:1px solid #f0f4f6"><td style="padding:8px 0;color:#6b7b84">E-posta:</td><td style="padding:8px 0">${email}</td></tr>
-                    <tr style="border-bottom:1px solid #f0f4f6"><td style="padding:8px 0;color:#6b7b84">Tekne / Motor:</td><td style="padding:8px 0;font-weight:bold">${boat_name}</td></tr>
-                    <tr style="border-bottom:1px solid #f0f4f6"><td style="padding:8px 0;color:#6b7b84">Marina / Konum:</td><td style="padding:8px 0">${marina_location}</td></tr>
-                    <tr style="border-bottom:1px solid #f0f4f6"><td style="padding:8px 0;color:#6b7b84">Hizmet Türü:</td><td style="padding:8px 0;font-weight:bold">${service_type}</td></tr>
-                    <tr style="border-bottom:1px solid #f0f4f6"><td style="padding:8px 0;color:#6b7b84">Açıklama:</td><td style="padding:8px 0">${message}</td></tr>
-                  </table>
-                  <div style="margin-top:24px;text-align:center">
-                    <a href="https://dmmarin.com/admin.html" style="background:#087f93;color:#fff;padding:12px 24px;text-decoration:none;border-radius:8px;font-weight:bold;display:inline-block">Admin Paneline Git →</a>
-                  </div>
-                </div>
-              </div>
-            `
+            reply_to: replyTo,
+            subject: cleanSubject,
+            text: plainText,
+            html: htmlContent,
+            headers: {
+              'X-Entity-Ref-ID': String(id || Date.now()),
+              'Auto-Submitted': 'auto-generated',
+              'X-Auto-Response-Suppress': 'OOF, AutoReply',
+              'Precedence': 'bulk'
+            }
           })
         });
 
