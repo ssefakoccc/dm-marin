@@ -1272,9 +1272,7 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
       <input type="password" id="erp-pin-input" class="lock-pin-input" maxlength="12" placeholder="••••" autocomplete="off" autofocus>
       <button type="submit" class="lock-btn">🔓 Giriş Yap</button>
     </form>
-    <div style="margin-top:16px;font-size:11.5px;color:#94a3b8">
-      Varsayılan PIN: <b>1998</b> veya <b>dm1998</b>
-    </div>
+    
   </div>
 </div>
 
@@ -1364,9 +1362,20 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
             <b id="top-today-paid">₺ 0,00</b>
           </div>
         </div>
+        <div style="display:flex;align-items:center;gap:7px;background:#f8fafc;padding:5px 12px;border-radius:10px;border:1px solid var(--line)" title="İşlemleri Kaydeden Aktif Personel">
+          <span style="font-size:16px">👤</span>
+          <div style="display:flex;flex-direction:column">
+            <span style="font-size:9.5px;font-weight:800;color:#64748b;letter-spacing:0.04em">İŞLEM YAPAN PERSONEL</span>
+            <select id="active-operator-select" style="font-size:12px;font-weight:750;border:none;background:transparent;padding:0;cursor:pointer;color:var(--navy);outline:none" onchange="changeActiveOperator(this.value)">
+              <option value="Ahmet Usta (Baş Teknisyen)">Ahmet Usta (Baş Teknisyen)</option>
+              <option value="Mehmet K. (Depo Sorumlusu)">Mehmet K. (Depo Sorumlusu)</option>
+              <option value="Can D. (Saha Teknisyeni)">Can D. (Saha Teknisyeni)</option>
+              <option value="Yönetici / Admin">Yönetici / Admin</option>
+            </select>
+          </div>
+        </div>
         <button type="button" class="btn success sm" onclick="switchNav('pos')">⚡ Hızlı Satış (POS)</button>
         <button type="button" class="btn primary sm" onclick="openNewSaleModal()">➕ Servis Faturası</button>
-        <button type="button" class="btn outline sm" onclick="resetTransactions()">🗑️ Alış/Satışları Sıfırla</button>
         <button type="button" class="btn outline sm" onclick="syncCloud()">🔄 Eşitle</button>
         <button type="button" class="btn danger sm" onclick="logoutERP()" title="Oturumu Kapat">🚪 Çıkış</button>
       </div>
@@ -1947,17 +1956,47 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
             </table>
           </div>
 
-          <!-- VERİ TEMİZLEME & İŞLEM SIFIRLAMA -->
-          <div class="widget-card" style="grid-column: 1 / -1; border-left: 4px solid #ef4444">
-            <div class="widget-head">
-              <b style="color:#b91c1c">⚠️ SİSTEM VERİLERİNİ VE HAREKETLERİ SIFIRLAMA</b>
+          <!-- PERSONEL & TEKNİSYEN YÖNETİMİ -->
+          <div class="widget-card" style="grid-column: 1 / -1; border-left: 4px solid #0284c7">
+            <div class="widget-head" style="justify-content:space-between">
+              <b>👥 PERSONEL & SAHA TEKNİSYENİ KADROSU</b>
+              <button type="button" class="btn primary sm" onclick="openNewStaffModal()">➕ Yeni Personel Ekle</button>
             </div>
-            <div style="padding:16px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
-              <div>
-                <b style="font-size:14px;color:#0f172a">Tüm Alış ve Satış Faturalarını Sıfırla</b>
-                <p style="margin:4px 0 0;font-size:12px;color:#64748b">Test veya geçmiş döneme ait tüm satış fişlerini, müşteri/tedarikçi borç bakiyelerini ve alış hareketlerini temizler. Ürün kartları ve stok adetleri korunur.</p>
+            <div style="padding:16px 20px">
+              <p style="margin:0 0 12px;font-size:12.5px;color:#64748b">Satışlarda, stok girişlerinde ve tahsilatlarda işlemi gerçekleştiren personellerin listesi. Aktif personel üst bardan seçilerek tüm fişlere otomatik işlenir.</p>
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Personel Adı Soyadı</th>
+                    <th>Görevi / Ünvanı</th>
+                    <th>Telefon</th>
+                    <th>Durum</th>
+                    <th style="text-align:right">İşlem</th>
+                  </tr>
+                </thead>
+                <tbody id="settings-staff-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- VERİTABANI YEDEKLEME & GERİ YÜKLEME -->
+          <div class="widget-card" style="grid-column: 1 / -1; border-left: 4px solid #10b981">
+            <div class="widget-head">
+              <b style="color:#059669">💾 VERİTABANI YEDEKLEME, DIŞA AKTAR & GERİ YÜKLEME</b>
+            </div>
+            <div style="padding:18px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+              <div style="max-width:560px">
+                <b style="font-size:14px;color:#0f172a">Tam Sistem Veritabanı Yedeği (.JSON)</b>
+                <p style="margin:4px 0 0;font-size:12px;color:#64748b">Tüm ürün kartlarını, barkodları, OEM referanslarını, stok hareketlerini, müşteri/tekne carilerini, tedarikçileri, personelleri ve ayarları tek bir yedek dosyası olarak bilgisayarınıza indirir veya yedekten geri yükler.</p>
               </div>
-              <button class="btn danger" onclick="resetTransactions()">🗑️ Alış ve Satışları Sıfırla</button>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <button type="button" class="btn success" onclick="exportDatabaseJSON()">📥 Tam Sistem Yedeği İndir (.JSON)</button>
+                <label class="btn outline" style="cursor:pointer;margin:0">
+                  📤 Yedekten Geri Yükle
+                  <input type="file" id="db-restore-file-input" accept=".json" style="display:none" onchange="importDatabaseJSON(this)">
+                </label>
+                <button type="button" class="btn outline" onclick="exportProductsCSV()">📑 Excel / CSV İndir</button>
+              </div>
             </div>
           </div>
         </div>
@@ -2148,8 +2187,11 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
             <input type="text" id="prod-code" placeholder="Örn: DM-FLT-101">
           </div>
           <div class="field-wrap">
-            <label>Barkod (EAN-13 / Code-128)</label>
-            <input type="text" id="prod-barcode" placeholder="Örn: 8690000123456 (Boşsa OEM no kullanılır)">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">
+              <label style="margin-bottom:0">Barkod (EAN-13 / Code-128)</label>
+              <button type="button" class="btn outline sm" style="padding:2px 8px;font-size:11px;background:#f0f9ff;border-color:#bae6fd;color:#0284c7;font-weight:750" onclick="generateAutoBarcode()">⚡ Otomatik Barkod Üret</button>
+            </div>
+            <input type="text" id="prod-barcode" placeholder="Örn: 8690000123456 (veya butona basarak üretin)">
           </div>
           <div class="field-wrap">
             <label>Marka *</label>
@@ -2239,6 +2281,47 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
 </div>
 
 <!-- 4. ADD/EDIT SUPPLIER MODAL -->
+
+<!-- 4.1 ADD/EDIT STAFF MODAL -->
+<div class="modal-overlay" id="modal-staff">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-head">
+      <h3 id="modal-staff-title">👤 Personel / Teknisyen Ekle</h3>
+      <button class="modal-close" onclick="closeModal('modal-staff')">✕</button>
+    </div>
+    <form id="form-staff" onsubmit="saveStaff(event)">
+      <input type="hidden" id="staff-id">
+      <div class="modal-body">
+        <div class="form-grid-2">
+          <div class="field-wrap full">
+            <label>Adı Soyadı *</label>
+            <input type="text" id="staff-name" placeholder="Örn: Ahmet Usta" required>
+          </div>
+          <div class="field-wrap full">
+            <label>Görevi / Pozisyonu *</label>
+            <input type="text" id="staff-role" placeholder="Örn: Baş Teknisyen / Mobil Servis" required>
+          </div>
+          <div class="field-wrap">
+            <label>Telefon Numarası</label>
+            <input type="tel" id="staff-phone" placeholder="0543 724 09 92">
+          </div>
+          <div class="field-wrap">
+            <label>Durum</label>
+            <select id="staff-active">
+              <option value="true">Aktif Personel</option>
+              <option value="false">Pasif / İzinli</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn outline" onclick="closeModal('modal-staff')">İptal</button>
+        <button type="submit" class="btn primary">💾 Personeli Kaydet</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modal-supplier">
   <div class="modal-box">
     <div class="modal-head">
@@ -2513,6 +2596,210 @@ let expensesState = [
   { id: "e-3", date: "2026-09-17", category: "Personel & Ulaşım", desc: "Kalamış & Fenerbahçe Marina Saha Harcırah", amount: 1030.40, status: "paid" }
 ];
 
+
+// ----------------------------------------------------
+// MULTI-USER PERSONNEL & STAFF MANAGEMENT
+// ----------------------------------------------------
+let staffState = [
+  { id: "st-1", name: "Ahmet Usta", role: "Baş Teknisyen / Mobil Servis", phone: "0543 724 09 92", active: true },
+  { id: "st-2", name: "Mehmet K.", role: "Depo & Mal Kabul Sorumlusu", phone: "0532 111 22 33", active: true },
+  { id: "st-3", name: "Can D.", role: "Saha Servis Teknisyeni", phone: "0541 222 33 44", active: true },
+  { id: "st-4", name: "Yönetici (Admin)", role: "Sistem Yöneticisi", phone: "", active: true }
+];
+
+let activeOperator = localStorage.getItem("dm_active_operator") || "Ahmet Usta (Baş Teknisyen)";
+
+function getCurrentOperator() {
+  return activeOperator || "Ahmet Usta (Baş Teknisyen)";
+}
+
+function changeActiveOperator(val) {
+  activeOperator = val;
+  localStorage.setItem("dm_active_operator", val);
+  flash(`👤 Aktif Personel Seçildi: ${val}`);
+}
+
+function renderStaff() {
+  const tbody = document.getElementById("settings-staff-tbody");
+  if (!tbody) return;
+  tbody.innerHTML = staffState.map(st => `
+    <tr>
+      <td><b>${escapeHtml(st.name)}</b></td>
+      <td><span style="background:#e0f2fe;color:#0369a1;padding:2px 8px;border-radius:6px;font-size:11.5px;font-weight:700">${escapeHtml(st.role)}</span></td>
+      <td>${escapeHtml(st.phone || '-')}</td>
+      <td><span class="badge-pill ${st.active ? 'green' : 'red'}">${st.active ? 'Aktif' : 'Pasif'}</span></td>
+      <td style="text-align:right">
+        <button class="btn danger sm" onclick="deleteStaff('${st.id}')" title="Personeli Sil">✕</button>
+      </td>
+    </tr>
+  `).join("");
+
+  // Update topbar select
+  const topSel = document.getElementById("active-operator-select");
+  if (topSel) {
+    topSel.innerHTML = staffState.filter(s => s.active).map(s => `
+      <option value="${escapeHtml(s.name)} (${escapeHtml(s.role)})" ${activeOperator.includes(s.name) ? 'selected' : ''}>${escapeHtml(s.name)} (${escapeHtml(s.role)})</option>
+    `).join("");
+  }
+}
+
+function openNewStaffModal() {
+  const form = document.getElementById("form-staff");
+  if (form) form.reset();
+  openModal("modal-staff");
+}
+
+function saveStaff(e) {
+  e.preventDefault();
+  const name = document.getElementById("staff-name").value.trim();
+  const role = document.getElementById("staff-role").value.trim();
+  const phone = document.getElementById("staff-phone").value.trim();
+  const active = document.getElementById("staff-active").value === "true";
+
+  if (!name || !role) return;
+
+  staffState.push({
+    id: "st-" + Date.now(),
+    name,
+    role,
+    phone,
+    active
+  });
+
+  saveAll();
+  renderStaff();
+  closeModal("modal-staff");
+  flash(`✓ Yeni personel eklendi: ${name}`);
+}
+
+function deleteStaff(id) {
+  if (staffState.length <= 1) {
+    alert("En az bir personel kaydı bulunmalıdır.");
+    return;
+  }
+  if (!confirm("Bu personeli listeden silmek istiyor musunuz?")) return;
+  staffState = staffState.filter(s => s.id !== id);
+  saveAll();
+  renderStaff();
+  flash("✓ Personel kaydı silindi.");
+}
+
+// ----------------------------------------------------
+// AUTO BARCODE GENERATOR (EAN-13 STANDARDI)
+// ----------------------------------------------------
+function generateAutoBarcode() {
+  const prefix = "869";
+  let randomPart = "";
+  for (let i = 0; i < 9; i++) {
+    randomPart += Math.floor(Math.random() * 10);
+  }
+  const code12 = prefix + randomPart;
+  let sum = 0;
+  for (let i = 0; i < 12; i++) {
+    const digit = parseInt(code12[i], 10);
+    sum += (i % 2 === 0) ? digit : digit * 3;
+  }
+  const checkDigit = (10 - (sum % 10)) % 10;
+  const barcode = code12 + checkDigit;
+
+  const el = document.getElementById("prod-barcode");
+  if (el) {
+    el.value = barcode;
+    flash(`✓ Otomatik EAN-13 Barkod Üretildi: ${barcode}`);
+  }
+  return barcode;
+}
+
+// ----------------------------------------------------
+// DATABASE FULL BACKUP & RESTORE & CSV EXPORT
+// ----------------------------------------------------
+function exportDatabaseJSON() {
+  const backupData = {
+    version: "2.0",
+    exportDate: new Date().toISOString(),
+    system: "DM MARİN ERP & Stok Yönetimi",
+    categories: categoriesState,
+    brands: brandsState,
+    locations: locationsState,
+    products: productsState,
+    customers: customersState,
+    suppliers: suppliersState,
+    staff: staffState,
+    sales: salesState,
+    purchases: purchasesState,
+    expenses: expensesState
+  };
+
+  const str = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+  const a = document.createElement("a");
+  const dateStr = new Date().toISOString().slice(0, 10);
+  a.setAttribute("href", str);
+  a.setAttribute("download", `dm_marin_erp_backup_${dateStr}.json`);
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  flash("📥 Tam sistem veritabanı yedeği başarıyla indirildi.");
+}
+
+function importDatabaseJSON(inputEl) {
+  const file = inputEl.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.products || !Array.isArray(data.products)) {
+        alert("Geçersiz yedek dosyası formatı!");
+        return;
+      }
+
+      if (!confirm(`Yedek dosyasından ${data.products.length} ürün ve sistem verileri geri yüklenecektir. Onaylıyor musunuz?`)) {
+        inputEl.value = "";
+        return;
+      }
+
+      if (data.categories) categoriesState = data.categories;
+      if (data.brands) brandsState = data.brands;
+      if (data.locations) locationsState = data.locations;
+      if (data.products) productsState = data.products;
+      if (data.customers) customersState = data.customers;
+      if (data.suppliers) suppliersState = data.suppliers;
+      if (data.staff) staffState = data.staff;
+      if (data.sales) salesState = data.sales;
+      if (data.purchases) purchasesState = data.purchases;
+      if (data.expenses) expensesState = data.expenses;
+
+      saveAll();
+      inputEl.value = "";
+      flash("✓ Veritabanı yedeği başarıyla sisteme aktarıldı.");
+      renderDashboard();
+      if (currentNav === 'products') renderProducts();
+      if (currentNav === 'staff') renderStaff();
+    } catch(err) {
+      alert("Yedek dosyası okunurken hata oluştu: " + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function exportProductsCSV() {
+  let csv = "ID;Urun Adi;OEM No;Muadil Kodlar;Barkod;Marka;Kategori;Konum;Alis Fiyati;Satis Fiyati;Stok Adedi\n";
+  productsState.forEach(p => {
+    csv += `"${p.id}";"${p.name || ''}";"${p.oemRef || p.code || ''}";"${p.crossRef || ''}";"${p.barcode || ''}";"${p.brand || ''}";"${p.category || ''}";"${p.location || ''}";"${p.buyPrice}";"${p.sellPrice}";"${p.qty}"\n`;
+  });
+
+  const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.setAttribute("href", url);
+  a.setAttribute("download", `dm_marin_urun_stok_listesi_${new Date().toISOString().slice(0,10)}.csv`);
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  flash("📊 Stok listesi CSV olarak indirildi.");
+}
+
 function loadAll() {
   try {
     const cat = localStorage.getItem("dm_erp_categories");
@@ -2534,6 +2821,7 @@ function loadAll() {
     if (pu) purchasesState = JSON.parse(pu);
     const ex = localStorage.getItem("dm_erp_expenses");
     if (ex) expensesState = JSON.parse(ex);
+    const st = localStorage.getItem("dm_erp_staff"); if (st) staffState = JSON.parse(st);
   } catch(e) {}
 }
 
@@ -2547,6 +2835,7 @@ function saveAll() {
   localStorage.setItem("dm_erp_sales", JSON.stringify(salesState));
   localStorage.setItem("dm_erp_purchases", JSON.stringify(purchasesState));
   localStorage.setItem("dm_erp_expenses", JSON.stringify(expensesState));
+  localStorage.setItem("dm_erp_staff", JSON.stringify(staffState));
 }
 
 function syncCloud() {
@@ -4414,7 +4703,19 @@ function resetTransactions() {
 }
 
 // PIN AUTHENTICATION & LOCK SCREEN
-const VALID_PINS = ['1998', 'dm1998', 'marin2026'];
+function getValidPins() {
+  try {
+    const raw = localStorage.getItem('dm_erp_settings');
+    if (raw) {
+      const cfg = JSON.parse(raw);
+      const pins = [];
+      if (cfg.adminPin) pins.push(String(cfg.adminPin).trim());
+      if (cfg.staffPin) pins.push(String(cfg.staffPin).trim());
+      if (pins.length > 0) return pins;
+    }
+  } catch(e) {}
+  return ['1998', 'dm1998', 'marin2026'];
+}
 
 function checkAuth() {
   const isAuth = sessionStorage.getItem('dm_erp_auth');
@@ -4433,7 +4734,7 @@ function handlePinLogin(e) {
   e.preventDefault();
   const input = document.getElementById('erp-pin-input');
   const val = input.value.trim();
-  if (VALID_PINS.includes(val)) {
+  if (getValidPins().includes(val)) {
     sessionStorage.setItem('dm_erp_auth', '1');
     const overlay = document.getElementById('erp-lock-overlay');
     if (overlay) overlay.style.display = 'none';
@@ -4458,6 +4759,7 @@ function logoutERP() {
 window.addEventListener("DOMContentLoaded", () => {
   loadAll();
   checkAuth();
+  renderStaff();
   renderDashboard();
 });
 </script>
