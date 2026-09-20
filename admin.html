@@ -265,7 +265,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
   <button data-view="media"><span class="icon">🖼️</span>Görseller & Medya</button>
 
   <div class="nav-section-title">Otonom Ajanlar & AI</div>
-  <button data-view="agents" title="Alt+9"><span class="icon">🤖</span>Ajan Takımı <span class="nav-badge-count" style="background:#10b981;color:#fff">6 Aktif</span></button>
+  <button data-view="agents" title="Alt+9"><span class="icon">🤖</span>Ajan Takımı <span class="nav-badge-count" style="background:#10b981;color:#fff">7 Aktif</span></button>
 
   <div class="nav-section-title">Sistem & Entegrasyon</div>
   <button data-view="notifications" title="Alt+5"><span class="icon">🔔</span>Bildirimler & Alerts</button>
@@ -1595,7 +1595,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
   <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
     <span class="pill ok" style="padding:6px 14px;font-size:12.5px;display:inline-flex;align-items:center;gap:6px">
       <span style="width:8px;height:8px;border-radius:50%;background:#10b981;display:inline-block;box-shadow:0 0 0 3px rgba(16,185,129,0.2)"></span>
-      6 Ajan Görev Başında
+      7 Ajan Görev Başında
     </span>
     <button type="button" class="btn primary" onclick="runAllAgentsHealthCheck()">⚡ Tüm Ajanları Denetle & Çalıştır</button>
   </div>
@@ -1605,7 +1605,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 <div class="cards" style="margin-bottom:22px">
   <article class="metric" style="border-left:4px solid #10b981">
     <span class="metric-icon" style="background:#ecfdf5;color:#059669">🤖</span>
-    <b>6 / 6</b>
+    <b>7 / 7</b>
     <span>Aktif Otonom Ajan <small style="color:var(--ok);font-weight:700">Tamamı Canlı</small></span>
   </article>
   <article class="metric" style="border-left:4px solid #0284c7">
@@ -1804,6 +1804,45 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <a href="puanla.html" target="_blank" class="btn" style="font-size:12px;padding:0 12px;min-height:34px">⭐ Puanlama Sayfasını Aç ↗</a>
         <button type="button" class="btn" style="font-size:12px;padding:0 12px;min-height:34px" onclick="logToAgentConsole('Review-Master', 'Müşteri memnuniyet hunisi ve Google Maps yönlendirmesi test edildi: Aktif.', 'ok')">Test Et</button>
+      </div>
+    </div>
+  </article>
+
+  
+  <!-- AGENT 7: SCRIBE-SEO (AUTONOMOUS BLOG & CONTENT AGENT) -->
+  <article class="panel" style="border-top:4px solid #06b6d4">
+    <div class="panel-head">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:22px">✍️</span>
+        <div>
+          <h3 style="margin:0;font-size:15px">Scribe-SEO</h3>
+          <small style="color:var(--muted)">Otonom Marin Blog & İçerik Ajanı</small>
+        </div>
+      </div>
+      <span class="pill ok">● Aktif (Limit: 80)</span>
+    </div>
+    <div class="panel-body">
+      <p style="margin:0 0 12px;font-size:13px;color:var(--ink)">
+        Google SERP için çift dilli (TR/EN) marin motor, jeneratör, akü, kışlama ve stabilizasyon makaleleri üretir. Disk ve performansı korumak için <b>Maks 80 Blog</b> tavan limitine sahiptir.
+      </p>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;font-size:12px;margin-bottom:14px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span style="color:var(--muted)">Blog Kapasitesi:</span>
+          <b id="agent-blog-count-badge" style="color:#0284c7">34 / 80 Makale (%42)</b>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span style="color:var(--muted)">Dil Desteği:</span>
+          <b style="color:var(--ok)">✓ Türkçe (TR) & İngilizce (EN)</b>
+        </div>
+        <div style="display:flex;justify-content:space-between">
+          <span style="color:var(--muted)">Düşük Trafik Optimizasyonu:</span>
+          <b style="color:var(--ok)">✓ Akıllı Budama & Yenileme Hazır</b>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button type="button" class="btn primary" style="font-size:12px;padding:0 12px;min-height:34px;background:#0891b2;border-color:#0891b2" onclick="runScribeBlogGeneration()">⚡ Akıllı Blog Üret & Güncelle</button>
+        <button type="button" class="btn" style="font-size:12px;padding:0 12px;min-height:34px;background:#fffbeb;border-color:#fcd34d;color:#92400e" onclick="pruneAndRefreshBlogs()">🔄 Düşük Ziyaretçiliyi Yenile</button>
+        <a href="blog.html" target="_blank" class="btn" style="font-size:12px;padding:0 12px;min-height:34px">📚 Blog Portalı ↗</a>
       </div>
     </div>
   </article>
