@@ -4797,6 +4797,7 @@ const DEFAULT_STAFF_USERS = [
 ];
 
 function getStaffUsers() {
+  // localStorage cache'den senkron oku (anlık render için)
   try {
     const raw = localStorage.getItem("dm_erp_staff") || localStorage.getItem("dm_staff_users");
     if (raw) {
@@ -4804,7 +4805,7 @@ function getStaffUsers() {
       if (Array.isArray(parsed) && parsed.length > 0) {
         return parsed.map(u => ({
           ...u,
-          permissions: Array.isArray(u.permissions) && u.permissions.length > 0 ? u.permissions : 
+          permissions: Array.isArray(u.permissions) && u.permissions.length > 0 ? u.permissions :
             (u.username === "admin" ? ["admin", "stock_manage", "prices_view", "service_manage", "pos_sale", "user_manage", "db_backup"] : ["stock_manage", "service_manage", "pos_sale"])
         }));
       }
@@ -4813,11 +4814,42 @@ function getStaffUsers() {
   return DEFAULT_STAFF_USERS;
 }
 
+// 🗄️ Supabase staff tablosundan personeli çek ve localStorage cache'i güncelle
+async function loadStaffFromDB() {
+  try {
+    const token = await getValidAdminToken();
+    const res = await fetch('/api/admin/staff', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data.success && Array.isArray(data.data)) {
+      // DB'den gelen veriyi localStorage cache'e yaz (field mapping: birth_date → birthDate)
+      const mapped = data.data.map(u => ({
+        id: u.id,
+        name: u.name,
+        username: u.username,
+        role: u.role || '',
+        phone: u.phone || '',
+        birthDate: u.birth_date || '',
+        pin: u.pin || '',
+        active: u.active !== false,
+        permissions: Array.isArray(u.permissions) ? u.permissions : []
+      }));
+      localStorage.setItem("dm_erp_staff", JSON.stringify(mapped));
+      localStorage.setItem("dm_staff_users", JSON.stringify(mapped));
+      return mapped;
+    }
+  } catch(e) {
+    console.warn("Staff DB yüklenemedi (offline mod):", e);
+  }
+  return null;
+}
+
 function saveStaffUsers(list) {
+  // localStorage cache güncelle
   localStorage.setItem("dm_erp_staff", JSON.stringify(list));
   localStorage.setItem("dm_staff_users", JSON.stringify(list));
-  // 🌐 Cloud Sync — Farklı PC'den de erişilebilsin
-  syncSettingToCloud("erp_staff", list);
 }
 
 // 🌐 Tek bir ayarı Supabase site_settings tablosuna yaz (arka planda, sessizce)
@@ -4866,34 +4898,8 @@ async function loadCriticalDataFromCloud() {
 
     const settings = data.data;
 
-    // 1. Personel verisi — Bidirectional merge (username bazlı)
-    {
-      const FAKE_PLACEHOLDER_USERS = ["ahmet", "mehmet", "can"]; // Eski örnek kullanıcılar — silinecek
-      const localRaw = localStorage.getItem("dm_erp_staff") || localStorage.getItem("dm_staff_users");
-      let localStaff = localRaw ? (JSON.parse(localRaw) || []) : [];
-      let cloudStaff = (settings.erp_staff && Array.isArray(settings.erp_staff)) ? settings.erp_staff : [];
-
-      // Eski sahte örnek kullanıcıları filtrele (her iki kaynaktan da)
-      localStaff = localStaff.filter(u => !FAKE_PLACEHOLDER_USERS.includes(u.username));
-      cloudStaff = cloudStaff.filter(u => !FAKE_PLACEHOLDER_USERS.includes(u.username));
-
-      // Username bazında merge: her kullanıcıyı bir kez al (local önce, sonra cloud'daki eksikler)
-      const mergedMap = {};
-      // Önce local'i ekle (local daha güncel kabul edilir aynı username için)
-      localStaff.forEach(u => { if (u.username) mergedMap[u.username] = u; });
-      // Cloud'daki kullanıcıları ekle — sadece local'de yoksa
-      cloudStaff.forEach(u => { if (u.username && !mergedMap[u.username]) mergedMap[u.username] = u; });
-
-      const merged = Object.values(mergedMap);
-
-      // Local'i güncelle
-      localStorage.setItem("dm_erp_staff", JSON.stringify(merged));
-      localStorage.setItem("dm_staff_users", JSON.stringify(merged));
-
-      // Her zaman cloud'a yaz (fake kullanıcılar temizlenmiş olabilir)
-      syncSettingToCloud("erp_staff", merged);
-      console.log("✅ Cloud Sync: Personel senkron (" + merged.length + " kişi). Eski örnek kullanıcılar (ahmet/mehmet/can) temizlendi.");
-    }
+    // 1. Personel verisi — Artık /api/admin/staff (Supabase staff tablosu) kullanıyor
+    // loadStaffFromDB() fonksiyonu doğrudan staff tablosundan çekiyor, burada gerek yok.
 
     // 2. Quartermaster öğrenilen bilgi
     if (settings.qm_learned && typeof settings.qm_learned === 'object') {
@@ -5122,7 +5128,7 @@ function editAdminUser(id) {
   }
 }
 
-function saveAdminUser(e) {
+async function saveAdminUser(e) {
   if (e) {
     if (e.preventDefault) e.preventDefault();
     if (e.stopPropagation) e.stopPropagation();
@@ -5157,51 +5163,81 @@ function saveAdminUser(e) {
     return false;
   }
 
-  const id = idEl ? idEl.value : "";
+  const id = idEl ? idEl.value.trim() : "";
   const username = (userEl && userEl.value.trim()) ? userEl.value.trim().toLowerCase() : name.toLowerCase().replace(/\s+/g, '');
   const phone = phoneEl ? phoneEl.value.trim() : "";
   const birthDate = birthEl ? birthEl.value : "";
   const active = actEl ? (actEl.value === "true") : true;
 
-  // Collect checked permissions
   const checkedPerms = [];
   document.querySelectorAll(".adm-perm-checkbox:checked").forEach(cb => {
     checkedPerms.push(cb.value);
   });
 
-  let users = getStaffUsers();
+  const payload = {
+    name, username, role, phone,
+    birth_date: birthDate || null,
+    pin, active,
+    permissions: checkedPerms
+  };
 
-  if (id) {
-    const idx = users.findIndex(x => x.id === id);
-    if (idx !== -1) {
-      users[idx] = { ...users[idx], name, username, role, phone, birthDate, pin, active, permissions: checkedPerms };
+  try {
+    const token = await getValidAdminToken();
+    let res;
+
+    if (id) {
+      // Güncelle (PUT)
+      res = await fetch('/api/admin/staff?id=' + encodeURIComponent(id), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify(payload)
+      });
     } else {
-      users.push({ id: id || ("st-" + Date.now()), name, username, role, phone, birthDate, pin, active, permissions: checkedPerms });
+      // Yeni ekle (POST)
+      res = await fetch('/api/admin/staff', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify(payload)
+      });
     }
-  } else {
-    users.push({
-      id: "st-" + Date.now(),
-      name,
-      username,
-      role,
-      phone,
-      birthDate,
-      pin,
-      active,
-      permissions: checkedPerms
-    });
+
+    const result = await res.json();
+    if (!res.ok || !result.success) {
+      throw new Error(result.error || 'Sunucu hatası');
+    }
+
+    // Başarılı — DB'den yenile
+    await loadStaffFromDB();
+    closeAdminUserModal();
+    renderAdminUsersTable();
+    if (typeof initAgentDashboard === "function") initAgentDashboard();
+    flash(`✓ Kullanıcı "${name}" (${username}) Supabase'e kaydedildi. Tüm cihazlardan erişilebilir.`);
+
+  } catch(err) {
+    // Offline fallback — localStorage'a kaydet
+    console.warn("Supabase staff kayıt hatası (offline fallback):", err);
+    let users = getStaffUsers();
+    if (id) {
+      const idx = users.findIndex(x => x.id === id);
+      if (idx !== -1) {
+        users[idx] = { ...users[idx], name, username, role, phone, birthDate, pin, active, permissions: checkedPerms };
+      } else {
+        users.push({ id, name, username, role, phone, birthDate, pin, active, permissions: checkedPerms });
+      }
+    } else {
+      users.push({ id: "st-" + Date.now(), name, username, role, phone, birthDate, pin, active, permissions: checkedPerms });
+    }
+    saveStaffUsers(users);
+    closeAdminUserModal();
+    renderAdminUsersTable();
+    flash(`⚠️ Çevrimdışı kaydedildi: "${name}" — İnternet bağlantısında otomatik sync olacak.`);
   }
 
-  saveStaffUsers(users);
-  closeAdminUserModal();
-  renderAdminUsersTable();
-  if (typeof initAgentDashboard === "function") initAgentDashboard();
-  flash(`✓ Kullanıcı "${name}" (${username}) yetkileriyle birlikte güvenle kaydedildi.`);
   return false;
 }
 
-function deleteAdminUser(id) {
-  let users = getStaffUsers();
+async function deleteAdminUser(id) {
+  const users = getStaffUsers();
   if (users.length <= 1) {
     alert("Sistemde en az 1 kullanıcı kalmalıdır.");
     return;
@@ -5209,19 +5245,40 @@ function deleteAdminUser(id) {
   const u = users.find(x => x.id === id);
   if (!confirm(`"${u?.name}" kullanıcısını silmek istediğinize emin misiniz?`)) return;
 
-  users = users.filter(x => x.id !== id);
-  saveStaffUsers(users);
-  renderAdminUsersTable();
-  if (typeof initAgentDashboard === "function") initAgentDashboard();
-  flash("✓ Kullanıcı sistemden silindi.");
+  try {
+    const token = await getValidAdminToken();
+    const res = await fetch('/api/admin/staff?id=' + encodeURIComponent(id), {
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const result = await res.json();
+    if (!res.ok || !result.success) throw new Error(result.error || 'Silme hatası');
+
+    // Başarılı — DB'den yenile
+    await loadStaffFromDB();
+    renderAdminUsersTable();
+    if (typeof initAgentDashboard === "function") initAgentDashboard();
+    flash("✓ Kullanıcı Supabase'den silindi.");
+  } catch(err) {
+    console.warn("Supabase silme hatası (offline fallback):", err);
+    const updated = users.filter(x => x.id !== id);
+    saveStaffUsers(updated);
+    renderAdminUsersTable();
+    flash("⚠️ Çevrimdışı silindi — sync bekleniyor.");
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Önce localStorage cache'den hemen göster, sonra DB'den taze veri çek
   renderAdminUsersTable();
   const uForm = document.getElementById("form-admin-user");
   if (uForm) {
     uForm.addEventListener("submit", saveAdminUser);
   }
+  // DB'den taze personel yükle
+  loadStaffFromDB().then(dbStaff => {
+    if (dbStaff) renderAdminUsersTable();
+  });
 });
 
 
