@@ -11,6 +11,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <style>
 :root {
   --navy-dark: #0f172a;
@@ -767,6 +768,178 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
   padding-top: 14px;
 }
 
+
+/* ============================================================ */
+/* BARCODE PRINT & LABEL GENERATOR STYLES                       */
+/* ============================================================ */
+.barcode-layout-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 18px;
+}
+@media (max-width: 900px) {
+  .barcode-layout-grid { grid-template-columns: 1fr; }
+}
+
+.barcode-preview-area {
+  background: #cbd5e1;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px;
+  max-height: 520px;
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* Individual Label Card */
+.barcode-label-card {
+  background: #ffffff;
+  color: #000000;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+  overflow: hidden;
+  page-break-inside: avoid;
+  break-inside: avoid;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Size Presets for Preview & Print */
+.barcode-label-card.size-50x30 {
+  width: 50mm;
+  height: 30mm;
+  min-width: 50mm;
+  min-height: 30mm;
+  padding: 1.5mm 2mm;
+}
+.barcode-label-card.size-40x25 {
+  width: 40mm;
+  height: 25mm;
+  min-width: 40mm;
+  min-height: 25mm;
+  padding: 1mm 1.5mm;
+}
+.barcode-label-card.size-80x50 {
+  width: 80mm;
+  height: 50mm;
+  min-width: 80mm;
+  min-height: 50mm;
+  padding: 3mm;
+}
+.barcode-label-card.size-a4-sheet {
+  width: 63.5mm;
+  height: 33.9mm;
+  min-width: 63.5mm;
+  min-height: 33.9mm;
+  padding: 2mm;
+  border: 1px dashed #cbd5e1;
+}
+
+.label-hdr {
+  font-size: 8px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #0f172a;
+  line-height: 1.1;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  border-bottom: 0.5px solid #000;
+  padding-bottom: 1px;
+  margin-bottom: 1px;
+}
+.size-40x25 .label-hdr { font-size: 7px; }
+.size-80x50 .label-hdr { font-size: 11px; padding-bottom: 2px; }
+
+.label-title {
+  font-size: 9.5px;
+  font-weight: 800;
+  line-height: 1.15;
+  max-height: 2.3em;
+  overflow: hidden;
+  color: #000;
+  width: 100%;
+  text-overflow: ellipsis;
+  margin: 1px 0;
+}
+.size-40x25 .label-title { font-size: 8px; }
+.size-80x50 .label-title { font-size: 13px; font-weight: 900; }
+
+.label-meta-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 8px;
+  font-weight: 600;
+  color: #334155;
+  margin: 1px 0;
+}
+.size-80x50 .label-meta-row { font-size: 10.5px; }
+
+.label-barcode-svg {
+  width: 100%;
+  max-height: 14mm;
+  display: block;
+  margin: 0 auto;
+}
+.size-40x25 .label-barcode-svg { max-height: 10mm; }
+.size-80x50 .label-barcode-svg { max-height: 22mm; }
+
+.label-price-tag {
+  font-size: 10.5px;
+  font-weight: 900;
+  color: #000;
+  line-height: 1;
+}
+.size-40x25 .label-price-tag { font-size: 9px; }
+.size-80x50 .label-price-tag { font-size: 15px; }
+
+/* PRINT MEDIA OVERRIDE FOR DEDICATED BARCODE LABELS */
+@media print {
+  body.printing-barcodes * {
+    visibility: hidden;
+  }
+  body.printing-barcodes #barcode-printable-area,
+  body.printing-barcodes #barcode-printable-area * {
+    visibility: visible;
+  }
+  body.printing-barcodes #barcode-printable-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0 !important;
+  }
+  body.printing-barcodes .barcode-label-card {
+    box-shadow: none !important;
+    border: none !important;
+    page-break-after: always;
+    break-after: page;
+    margin: 0 !important;
+  }
+  body.printing-barcodes .barcode-label-card.size-a4-sheet {
+    page-break-after: auto;
+    break-after: auto;
+    border: 0.2px solid #e2e8f0 !important;
+    margin: 1mm !important;
+  }
+}
+
 /* PRINT MEDIA */
 @media print {
   .sidebar, .top-bar, .toolbar-card, .btn, .nav-badge, .pos-top-search, .pos-cat-bar, .pos-pay-btns { display: none !important; }
@@ -1139,6 +1312,9 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
       </div>
       <div class="nav-item" onclick="switchNav('count')">
         <span class="icon">📋</span> <span>Stok Sayımı</span>
+      </div>
+      <div class="nav-item" onclick="openBarcodePrintModal()">
+        <span class="icon">🖨️</span> <span>Barkod Yazdır</span>
       </div>
       <div class="nav-item" onclick="switchNav('purchases')">
         <span class="icon">📥</span> <span>Alışlar & Mal Kabul</span>
@@ -1790,6 +1966,104 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
     </div>
   </main>
 </div>
+
+
+<!-- 8. BARCODE LABEL PRINTING MODAL -->
+<div class="modal-overlay" id="modal-barcode-print">
+  <div class="modal-box" style="max-width:960px;width:95vw">
+    <div class="modal-head">
+      <h3>🏷️ Barkod & Raf Etiketi Basım Merkezi</h3>
+      <button class="modal-close" onclick="closeModal('modal-barcode-print')">✕</button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="barcode-layout-grid">
+        
+        <!-- LEFT CONTROL PANEL -->
+        <div style="display:flex;flex-direction:column;gap:12px">
+          
+          <div style="background:#f8fafc;padding:12px;border-radius:8px;border:1px solid var(--line)">
+            <label style="font-size:11.5px;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">➕ Listeye Ürün Ekle</label>
+            <select id="bc-product-select" style="width:100%;height:36px;padding:0 8px;border-radius:6px;border:1px solid var(--line);font-size:12px" onchange="addSelectedProductToBarcodeQueue()">
+              <option value="">-- Ürün veya Parça Seçiniz --</option>
+            </select>
+            <div style="display:flex;gap:6px;margin-top:8px">
+              <button type="button" class="btn outline sm" style="flex:1" onclick="addAllProductsToBarcodeQueue()">Tüm Ürünleri Ekle</button>
+              <button type="button" class="btn danger sm" onclick="clearBarcodeQueue()">Temizle</button>
+            </div>
+          </div>
+
+          <div style="background:#f8fafc;padding:12px;border-radius:8px;border:1px solid var(--line)">
+            <label style="font-size:11.5px;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">📐 Etiket & Kağıt Formatı</label>
+            <select id="bc-label-size" style="width:100%;height:36px;padding:0 8px;border-radius:6px;border:1px solid var(--line);font-size:12px" onchange="renderBarcodePreview()">
+              <option value="size-50x30">🏷️ Termal Rulo: 50 x 30 mm (Standart Raf/Kutu)</option>
+              <option value="size-40x25">🏷️ Termal Rulo: 40 x 25 mm (Küçük Parça/Poşet)</option>
+              <option value="size-80x50">🏷️ Termal Rulo: 80 x 50 mm (Geniş Koli/Motor)</option>
+              <option value="size-a4-sheet">📄 A4 Etiket Sayfası (3x8 = 24'lü Standart Tabaka)</option>
+            </select>
+          </div>
+
+          <div style="background:#f8fafc;padding:12px;border-radius:8px;border:1px solid var(--line)">
+            <label style="font-size:11.5px;font-weight:700;color:var(--navy);display:block;margin-bottom:8px">👁️ Etikette Gösterilecek Alanlar</label>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+                <input type="checkbox" id="bc-opt-brand" checked onchange="renderBarcodePreview()"> DM MARIN Başlığı
+              </label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+                <input type="checkbox" id="bc-opt-name" checked onchange="renderBarcodePreview()"> Ürün Adı & Marka
+              </label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+                <input type="checkbox" id="bc-opt-oem" checked onchange="renderBarcodePreview()"> OEM / Parça Kodu
+              </label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+                <input type="checkbox" id="bc-opt-price" checked onchange="renderBarcodePreview()"> Satış Fiyatı (₺)
+              </label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+                <input type="checkbox" id="bc-opt-loc" checked onchange="renderBarcodePreview()"> Depo / Raf Lokasyonu
+              </label>
+            </div>
+          </div>
+
+          <!-- PRINT QUEUE LIST -->
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+              <b style="font-size:12px;color:var(--navy)">Basılacak Etiketler (<span id="bc-queue-total-count">0</span>)</b>
+            </div>
+            <div id="bc-queue-list" style="max-height:160px;overflow-y:auto;border:1px solid var(--line);border-radius:6px;background:#fff;padding:6px">
+              <div style="text-align:center;color:#94a3b8;font-size:11.5px;padding:12px">Henüz etiket eklenmedi</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT LIVE PREVIEW AREA -->
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <b style="font-size:13px;color:var(--navy)">Canlı Etiket Önizleme</b>
+            <span style="font-size:11.5px;color:var(--text-muted)">Yazdır butonu ile doğrudan termal/A4 yazıcıya gönderilir</span>
+          </div>
+
+          <div id="bc-preview-container" class="barcode-preview-area">
+            <div style="text-align:center;color:#64748b;font-size:13px;margin:40px 0">
+              🏷️ Önizleme için sol menüden ürün seçiniz veya "Tüm Ürünleri Ekle"ye basınız.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="modal-foot" style="justify-content:space-between">
+      <button class="btn outline" onclick="closeModal('modal-barcode-print')">Kapat</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn success lg" onclick="triggerBarcodePrint()">🖨️ Barkodları Yazdır (Ctrl+P)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HIDDEN DEDICATED PRINT CONTAINER -->
+<div id="barcode-printable-area" style="display:none"></div>
 
 <!-- ============================================================ -->
 <!-- MODALS -->
@@ -2985,6 +3259,7 @@ function renderProducts() {
       <td style="font-weight:800;color:#059669">₺ ${Number(p.sellPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
       <td><span class="badge-pill ${p.qty<=p.minQty?'red':'green'}">${p.qty} Adet</span></td>
       <td style="text-align:right">
+        <button class="btn outline sm" onclick="openSingleBarcodePrint('${p.id}')" title="Barkod Etiketi Yazdır">🏷️ Barkod</button>
         <button class="btn outline sm" onclick="openProductHistory('${p.id}')" title="Alış/Satış Geçmişi">🔍 Geçmiş</button>
         <button class="btn outline sm" onclick="openEditProductModal('${p.id}')">✏️</button>
       </td>
@@ -3846,6 +4121,230 @@ function exportProductsCsv() {
 function openModal(id) { document.getElementById(id)?.classList.add("open"); }
 function closeModal(id) { document.getElementById(id)?.classList.remove("open"); }
 function escapeHtml(str) { return str ? String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : ''; }
+
+
+// ============================================================
+// BARCODE PRINTING & GENERATOR MODULE
+// ============================================================
+let barcodeQueue = []; // array of { prodId, qty }
+
+function openBarcodePrintModal() {
+  populateBarcodeProductSelect();
+  if (barcodeQueue.length === 0 && productsState.length > 0) {
+    // default add first 3 or selected
+    barcodeQueue = productsState.slice(0, 3).map(p => ({ prodId: p.id, qty: 1 }));
+  }
+  renderBarcodeQueueList();
+  renderBarcodePreview();
+  openModal('modal-barcode-print');
+}
+
+function openSingleBarcodePrint(prodId) {
+  const p = productsState.find(x => x.id === prodId);
+  if (!p) return;
+  barcodeQueue = [{ prodId: p.id, qty: Math.max(1, Number(p.qty) || 1) }];
+  populateBarcodeProductSelect();
+  renderBarcodeQueueList();
+  renderBarcodePreview();
+  openModal('modal-barcode-print');
+}
+
+function populateBarcodeProductSelect() {
+  const sel = document.getElementById('bc-product-select');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">-- Listeye Eklemek İçin Ürün Seçiniz --</option>' + 
+    productsState.map(p => `<option value="${p.id}">${escapeHtml(p.name)} [OEM: ${escapeHtml(p.code)}] (Stok: ${p.qty})</option>`).join('');
+}
+
+function addSelectedProductToBarcodeQueue() {
+  const sel = document.getElementById('bc-product-select');
+  const prodId = sel.value;
+  if (!prodId) return;
+
+  const existing = barcodeQueue.find(x => x.prodId === prodId);
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    barcodeQueue.push({ prodId, qty: 1 });
+  }
+  sel.value = "";
+  renderBarcodeQueueList();
+  renderBarcodePreview();
+}
+
+function addAllProductsToBarcodeQueue() {
+  if (productsState.length === 0) {
+    alert("Kayıtlı ürün bulunmamaktadır.");
+    return;
+  }
+  barcodeQueue = productsState.map(p => ({
+    prodId: p.id,
+    qty: 1
+  }));
+  renderBarcodeQueueList();
+  renderBarcodePreview();
+  flash(`✓ ${productsState.length} ürün barkod yazdırma kuyruğuna eklendi.`);
+}
+
+function clearBarcodeQueue() {
+  barcodeQueue = [];
+  renderBarcodeQueueList();
+  renderBarcodePreview();
+}
+
+function updateBarcodeQueueQty(prodId, deltaOrVal, isAbsolute = false) {
+  const item = barcodeQueue.find(x => x.prodId === prodId);
+  if (!item) return;
+
+  if (isAbsolute) {
+    item.qty = Math.max(1, parseInt(deltaOrVal) || 1);
+  } else {
+    item.qty = Math.max(1, item.qty + deltaOrVal);
+  }
+  renderBarcodeQueueList();
+  renderBarcodePreview();
+}
+
+function removeBarcodeQueueItem(prodId) {
+  barcodeQueue = barcodeQueue.filter(x => x.prodId !== prodId);
+  renderBarcodeQueueList();
+  renderBarcodePreview();
+}
+
+function renderBarcodeQueueList() {
+  const container = document.getElementById('bc-queue-list');
+  const totalCounter = document.getElementById('bc-queue-total-count');
+  if (!container) return;
+
+  const totalLabels = barcodeQueue.reduce((acc, curr) => acc + (curr.qty || 1), 0);
+  if (totalCounter) totalCounter.textContent = `${totalLabels} Etiket`;
+
+  if (barcodeQueue.length === 0) {
+    container.innerHTML = '<div style="text-align:center;color:#94a3b8;font-size:11.5px;padding:12px">Kuyruk boş. Yukarıdan ürün seçiniz.</div>';
+    return;
+  }
+
+  container.innerHTML = barcodeQueue.map(item => {
+    const p = productsState.find(x => x.id === item.prodId);
+    if (!p) return '';
+    return `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 6px;border-bottom:1px solid #f1f5f9;font-size:11.5px">
+        <div style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:8px">
+          <b>${escapeHtml(p.name)}</b>
+          <span style="color:#64748b;font-size:10px;display:block">OEM: ${escapeHtml(p.code)}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:4px">
+          <input type="number" min="1" value="${item.qty}" style="width:45px;height:24px;text-align:center;border:1px solid var(--line);border-radius:4px;font-size:11px" onchange="updateBarcodeQueueQty('${p.id}', this.value, true)">
+          <button type="button" class="btn danger sm" style="padding:2px 6px;font-size:10px" onclick="removeBarcodeQueueItem('${p.id}')">✕</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderBarcodePreview() {
+  const container = document.getElementById('bc-preview-container');
+  if (!container) return;
+
+  if (barcodeQueue.length === 0) {
+    container.innerHTML = '<div style="text-align:center;color:#64748b;font-size:13px;margin:40px 0">🏷️ Basılacak etiket bulunmamaktadır.</div>';
+    return;
+  }
+
+  const sizeClass = document.getElementById('bc-label-size')?.value || 'size-50x30';
+  const showBrand = document.getElementById('bc-opt-brand')?.checked ?? true;
+  const showName = document.getElementById('bc-opt-name')?.checked ?? true;
+  const showOem = document.getElementById('bc-opt-oem')?.checked ?? true;
+  const showPrice = document.getElementById('bc-opt-price')?.checked ?? true;
+  const showLoc = document.getElementById('bc-opt-loc')?.checked ?? true;
+
+  let labelsHtml = '';
+  let barcodeIndex = 0;
+
+  barcodeQueue.forEach(item => {
+    const p = productsState.find(x => x.id === item.prodId);
+    if (!p) return;
+
+    const barcodeValue = (p.barcode && p.barcode.trim()) ? p.barcode.trim() : (p.code || 'DM-001');
+
+    for (let i = 0; i < item.qty; i++) {
+      const svgId = `bc-svg-${barcodeIndex++}`;
+      labelsHtml += `
+        <div class="barcode-label-card ${sizeClass}">
+          ${showBrand ? `
+            <div class="label-hdr">
+              <span>⚓ DM MARİN MOTOR</span>
+              ${showLoc && p.location ? `<span>📍 ${escapeHtml(p.location)}</span>` : ''}
+            </div>
+          ` : ''}
+          
+          ${showName ? `
+            <div class="label-title" title="${escapeHtml(p.name)}">${escapeHtml(p.name)}</div>
+          ` : ''}
+
+          <svg id="${svgId}" class="label-barcode-svg"></svg>
+
+          <div class="label-meta-row">
+            ${showOem ? `<span>OEM: <b>${escapeHtml(p.code)}</b></span>` : '<span></span>'}
+            ${showPrice ? `<span class="label-price-tag">₺ ${Number(p.sellPrice || 0).toLocaleString('tr-TR', {minimumFractionDigits:2})}</span>` : ''}
+          </div>
+        </div>
+      `;
+    }
+  });
+
+  container.innerHTML = labelsHtml;
+
+  // Render SVG barcodes with JsBarcode
+  setTimeout(() => {
+    barcodeIndex = 0;
+    barcodeQueue.forEach(item => {
+      const p = productsState.find(x => x.id === item.prodId);
+      if (!p) return;
+      const barcodeValue = (p.barcode && p.barcode.trim()) ? p.barcode.trim() : (p.code || 'DM-001');
+
+      for (let i = 0; i < item.qty; i++) {
+        const svgEl = document.getElementById(`bc-svg-${barcodeIndex++}`);
+        if (svgEl && window.JsBarcode) {
+          try {
+            JsBarcode(svgEl, barcodeValue, {
+              format: "CODE128",
+              width: sizeClass === 'size-40x25' ? 1.1 : (sizeClass === 'size-80x50' ? 2.0 : 1.4),
+              height: sizeClass === 'size-40x25' ? 22 : (sizeClass === 'size-80x50' ? 48 : 30),
+              displayValue: true,
+              fontSize: sizeClass === 'size-40x25' ? 8 : (sizeClass === 'size-80x50' ? 12 : 9.5),
+              margin: 1
+            });
+          } catch(err) {
+            console.warn("JsBarcode render error:", err);
+          }
+        }
+      }
+    });
+  }, 50);
+}
+
+function triggerBarcodePrint() {
+  if (barcodeQueue.length === 0) {
+    alert("Basılacak etiket seçilmedi!");
+    return;
+  }
+
+  const preview = document.getElementById('bc-preview-container');
+  const printArea = document.getElementById('barcode-printable-area');
+  if (!preview || !printArea) return;
+
+  printArea.innerHTML = preview.innerHTML;
+
+  document.body.classList.add('printing-barcodes');
+
+  window.print();
+
+  setTimeout(() => {
+    document.body.classList.remove('printing-barcodes');
+    printArea.innerHTML = '';
+  }, 1000);
+}
 
 function flash(msg) {
   const el = document.getElementById("flash-toast");
