@@ -1357,5 +1357,653 @@
     "cross": "Jabsco 18653-0001, Johnson 09-810B-1, Sierra 18-3081, CEF 500100",
     "interval": "150-200 Saat / Sezonluk",
     "specs": "10 Kanatlı Neopren İmpeller, D-Mil"
+  },
+  "21410633": {
+    "brand": "Volvo Penta",
+    "category": "Sensör & Elektronik",
+    "name": "D4 / D6 Soğutma Suyu Sıcaklık Sensörü (EVC)",
+    "models": "Volvo Penta D4, D6, D8, D11, D13",
+    "cross": "Bosch 0281002209, Volvo 21410633",
+    "interval": "Arıza Halinde",
+    "specs": "M12x1.5 Çift Kutuplu NTC Sensör"
+  },
+  "21707134": {
+    "brand": "Volvo Penta",
+    "category": "Yağlama & Filtre",
+    "name": "D11 / D13 Karter Yağ Çubuğu & Seviye Sensörü",
+    "models": "Volvo Penta D11, D13 Marin",
+    "cross": "Volvo 21707134",
+    "interval": "Periyodik Kontrol",
+    "specs": "Elektronik Seviye Sensörü"
+  },
+  "3860703": {
+    "brand": "Volvo Penta",
+    "category": "İmpeller & Soğutma",
+    "name": "3.0L / 4.3L / 5.0L / 5.7L Krank Kasnağı Su Pompası Gövde Kiti",
+    "models": "Volvo Penta Benzinli V6/V8",
+    "cross": "Johnson 10-24232-1, Sierra 18-3586",
+    "interval": "500 Saat / Revizyonda",
+    "specs": "Pirinç Ağır Hizmet Pompa Gövdesi"
+  },
+  "3857840": {
+    "brand": "Volvo Penta",
+    "category": "Termostat & Soğutma",
+    "name": "4.3L / 5.0L / 5.7L / 8.1L 71°C Benzinli Marin Termostat",
+    "models": "Volvo Penta 4.3GL, 5.0GXi, 5.7Gi, 8.1Gi",
+    "cross": "Sierra 18-3551, Mallory 9-43015",
+    "interval": "200 Saat / 2 Yılda 1",
+    "specs": "71°C (160°F) Paslanmaz Termostat"
+  },
+  "3853807": {
+    "brand": "Volvo Penta",
+    "category": "Ateşleme & Elektrik",
+    "name": "V6 / V8 Yüksek Gerilim Buji Kablo Seti",
+    "models": "Volvo Penta 4.3L, 5.0L, 5.7L EFI/MPI",
+    "cross": "Sierra 18-8830-1, Mallory 9-28020",
+    "interval": "300 Saat / 3 Yılda 1",
+    "specs": "8mm Silikon Karbon Çekirdekli Kablo"
+  },
+  "3854583": {
+    "brand": "Volvo Penta",
+    "category": "Ateşleme & Elektrik",
+    "name": "Delco EST Elektronik Ateşleme Modülü",
+    "models": "Volvo Penta 4.3L..8.1L Benzinli Motorlar",
+    "cross": "Sierra 18-5107-1, Mallory 9-29800",
+    "interval": "Arıza Halinde",
+    "specs": "4-Pin EST Ateşleme Kontrol Modülü"
+  },
+  "3857578": {
+    "brand": "Volvo Penta",
+    "category": "Sürücü & Kuyruk",
+    "name": "SX / DPS Gimbal Rulmanı (Greslenebilir)",
+    "models": "Volvo Penta SX-M, SX-A, DPS-A, DPS-B",
+    "cross": "Sierra 18-2100, Mallory 9-72410",
+    "interval": "200 Saat / 2 Yılda 1",
+    "specs": "Ağır Hizmet Küresel Makaralı Rulman"
+  },
+  "3852293": {
+    "brand": "Volvo Penta",
+    "category": "Sürücü & Kuyruk",
+    "name": "DP-SM / SX Şaft U-Joint İstavroz Mafsalı",
+    "models": "Volvo Penta SX, DP-S, DP-SM Kuyruklar",
+    "cross": "Sierra 18-2174, Mallory 9-72404",
+    "interval": "300 Saat / Sezon Başı",
+    "specs": "Greslenebilir Korozyona Dirençli Mafsal"
+  },
+  "877539": {
+    "brand": "Volvo Penta",
+    "category": "Sürücü & Kuyruk",
+    "name": "DPH / DPR Kuyruk Körük & Egzoz Seti",
+    "models": "Volvo Penta DPH-A..D, DPR",
+    "cross": "Sierra 18-2776, Orbitrade 15539",
+    "interval": "200 Saat / 2 Yılda 1",
+    "specs": "Yüksek Basınç Neopren Körük Kiti"
+  },
+  "21752940": {
+    "brand": "Volvo Penta",
+    "category": "Soğutma & Isı",
+    "name": "D4 / D6 Isı Eşanjörü Bakır Boru Demeti",
+    "models": "Volvo Penta D4-260, D6-370, D6-435",
+    "cross": "Volvo 21752940, Bowman",
+    "interval": "1000 Saat / 5 Yılda 1 Temizlik",
+    "specs": "Korozyona Dirençli CuNi10Fe Demet"
+  },
+  "21170563": {
+    "brand": "Volvo Penta",
+    "category": "Kayış & Kasnak",
+    "name": "D11 / D13 Alternatör ve Pompa V-Ribbed Kayış",
+    "models": "Volvo Penta D11-670, D13-800..1000",
+    "cross": "Gates 8PK1650, Dayco 8PK1650",
+    "interval": "500 Saat / 2 Sezonda 1",
+    "specs": "8 Kanallı EPDM Takviyeli Kayış"
+  },
+  "21384074": {
+    "brand": "Volvo Penta",
+    "category": "Yakıt Filtrasyonu",
+    "name": "D8 / D11 / D13 Ortak Ray (Common Rail) Yakıt Boru Seti",
+    "models": "Volvo Penta D8, D11, D13 CR",
+    "cross": "Bosch, Volvo 21384074",
+    "interval": "Enjektör Revizyonunda",
+    "specs": "2000 Bar Yüksek Basınç Çelik Boru"
+  },
+  "21379799": {
+    "brand": "Volvo Penta",
+    "category": "Krank Havalandırma",
+    "name": "D11 / D13 CCV Karter Havalandırma Valfi",
+    "models": "Volvo Penta D11, D13",
+    "cross": "Racor CCV55274-10, Baldwin CV15004",
+    "interval": "500 Saat / 2 Yılda 1",
+    "specs": "Yağ Buharı Ayırıcı Kaset Filtre"
+  },
+  "3850398": {
+    "brand": "Volvo Penta",
+    "category": "Ateşleme & Elektrik",
+    "name": "V6 / V8 12V 1.4kW Marin Marş Motoru",
+    "models": "Volvo Penta 4.3L, 5.0L, 5.7L, 8.1L",
+    "cross": "Sierra 18-5913, Arco 30460",
+    "interval": "Arıza Halinde",
+    "specs": "SAE J1171 Marin Kıvılcım Korumalı"
+  },
+  "3860769": {
+    "brand": "Volvo Penta",
+    "category": "Ateşleme & Elektrik",
+    "name": "12V 65A Delco Marin Şarj Dinamosu (Alternatör)",
+    "models": "Volvo Penta 3.0L..8.1L Benzinli Motorlar",
+    "cross": "Sierra 18-5966, Arco 60065",
+    "interval": "Arıza Halinde",
+    "specs": "Kıvılcım Korumalı İç Regülatörlü"
+  },
+  "21384758": {
+    "brand": "Volvo Penta",
+    "category": "Egzoz & Turbo",
+    "name": "D4 / D6 Paslanmaz Egzoz Karıştırıcı Dirsek",
+    "models": "Volvo Penta D4-225..300, D6-310..435",
+    "cross": "HDI Marine VPF, Orbitrade 15758",
+    "interval": "500 Saat / 4 Yılda 1 Kontrol",
+    "specs": "316L Paslanmaz Döküm Marin Dirsek"
+  },
+  "3589886": {
+    "brand": "Volvo Penta",
+    "category": "Şanzıman & Redüksiyon",
+    "name": "HS45A / HS63A Hidrolik Şanzıman Yağ Filtresi",
+    "models": "Volvo Penta HS45, HS63, HS85 Şanzımanlar",
+    "cross": "ZF 0501314405, Mann W 712",
+    "interval": "300 Saat / Sezonluk",
+    "specs": "Spin-on Hidrolik Basınç Filtresi"
+  },
+  "21408351": {
+    "brand": "Volvo Penta",
+    "category": "Sürücü & Kuyruk",
+    "name": "IPS600 / IPS800 / IPS900 Tahrik Şaftı Yağ Filtresi",
+    "models": "Volvo Penta IPS-A..F Pod Sürücüler",
+    "cross": "Mann W 719, Baldwin B7299",
+    "interval": "250 Saat / Sezon Başı",
+    "specs": "Sentetik Yüksek Basınç Dişli Filtresi"
+  },
+  "129670-42500": {
+    "brand": "Yanmar Marine",
+    "category": "İmpeller & Soğutma",
+    "name": "4BY2 / 6BY2 Deniz Suyu Devridaim Pompası Komple",
+    "models": "Yanmar 4BY2-150, 6BY2-260",
+    "cross": "Johnson 10-13443-01, Yanmar 129670-42500",
+    "interval": "1000 Saat / İhtiyaç Halinde",
+    "specs": "Pirinç Gövde, Mekanik Salmastralı"
+  },
+  "128377-42200-O": {
+    "brand": "Yanmar Marine",
+    "category": "Termostat & Soğutma",
+    "name": "3JH / 4JH 76.5°C Tropikal Marin Termostat",
+    "models": "Yanmar 3JH, 4JH, 4LH Sıcak Bölge",
+    "cross": "Calorstat TH6876, Sierra 18-3642",
+    "interval": "500 Saat / 3 Sezonda 1",
+    "specs": "76.5°C Paslanmaz Gövdeli Termostat"
+  },
+  "129574-18840": {
+    "brand": "Yanmar Marine",
+    "category": "Sensör & Elektronik",
+    "name": "4JH4-TE / 4JH57 Common Rail Boost Basınç Sensörü",
+    "models": "Yanmar 4JH4-TE, 4JH57, 4JH80, 4JH110",
+    "cross": "Bosch 0281002437, Yanmar 129574-18840",
+    "interval": "Arıza Halinde",
+    "specs": "3.0 Bar Mutlak Emme Manifoldu Sensörü"
+  },
+  "129470-13560": {
+    "brand": "Yanmar Marine",
+    "category": "Egzoz & Turbo",
+    "name": "3JH / 4JH Paslanmaz Çelik Egzoz Karıştırıcı Dirsek",
+    "models": "Yanmar 3JH2, 3JH3, 3JH4, 4JH2, 4JH3, 4JH4",
+    "cross": "HDI Marine YJH, Orbitrade 15560",
+    "interval": "500 Saat / 4 Yılda 1",
+    "specs": "316L Hassas Paslanmaz Marin Dirsek"
+  },
+  "128170-42070": {
+    "brand": "Yanmar Marine",
+    "category": "İmpeller & Soğutma",
+    "name": "1GM / 1GM10 Deniz Suyu İmpeller Kiti",
+    "models": "Yanmar 1GM, 1GM10",
+    "cross": "Johnson 09-801B, Jabsco 4528-0001, CEF 500106",
+    "interval": "150 Saat / Sezonluk",
+    "specs": "6 Bıçaklı Neopren, Çap: 40mm, Pim Geçme"
+  },
+  "129795-77010": {
+    "brand": "Yanmar Marine",
+    "category": "Ateşleme & Elektrik",
+    "name": "12V 1.4kW Hitachi Tip Yanmar Marş Motoru",
+    "models": "Yanmar 3JH, 4JH, 4LH, 6LY Serileri",
+    "cross": "Hitachi S114-651, Sierra 18-5942",
+    "interval": "Arıza Halinde",
+    "specs": "Redüksiyonlu Ağır Hizmet Marş Motoru"
+  },
+  "129772-77200": {
+    "brand": "Yanmar Marine",
+    "category": "Ateşleme & Elektrik",
+    "name": "12V 80A Hitachi Marin Alternatör",
+    "models": "Yanmar 2YM, 3YM, 3JH, 4JH Serileri",
+    "cross": "Hitachi LR180-03, Sierra 18-5975",
+    "interval": "Arıza Halinde",
+    "specs": "Dahili Regülatörlü Marin Şarj Dinamosu"
+  },
+  "121400-01520": {
+    "brand": "Yanmar Marine",
+    "category": "Krank Havalandırma",
+    "name": "2GM / 3GM / 3JH Karter Havalandırma Diyaframı",
+    "models": "Yanmar 2GM, 3GM, 3JH, 4JH",
+    "cross": "Yanmar 121400-01520",
+    "interval": "500 Saat / 2 Yılda 1",
+    "specs": "Viton Yağ Buharı Ayırıcı Diyafram"
+  },
+  "129271-42502": {
+    "brand": "Yanmar Marine",
+    "category": "İmpeller & Soğutma",
+    "name": "4JH-TE / 4JH-HTE / 4JH-DTE Deniz Suyu İmpelleri",
+    "models": "Yanmar 4JH-TE, 4JH-DTE, 4JH-HTE (Turbo Modeller)",
+    "cross": "Johnson 09-1027B-1, Jabsco 1210-0001, CEF 500107",
+    "interval": "200 Saat / Sezon Başı",
+    "specs": "12 Kanatlı Neopren, 57x31.5mm Spline"
+  },
+  "119773-42652": {
+    "brand": "Yanmar Marine",
+    "category": "İmpeller & Soğutma",
+    "name": "6LY / 6LY2 / 6LY3 Deniz Suyu Pompası Mekanik Keçe Kiti",
+    "models": "Yanmar 6LY Serisi Pompalar",
+    "cross": "Johnson 09-0210, CEF 500124K",
+    "interval": "500 Saat / Damlatmada",
+    "specs": "Seramik-Karbon Mekanik Su Keçesi"
+  },
+  "120650-42310": {
+    "brand": "Yanmar Marine",
+    "category": "Tutya & Korozyon",
+    "name": "Yanmar SD20 / SD31 / SD40 / SD50 Saildrive Kuyruk Anodu",
+    "models": "Yanmar SD20, SD25, SD30, SD31, SD40, SD50, SD60",
+    "cross": "Tecnoseal 00508, Martyr CMSD50",
+    "interval": "Sezonluk / %50 Aşınmada Değişim",
+    "specs": "İki Parçalı Bölünmüş Çinko Halka Anot"
+  },
+  "110-6326": {
+    "brand": "Caterpillar",
+    "category": "Hava Emiş",
+    "name": "CAT 3116 / 3126 Dairesel Marin Hava Filtresi",
+    "models": "Caterpillar 3116, 3126 Marin",
+    "cross": "Mann C 24 650/1, Donaldson P532505, Baldwin PA2897",
+    "interval": "500 Saat / Sezonluk",
+    "specs": "Radyal Contalı Yüksek Kapasite Filtre"
+  },
+  "198-6378": {
+    "brand": "Caterpillar",
+    "category": "Yakıt Filtrasyonu",
+    "name": "CAT C7 / C9 / C12 Ön Yakıt / Su Ayırıcı Kartuşu (Sensörlü)",
+    "models": "Caterpillar C7, C9, C12, C15, C18",
+    "cross": "Mann WK 1080/7 x, Donaldson P551421, Baldwin BF7768",
+    "interval": "250 Saat / Sezon Başı",
+    "specs": "10 Mikron Su Ayırıcı Kartuş"
+  },
+  "205-3051": {
+    "brand": "Caterpillar",
+    "category": "Sensör & Elektronik",
+    "name": "CAT C7 / C9 / C12 / C18 Common Rail Basınç Sensörü",
+    "models": "Caterpillar C7, C9, C12, C15, C18 ACERT",
+    "cross": "Bosch 0281002937, CAT 205-3051",
+    "interval": "Arıza Halinde",
+    "specs": "2000 Bar CR Basınç Transmitteri"
+  },
+  "256-8753": {
+    "brand": "Caterpillar",
+    "category": "Termostat & Soğutma",
+    "name": "CAT C12 / C15 / C18 82°C Ağır Hizmet Termostatı",
+    "models": "Caterpillar C12, C15, C18 Marin",
+    "cross": "Calorstat TH7082, Gates 33982",
+    "interval": "500 Saat / 3 Sezonda 1",
+    "specs": "Yüksek Debili Çift Yaylı Termostat"
+  },
+  "7W-2326": {
+    "brand": "Caterpillar",
+    "category": "Kayış & Kasnak",
+    "name": "CAT 3406 / 3412 Alternatör V-Kayış Seti",
+    "models": "Caterpillar 3406, 3412 Marin",
+    "cross": "Gates 9540HD, Dayco 17A1370",
+    "interval": "500 Saat / 2 Yılda 1",
+    "specs": "Eşleştirilmiş Çiftli Marin V-Kayışı"
+  },
+  "7W-5317": {
+    "brand": "Caterpillar",
+    "category": "Ateşleme & Elektrik",
+    "name": "CAT 3126 / C7 / C9 24V Marin Marş Motoru",
+    "models": "Caterpillar 3126, C7, C9, C12",
+    "cross": "Delco Remy 28MT / 39MT, Prestolite",
+    "interval": "Arıza Halinde",
+    "specs": "24V 5.5kW Ağır Hizmet Marş Motoru"
+  },
+  "360-8960": {
+    "brand": "Caterpillar",
+    "category": "Yakıt Filtrasyonu",
+    "name": "CAT C18 / C32 İleri Düzey Yüksek Verimli Yakıt Filtresi",
+    "models": "Caterpillar C18 ACERT, C32 ACERT",
+    "cross": "Mann WK 11 002, Donaldson P550770, Baldwin BF1383",
+    "interval": "250-400 Saat",
+    "specs": "4 Mikron Hassas Common Rail Kartuşu"
+  },
+  "51.06630-0133": {
+    "brand": "MAN Marine",
+    "category": "İmpeller & Soğutma",
+    "name": "MAN V8-1000 / V8-1200 / V12-1400 Ham Su İmpeller Kiti",
+    "models": "MAN V8-1000, V8-1200, V12-1400, V12-1550",
+    "cross": "Johnson 09-819B, Jabsco 17954-0001, Gilkes 44139",
+    "interval": "300 Saat / Sezon Başı",
+    "specs": "12 Kanatlı Neopren, 95x63mm Spline"
+  },
+  "51.12503-0069": {
+    "brand": "MAN Marine",
+    "category": "Yakıt Filtrasyonu",
+    "name": "MAN V12-1900 / V12-2000 Yüksek Basınç İkincil Yakıt Kartuşu",
+    "models": "MAN V8-1300, V12-1800, V12-1900, V12-2000",
+    "cross": "Mann PU 1059 x, Hengst E100KP D180, Mahle KX 208",
+    "interval": "250 Saat / Sezon Başı",
+    "specs": "Eko Kartuş 2 Mikron CR Yakıt Elemanı"
+  },
+  "51.09500-7060": {
+    "brand": "MAN Marine",
+    "category": "Sensör & Elektronik",
+    "name": "MAN Common Rail Krank Devir Sensörü (Pick-up)",
+    "models": "MAN D0836, D2842, D2868, D2862",
+    "cross": "Bosch 0281002214, MAN 51.09500-7060",
+    "interval": "Arıza Halinde",
+    "specs": "Endüktif Krank Pozisyon Sensörü"
+  },
+  "23518526": {
+    "brand": "MTU Marine",
+    "category": "Yağlama & Filtre",
+    "name": "MTU Series 60 Marin Motor Yağ Filtresi",
+    "models": "MTU Series 60 12.7L & 14.0L (DDC 60 Tabanlı)",
+    "cross": "Mann W 11 102/4, Donaldson P552100, Baldwin B495, Fleetguard LF3620",
+    "interval": "250 Saat / Sezon Başı",
+    "specs": "Tam Akışlı Spin-on Yağ Filtresi (1-1/2-12 Diş)"
+  },
+  "23530647": {
+    "brand": "MTU Marine",
+    "category": "Yakıt Filtrasyonu",
+    "name": "MTU Series 60 İkincil Yakıt Filtresi Kartuşu",
+    "models": "MTU Series 60 Marin",
+    "cross": "Mann WK 950/16, Donaldson P556916, Baldwin BF5810, Fleetguard FF5207",
+    "interval": "250 Saat",
+    "specs": "2 Mikron Yüksek Basınç Spin-on Eleman"
+  },
+  "X00042421": {
+    "brand": "MTU Marine",
+    "category": "Termostat & Soğutma",
+    "name": "MTU Series 2000 M93..M96 79°C Marin Termostat Kiti",
+    "models": "MTU 10V2000, 12V2000, 16V2000",
+    "cross": "Behr, Wahler, MTU X00042421",
+    "interval": "600 Saat / 3 Sezonda 1",
+    "specs": "79°C Yüksek Debi Paslanmaz Regülatör"
+  },
+  "X57508300027": {
+    "brand": "MTU Marine",
+    "category": "Sensör & Elektronik",
+    "name": "MTU ADEC / DDEC Elektronik Kontrol Ünitesi Basınç Sensörü",
+    "models": "MTU Series 2000, Series 4000",
+    "cross": "Bosch, MTU X57508300027",
+    "interval": "Arıza Halinde",
+    "specs": "ADEC Dijital Motor Basınç Sensörü"
+  },
+  "3908615": {
+    "brand": "Cummins Marine",
+    "category": "Termostat & Soğutma",
+    "name": "Cummins 6BTA 5.9 / 6CTA 8.3 82°C Marin Termostat",
+    "models": "Cummins 6BTA5.9-M, 6CTA8.3-M, QSB5.9",
+    "cross": "Calorstat TH6882, Fleetguard 3908615, Gates 33982",
+    "interval": "500 Saat / 3 Sezonda 1",
+    "specs": "82°C Paslanmaz Çelik Termostat, O-Ring Dahil"
+  },
+  "3918000": {
+    "brand": "Cummins Marine",
+    "category": "Kayış & Kasnak",
+    "name": "Cummins 6BTA 5.9 Marin Alternatör & Pompa Kayışı",
+    "models": "Cummins 6BTA 5.9-M (210 - 370 HP)",
+    "cross": "Gates 8PK1440, Dayco 8PK1440",
+    "interval": "400 Saat / 2 Sezonda Bir",
+    "specs": "8 Kanallı Yüksek Sıcaklık EPDM Kayış"
+  },
+  "4935205": {
+    "brand": "Cummins Marine",
+    "category": "Yakıt Filtrasyonu",
+    "name": "Cummins QSC 8.3 / QSL 9 / QSM 11 Common Rail Basınç Filtresi",
+    "models": "Cummins QSC8.3, QSL9, QSM11",
+    "cross": "Fleetguard FF5612, Donaldson P550881, Baldwin BF7815",
+    "interval": "250 Saat",
+    "specs": "Stratapore 2 Mikron Hassas CR Yakıt Filtresi"
+  },
+  "3903640": {
+    "brand": "Cummins Marine",
+    "category": "Ateşleme & Elektrik",
+    "name": "Cummins 6BT / 6BTA 12V 3.0kW Denso Tip Marş Motoru",
+    "models": "Cummins 4BT, 6BT, 6BTA 5.9",
+    "cross": "Denso 228000-0631, Sierra 18-5925",
+    "interval": "Arıza Halinde",
+    "specs": "Ağır Hizmet 12V Marin Marş Motoru"
+  },
+  "185-7444": {
+    "brand": "Onan Generator",
+    "category": "İmpeller & Soğutma",
+    "name": "Onan MDKUB / MDKAV Ham Su Pompası Mekanik Keçe Kiti",
+    "models": "Onan MDKUB, MDKAV, MDKAW",
+    "cross": "Johnson 09-0210, Sierra 18-3081K",
+    "interval": "400 Saat / Damlatmada",
+    "specs": "Mekanik Karbon Keçe ve O-Ringler"
+  },
+  "300-4105": {
+    "brand": "Onan Generator",
+    "category": "Sensör & Elektronik",
+    "name": "Onan e-QD Jeneratör Dijital Kontrol Paneli Yağ Müşürü",
+    "models": "Onan MDKBH, MDKBL, MDKBM, MDKBN, MDKBP",
+    "cross": "VDO, Cummins 300-4105",
+    "interval": "Arıza Halinde",
+    "specs": "1/8 NPT 0-5 Bar Analog/Dijital Sensör"
+  },
+  "GM28487": {
+    "brand": "Kohler Generator",
+    "category": "Hava Emiş",
+    "name": "Kohler 9EFOZD / 11EFOZD / 13EFOZD Susturucu Hava Filtresi",
+    "models": "Kohler 9-13 kW Dizel Jeneratörler",
+    "cross": "Mann C 1140, Baldwin PA4600",
+    "interval": "250 Saat / Sezonluk",
+    "specs": "Ses Emici Kaset Tipi Marin Filtre"
+  },
+  "GM49855": {
+    "brand": "Kohler Generator",
+    "category": "Sensör & Elektronik",
+    "name": "Kohler Karar / Decision-Maker 3500 Kontrolcü Su Sıcaklık Müşürü",
+    "models": "Kohler 5E..33EFOZD Serisi",
+    "cross": "Kohler GM49855",
+    "interval": "Arıza Halinde",
+    "specs": "Dijital LCD Uyumlu Sıcaklık Transmitteri"
+  },
+  "0001889": {
+    "brand": "Fischer Panda",
+    "category": "Termostat & Soğutma",
+    "name": "Fischer Panda Kubota Motorlu 71°C Marin Termostat",
+    "models": "Panda 8000i, 10000i, 15000i, 25i",
+    "cross": "Calorstat TH6871, Kubota 19203-73010",
+    "interval": "400 Saat / 3 Sezonda 1",
+    "specs": "71°C Pirinç Gövdeli Termostat"
+  },
+  "0005601": {
+    "brand": "Fischer Panda",
+    "category": "Kayış & Kasnak",
+    "name": "Fischer Panda 5000i / 8000i Su Pompası Poly-V Kayışı",
+    "models": "Fischer Panda 5000i.Neo, 8000i",
+    "cross": "Optibelt 3PK675, Gates 3PK675",
+    "interval": "300 Saat / 2 Sezonda 1",
+    "specs": "3 Kanallı Kompakt Marin Kayış"
+  },
+  "24-01002": {
+    "brand": "Northern Lights",
+    "category": "Termostat & Soğutma",
+    "name": "Northern Lights M673 / M773 / M843 71°C Termostat Kiti",
+    "models": "Northern Lights 5kW - 20kW",
+    "cross": "Calorstat TH6871, Sierra 18-3640",
+    "interval": "400 Saat / 3 Sezonda 1",
+    "specs": "Paslanmaz Gövde, Conta Dahil"
+  },
+  "24-11002": {
+    "brand": "Northern Lights",
+    "category": "Ateşleme & Isıtma",
+    "name": "Northern Lights M673 / M773 Shibaura Motor Kızdırma Bujisi",
+    "models": "Northern Lights M673L2/L3, M773LW2/LW3",
+    "cross": "NGK Y-103V, Denso DG-211",
+    "interval": "500 Saat / İhtiyaç Halinde",
+    "specs": "11V Hızlı Isıtmalı Kızdırma Bujisi"
+  },
+  "024688": {
+    "brand": "Westerbeke",
+    "category": "Yakıt Filtrasyonu",
+    "name": "Westerbeke Benzinli ve Dizel Vidalı Yakıt Filtresi",
+    "models": "Westerbeke 3.0kW - 15.0kW Jeneratörler",
+    "cross": "Sierra 18-7845, Racor R12T, Mann WK 712",
+    "interval": "150-200 Saat / Sezonluk",
+    "specs": "10 Mikron Su Ayırıcı Spin-on Eleman"
+  },
+  "6P2-11325-00": {
+    "brand": "Yamaha Marine",
+    "category": "Tutya & Korozyon",
+    "name": "Yamaha F200..F300 V6 Silindir Kapağı Dahili Çinko Anodu",
+    "models": "Yamaha F200, F225, F250, F300 4.2L",
+    "cross": "Tecnoseal 01105, Martyr CM6P211325",
+    "interval": "100 Saat / %50 Aşınmada Değişim",
+    "specs": "İç Blok Çinko Anot Parçası"
+  },
+  "6EK-12411-00": {
+    "brand": "Yamaha Marine",
+    "category": "Termostat & Soğutma",
+    "name": "Yamaha F70 / F75 / F90 / F115 60°C Dıştan Takma Termostatı",
+    "models": "Yamaha F70A, F75B, F90B, F115A, F115B",
+    "cross": "Sierra 18-3632, Mallory 9-43152",
+    "interval": "100-200 Saat / 2 Yılda 1",
+    "specs": "60°C Korozyona Dirençli Pirinç Termostat"
+  },
+  "8M0055011": {
+    "brand": "Mercury Marine",
+    "category": "Termostat & Soğutma",
+    "name": "Mercury Verado 150..400 HP 60°C Marin Termostat Kiti",
+    "models": "Mercury Verado 150, 200, 250, 300, 350, 400R",
+    "cross": "Sierra 18-3635, Quicksilver 8M0055011",
+    "interval": "150 Saat / 2 Yılda 1",
+    "specs": "Kompresörlü Motor Özel Termostatı"
+  },
+  "8M0060041": {
+    "brand": "Mercruiser",
+    "category": "Ateşleme & Elektrik",
+    "name": "Mercruiser 4.3L / 5.0L / 5.7L MPI İridyum Buji Seti",
+    "models": "Mercruiser 4.3 MPI, 350 MAG, 377 MAG, 6.2 MPI",
+    "cross": "NGK ITR4A15, Champion RS12WYPB4, AC Delco 41-993",
+    "interval": "100-200 Saat / Sezonluk",
+    "specs": "Lazer İridyum Uzun Ömürlü Marin Buji"
+  },
+  "17400-88L00": {
+    "brand": "Suzuki Marine",
+    "category": "İmpeller & Soğutma",
+    "name": "Suzuki DF40A / DF50A / DF60A Yeni Nesil Su Pompası Kiti",
+    "models": "Suzuki DF40A, DF50A, DF60A (2010+)",
+    "cross": "Sierra 18-3256, CEF 500369, Solas SZ-P60",
+    "interval": "100-150 Saat / Sezonluk",
+    "specs": "6 Bıçaklı Neopren İmpeller ve Pompa Tası"
+  },
+  "15412-92J00": {
+    "brand": "Suzuki Marine",
+    "category": "Yakıt Filtrasyonu",
+    "name": "Suzuki DF150 - DF300 Buhar Ayırıcı (VST) Yüksek Basınç Filtresi",
+    "models": "Suzuki DF150, DF175, DF200, DF250, DF300",
+    "cross": "Sierra 18-79815, Hifi SN 25095",
+    "interval": "200 Saat / 2 Yılda 1",
+    "specs": "Mikron Paslanmaz Çelik Tel Süzgeç"
+  },
+  "15400-PFB-014": {
+    "brand": "Honda Marine",
+    "category": "Yağlama & Filtre",
+    "name": "Honda BF25 - BF250 4-Zamanlı Dıştan Takma Yağ Filtresi",
+    "models": "Honda Marine BF25, BF30, BF40, BF50, BF75, BF90, BF150, BF225, BF250",
+    "cross": "Sierra 18-7911-1, Mann W 67/1, Baldwin B1400, Fram PH6017A",
+    "interval": "100 Saat veya 1 Yıl",
+    "specs": "Yüksek Basınçlı Spin-on Dıştan Takma Filtre"
+  },
+  "19210-ZW1-003": {
+    "brand": "Honda Marine",
+    "category": "İmpeller & Soğutma",
+    "name": "Honda BF75 / BF90 / BF115 / BF130 Su Pompası İmpelleri",
+    "models": "Honda BF75A, BF90A, BF115A, BF130A",
+    "cross": "Sierra 18-3250, CEF 500361, Mallory 9-45102",
+    "interval": "100 Saat / Sezon Başı",
+    "specs": "6 Kanatlı Güçlendirilmiş Neopren İmpeller"
+  },
+  "3C8-65021-2": {
+    "brand": "Tohatsu Marine",
+    "category": "İmpeller & Soğutma",
+    "name": "Tohatsu / Nissan 40HP - 90HP 2/4-Zamanlı Su Pompası İmpelleri",
+    "models": "Tohatsu M40D, M50D, MD40, MD50, BFT60..90",
+    "cross": "Sierra 18-8922, CEF 500344, Mallory 9-45400",
+    "interval": "100 Saat / Sezonluk",
+    "specs": "6 Bıçaklı Dayanıklı Kauçuk İmpeller"
+  },
+  "0501314405": {
+    "brand": "ZF Marine",
+    "category": "Şanzıman & Redüksiyon",
+    "name": "ZF 45A / ZF 63A / ZF 85A Hidrolik Marin Şanzıman Filtresi",
+    "models": "ZF Marine ZF45A, ZF45IV, ZF63A, ZF63IV, ZF85A, ZF85IV",
+    "cross": "Volvo Penta 3589886, Mann W 712/4, Baldwin B1434",
+    "interval": "300-500 Saat / Sezonluk",
+    "specs": "Spin-on Hidrolik Basınç Filtresi"
+  },
+  "0501319045": {
+    "brand": "ZF Marine",
+    "category": "Şanzıman & Redüksiyon",
+    "name": "ZF 220A / ZF 280A / ZF 325A Ağır Hizmet Şanzıman Filtresi",
+    "models": "ZF 220A, ZF 280A, ZF 325A, ZF 500 Serisi",
+    "cross": "Mann W 920/21, Donaldson P550086, Baldwin B1400",
+    "interval": "500 Saat / Yılda 1",
+    "specs": "Yüksek Debi Hidrolik Yağ Filtresi"
+  },
+  "9700140": {
+    "brand": "Twin Disc",
+    "category": "Şanzıman & Redüksiyon",
+    "name": "Twin Disc MG5061 / MG5075 / MG5091 Marin Şanzıman Filtresi",
+    "models": "Twin Disc MG-5061A, MG-5075A, MG-5091A",
+    "cross": "Donaldson P550388, Baldwin B7030, Fleetguard LF3883",
+    "interval": "500 Saat / Sezon Başı",
+    "specs": "Tam Akışlı Ağır Hizmet Şanzıman Filtresi"
+  },
+  "020-03418": {
+    "brand": "Seakeeper",
+    "category": "Stabilizatör & Gyro",
+    "name": "Seakeeper 2 / 3 / 5 / 6 / 9 Yıllık Hidrolik Servis & Filtre Kiti",
+    "models": "Seakeeper 2, 3, 5, 6, 9, 16, 18, 26, 35 Gyro Stabilizers",
+    "cross": "Seakeeper Official Kit 020-03418",
+    "interval": "Annual / 1000 Saat",
+    "specs": "Glikol & Hidrolik Filtre Kartuşu, O-Ringler Dahil"
+  },
+  "02-114-112": {
+    "brand": "PSS Shaft Seal",
+    "category": "Şaft & Pervane",
+    "name": "PSS 1-1/2 İnç (38mm) - 2 İnç (50mm) Mekanik Şaft Salmastrası",
+    "models": "Tüm Şaftlı Tekneler (30mm - 75mm Şaft Çapı)",
+    "cross": "PYI PSS Type A, Tides Marine SureSeal",
+    "interval": "5 Yılda 1 Körük Değişimi",
+    "specs": "Karbon Flanş & Paslanmaz Çelik Rotorlu Kuru Salmastra"
+  },
+  "00706": {
+    "brand": "Tecnoseal",
+    "category": "Tutya & Korozyon",
+    "name": "Şaft Tipi Bölünmüş Çinko Anot (35mm - 50mm)",
+    "models": "Tüm Şaftlı Yelkenli ve Motor Yatlar",
+    "cross": "Martyr CMXS, Sierra 18-6005",
+    "interval": "Sezonluk / %50 Aşınmada",
+    "specs": "Yüksek Saflıkta Tuzlu Su Çinko Şaft Tutyası"
+  },
+  "00734": {
+    "brand": "Tecnoseal",
+    "category": "Tutya & Korozyon",
+    "name": "Volvo Penta DPH / DPR Kuyruk Kalkanı Çinko Anot Seti",
+    "models": "Volvo Penta DPH-A, DPH-B, DPH-C, DPH-D",
+    "cross": "Martyr CM3588745, Volvo 3593881",
+    "interval": "Sezonluk Değişim",
+    "specs": "Hidrolik Piston ve Kovan Anot Takımı"
   }
 }
