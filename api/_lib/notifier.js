@@ -28,7 +28,7 @@ async function sendNotification(requestData) {
     const webhookUrl = (config && config.webhook_url) || process.env.ADMIN_WEBHOOK_URL;
     const resendApiKey = (config && config.resend_api_key) || process.env.RESEND_API_KEY;
     const adminEmail = (config && config.admin_email) || process.env.ADMIN_EMAIL || 'dmmarin48@gmail.com';
-    const fromEmail = (config && config.resend_from_email) || process.env.RESEND_FROM_EMAIL || 'DM MARİN Servis <onboarding@resend.dev>';
+    const fromEmail = (config && config.resend_from_email) || process.env.RESEND_FROM_EMAIL || 'DM MARİN Servis <servis@dmmarin.com>';
 
     const {
       name = '-',
