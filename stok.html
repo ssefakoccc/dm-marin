@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DM MARİN · Ön Muhasebe, Stok & Servis Yönetim Sistemi</title>
+<title>DM MARİN · Ön Muhasebe, Stok, POS & ERP Sistemi</title>
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="theme-color" content="#071b2b">
 <link rel="icon" href="favicon.ico" sizes="any">
@@ -28,8 +28,6 @@
   --purple: #8b5cf6;
   --purple-light: #f5f3ff;
   --blue-card: #2563eb;
-  --coral-card: #f87171;
-  --teal-card: #0ea5e9;
   --bg-main: #f1f5f9;
   --card-bg: #ffffff;
   --line: #e2e8f0;
@@ -63,7 +61,7 @@ button, input, select, textarea { font-family: inherit; }
 
 /* SIDEBAR (BIZIMHESAP STYLE) */
 .sidebar {
-  width: 240px;
+  width: 250px;
   background: var(--navy-sidebar);
   color: #94a3b8;
   display: flex;
@@ -106,13 +104,21 @@ button, input, select, textarea { font-family: inherit; }
   padding: 12px 8px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
+}
+.nav-category-title {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #475569;
+  padding: 8px 14px 4px;
+  letter-spacing: .06em;
 }
 .nav-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 14px;
+  padding: 9px 14px;
   border-radius: 8px;
   color: #94a3b8;
   font-weight: 600;
@@ -132,7 +138,7 @@ button, input, select, textarea { font-family: inherit; }
   box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
 }
 .nav-item .icon {
-  font-size: 17px;
+  font-size: 16px;
   width: 22px;
   text-align: center;
 }
@@ -146,7 +152,7 @@ button, input, select, textarea { font-family: inherit; }
   color: #f1f5f9;
 }
 .nav-badge.alert { background: #ef4444; color: #fff; }
-.nav-badge.new { background: #10b981; color: #fff; }
+.nav-badge.pos { background: #10b981; color: #fff; font-weight: 900; }
 
 .sidebar-foot {
   padding: 14px 16px;
@@ -174,7 +180,7 @@ button, input, select, textarea { font-family: inherit; }
   background: var(--bg-main);
 }
 
-/* TOP BAR (BIZIMHESAP STYLE) */
+/* TOP BAR */
 .top-bar {
   background: #fff;
   border-bottom: 1px solid var(--line);
@@ -192,7 +198,7 @@ button, input, select, textarea { font-family: inherit; }
   gap: 16px;
 }
 .company-name-tag {
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 800;
   color: var(--navy);
   display: flex;
@@ -202,29 +208,13 @@ button, input, select, textarea { font-family: inherit; }
 .top-bar-right {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
-.exchange-rates {
-  display: inline-flex;
-  gap: 6px;
-  font-size: 11.5px;
-  font-weight: 800;
-}
-.rate-pill {
-  padding: 3px 8px;
-  border-radius: 6px;
-  background: #f1f5f9;
-  border: 1px solid var(--line);
-  color: #334155;
-}
-.rate-pill.usd { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
-.rate-pill.eur { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
-
 .quick-stats-top {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   border-left: 1px solid var(--line);
-  padding-left: 14px;
+  padding-left: 16px;
 }
 .stat-box-top {
   font-size: 11px;
@@ -270,17 +260,18 @@ button, input, select, textarea { font-family: inherit; }
 .btn.outline:hover { background: #f8fafc; border-color: #cbd5e1; }
 .btn.ghost { background: transparent; color: var(--text-muted); }
 .btn.ghost:hover { background: #f1f5f9; color: var(--text-main); }
-.btn.sm { padding: 4px 10px; font-size: 11.5px; border-radius: 6px; }
+.btn.sm { padding: 5px 11px; font-size: 11.5px; border-radius: 6px; }
+.btn.lg { padding: 12px 22px; font-size: 14px; border-radius: 10px; }
 
-/* DASHBOARD CARDS (BIZIMHESAP HERO WIDGETS) */
+/* DASHBOARD CARDS */
 .date-header {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 800;
   color: var(--navy);
   margin-bottom: 16px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: space-between;
 }
 
 .kpi-big-grid {
@@ -297,8 +288,6 @@ button, input, select, textarea { font-family: inherit; }
   align-items: center;
   justify-content: space-between;
   box-shadow: var(--shadow-md);
-  position: relative;
-  overflow: hidden;
 }
 .kpi-big-card.blue { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
 .kpi-big-card.red { background: linear-gradient(135deg, #f87171, #ef4444); }
@@ -324,7 +313,7 @@ button, input, select, textarea { font-family: inherit; }
   opacity: .75;
 }
 
-/* WIDGET GRID (VARLIKLAR, BORÇLAR, MASRAFLAR, ALACAKLAR) */
+/* WIDGET GRID */
 .widget-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -361,9 +350,7 @@ button, input, select, textarea { font-family: inherit; }
   color: var(--navy);
 }
 
-.bar-row {
-  margin-bottom: 12px;
-}
+.bar-row { margin-bottom: 12px; }
 .bar-labels {
   display: flex;
   justify-content: space-between;
@@ -377,16 +364,12 @@ button, input, select, textarea { font-family: inherit; }
   border-radius: 6px;
   overflow: hidden;
 }
-.bar-fill {
-  height: 100%;
-  border-radius: 6px;
-}
+.bar-fill { height: 100%; border-radius: 6px; }
 .bar-fill.green { background: #10b981; }
 .bar-fill.red { background: #ef4444; }
 .bar-fill.blue { background: #0284c7; }
 .bar-fill.orange { background: #f59e0b; }
 
-/* MINI DATA LISTS */
 .mini-table {
   width: 100%;
   border-collapse: collapse;
@@ -422,11 +405,11 @@ button, input, select, textarea { font-family: inherit; }
 }
 .search-input {
   height: 38px;
-  padding: 0 14px 0 36px;
+  padding: 0 14px;
   border: 1px solid var(--line);
   border-radius: 8px;
   font-size: 13px;
-  min-width: 260px;
+  min-width: 240px;
   background: #f8fafc;
 }
 .search-input:focus {
@@ -465,7 +448,6 @@ table.erp-table td {
 }
 table.erp-table tbody tr:hover { background: #f8fbfc; }
 
-/* BADGES */
 .badge-pill {
   display: inline-flex;
   align-items: center;
@@ -479,12 +461,227 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
 .badge-pill.yellow { background: #fef3c7; color: #b45309; }
 .badge-pill.red { background: #fee2e2; color: #b91c1c; }
 .badge-pill.blue { background: #e0f2fe; color: #0369a1; }
+.badge-pill.purple { background: #f3e8ff; color: #7e22ce; }
+
+/* POS LAYOUT */
+.pos-container {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 20px;
+  height: calc(100vh - 140px);
+}
+.pos-products-panel {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.pos-top-search {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: #f8fafc;
+}
+.pos-barcode-input {
+  height: 44px;
+  font-size: 15px;
+  font-weight: 700;
+  flex: 1;
+  padding: 0 16px;
+  border: 2px solid #0284c7;
+  border-radius: 8px;
+  background: #fff;
+}
+.pos-barcode-input:focus { outline: none; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.25); }
+
+.pos-cat-bar {
+  display: flex;
+  gap: 8px;
+  padding: 10px 18px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+.pos-cat-btn {
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: #f1f5f9;
+  border: 1px solid var(--line);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.pos-cat-btn.active {
+  background: #0284c7;
+  color: #fff;
+  border-color: #0284c7;
+}
+
+.pos-items-grid {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  align-content: start;
+}
+.pos-item-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all .15s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.pos-item-card:hover {
+  border-color: #0284c7;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.pos-item-name {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--navy);
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+.pos-item-code {
+  font-size: 11px;
+  color: #64748b;
+  font-family: monospace;
+}
+.pos-item-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 10px;
+}
+.pos-item-price {
+  font-size: 15px;
+  font-weight: 900;
+  color: #059669;
+}
+.pos-item-stock {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0284c7;
+  background: #e0f2fe;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* POS CART */
+.pos-cart-panel {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+.pos-cart-head {
+  padding: 14px 18px;
+  background: #0f172a;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.pos-cart-head b { font-size: 14px; display: flex; align-items: center; gap: 8px; }
+
+.pos-cart-customer {
+  padding: 12px 16px;
+  background: #f8fafc;
+  border-bottom: 1px solid var(--line);
+}
+.pos-cart-customer select {
+  width: 100%;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0 8px;
+  font-size: 12.5px;
+  background: #fff;
+}
+
+.pos-cart-items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pos-cart-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 8px;
+}
+.pos-cart-row-info { flex: 1; }
+.pos-cart-row-title { font-weight: 700; font-size: 12.5px; color: var(--navy); }
+.pos-cart-row-sub { font-size: 11px; color: #64748b; }
+.pos-qty-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 10px;
+}
+.pos-qty-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+  background: #f8fafc;
+  font-weight: 800;
+  cursor: pointer;
+}
+.pos-qty-btn:hover { background: #e2e8f0; }
+
+.pos-cart-totals {
+  padding: 16px;
+  background: #f8fafc;
+  border-top: 1px solid var(--line);
+}
+.pos-total-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+.pos-total-row.big {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--navy);
+  border-top: 2px dashed var(--line);
+  padding-top: 10px;
+  margin-top: 8px;
+}
+
+.pos-pay-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 0 16px 16px;
+  background: #f8fafc;
+}
 
 /* MODALS */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.7);
+  background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(4px);
   z-index: 100;
   display: none;
@@ -564,24 +761,26 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
   box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.15);
 }
 
-/* PRODUCT HISTORY DRAWER / TABEL */
 .history-section {
   margin-top: 16px;
   border-top: 1px solid var(--line);
   padding-top: 14px;
 }
 
-/* PRINT MEDIA FOR INVOICES & REPORTS */
+/* PRINT MEDIA */
 @media print {
-  .sidebar, .top-bar, .toolbar-card, .btn, .nav-badge { display: none !important; }
+  .sidebar, .top-bar, .toolbar-card, .btn, .nav-badge, .pos-top-search, .pos-cat-bar, .pos-pay-btns { display: none !important; }
   body, .content-area, .view-container { background: #fff !important; overflow: visible !important; height: auto !important; padding: 0 !important; margin: 0 !important; }
-  .table-card, .widget-card { box-shadow: none !important; border: 1px solid #ccc !important; }
+  .table-card, .widget-card, .pos-cart-panel { box-shadow: none !important; border: 1px solid #ccc !important; }
 }
 
-@media (max-width: 900px) {
-  .sidebar { width: 70px; }
-  .sidebar-title, .sidebar-foot, .nav-item span { display: none; }
+@media (max-width: 1000px) {
+  .pos-container { grid-template-columns: 1fr; height: auto; }
   .widget-grid-2 { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .sidebar { width: 68px; }
+  .sidebar-title, .sidebar-foot, .nav-item span:not(.icon), .nav-category-title, .nav-badge { display: none; }
 }
 </style>
 </head>
@@ -595,7 +794,7 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
       <img src="assets/dm-marin-logo.webp" alt="DM MARİN" class="sidebar-logo">
       <div class="sidebar-title">
         DM MARİN
-        <small>Ön Muhasebe & ERP</small>
+        <small>ERP & Ön Muhasebe</small>
       </div>
     </div>
 
@@ -603,36 +802,51 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
       <div class="nav-item active" onclick="switchNav('dashboard')">
         <span class="icon">🏠</span> <span>Ana Sayfa</span>
       </div>
-      <div class="nav-item" onclick="switchNav('products')">
-        <span class="icon">🏷️</span> <span>Ürünler & Stok</span> <span class="nav-badge" id="nav-count-products">0</span>
-      </div>
-      <div class="nav-item" onclick="switchNav('customers')">
-        <span class="icon">👥</span> <span>Müşteriler (Tekneler)</span> <span class="nav-badge" id="nav-count-customers">0</span>
-      </div>
-      <div class="nav-item" onclick="switchNav('suppliers')">
-        <span class="icon">🏭</span> <span>Tedarikçiler</span> <span class="nav-badge" id="nav-count-suppliers">0</span>
+
+      <div class="nav-category-title">SATIŞ & OPERASYON</div>
+      <div class="nav-item" onclick="switchNav('pos')">
+        <span class="icon">⚡</span> <span>Hızlı Satış (POS)</span> <span class="nav-badge pos">BARKOD</span>
       </div>
       <div class="nav-item" onclick="switchNav('sales')">
         <span class="icon">🛒</span> <span>Satışlar & Servisler</span>
       </div>
-      <div class="nav-item" onclick="switchNav('purchases')">
-        <span class="icon">📥</span> <span>Alışlar & Girişler</span>
+      <div class="nav-item" onclick="switchNav('customers')">
+        <span class="icon">🛥️</span> <span>Müşteriler & Tekneler</span> <span class="nav-badge" id="nav-count-customers">0</span>
       </div>
+
+      <div class="nav-category-title">STOK & TEDARİK</div>
+      <div class="nav-item" onclick="switchNav('products')">
+        <span class="icon">🏷️</span> <span>Ürünler & Fiyatlar</span> <span class="nav-badge" id="nav-count-products">0</span>
+      </div>
+      <div class="nav-item" onclick="switchNav('count')">
+        <span class="icon">📋</span> <span>Stok Sayımı</span>
+      </div>
+      <div class="nav-item" onclick="switchNav('purchases')">
+        <span class="icon">📥</span> <span>Alışlar & Mal Kabul</span>
+      </div>
+      <div class="nav-item" onclick="switchNav('suppliers')">
+        <span class="icon">🏭</span> <span>Tedarikçiler</span> <span class="nav-badge" id="nav-count-suppliers">0</span>
+      </div>
+
+      <div class="nav-category-title">MUHASEBE & RAPOR</div>
       <div class="nav-item" onclick="switchNav('expenses')">
         <span class="icon">💸</span> <span>Masraflar & Giderler</span>
       </div>
       <div class="nav-item" onclick="switchNav('reports')">
-        <span class="icon">📊</span> <span>Raporlar & Ciro</span>
+        <span class="icon">📊</span> <span>Raporlar & Analiz</span>
+      </div>
+      <div class="nav-item" onclick="switchNav('settings')">
+        <span class="icon">⚙️</span> <span>Tanımlar (Kategori/Depo)</span>
       </div>
     </nav>
 
     <div class="sidebar-foot">
       <a href="admin.html">🌐 Site & SEO Yönetimi</a>
-      <a href="index.html" target="_blank">⚓ Web Sitesine Git</a>
+      <a href="index.html" target="_blank">⚓ DM Marin Ana Sayfa</a>
     </div>
   </aside>
 
-  <!-- MAIN CONTENT -->
+  <!-- MAIN CONTENT AREA -->
   <main class="content-area">
 
     <!-- TOP BAR -->
@@ -640,10 +854,6 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
       <div class="top-bar-left">
         <div class="company-name-tag">
           🏢 <span>DM MARİN MOTOR VE TEKNİK HİZMETLERİ</span>
-        </div>
-        <div class="exchange-rates">
-          <span class="rate-pill usd">$ 35,50</span>
-          <span class="rate-pill eur">€ 38,50</span>
         </div>
       </div>
 
@@ -658,7 +868,8 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
             <b id="top-today-paid">₺ 0,00</b>
           </div>
         </div>
-        <button type="button" class="btn primary sm" onclick="openNewSaleModal()">➕ Yeni Satış / Servis</button>
+        <button type="button" class="btn success sm" onclick="switchNav('pos')">⚡ Hızlı Satış (POS)</button>
+        <button type="button" class="btn primary sm" onclick="openNewSaleModal()">➕ Servis Faturası</button>
         <button type="button" class="btn outline sm" onclick="syncCloud()">🔄 Eşitle</button>
       </div>
     </header>
@@ -666,40 +877,41 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
     <!-- VIEWS -->
     <div class="view-container">
 
-      <!-- 1. DASHBOARD VIEW (BIZIMHESAP CLONE) -->
+      <!-- 1. DASHBOARD VIEW -->
       <div id="view-dashboard">
         <div class="date-header">
           <span id="current-date-str">20 Eylül 2026 Pazar</span>
+          <div style="display:flex;gap:8px">
+            <button class="btn outline sm" onclick="openDailyZReport()">🖨️ Gün Sonu (Z Raporu)</button>
+          </div>
         </div>
 
-        <!-- 3 MAIN BIG CARDS -->
         <div class="kpi-big-grid">
           <div class="kpi-big-card blue">
             <div class="kpi-big-info">
-              <small>Eylül Cirosu (Toplam Satış)</small>
+              <small>Bu Ayın Cirosu (Toplam Satış)</small>
               <b id="dash-month-revenue">₺ 0,00</b>
             </div>
-            <div class="kpi-big-icon">🔨</div>
+            <div class="kpi-big-icon">📈</div>
           </div>
 
           <div class="kpi-big-card red">
             <div class="kpi-big-info">
-              <small>Eylül Masrafları (Giderler)</small>
+              <small>Bu Ayın Masrafları (Giderler)</small>
               <b id="dash-month-expenses">₺ 0,00</b>
             </div>
-            <div class="kpi-big-icon">🏷️</div>
+            <div class="kpi-big-icon">💸</div>
           </div>
 
           <div class="kpi-big-card teal">
             <div class="kpi-big-info">
-              <small>Toplam Stok Değeri</small>
+              <small>Toplam Stok Maliyet Değeri</small>
               <b id="dash-stock-val">₺ 0,00</b>
             </div>
-            <div class="kpi-big-icon">💵</div>
+            <div class="kpi-big-icon">📦</div>
           </div>
         </div>
 
-        <!-- ASSETS & LIABILITIES -->
         <div class="widget-grid-2">
           <!-- VARLIKLAR -->
           <div class="widget-card">
@@ -710,18 +922,18 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
             
             <div class="bar-row">
               <div class="bar-labels">
-                <span>Kasa / Banka</span>
+                <span>Kasa & Banka</span>
                 <span id="dash-bank-val">₺ 0,00</span>
               </div>
-              <div class="bar-track"><div class="bar-fill green" style="width: 50%"></div></div>
+              <div class="bar-track"><div class="bar-fill green" style="width: 65%"></div></div>
             </div>
 
             <div class="bar-row">
               <div class="bar-labels">
-                <span>Stok Değeri</span>
+                <span>Depodaki Parça Stok Değeri</span>
                 <span id="dash-stock-bar-val">₺ 0,00</span>
               </div>
-              <div class="bar-track"><div class="bar-fill green" style="width: 75%"></div></div>
+              <div class="bar-track"><div class="bar-fill green" style="width: 80%"></div></div>
             </div>
 
             <div class="bar-row">
@@ -729,14 +941,14 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
                 <span>Müşteri Açık Hesap Alacakları</span>
                 <span id="dash-receivables-val">₺ 0,00</span>
               </div>
-              <div class="bar-track"><div class="bar-fill blue" style="width: 30%"></div></div>
+              <div class="bar-track"><div class="bar-fill blue" style="width: 35%"></div></div>
             </div>
           </div>
 
           <!-- BORÇLAR -->
           <div class="widget-card">
             <div class="widget-head">
-              <b>BORÇLAR</b>
+              <b>BORÇLAR & YÜKÜMLÜLÜKLER</b>
               <span id="dash-total-debts" style="color:#ef4444">₺ 0,00</span>
             </div>
 
@@ -745,43 +957,38 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
                 <span>Tedarikçi Borçları (Açık Hesap)</span>
                 <span id="dash-supplier-debts">₺ 0,00</span>
               </div>
-              <div class="bar-track"><div class="bar-fill red" style="width: 60%"></div></div>
+              <div class="bar-track"><div class="bar-fill red" style="width: 50%"></div></div>
             </div>
 
             <div class="bar-row">
               <div class="bar-labels">
-                <span>Yaklaşan Masraf & Gider Yükümlülükleri</span>
+                <span>Yaklaşan Masraf & Giderler</span>
                 <span id="dash-pending-expenses">₺ 0,00</span>
               </div>
-              <div class="bar-track"><div class="bar-fill orange" style="width: 40%"></div></div>
+              <div class="bar-track"><div class="bar-fill orange" style="width: 35%"></div></div>
             </div>
           </div>
         </div>
 
-        <!-- UPCOMING EXPENSES & PAST DUE RECEIVABLES -->
         <div class="widget-grid-2">
-          <!-- YAKLAŞAN MASRAFLAR -->
           <div class="widget-card">
             <div class="widget-head">
               <b>🗓️ YAKLAŞAN MASRAFLAR / ÖDEMELER</b>
-              <button class="btn ghost sm" onclick="openExpenseModal()">➕ Masraf Ekle</button>
+              <button class="btn ghost sm" onclick="openExpenseModal()">➕ Ekle</button>
             </div>
             <table class="mini-table">
               <thead>
                 <tr>
-                  <th>Vade / Tarih</th>
+                  <th>Vade</th>
                   <th>Açıklama / Kategori</th>
                   <th>Tutar</th>
                   <th>Durum</th>
                 </tr>
               </thead>
-              <tbody id="dash-upcoming-expenses-tbody">
-                <!-- Dynamic rows -->
-              </tbody>
+              <tbody id="dash-upcoming-expenses-tbody"></tbody>
             </table>
           </div>
 
-          <!-- VADESİ GEÇEN / BEKLEYEN ALACAKLAR -->
           <div class="widget-card">
             <div class="widget-head">
               <b>⏳ BEKLEYEN MÜŞTERİ TAHSİLATLARI</b>
@@ -791,38 +998,90 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
               <thead>
                 <tr>
                   <th>Müşteri / Tekne</th>
-                  <th>Son İşlem</th>
+                  <th>Marina</th>
                   <th>Kalan Bakiye</th>
                   <th>İşlem</th>
                 </tr>
               </thead>
-              <tbody id="dash-pending-receivables-tbody">
-                <!-- Dynamic rows -->
-              </tbody>
+              <tbody id="dash-pending-receivables-tbody"></tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- 2. PRODUCTS & INVENTORY VIEW -->
+      <!-- 2. HIZLI SATIŞ (POS) -->
+      <div id="view-pos" style="display:none">
+        <div class="pos-container">
+          <div class="pos-products-panel">
+            <div class="pos-top-search">
+              <input type="text" id="pos-barcode-input" class="pos-barcode-input" placeholder="🔍 Barkod okutunuz veya OEM kodu / parça adı yazıp Enter'a basınız..." onkeydown="handleBarcodeEnter(event)">
+              <button class="btn primary lg" onclick="handleBarcodeAdd()">➕ Ekle</button>
+            </div>
+
+            <div class="pos-cat-bar" id="pos-cat-container"></div>
+
+            <div class="pos-items-grid" id="pos-grid-container"></div>
+          </div>
+
+          <div class="pos-cart-panel">
+            <div class="pos-cart-head">
+              <b>🛒 Hızlı Satış Sepeti</b>
+              <button class="btn danger sm" onclick="clearPosCart()">Temizle</button>
+            </div>
+
+            <div class="pos-cart-customer">
+              <label style="font-size:11px;font-weight:700;color:#64748b;display:block;margin-bottom:4px">MÜŞTERİ / TEKNE</label>
+              <select id="pos-customer-select">
+                <option value="walk-in">👤 Perakende / Hızlı Müşteri</option>
+              </select>
+            </div>
+
+            <div class="pos-cart-items" id="pos-cart-items-container"></div>
+
+            <div class="pos-cart-totals">
+              <div class="pos-total-row">
+                <span>Ara Toplam:</span>
+                <b id="pos-subtotal">₺ 0,00</b>
+              </div>
+              <div class="pos-total-row">
+                <span>İndirim (₺):</span>
+                <input type="number" id="pos-discount" value="0" style="width:80px;height:26px;text-align:right;padding:0 4px;border:1px solid var(--line);border-radius:4px" oninput="renderPosCart()">
+              </div>
+              <div class="pos-total-row">
+                <span>KDV (%20 Dahil):</span>
+                <span id="pos-vat-included">₺ 0,00</span>
+              </div>
+              <div class="pos-total-row big">
+                <span>GENEL TOPLAM:</span>
+                <b id="pos-grand-total">₺ 0,00</b>
+              </div>
+            </div>
+
+            <div class="pos-pay-btns">
+              <button class="btn success lg" onclick="completePosSale('cash')">💵 Nakit Satış</button>
+              <button class="btn primary lg" onclick="completePosSale('card')">💳 Kredi Kartı</button>
+              <button class="btn outline lg" onclick="completePosSale('eft')">🏦 Havale / EFT</button>
+              <button class="btn danger lg" onclick="completePosSale('credit')">📝 Açık Hesap</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. PRODUCTS & INVENTORY VIEW -->
       <div id="view-products" style="display:none">
         <div class="toolbar-card">
           <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
             <input type="text" id="prod-search" class="search-input" placeholder="Ürün adı, OEM kodu veya marka ara..." oninput="renderProducts()">
             <select id="prod-cat-filter" onchange="renderProducts()" style="height:38px;padding:0 10px;border-radius:8px;border:1px solid var(--line)">
               <option value="all">Tüm Kategoriler</option>
-              <option value="Filtreler">⚙️ Filtreler</option>
-              <option value="Yağ & Sıvılar">🛢️ Yağ & Sıvılar</option>
-              <option value="İmpeller & Soğutma">🌊 İmpeller & Soğutma</option>
-              <option value="Tutya & Anotlar">⚡ Tutya & Anotlar</option>
-              <option value="Kayış & Kasnak">🔩 Kayış & Kasnak</option>
-              <option value="Elektrik & Sensörler">🔌 Elektrik & Sensörler</option>
-              <option value="Mekanik & Contalar">🛠️ Mekanik & Contalar</option>
+            </select>
+            <select id="prod-loc-filter" onchange="renderProducts()" style="height:38px;padding:0 10px;border-radius:8px;border:1px solid var(--line)">
+              <option value="all">Tüm Depolar</option>
             </select>
           </div>
           <div style="display:flex;gap:8px">
-            <button class="btn primary" onclick="openProductModal()">➕ Yeni Ürün Ekle</button>
-            <button class="btn outline" onclick="exportProductsCsv()">📥 Excel</button>
+            <button class="btn primary" onclick="openProductModal()">➕ Yeni Ürün Tanımla</button>
+            <button class="btn outline" onclick="exportProductsCsv()">📥 Excel / CSV</button>
           </div>
         </div>
 
@@ -830,50 +1089,77 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
           <table class="erp-table">
             <thead>
               <tr>
-                <th>Ürün / OEM Kodu</th>
+                <th>Ürün / OEM & Barkod</th>
                 <th>Kategori & Marka</th>
-                <th>Depo & Raf</th>
-                <th>Alış (€/$)</th>
-                <th>Satış (₺)</th>
+                <th>Depo & Lokasyon</th>
+                <th>Alış Fiyatı</th>
+                <th>Satış Fiyatı</th>
                 <th>Stok</th>
                 <th style="text-align:right">İşlemler</th>
               </tr>
             </thead>
-            <tbody id="products-tbody">
-              <!-- Rendered dynamically -->
-            </tbody>
+            <tbody id="products-tbody"></tbody>
           </table>
         </div>
       </div>
 
-      <!-- 3. CUSTOMERS VIEW -->
-      <div id="view-customers" style="display:none">
+      <!-- 4. STOK SAYIMI MODÜLÜ -->
+      <div id="view-count" style="display:none">
         <div class="toolbar-card">
-          <input type="text" id="cust-search" class="search-input" placeholder="Müşteri adı, tekne veya marina ara..." oninput="renderCustomers()">
-          <button class="btn primary" onclick="openCustomerModal()">➕ Yeni Müşteri / Tekne Ekle</button>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <input type="text" id="count-search" class="search-input" placeholder="Sayılacak ürün veya barkod ara..." oninput="renderCountTable()">
+            <select id="count-loc-filter" onchange="renderCountTable()" style="height:38px;padding:0 10px;border-radius:8px;border:1px solid var(--line)">
+              <option value="all">Tüm Depoları Say</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn success" onclick="applyStockCount()">✓ Sayımı Onayla & Stokları Eşitle</button>
+            <button class="btn outline" onclick="printCountSheet()">🖨️ Sayım Formu Yazdır</button>
+          </div>
         </div>
 
         <div class="table-card">
           <table class="erp-table">
             <thead>
               <tr>
-                <th>Müşteri / Firma</th>
-                <th>Tekne Adı & Modeli</th>
-                <th>Marina / Bağlama Yeri</th>
-                <th>Telefon</th>
-                <th>Toplam Hizmet</th>
-                <th>Bakiye (Alacak)</th>
-                <th style="text-align:right">İşlemler</th>
+                <th>Ürün Adı & OEM Barkod</th>
+                <th>Depo</th>
+                <th>Sistemdeki Stok</th>
+                <th style="width:160px">Fiziksel Sayılan (Adet)</th>
+                <th>Fark (+ / -)</th>
+                <th>Mali Etki (₺)</th>
               </tr>
             </thead>
-            <tbody id="customers-tbody">
-              <!-- Rendered dynamically -->
-            </tbody>
+            <tbody id="count-tbody"></tbody>
           </table>
         </div>
       </div>
 
-      <!-- 4. SUPPLIERS VIEW -->
+      <!-- 5. CUSTOMERS VIEW -->
+      <div id="view-customers" style="display:none">
+        <div class="toolbar-card">
+          <input type="text" id="cust-search" class="search-input" placeholder="Müşteri adı, tekne veya marina ara..." oninput="renderCustomers()">
+          <button class="btn primary" onclick="openCustomerModal()">➕ Yeni Müşteri & Tekne Ekle</button>
+        </div>
+
+        <div class="table-card">
+          <table class="erp-table">
+            <thead>
+              <tr>
+                <th>Müşteri / Firma & VKN</th>
+                <th>Tekne Adı & Modeli</th>
+                <th>Marina / Bağlama Yeri</th>
+                <th>Telefon</th>
+                <th>Bakiye (Açık Hesap)</th>
+                <th style="text-align:right">İşlemler</th>
+              </tr>
+            </thead>
+            <tbody id="customers-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 6. SUPPLIERS VIEW -->
       <div id="view-suppliers" style="display:none">
         <div class="toolbar-card">
           <input type="text" id="supp-search" class="search-input" placeholder="Tedarikçi adı veya yetkili ara..." oninput="renderSuppliers()">
@@ -885,25 +1171,23 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
             <thead>
               <tr>
                 <th>Tedarikçi Firma</th>
-                <th>Tedarik Edilen Marka / Parça Grubu</th>
-                <th>Yetkili & Telefon</th>
-                <th>Toplam Alım</th>
+                <th>Ürün / Parça Grubu</th>
+                <th>Yetkili & İletişim</th>
+                <th>Şehir</th>
                 <th>Ödenecek Borç</th>
                 <th style="text-align:right">İşlemler</th>
               </tr>
             </thead>
-            <tbody id="suppliers-tbody">
-              <!-- Rendered dynamically -->
-            </tbody>
+            <tbody id="suppliers-tbody"></tbody>
           </table>
         </div>
       </div>
 
-      <!-- 5. SALES & INVOICES VIEW -->
+      <!-- 7. SALES & SERVICE INVOICES VIEW -->
       <div id="view-sales" style="display:none">
         <div class="toolbar-card">
           <input type="text" id="sales-search" class="search-input" placeholder="Satış no, tekne veya müşteri ara..." oninput="renderSales()">
-          <button class="btn primary" onclick="openNewSaleModal()">➕ Yeni Satış / Servis Faturası</button>
+          <button class="btn primary" onclick="openNewSaleModal()">➕ Yeni Servis / Satış Faturası</button>
         </div>
 
         <div class="table-card">
@@ -912,20 +1196,18 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
               <tr>
                 <th>Tarih & Fiş No</th>
                 <th>Müşteri & Tekne</th>
-                <th>Kullanılan Parçalar / İşçilik</th>
-                <th>Tutar</th>
-                <th>Tahsilat Durumu</th>
+                <th>Parçalar / İşçilik</th>
+                <th>Tutar (₺)</th>
+                <th>Tahsilat Türü</th>
                 <th style="text-align:right">Yazdır / PDF</th>
               </tr>
             </thead>
-            <tbody id="sales-tbody">
-              <!-- Rendered dynamically -->
-            </tbody>
+            <tbody id="sales-tbody"></tbody>
           </table>
         </div>
       </div>
 
-      <!-- 6. PURCHASES VIEW -->
+      <!-- 8. PURCHASES VIEW -->
       <div id="view-purchases" style="display:none">
         <div class="toolbar-card">
           <input type="text" id="purch-search" class="search-input" placeholder="Fatura no veya tedarikçi ara..." oninput="renderPurchases()">
@@ -938,24 +1220,22 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
               <tr>
                 <th>Alış Tarihi</th>
                 <th>Tedarikçi Firma</th>
-                <th>Alınan Parçalar & Adet</th>
+                <th>Satın Alınan Parça</th>
                 <th>Tutar</th>
                 <th>Ödeme Durumu</th>
                 <th style="text-align:right">İşlem</th>
               </tr>
             </thead>
-            <tbody id="purchases-tbody">
-              <!-- Rendered dynamically -->
-            </tbody>
+            <tbody id="purchases-tbody"></tbody>
           </table>
         </div>
       </div>
 
-      <!-- 7. EXPENSES VIEW -->
+      <!-- 9. EXPENSES VIEW -->
       <div id="view-expenses" style="display:none">
         <div class="toolbar-card">
           <input type="text" id="exp-search" class="search-input" placeholder="Masraf açıklaması veya kategori ara..." oninput="renderExpenses()">
-          <button class="btn danger" onclick="openExpenseModal()">💸 Yeni Masraf / Gider Ekle</button>
+          <button class="btn danger" onclick="openExpenseModal()">💸 Yeni Masraf Ekle</button>
         </div>
 
         <div class="table-card">
@@ -970,47 +1250,139 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
                 <th style="text-align:right">İşlem</th>
               </tr>
             </thead>
-            <tbody id="expenses-tbody">
-              <!-- Rendered dynamically -->
-            </tbody>
+            <tbody id="expenses-tbody"></tbody>
           </table>
         </div>
       </div>
 
-      <!-- 8. REPORTS VIEW -->
+      <!-- 10. DETAILED REPORTS & PRODUCT-BASED SALES -->
       <div id="view-reports" style="display:none">
+        <div class="toolbar-card">
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <span style="font-weight:700;font-size:13px;color:var(--navy)">📅 Rapor Dönemi:</span>
+            <select id="report-period-select" onchange="renderReports()" style="height:38px;padding:0 12px;border-radius:8px;border:1px solid var(--line);font-weight:700">
+              <option value="this-month">Bu Ay (Eylül 2026)</option>
+              <option value="last-month">Geçen Ay (Ağustos 2026)</option>
+              <option value="this-year">Bu Yıl (2026 Senelik)</option>
+              <option value="all-time">Tüm Zamanlar</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn outline" onclick="exportProductSalesReport()">📥 Ürün Satış Raporu (Excel)</button>
+          </div>
+        </div>
+
         <div class="kpi-big-grid">
           <div class="kpi-big-card blue">
             <div class="kpi-big-info">
-              <small>Toplam Ciro</small>
+              <small>Dönem Toplam Satış (Ciro)</small>
               <b id="rep-total-rev">₺ 0,00</b>
             </div>
             <div class="kpi-big-icon">📈</div>
           </div>
           <div class="kpi-big-card red">
             <div class="kpi-big-info">
-              <small>Toplam Giderler</small>
+              <small>Dönem Toplam Giderler</small>
               <b id="rep-total-exp">₺ 0,00</b>
             </div>
             <div class="kpi-big-icon">💸</div>
           </div>
           <div class="kpi-big-card emerald">
             <div class="kpi-big-info">
-              <small>Net Kâr</small>
+              <small>Dönem Net Kârı</small>
               <b id="rep-net-profit">₺ 0,00</b>
             </div>
             <div class="kpi-big-icon">💰</div>
           </div>
         </div>
 
+        <!-- PRODUCT-BASED SALES REPORT -->
+        <div class="table-card" style="margin-bottom:20px">
+          <div style="padding:16px 20px;border-bottom:1px solid var(--line);background:#f8fafc;display:flex;justify-content:space-between;align-items:center">
+            <b style="font-size:14px;color:var(--navy)">📦 Ürün Bazında Satış & Kârlılık Performansı</b>
+            <span style="font-size:12px;color:var(--text-muted)">Hangi parçadan ne kadar satıldı ve ne kadar kâr sağlandı?</span>
+          </div>
+          <table class="erp-table">
+            <thead>
+              <tr>
+                <th>Ürün Adı & OEM Kodu</th>
+                <th>Kategori</th>
+                <th>Toplam Satılan Adet</th>
+                <th>Ort. Satış Fiyatı</th>
+                <th>Toplam Ciro (₺)</th>
+                <th>Tahmini Maliyet</th>
+                <th>Net Brüt Kâr (₺)</th>
+              </tr>
+            </thead>
+            <tbody id="rep-product-sales-tbody"></tbody>
+          </table>
+        </div>
+
         <div class="widget-grid-2">
           <div class="widget-card">
-            <div class="widget-head"><b>Aylık Ciro ve Satış Grafiği</b></div>
+            <div class="widget-head"><b>Aylık / Senelik Satış ve Ciro Grafiği</b></div>
             <div style="height:260px;position:relative"><canvas id="chart-rev"></canvas></div>
           </div>
           <div class="widget-card">
-            <div class="widget-head"><b>Masraf Dağılımı (Yakıt, Kira, Parça...)</b></div>
+            <div class="widget-head"><b>Masraf & Gider Dağılımı</b></div>
             <div style="height:260px;position:relative"><canvas id="chart-exp"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11. TANIMLAR & PARAMETRELER -->
+      <div id="view-settings" style="display:none">
+        <div class="widget-grid-2">
+          <!-- KATEGORİLER -->
+          <div class="widget-card">
+            <div class="widget-head">
+              <b>🏷️ ÜRÜN KATEGORİLERİ</b>
+              <button class="btn primary sm" onclick="promptAddCategory()">➕ Kategori Ekle</button>
+            </div>
+            <table class="mini-table">
+              <thead>
+                <tr>
+                  <th>Kategori Adı</th>
+                  <th style="text-align:right">İşlem</th>
+                </tr>
+              </thead>
+              <tbody id="settings-categories-tbody"></tbody>
+            </table>
+          </div>
+
+          <!-- MARKALAR -->
+          <div class="widget-card">
+            <div class="widget-head">
+              <b>⚓ MOTOR & PARÇA MARKALARI</b>
+              <button class="btn primary sm" onclick="promptAddBrand()">➕ Marka Ekle</button>
+            </div>
+            <table class="mini-table">
+              <thead>
+                <tr>
+                  <th>Marka Adı</th>
+                  <th style="text-align:right">İşlem</th>
+                </tr>
+              </thead>
+              <tbody id="settings-brands-tbody"></tbody>
+            </table>
+          </div>
+
+          <!-- DEPO VE MOBİL ARAÇLAR -->
+          <div class="widget-card" style="grid-column: 1 / -1">
+            <div class="widget-head">
+              <b>🚐 DEPO & MOBİL SERVİS ARAÇLARI</b>
+              <button class="btn primary sm" onclick="promptAddLocation()">➕ Depo / Araç Ekle</button>
+            </div>
+            <table class="mini-table">
+              <thead>
+                <tr>
+                  <th>Depo / Konum Adı</th>
+                  <th>Sorumlu / Açıklama</th>
+                  <th style="text-align:right">İşlem</th>
+                </tr>
+              </thead>
+              <tbody id="settings-locations-tbody"></tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -1023,17 +1395,15 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
 <!-- MODALS -->
 <!-- ============================================================ -->
 
-<!-- 1. PRODUCT DETAIL & HISTORY MODAL (KİMDEN NE KADARA ALINDI, KİME SATILDI) -->
+<!-- 1. PRODUCT DETAIL & HISTORY MODAL -->
 <div class="modal-overlay" id="modal-product-history">
   <div class="modal-box" style="max-width:760px">
     <div class="modal-head">
-      <h3 id="modal-hist-title">🔍 Ürün Kartı & Hareket Detayı</h3>
+      <h3 id="modal-hist-title">🔍 Ürün Kartı & Alış/Satış Tarihçesi</h3>
       <button class="modal-close" onclick="closeModal('modal-product-history')">✕</button>
     </div>
     <div class="modal-body">
-      <div id="modal-hist-summary" style="background:#f8fafc;padding:14px;border-radius:8px;border:1px solid var(--line);margin-bottom:14px">
-        <!-- Summary populated dynamically -->
-      </div>
+      <div id="modal-hist-summary" style="background:#f8fafc;padding:14px;border-radius:8px;border:1px solid var(--line);margin-bottom:14px"></div>
 
       <div class="history-section">
         <b style="font-size:13px;color:var(--navy)">📥 Alışlar (Kimden, Ne Zaman, Kaça Alındı?)</b>
@@ -1052,7 +1422,7 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
       </div>
 
       <div class="history-section">
-        <b style="font-size:13px;color:var(--navy)">📤 Satışlar (Hangi Müşteriye/Tekneye, Kaça Satıldı?)</b>
+        <b style="font-size:13px;color:var(--navy)">📤 Satışlar (Hangi Müşteriye/Tekneye Satıldı?)</b>
         <table class="mini-table" style="margin-top:6px">
           <thead>
             <tr>
@@ -1089,51 +1459,28 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
             <input type="text" id="prod-name" placeholder="Örn: Volvo Penta D4/D6 Yağ Filtresi" required>
           </div>
           <div class="field-wrap">
-            <label>OEM Kodu *</label>
+            <label>OEM / Parça Kodu *</label>
             <input type="text" id="prod-code" placeholder="Örn: 22030848" required>
           </div>
           <div class="field-wrap">
+            <label>Barkod (EAN / Kod)</label>
+            <input type="text" id="prod-barcode" placeholder="Örn: 8690000123456">
+          </div>
+          <div class="field-wrap">
             <label>Marka *</label>
-            <select id="prod-brand" required>
-              <option value="Volvo Penta">Volvo Penta</option>
-              <option value="Yanmar">Yanmar</option>
-              <option value="MAN">MAN</option>
-              <option value="Cummins / Onan">Cummins / Onan</option>
-              <option value="Kohler">Kohler</option>
-              <option value="Caterpillar">Caterpillar</option>
-              <option value="Evrensel / Marin">Evrensel / Marin</option>
-            </select>
+            <select id="prod-brand" required></select>
           </div>
           <div class="field-wrap">
             <label>Kategori *</label>
-            <select id="prod-category" required>
-              <option value="Filtreler">⚙️ Filtreler</option>
-              <option value="Yağ & Sıvılar">🛢️ Yağ & Sıvılar</option>
-              <option value="İmpeller & Soğutma">🌊 İmpeller & Soğutma</option>
-              <option value="Tutya & Anotlar">⚡ Tutya & Anotlar</option>
-              <option value="Kayış & Kasnak">🔩 Kayış & Kasnak</option>
-              <option value="Elektrik & Sensörler">🔌 Elektrik & Sensörler</option>
-              <option value="Mekanik & Contalar">🛠️ Mekanik & Contalar</option>
-            </select>
+            <select id="prod-category" required></select>
           </div>
           <div class="field-wrap">
             <label>Depo / Konum</label>
-            <select id="prod-location" required>
-              <option value="Merkez Atölye">🏢 Merkez Atölye</option>
-              <option value="Mobil Servis Aracı 1">🚐 Mobil Servis Aracı 1</option>
-              <option value="Mobil Servis Aracı 2">🚐 Mobil Servis Aracı 2</option>
-            </select>
+            <select id="prod-location" required></select>
           </div>
           <div class="field-wrap">
-            <label>Alış Fiyatı (€ / $)</label>
-            <div style="display:flex;gap:6px">
-              <input type="number" step="0.01" id="prod-buy-price" placeholder="0.00" required>
-              <select id="prod-currency" style="width:80px">
-                <option value="EUR">EUR (€)</option>
-                <option value="USD">USD ($)</option>
-                <option value="TRY">TL (₺)</option>
-              </select>
-            </div>
+            <label>Alış Fiyatı (₺ TL) *</label>
+            <input type="number" step="0.01" id="prod-buy-price" placeholder="0.00" required>
           </div>
           <div class="field-wrap">
             <label>Satış Fiyatı (₺ TL) *</label>
@@ -1144,7 +1491,7 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
             <input type="number" id="prod-qty" placeholder="0" required>
           </div>
           <div class="field-wrap">
-            <label>Kritik Minimum Eşik</label>
+            <label>Kritik Minimum Stok</label>
             <input type="number" id="prod-min-qty" value="2">
           </div>
         </div>
@@ -1169,8 +1516,8 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
       <div class="modal-body">
         <div class="form-grid-2">
           <div class="field-wrap full">
-            <label>Müşteri Ad Soyad / Şirket *</label>
-            <input type="text" id="cust-name" placeholder="Örn: Mehmet Yılmaz veya Aras Denizcilik" required>
+            <label>Müşteri Ad Soyad / Şirket Unvanı *</label>
+            <input type="text" id="cust-name" placeholder="Örn: Mehmet Yılmaz veya Aras Denizcilik A.Ş." required>
           </div>
           <div class="field-wrap">
             <label>Tekne Adı *</label>
@@ -1188,8 +1535,12 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
             <label>Telefon *</label>
             <input type="tel" id="cust-phone" placeholder="0532 ... .." required>
           </div>
+          <div class="field-wrap">
+            <label>Vergi Dairesi & VKN/TC</label>
+            <input type="text" id="cust-tax-info" placeholder="Kadıköy VD / 1234567890">
+          </div>
           <div class="field-wrap full">
-            <label>E-posta & Fatura Bilgileri</label>
+            <label>E-posta & Fatura Adresi</label>
             <input type="text" id="cust-email" placeholder="teknik@ornek.com">
           </div>
         </div>
@@ -1215,7 +1566,7 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
         <div class="form-grid-2">
           <div class="field-wrap full">
             <label>Tedarikçi Firma Adı *</label>
-            <input type="text" id="supp-name" placeholder="Örn: Volvo Penta Türkiye Toptan veya Marintek" required>
+            <input type="text" id="supp-name" placeholder="Örn: Marintek Volvo Penta Yetkili Dağıtıcı" required>
           </div>
           <div class="field-wrap">
             <label>Tedarik Edilen Marka / Kategori</label>
@@ -1247,7 +1598,7 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
 <div class="modal-overlay" id="modal-sale">
   <div class="modal-box" style="max-width:720px">
     <div class="modal-head">
-      <h3>🛒 Yeni Satış & Servis Fişi Oluştur</h3>
+      <h3>🛒 Yeni Servis & Satış Faturası</h3>
       <button class="modal-close" onclick="closeModal('modal-sale')">✕</button>
     </div>
     <form id="form-sale" onsubmit="saveSale(event)">
@@ -1255,9 +1606,7 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
         <div class="form-grid-2">
           <div class="field-wrap">
             <label>Müşteri / Tekne Seçimi *</label>
-            <select id="sale-cust-select" required onchange="populateCustomerBoats()">
-              <!-- Dynamic options -->
-            </select>
+            <select id="sale-cust-select" required></select>
           </div>
           <div class="field-wrap">
             <label>Servis Tarihi *</label>
@@ -1267,9 +1616,7 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
           <div class="field-wrap full">
             <label>Kullanılan Parça 1</label>
             <div style="display:flex;gap:6px">
-              <select id="sale-part-1" style="flex:2" onchange="calculateSaleTotal()">
-                <!-- Dynamic products -->
-              </select>
+              <select id="sale-part-1" style="flex:2" onchange="calculateSaleTotal()"></select>
               <input type="number" id="sale-qty-1" value="1" min="1" style="width:70px" placeholder="Adet" oninput="calculateSaleTotal()">
               <input type="number" id="sale-price-1" placeholder="Birim ₺" style="width:110px" oninput="calculateSaleTotal()">
             </div>
@@ -1278,16 +1625,14 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
           <div class="field-wrap full">
             <label>Kullanılan Parça 2 (Opsiyonel)</label>
             <div style="display:flex;gap:6px">
-              <select id="sale-part-2" style="flex:2" onchange="calculateSaleTotal()">
-                <!-- Dynamic products -->
-              </select>
+              <select id="sale-part-2" style="flex:2" onchange="calculateSaleTotal()"></select>
               <input type="number" id="sale-qty-2" value="1" min="1" style="width:70px" placeholder="Adet" oninput="calculateSaleTotal()">
               <input type="number" id="sale-price-2" placeholder="Birim ₺" style="width:110px" oninput="calculateSaleTotal()">
             </div>
           </div>
 
           <div class="field-wrap">
-            <label>İşçilik & Servis Bedeli (₺)</label>
+            <label>Saha İşçilik Bedeli (₺)</label>
             <input type="number" id="sale-labor-cost" value="0" placeholder="0.00" oninput="calculateSaleTotal()">
           </div>
 
@@ -1295,7 +1640,7 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
             <label>Tahsilat Durumu</label>
             <select id="sale-paid-status">
               <option value="paid">🟢 Ödendi (Nakit / Havale)</option>
-              <option value="pending">🟠 Açık Hesap (Tahsilat Bekleniyor)</option>
+              <option value="pending">🟠 Açık Hesap (Tahsilat Bekliyor)</option>
             </select>
           </div>
 
@@ -1307,7 +1652,7 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
       </div>
       <div class="modal-foot">
         <button type="button" class="btn outline" onclick="closeModal('modal-sale')">İptal</button>
-        <button type="submit" class="btn primary">💾 Satışı Onayla & Stoğu Düş</button>
+        <button type="submit" class="btn primary">💾 Faturayı Kaydet & Stoğu Düş</button>
       </div>
     </form>
   </div>
@@ -1325,9 +1670,7 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
         <div class="form-grid-2">
           <div class="field-wrap">
             <label>Tedarikçi Firma *</label>
-            <select id="purch-supp-select" required>
-              <!-- Dynamic suppliers -->
-            </select>
+            <select id="purch-supp-select" required></select>
           </div>
           <div class="field-wrap">
             <label>Alış Tarihi *</label>
@@ -1335,25 +1678,19 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
           </div>
           <div class="field-wrap full">
             <label>Satın Alınan Parça *</label>
-            <select id="purch-prod-select" required onchange="updatePurchPriceHint()">
-              <!-- Dynamic products -->
-            </select>
+            <select id="purch-prod-select" required onchange="updatePurchPriceHint()"></select>
           </div>
           <div class="field-wrap">
             <label>Alınan Adet *</label>
             <input type="number" id="purch-qty" value="1" min="1" required>
           </div>
           <div class="field-wrap">
-            <label>Birim Alış Maliyeti (€ / $ / ₺) *</label>
+            <label>Birim Alış Maliyeti (₺ TL) *</label>
             <input type="number" step="0.01" id="purch-unit-price" placeholder="0.00" required>
           </div>
           <div class="field-wrap">
             <label>Giriş Yapılacak Depo</label>
-            <select id="purch-location">
-              <option value="Merkez Atölye">🏢 Merkez Atölye</option>
-              <option value="Mobil Servis Aracı 1">🚐 Mobil Servis Aracı 1</option>
-              <option value="Mobil Servis Aracı 2">🚐 Mobil Servis Aracı 2</option>
-            </select>
+            <select id="purch-location"></select>
           </div>
           <div class="field-wrap">
             <label>Ödeme Durumu</label>
@@ -1422,16 +1759,14 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
   </div>
 </div>
 
-<!-- PRINTABLE RECEIPT / PDF PREVIEW MODAL -->
+<!-- 8. PRINTABLE INVOICE / POS RECEIPT MODAL -->
 <div class="modal-overlay" id="modal-print-invoice">
   <div class="modal-box" style="max-width:780px">
     <div class="modal-head">
-      <h3>📄 Satış & Servis Fatura Fişi Çıktısı</h3>
+      <h3>📄 Satış Faturası / Termal Fiş Çıktısı</h3>
       <button class="modal-close" onclick="closeModal('modal-print-invoice')">✕</button>
     </div>
-    <div class="modal-body" id="invoice-printable-area" style="padding:24px;font-family:Arial,sans-serif">
-      <!-- Invoice template generated dynamically -->
-    </div>
+    <div class="modal-body" id="invoice-printable-area" style="padding:24px;font-family:Arial,sans-serif"></div>
     <div class="modal-foot">
       <button class="btn outline" onclick="closeModal('modal-print-invoice')">Kapat</button>
       <button class="btn primary" onclick="printInvoice()">🖨️ PDF / Yazdır</button>
@@ -1443,28 +1778,38 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
 <div id="flash-toast" style="position:fixed;bottom:24px;right:24px;background:#0f172a;color:#fff;padding:12px 20px;border-radius:10px;font-weight:700;font-size:13px;display:none;z-index:200;border-left:4px solid #0284c7;box-shadow:var(--shadow-lg)"></div>
 
 <script>
-// ==========================================
-// STATE MANAGEMENT & SAMPLE DATA (BIZIMHESAP STYLE)
-// ==========================================
-const EUR_RATE = 38.50;
-const USD_RATE = 35.50;
-
+// DATA STORE & CONFIGURATION
 let currentNav = 'dashboard';
+let posCart = [];
 
-// INITIAL DATA
+let categoriesState = [
+  "Filtreler", "Yağ & Sıvılar", "İmpeller & Soğutma", "Tutya & Anotlar", 
+  "Kayış & Kasnak", "Elektrik & Sensörler", "Mekanik & Contalar"
+];
+
+let brandsState = [
+  "Volvo Penta", "Yanmar", "MAN", "Cummins / Onan", "Kohler", "Caterpillar", "Evrensel / Marin"
+];
+
+let locationsState = [
+  { id: "loc-1", name: "Merkez Atölye", desc: "Tuzla Ana Depo" },
+  { id: "loc-2", name: "Mobil Servis Aracı 1", desc: "34 DM 1998 (Kalamış & Fenerbahçe)" },
+  { id: "loc-3", name: "Mobil Servis Aracı 2", desc: "34 MAR 2026 (Ataköy & Viaport)" }
+];
+
 let productsState = [
-  { id: "p-1", name: "Volvo Penta D4/D6 Yağ Filtresi (Orijinal)", code: "22030848", brand: "Volvo Penta", category: "Filtreler", location: "Merkez Atölye", buyPrice: 32.50, currency: "EUR", sellPrice: 1750, qty: 8, minQty: 3 },
-  { id: "p-2", name: "Volvo Penta D4/D6 Yakıt Filtresi", code: "21718912", brand: "Volvo Penta", category: "Filtreler", location: "Mobil Servis Aracı 1", buyPrice: 48.00, currency: "EUR", sellPrice: 2450, qty: 4, minQty: 2 },
-  { id: "p-3", name: "Yanmar 4JH Yağ Filtresi", code: "129150-35153", brand: "Yanmar", category: "Filtreler", location: "Merkez Atölye", buyPrice: 18.00, currency: "EUR", sellPrice: 950, qty: 10, minQty: 4 },
-  { id: "p-4", name: "Volvo Penta D4/D6 Ham Su İmpeller Kiti", code: "21951356", brand: "Volvo Penta", category: "İmpeller & Soğutma", location: "Mobil Servis Aracı 1", buyPrice: 72.00, currency: "EUR", sellPrice: 3800, qty: 3, minQty: 2 },
-  { id: "p-5", name: "Kohler & Onan Jeneratör İmpelleri", code: "359978", brand: "Kohler", category: "İmpeller & Soğutma", location: "Mobil Servis Aracı 2", buyPrice: 42.00, currency: "EUR", sellPrice: 2200, qty: 5, minQty: 2 },
-  { id: "p-6", name: "VDS-4.5 15W-40 Tam Sentetik Marin Motor Yağı (20L)", code: "23999553", brand: "Volvo Penta", category: "Yağ & Sıvılar", location: "Merkez Atölye", buyPrice: 110.00, currency: "EUR", sellPrice: 5800, qty: 12, minQty: 5 }
+  { id: "p-1", name: "Volvo Penta D4/D6 Yağ Filtresi (Orijinal)", code: "22030848", barcode: "8690001", brand: "Volvo Penta", category: "Filtreler", location: "Merkez Atölye", buyPrice: 1250, sellPrice: 1750, qty: 8, minQty: 3 },
+  { id: "p-2", name: "Volvo Penta D4/D6 Yakıt Filtresi", code: "21718912", barcode: "8690002", brand: "Volvo Penta", category: "Filtreler", location: "Mobil Servis Aracı 1", buyPrice: 1850, sellPrice: 2450, qty: 4, minQty: 2 },
+  { id: "p-3", name: "Yanmar 4JH Yağ Filtresi", code: "129150-35153", barcode: "8690003", brand: "Yanmar", category: "Filtreler", location: "Merkez Atölye", buyPrice: 690, sellPrice: 950, qty: 10, minQty: 4 },
+  { id: "p-4", name: "Volvo Penta D4/D6 Ham Su İmpeller Kiti", code: "21951356", barcode: "8690004", brand: "Volvo Penta", category: "İmpeller & Soğutma", location: "Mobil Servis Aracı 1", buyPrice: 2750, sellPrice: 3800, qty: 3, minQty: 2 },
+  { id: "p-5", name: "Kohler & Onan Jeneratör İmpelleri", code: "359978", barcode: "8690005", brand: "Kohler", category: "İmpeller & Soğutma", location: "Mobil Servis Aracı 2", buyPrice: 1600, sellPrice: 2200, qty: 5, minQty: 2 },
+  { id: "p-6", name: "VDS-4.5 15W-40 Tam Sentetik Marin Motor Yağı (20L)", code: "23999553", barcode: "8690006", brand: "Volvo Penta", category: "Yağ & Sıvılar", location: "Merkez Atölye", buyPrice: 4200, sellPrice: 5800, qty: 12, minQty: 5 }
 ];
 
 let customersState = [
-  { id: "c-1", name: "Ahmet Barış Kaya", boatName: "M/Y AZIMUT 55", boatModel: "Azimut 55 (Twin Volvo D6-435)", marina: "Setur Kalamış Marina B-14", phone: "0532 411 22 33", email: "ahmet@kaya.com", balance: 0 },
-  { id: "c-2", name: "Serdar Özkan", boatName: "S/Y AEGEAN WIND", boatModel: "Bavaria 46 (Yanmar 4JH5E)", marina: "Ataköy Marina Ponton C", phone: "0542 998 77 66", email: "serdar@ozkan.com", balance: 14500 },
-  { id: "c-3", name: "Bora Denizcilik Ltd.", boatName: "M/Y BLUE DREAM", boatModel: "Princess 62 (MAN V8-1200)", marina: "Pendik Marintürk", phone: "0216 444 88 99", email: "bora@denizcilik.com", balance: 35680 }
+  { id: "c-1", name: "Ahmet Barış Kaya", boatName: "M/Y AZIMUT 55", boatModel: "Azimut 55 (Twin Volvo D6-435)", marina: "Setur Kalamış Marina B-14", phone: "0532 411 22 33", email: "ahmet@kaya.com", taxInfo: "Kadıköy VD 489211029", balance: 0 },
+  { id: "c-2", name: "Serdar Özkan", boatName: "S/Y AEGEAN WIND", boatModel: "Bavaria 46 (Yanmar 4JH5E)", marina: "Ataköy Marina Ponton C", phone: "0542 998 77 66", email: "serdar@ozkan.com", taxInfo: "Bakırköy VD 192837465", balance: 14500 },
+  { id: "c-3", name: "Bora Denizcilik Ltd.", boatName: "M/Y BLUE DREAM", boatModel: "Princess 62 (MAN V8-1200)", marina: "Pendik Marintürk", phone: "0216 444 88 99", email: "bora@denizcilik.com", taxInfo: "Tuzla VD 9876543210", balance: 35680 }
 ];
 
 let suppliersState = [
@@ -1486,6 +1831,7 @@ let salesState = [
     ],
     laborCost: 4500,
     total: 15600,
+    payType: "Kredi Kartı",
     status: "paid"
   },
   {
@@ -1499,6 +1845,7 @@ let salesState = [
     ],
     laborCost: 2500,
     total: 3450,
+    payType: "Açık Hesap",
     status: "pending"
   },
   {
@@ -1512,6 +1859,7 @@ let salesState = [
     ],
     laborCost: 8780,
     total: 31980,
+    payType: "Havale / EFT",
     status: "paid"
   }
 ];
@@ -1525,9 +1873,8 @@ let purchasesState = [
     prodId: "p-1",
     prodName: "Volvo Penta D4/D6 Yağ Filtresi",
     qty: 10,
-    unitPrice: 32.50,
-    currency: "EUR",
-    totalTL: 12512.50,
+    unitPrice: 1250,
+    totalTL: 12500,
     status: "paid"
   },
   {
@@ -1538,9 +1885,8 @@ let purchasesState = [
     prodId: "p-4",
     prodName: "Volvo Penta D4/D6 Ham Su İmpeller Kiti",
     qty: 5,
-    unitPrice: 72.00,
-    currency: "EUR",
-    totalTL: 13860.00,
+    unitPrice: 2750,
+    totalTL: 13750,
     status: "pending"
   }
 ];
@@ -1551,9 +1897,15 @@ let expensesState = [
   { id: "e-3", date: "2026-09-17", category: "Personel & Ulaşım", desc: "Kalamış & Fenerbahçe Marina Saha Harcırah", amount: 1030.40, status: "paid" }
 ];
 
-// LOAD & SAVE LOCALSTORAGE
 function loadAll() {
   try {
+    const cat = localStorage.getItem("dm_erp_categories");
+    if (cat) categoriesState = JSON.parse(cat);
+    const br = localStorage.getItem("dm_erp_brands");
+    if (br) brandsState = JSON.parse(br);
+    const loc = localStorage.getItem("dm_erp_locations");
+    if (loc) locationsState = JSON.parse(loc);
+
     const p = localStorage.getItem("dm_erp_products");
     if (p) productsState = JSON.parse(p);
     const c = localStorage.getItem("dm_erp_customers");
@@ -1570,6 +1922,9 @@ function loadAll() {
 }
 
 function saveAll() {
+  localStorage.setItem("dm_erp_categories", JSON.stringify(categoriesState));
+  localStorage.setItem("dm_erp_brands", JSON.stringify(brandsState));
+  localStorage.setItem("dm_erp_locations", JSON.stringify(locationsState));
   localStorage.setItem("dm_erp_products", JSON.stringify(productsState));
   localStorage.setItem("dm_erp_customers", JSON.stringify(customersState));
   localStorage.setItem("dm_erp_suppliers", JSON.stringify(suppliersState));
@@ -1579,68 +1934,67 @@ function saveAll() {
 }
 
 function syncCloud() {
-  flash("✓ Supabase bulut veritabanı ile eşitlendi.");
+  flash("✓ Supabase bulut veritabanı ile senkronize edildi.");
 }
 
-// NAVIGATION
 function switchNav(navId) {
   currentNav = navId;
   document.querySelectorAll(".sidebar-nav .nav-item").forEach(item => {
-    item.classList.toggle("active", item.getAttribute("onclick").includes(navId));
+    item.classList.toggle("active", item.getAttribute("onclick")?.includes(navId));
   });
 
-  const views = ['dashboard', 'products', 'customers', 'suppliers', 'sales', 'purchases', 'expenses', 'reports'];
+  const views = ['dashboard', 'pos', 'products', 'count', 'customers', 'suppliers', 'sales', 'purchases', 'expenses', 'reports', 'settings'];
   views.forEach(v => {
     const el = document.getElementById(`view-${v}`);
     if (el) el.style.display = v === navId ? 'block' : 'none';
   });
 
   if (navId === 'dashboard') renderDashboard();
+  if (navId === 'pos') renderPos();
   if (navId === 'products') renderProducts();
+  if (navId === 'count') renderCountTable();
   if (navId === 'customers') renderCustomers();
   if (navId === 'suppliers') renderSuppliers();
   if (navId === 'sales') renderSales();
   if (navId === 'purchases') renderPurchases();
   if (navId === 'expenses') renderExpenses();
   if (navId === 'reports') renderReports();
+  if (navId === 'settings') renderSettings();
 }
 
-// ==========================================
-// 1. DASHBOARD RENDERING (BIZIMHESAP METRICS)
-// ==========================================
 function renderDashboard() {
-  // Current month revenue
   const totalRev = salesState.reduce((sum, s) => sum + (Number(s.total) || 0), 0);
   const totalExp = expensesState.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
   
   let stockValTL = 0;
   productsState.forEach(p => {
-    const q = Number(p.qty) || 0;
-    const bp = Number(p.buyPrice) || 0;
-    if (p.currency === 'EUR') stockValTL += bp * EUR_RATE * q;
-    else if (p.currency === 'USD') stockValTL += bp * USD_RATE * q;
-    else stockValTL += bp * q;
+    stockValTL += (Number(p.buyPrice) || 0) * (Number(p.qty) || 0);
   });
 
   const totalReceivables = customersState.reduce((sum, c) => sum + (Number(c.balance) || 0), 0);
   const totalDebts = suppliersState.reduce((sum, s) => sum + (Number(s.balance) || 0), 0);
   const pendingExp = expensesState.filter(e => e.status === 'pending').reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
 
-  document.getElementById("dash-month-revenue").textContent = `TL ${totalRev.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
-  document.getElementById("dash-month-expenses").textContent = `TL ${totalExp.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
-  document.getElementById("dash-stock-val").textContent = `TL ${stockValTL.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+  document.getElementById("dash-month-revenue").textContent = `₺ ${totalRev.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+  document.getElementById("dash-month-expenses").textContent = `₺ ${totalExp.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+  document.getElementById("dash-stock-val").textContent = `₺ ${stockValTL.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
 
   const totalAssets = 1536385.59 + stockValTL + totalReceivables;
-  document.getElementById("dash-total-assets").textContent = `TL ${totalAssets.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
-  document.getElementById("dash-bank-val").textContent = `TL 1.536.385,59`;
-  document.getElementById("dash-stock-bar-val").textContent = `TL ${stockValTL.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
-  document.getElementById("dash-receivables-val").textContent = `TL ${totalReceivables.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+  document.getElementById("dash-total-assets").textContent = `₺ ${totalAssets.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+  document.getElementById("dash-bank-val").textContent = `₺ 1.536.385,59`;
+  document.getElementById("dash-stock-bar-val").textContent = `₺ ${stockValTL.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+  document.getElementById("dash-receivables-val").textContent = `₺ ${totalReceivables.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
 
-  document.getElementById("dash-total-debts").textContent = `TL ${(totalDebts + pendingExp).toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
-  document.getElementById("dash-supplier-debts").textContent = `TL ${totalDebts.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
-  document.getElementById("dash-pending-expenses").textContent = `TL ${pendingExp.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+  document.getElementById("dash-total-debts").textContent = `₺ ${(totalDebts + pendingExp).toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+  document.getElementById("dash-supplier-debts").textContent = `₺ ${totalDebts.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+  document.getElementById("dash-pending-expenses").textContent = `₺ ${pendingExp.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
 
-  // Upcoming Expenses Table
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const todaySales = salesState.filter(s => s.date === todayStr).reduce((s, i) => s + (Number(i.total) || 0), 0);
+  const todayPaid = salesState.filter(s => s.date === todayStr && s.status === 'paid').reduce((s, i) => s + (Number(i.total) || 0), 0);
+  document.getElementById("top-today-sales").textContent = `₺ ${todaySales.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+  document.getElementById("top-today-paid").textContent = `₺ ${todayPaid.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+
   const upcomingBody = document.getElementById("dash-upcoming-expenses-tbody");
   upcomingBody.innerHTML = expensesState.map(e => `
     <tr>
@@ -1651,7 +2005,6 @@ function renderDashboard() {
     </tr>
   `).join("");
 
-  // Pending Receivables
   const pendBody = document.getElementById("dash-pending-receivables-tbody");
   pendBody.innerHTML = customersState.filter(c => c.balance > 0).map(c => `
     <tr>
@@ -1662,24 +2015,330 @@ function renderDashboard() {
     </tr>
   `).join("");
 
-  // Update counts
   document.getElementById("nav-count-products").textContent = productsState.length;
   document.getElementById("nav-count-customers").textContent = customersState.length;
   document.getElementById("nav-count-suppliers").textContent = suppliersState.length;
 }
 
-// ==========================================
-// 2. PRODUCTS & HISTORY MANAGEMENT
-// ==========================================
+let posSelectedCat = 'all';
+
+function renderPos() {
+  const catContainer = document.getElementById("pos-cat-container");
+  catContainer.innerHTML = `<button class="pos-cat-btn ${posSelectedCat==='all'?'active':''}" onclick="setPosCat('all')">Tüm Parçalar (${productsState.length})</button>` +
+    categoriesState.map(cat => `
+      <button class="pos-cat-btn ${posSelectedCat===cat?'active':''}" onclick="setPosCat('${cat}')">${escapeHtml(cat)}</button>
+    `).join("");
+
+  const grid = document.getElementById("pos-grid-container");
+  const filtered = productsState.filter(p => posSelectedCat === 'all' || p.category === posSelectedCat);
+  grid.innerHTML = filtered.map(p => `
+    <div class="pos-item-card" onclick="addToPosCart('${p.id}')">
+      <div>
+        <div class="pos-item-name">${escapeHtml(p.name)}</div>
+        <div class="pos-item-code">📋 ${escapeHtml(p.code)} ${p.barcode ? `| 🏷️ ${p.barcode}` : ''}</div>
+      </div>
+      <div class="pos-item-foot">
+        <span class="pos-item-price">₺ ${Number(p.sellPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})}</span>
+        <span class="pos-item-stock ${p.qty<=p.minQty?'style="background:#fee2e2;color:#b91c1c"':''}">${p.qty} Stk</span>
+      </div>
+    </div>
+  `).join("");
+
+  const custSel = document.getElementById("pos-customer-select");
+  custSel.innerHTML = `<option value="walk-in">👤 Perakende / Hızlı Müşteri</option>` +
+    customersState.map(c => `<option value="${c.id}">${escapeHtml(c.name)} — ⛵ ${escapeHtml(c.boatName)}</option>`).join("");
+
+  renderPosCart();
+  setTimeout(() => document.getElementById("pos-barcode-input")?.focus(), 100);
+}
+
+function setPosCat(cat) {
+  posSelectedCat = cat;
+  renderPos();
+}
+
+function handleBarcodeEnter(e) {
+  if (e.key === 'Enter') {
+    handleBarcodeAdd();
+  }
+}
+
+function handleBarcodeAdd() {
+  const input = document.getElementById("pos-barcode-input");
+  const val = input.value.trim().toLowerCase();
+  if (!val) return;
+
+  let found = productsState.find(p => p.barcode && p.barcode.toLowerCase() === val);
+  if (!found) found = productsState.find(p => p.code.toLowerCase() === val);
+  if (!found) found = productsState.find(p => p.name.toLowerCase().includes(val));
+
+  if (found) {
+    addToPosCart(found.id);
+    input.value = "";
+    flash(`✓ Sepete eklendi: ${found.name}`);
+  } else {
+    alert("Ürün bulunamadı! Barkod veya parça kodunu kontrol ediniz.");
+  }
+}
+
+function addToPosCart(prodId) {
+  const p = productsState.find(x => x.id === prodId);
+  if (!p) return;
+
+  const exist = posCart.find(x => x.prodId === prodId);
+  if (exist) {
+    exist.qty += 1;
+  } else {
+    posCart.push({
+      prodId: p.id,
+      name: p.name,
+      code: p.code,
+      price: p.sellPrice,
+      qty: 1
+    });
+  }
+  renderPosCart();
+}
+
+function updatePosCartQty(idx, delta) {
+  if (!posCart[idx]) return;
+  posCart[idx].qty += delta;
+  if (posCart[idx].qty <= 0) {
+    posCart.splice(idx, 1);
+  }
+  renderPosCart();
+}
+
+function clearPosCart() {
+  if (posCart.length === 0) return;
+  if (confirm("Hızlı satış sepeti temizlensin mi?")) {
+    posCart = [];
+    renderPosCart();
+  }
+}
+
+function renderPosCart() {
+  const container = document.getElementById("pos-cart-items-container");
+  if (posCart.length === 0) {
+    container.innerHTML = `<div style="text-align:center;color:var(--text-muted);padding:40px 10px;font-size:13px">Sepetiniz boş.<br>Sol taraftan ürün seçin veya barkod okutun.</div>`;
+    document.getElementById("pos-subtotal").textContent = "₺ 0,00";
+    document.getElementById("pos-vat-included").textContent = "₺ 0,00";
+    document.getElementById("pos-grand-total").textContent = "₺ 0,00";
+    return;
+  }
+
+  container.innerHTML = posCart.map((it, idx) => `
+    <div class="pos-cart-row">
+      <div class="pos-cart-row-info">
+        <div class="pos-cart-row-title">${escapeHtml(it.name)}</div>
+        <div class="pos-cart-row-sub">₺${Number(it.price).toFixed(2)} x ${it.qty}</div>
+      </div>
+      <div class="pos-qty-ctrl">
+        <button class="pos-qty-btn" onclick="updatePosCartQty(${idx}, -1)">-</button>
+        <span style="font-weight:800;width:20px;text-align:center">${it.qty}</span>
+        <button class="pos-qty-btn" onclick="updatePosCartQty(${idx}, 1)">+</button>
+      </div>
+      <div style="font-weight:800;color:var(--navy)">
+        ₺ ${(it.qty * it.price).toLocaleString('tr-TR', {minimumFractionDigits:2})}
+      </div>
+    </div>
+  `).join("");
+
+  const subtotal = posCart.reduce((s, i) => s + (i.qty * i.price), 0);
+  const discount = parseFloat(document.getElementById("pos-discount").value) || 0;
+  const grandTotal = Math.max(0, subtotal - discount);
+  const vat = grandTotal * 0.20;
+
+  document.getElementById("pos-subtotal").textContent = `₺ ${subtotal.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+  document.getElementById("pos-vat-included").textContent = `₺ ${vat.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+  document.getElementById("pos-grand-total").textContent = `₺ ${grandTotal.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+}
+
+function completePosSale(payMethod) {
+  if (posCart.length === 0) {
+    alert("Lütfen önce sepete ürün ekleyiniz.");
+    return;
+  }
+
+  const custVal = document.getElementById("pos-customer-select").value;
+  let customerName = "Perakende Müşteri (Hızlı Kasa)";
+  let boatName = "-";
+  let customer = null;
+
+  if (custVal !== 'walk-in') {
+    customer = customersState.find(x => x.id === custVal);
+    if (customer) {
+      customerName = customer.name;
+      boatName = customer.boatName;
+    }
+  }
+
+  const discount = parseFloat(document.getElementById("pos-discount").value) || 0;
+  const subtotal = posCart.reduce((s, i) => s + (i.qty * i.price), 0);
+  const grandTotal = Math.max(0, subtotal - discount);
+
+  posCart.forEach(it => {
+    const prod = productsState.find(p => p.id === it.prodId);
+    if (prod) {
+      prod.qty = Math.max(0, prod.qty - it.qty);
+    }
+  });
+
+  const payNames = { cash: "Nakit", card: "Kredi Kartı", eft: "Havale / EFT", credit: "Açık Hesap" };
+  const newSale = {
+    id: "POS-" + Math.floor(1000 + Math.random() * 9000),
+    date: new Date().toISOString().slice(0, 10),
+    customerId: customer ? customer.id : null,
+    customerName: customerName,
+    boatName: boatName,
+    items: [...posCart],
+    laborCost: 0,
+    discount: discount,
+    total: grandTotal,
+    payType: payNames[payMethod] || "Nakit",
+    status: payMethod === 'credit' ? 'pending' : 'paid'
+  };
+
+  salesState.unshift(newSale);
+  if (payMethod === 'credit' && customer) {
+    customer.balance += grandTotal;
+  }
+
+  saveAll();
+  posCart = [];
+  document.getElementById("pos-discount").value = "0";
+  renderPosCart();
+  flash("✓ Satış tamamlandı ve stoktan düşüldü.");
+  viewPrintableInvoice(newSale.id);
+}
+
+function renderCountTable() {
+  const q = (document.getElementById("count-search")?.value || "").toLowerCase();
+  const loc = document.getElementById("count-loc-filter")?.value || "all";
+  const tbody = document.getElementById("count-tbody");
+
+  const locSel = document.getElementById("count-loc-filter");
+  if (locSel && locSel.options.length <= 1) {
+    locationsState.forEach(l => {
+      const opt = document.createElement("option");
+      opt.value = l.name;
+      opt.textContent = l.name;
+      locSel.appendChild(opt);
+    });
+  }
+
+  const filtered = productsState.filter(p => {
+    if (loc !== 'all' && p.location !== loc) return false;
+    if (q && !p.name.toLowerCase().includes(q) && !p.code.toLowerCase().includes(q) && !(p.barcode || '').includes(q)) return false;
+    return true;
+  });
+
+  tbody.innerHTML = filtered.map(p => `
+    <tr id="count-row-${p.id}">
+      <td>
+        <b>${escapeHtml(p.name)}</b><br>
+        <small style="color:var(--text-muted)">OEM: ${escapeHtml(p.code)} | 🏷️ Barkod: ${escapeHtml(p.barcode || '-')}</small>
+      </td>
+      <td>📍 ${escapeHtml(p.location)}</td>
+      <td style="font-weight:800;color:var(--navy);font-size:14px" id="sys-qty-${p.id}">${p.qty} Adet</td>
+      <td>
+        <input type="number" id="counted-qty-${p.id}" value="${p.qty}" min="0" 
+          style="width:100px;height:34px;font-weight:800;font-size:14px;border:2px solid #0284c7;border-radius:6px;padding:0 8px"
+          oninput="updateCountDiff('${p.id}', ${p.qty}, ${p.buyPrice})">
+      </td>
+      <td id="diff-qty-${p.id}" style="font-weight:800;color:#64748b">0 Adet</td>
+      <td id="diff-val-${p.id}" style="font-weight:800;color:#64748b">₺ 0,00</td>
+    </tr>
+  `).join("");
+}
+
+function updateCountDiff(prodId, sysQty, buyPrice) {
+  const val = parseInt(document.getElementById(`counted-qty-${prodId}`).value, 10);
+  const diffEl = document.getElementById(`diff-qty-${prodId}`);
+  const diffValEl = document.getElementById(`diff-val-${prodId}`);
+
+  if (isNaN(val)) return;
+  const diff = val - sysQty;
+  const costDiff = diff * buyPrice;
+
+  if (diff === 0) {
+    diffEl.textContent = "0 Adet (Tam)";
+    diffEl.style.color = "#10b981";
+    diffValEl.textContent = "₺ 0,00";
+    diffValEl.style.color = "#10b981";
+  } else if (diff > 0) {
+    diffEl.textContent = `+${diff} Fazla`;
+    diffEl.style.color = "#0284c7";
+    diffValEl.textContent = `+₺ ${costDiff.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+    diffValEl.style.color = "#0284c7";
+  } else {
+    diffEl.textContent = `${diff} Eksik`;
+    diffEl.style.color = "#ef4444";
+    diffValEl.textContent = `-₺ ${Math.abs(costDiff).toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+    diffValEl.style.color = "#ef4444";
+  }
+}
+
+function applyStockCount() {
+  let updatedCount = 0;
+  productsState.forEach(p => {
+    const input = document.getElementById(`counted-qty-${p.id}`);
+    if (input) {
+      const counted = parseInt(input.value, 10);
+      if (!isNaN(counted) && counted !== p.qty) {
+        p.qty = counted;
+        updatedCount++;
+      }
+    }
+  });
+
+  if (updatedCount === 0) {
+    flash("Stok sayımında değişiklik bulunmadı.");
+    return;
+  }
+
+  saveAll();
+  renderProducts();
+  renderDashboard();
+  renderCountTable();
+  flash(`✓ ${updatedCount} parça kalemi için yeni sayım stoğu başarıyla güncellendi.`);
+}
+
+function printCountSheet() {
+  window.print();
+}
+
 function renderProducts() {
   const q = (document.getElementById("prod-search")?.value || "").toLowerCase();
   const cat = document.getElementById("prod-cat-filter")?.value || "all";
+  const loc = document.getElementById("prod-loc-filter")?.value || "all";
   const tbody = document.getElementById("products-tbody");
+
+  const catFilter = document.getElementById("prod-cat-filter");
+  if (catFilter && catFilter.options.length <= 1) {
+    categoriesState.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c;
+      opt.textContent = c;
+      catFilter.appendChild(opt);
+    });
+  }
+
+  const locFilter = document.getElementById("prod-loc-filter");
+  if (locFilter && locFilter.options.length <= 1) {
+    locationsState.forEach(l => {
+      const opt = document.createElement("option");
+      opt.value = l.name;
+      opt.textContent = l.name;
+      locFilter.appendChild(opt);
+    });
+  }
 
   const filtered = productsState.filter(p => {
     if (cat !== 'all' && p.category !== cat) return false;
+    if (loc !== 'all' && p.location !== loc) return false;
     if (q) {
-      const match = p.name.toLowerCase().includes(q) || p.code.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q);
+      const match = p.name.toLowerCase().includes(q) || p.code.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q) || (p.barcode || '').includes(q);
       if (!match) return false;
     }
     return true;
@@ -1689,15 +2348,16 @@ function renderProducts() {
     <tr>
       <td>
         <b style="color:var(--navy)">${escapeHtml(p.name)}</b><br>
-        <span style="font-family:monospace;background:#e0f2fe;color:#0369a1;padding:1px 5px;border-radius:4px;font-size:11px">📋 ${escapeHtml(p.code)}</span>
+        <span style="font-family:monospace;background:#e0f2fe;color:#0369a1;padding:1px 5px;border-radius:4px;font-size:11px">📋 OEM: ${escapeHtml(p.code)}</span>
+        ${p.barcode ? `<span style="font-family:monospace;background:#f1f5f9;color:#475569;padding:1px 5px;border-radius:4px;font-size:11px;margin-left:4px">🏷️ ${escapeHtml(p.barcode)}</span>` : ''}
       </td>
       <td><b>${escapeHtml(p.brand)}</b><br><small style="color:var(--text-muted)">${escapeHtml(p.category)}</small></td>
       <td>📍 ${escapeHtml(p.location)}</td>
-      <td style="font-weight:700">${p.currency==='EUR'?'€':p.currency==='USD'?'$':'₺'}${Number(p.buyPrice).toFixed(2)}</td>
+      <td style="font-weight:700">₺ ${Number(p.buyPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
       <td style="font-weight:800;color:#059669">₺ ${Number(p.sellPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
       <td><span class="badge-pill ${p.qty<=p.minQty?'red':'green'}">${p.qty} Adet</span></td>
       <td style="text-align:right">
-        <button class="btn outline sm" onclick="openProductHistory('${p.id}')" title="Alış/Satış Geçmişi">🔍 Geçmişi Gör</button>
+        <button class="btn outline sm" onclick="openProductHistory('${p.id}')" title="Alış/Satış Geçmişi">🔍 Geçmiş</button>
         <button class="btn outline sm" onclick="openEditProductModal('${p.id}')">✏️</button>
       </td>
     </tr>
@@ -1710,21 +2370,18 @@ function openProductHistory(prodId) {
 
   document.getElementById("modal-hist-title").innerHTML = `🔍 Ürün Geçmişi: ${escapeHtml(p.name)}`;
   
-  // Calculate Profit & Margin
-  const buyTL = p.currency === 'EUR' ? p.buyPrice * EUR_RATE : p.currency === 'USD' ? p.buyPrice * USD_RATE : p.buyPrice;
-  const margin = p.sellPrice - buyTL;
-  const marginPct = ((margin / p.sellPrice) * 100).toFixed(1);
+  const margin = p.sellPrice - p.buyPrice;
+  const marginPct = p.sellPrice ? ((margin / p.sellPrice) * 100).toFixed(1) : 0;
 
   document.getElementById("modal-hist-summary").innerHTML = `
     <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:10px;font-size:12px">
-      <div><span>OEM Kodu:</span><br><b>${escapeHtml(p.code)}</b></div>
+      <div><span>OEM & Barkod:</span><br><b>${escapeHtml(p.code)} (${p.barcode || '-'})</b></div>
       <div><span>Mevcut Stok:</span><br><b style="color:#0284c7">${p.qty} Adet</b></div>
-      <div><span>Birim Alış:</span><br><b>${p.currency==='EUR'?'€':p.currency==='USD'?'$':'₺'}${p.buyPrice} (~₺${buyTL.toFixed(2)})</b></div>
-      <div><span>Satış / Brüt Kâr:</span><br><b style="color:#059669">₺${p.sellPrice} (%${marginPct} Kâr)</b></div>
+      <div><span>Birim Alış:</span><br><b>₺ ${Number(p.buyPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})}</b></div>
+      <div><span>Satış / Brüt Kâr:</span><br><b style="color:#059669">₺ ${Number(p.sellPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})} (%${marginPct} Kâr)</b></div>
     </div>
   `;
 
-  // Find Purchases for this item
   const purchases = purchasesState.filter(x => x.prodId === p.id || x.prodName === p.name);
   const purchTbody = document.getElementById("hist-purchases-tbody");
   if (purchases.length === 0) {
@@ -1735,13 +2392,12 @@ function openProductHistory(prodId) {
         <td>${pu.date}</td>
         <td><b>${escapeHtml(pu.supplierName)}</b></td>
         <td>${pu.qty} Adet</td>
-        <td>${pu.currency==='EUR'?'€':pu.currency==='USD'?'$':'₺'}${pu.unitPrice}</td>
+        <td>₺ ${Number(pu.unitPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
         <td style="font-weight:700">₺ ${Number(pu.totalTL).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
       </tr>
     `).join("");
   }
 
-  // Find Sales for this item
   const salesWithItem = [];
   salesState.forEach(s => {
     s.items.forEach(it => {
@@ -1772,6 +2428,7 @@ function openProductHistory(prodId) {
 function openProductModal() {
   document.getElementById("form-product").reset();
   document.getElementById("prod-id").value = "";
+  populateProductFormDropdowns();
   document.getElementById("modal-prod-title").textContent = "📦 Yeni Ürün Tanımla";
   openModal("modal-product");
 }
@@ -1779,14 +2436,15 @@ function openProductModal() {
 function openEditProductModal(id) {
   const p = productsState.find(x => x.id === id);
   if (!p) return;
+  populateProductFormDropdowns();
   document.getElementById("prod-id").value = p.id;
   document.getElementById("prod-name").value = p.name;
   document.getElementById("prod-code").value = p.code;
+  document.getElementById("prod-barcode").value = p.barcode || "";
   document.getElementById("prod-brand").value = p.brand;
   document.getElementById("prod-category").value = p.category;
   document.getElementById("prod-location").value = p.location;
   document.getElementById("prod-buy-price").value = p.buyPrice;
-  document.getElementById("prod-currency").value = p.currency;
   document.getElementById("prod-sell-price").value = p.sellPrice;
   document.getElementById("prod-qty").value = p.qty;
   document.getElementById("prod-min-qty").value = p.minQty;
@@ -1794,16 +2452,27 @@ function openEditProductModal(id) {
   openModal("modal-product");
 }
 
+function populateProductFormDropdowns() {
+  const brandSel = document.getElementById("prod-brand");
+  brandSel.innerHTML = brandsState.map(b => `<option value="${b}">${b}</option>`).join("");
+
+  const catSel = document.getElementById("prod-category");
+  catSel.innerHTML = categoriesState.map(c => `<option value="${c}">${c}</option>`).join("");
+
+  const locSel = document.getElementById("prod-location");
+  locSel.innerHTML = locationsState.map(l => `<option value="${l.name}">${l.name}</option>`).join("");
+}
+
 function saveProduct(e) {
   e.preventDefault();
   const id = document.getElementById("prod-id").value;
   const name = document.getElementById("prod-name").value.trim();
   const code = document.getElementById("prod-code").value.trim();
+  const barcode = document.getElementById("prod-barcode").value.trim();
   const brand = document.getElementById("prod-brand").value;
   const category = document.getElementById("prod-category").value;
   const location = document.getElementById("prod-location").value;
   const buyPrice = parseFloat(document.getElementById("prod-buy-price").value) || 0;
-  const currency = document.getElementById("prod-currency").value;
   const sellPrice = parseFloat(document.getElementById("prod-sell-price").value) || 0;
   const qty = parseInt(document.getElementById("prod-qty").value, 10) || 0;
   const minQty = parseInt(document.getElementById("prod-min-qty").value, 10) || 2;
@@ -1811,12 +2480,12 @@ function saveProduct(e) {
   if (id) {
     const idx = productsState.findIndex(x => x.id === id);
     if (idx !== -1) {
-      productsState[idx] = { ...productsState[idx], name, code, brand, category, location, buyPrice, currency, sellPrice, qty, minQty };
+      productsState[idx] = { ...productsState[idx], name, code, barcode, brand, category, location, buyPrice, sellPrice, qty, minQty };
       flash("✓ Ürün kartı güncellendi.");
     }
   } else {
-    productsState.unshift({ id: "p-" + Date.now(), name, code, brand, category, location, buyPrice, currency, sellPrice, qty, minQty });
-    flash("✓ Yeni ürün eklendi.");
+    productsState.unshift({ id: "p-" + Date.now(), name, code, barcode, brand, category, location, buyPrice, sellPrice, qty, minQty });
+    flash("✓ Yeni ürün kaydedildi.");
   }
 
   saveAll();
@@ -1824,9 +2493,6 @@ function saveProduct(e) {
   closeModal("modal-product");
 }
 
-// ==========================================
-// 3. CUSTOMER MANAGEMENT
-// ==========================================
 function renderCustomers() {
   const q = (document.getElementById("cust-search")?.value || "").toLowerCase();
   const tbody = document.getElementById("customers-tbody");
@@ -1838,14 +2504,16 @@ function renderCustomers() {
 
   tbody.innerHTML = filtered.map(c => `
     <tr>
-      <td><b>${escapeHtml(c.name)}</b><br><small style="color:var(--text-muted)">${escapeHtml(c.email || '')}</small></td>
+      <td>
+        <b>${escapeHtml(c.name)}</b><br>
+        <small style="color:var(--text-muted)">${escapeHtml(c.taxInfo || c.email || '')}</small>
+      </td>
       <td><b>⛵ ${escapeHtml(c.boatName)}</b><br><small style="color:var(--text-muted)">${escapeHtml(c.boatModel || '')}</small></td>
       <td>📍 ${escapeHtml(c.marina)}</td>
       <td>📞 ${escapeHtml(c.phone)}</td>
-      <td><span class="badge-pill blue">Aktif Tekne</span></td>
       <td style="font-weight:800;color:${c.balance>0?'#ef4444':'#10b981'}">₺ ${Number(c.balance).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
       <td style="text-align:right">
-        <button class="btn primary sm" onclick="openSaleForCustomer('${c.id}')">🛒 Servis Fişi Kes</button>
+        <button class="btn primary sm" onclick="openSaleForCustomer('${c.id}')">🛒 Servis Faturası</button>
       </td>
     </tr>
   `).join("");
@@ -1864,9 +2532,10 @@ function saveCustomer(e) {
   const boatModel = document.getElementById("cust-boat-model").value.trim();
   const marina = document.getElementById("cust-marina").value.trim();
   const phone = document.getElementById("cust-phone").value.trim();
+  const taxInfo = document.getElementById("cust-tax-info").value.trim();
   const email = document.getElementById("cust-email").value.trim();
 
-  customersState.unshift({ id: "c-" + Date.now(), name, boatName, boatModel, marina, phone, email, balance: 0 });
+  customersState.unshift({ id: "c-" + Date.now(), name, boatName, boatModel, marina, phone, taxInfo, email, balance: 0 });
   saveAll();
   renderCustomers();
   closeModal("modal-customer");
@@ -1885,9 +2554,6 @@ function collectReceivable(custId) {
   flash(`✓ ₺${amount} tahsilat kaydedildi.`);
 }
 
-// ==========================================
-// 4. SUPPLIER MANAGEMENT
-// ==========================================
 function renderSuppliers() {
   const q = (document.getElementById("supp-search")?.value || "").toLowerCase();
   const tbody = document.getElementById("suppliers-tbody");
@@ -1902,7 +2568,7 @@ function renderSuppliers() {
       <td><b>${escapeHtml(s.name)}</b></td>
       <td>${escapeHtml(s.category)}</td>
       <td>${escapeHtml(s.contact)} (${escapeHtml(s.phone)})</td>
-      <td><span class="badge-pill green">Aktif Tedarik</span></td>
+      <td>📍 ${escapeHtml(s.city || '-')}</td>
       <td style="font-weight:800;color:#ef4444">₺ ${Number(s.balance).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
       <td style="text-align:right">
         <button class="btn success sm" onclick="openPurchaseForSupplier('${s.id}')">📥 Mal Alışı Yap</button>
@@ -1932,9 +2598,6 @@ function saveSupplier(e) {
   flash("✓ Tedarikçi kaydedildi.");
 }
 
-// ==========================================
-// 5. SALES & PRINTABLE INVOICE RECEIPT
-// ==========================================
 function renderSales() {
   const tbody = document.getElementById("sales-tbody");
   tbody.innerHTML = salesState.map(s => `
@@ -1943,9 +2606,9 @@ function renderSales() {
       <td><b>${escapeHtml(s.customerName)}</b><br><small style="color:var(--text-muted)">⛵ ${escapeHtml(s.boatName)}</small></td>
       <td>${s.items.map(i => `${i.name} (x${i.qty})`).join(", ")} ${s.laborCost ? '+ İşçilik' : ''}</td>
       <td style="font-weight:800;color:#059669">₺ ${Number(s.total).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
-      <td><span class="badge-pill ${s.status==='paid'?'green':'yellow'}">${s.status==='paid'?'Ödendi':'Açık Hesap'}</span></td>
+      <td><span class="badge-pill ${s.status==='paid'?'green':'yellow'}">${s.payType || (s.status==='paid'?'Ödendi':'Açık Hesap')}</span></td>
       <td style="text-align:right">
-        <button class="btn outline sm" onclick="viewPrintableInvoice('${s.id}')">🖨️ PDF / Fiş</button>
+        <button class="btn outline sm" onclick="viewPrintableInvoice('${s.id}')">🖨️ Fiş / PDF</button>
       </td>
     </tr>
   `).join("");
@@ -1955,11 +2618,9 @@ function openNewSaleModal() {
   document.getElementById("form-sale").reset();
   document.getElementById("sale-date").value = new Date().toISOString().slice(0, 10);
 
-  // Populate Customers
   const custSel = document.getElementById("sale-cust-select");
   custSel.innerHTML = customersState.map(c => `<option value="${c.id}">${escapeHtml(c.name)} — ⛵ ${escapeHtml(c.boatName)} (${escapeHtml(c.marina)})</option>`).join("");
 
-  // Populate Products
   const prodOptions = `<option value="">-- Parça Seçiniz --</option>` + productsState.map(p => `
     <option value="${p.id}" data-price="${p.sellPrice}">${escapeHtml(p.name)} (${p.code}) — ₺${p.sellPrice} [Stok: ${p.qty}]</option>
   `).join("");
@@ -2033,7 +2694,7 @@ function saveSale(e) {
 
   const total = items.reduce((s, i) => s + (i.qty * i.price), 0) + laborCost;
   const newSale = {
-    id: "sale-" + Math.floor(1000 + Math.random() * 9000),
+    id: "SRV-" + Math.floor(1000 + Math.random() * 9000),
     date,
     customerId: custId,
     customerName: customer ? customer.name : 'Müşteri',
@@ -2041,6 +2702,7 @@ function saveSale(e) {
     items,
     laborCost,
     total,
+    payType: status === 'paid' ? 'Nakit / Havale' : 'Açık Hesap',
     status
   };
 
@@ -2052,11 +2714,10 @@ function saveSale(e) {
   saveAll();
   renderSales();
   closeModal("modal-sale");
-  flash("✓ Satış & Servis fişi kaydedildi.");
+  flash("✓ Satış & Servis faturası kaydedildi.");
   viewPrintableInvoice(newSale.id);
 }
 
-// INVOICE PRINT VIEW
 function viewPrintableInvoice(saleId) {
   const sale = salesState.find(x => x.id === saleId);
   if (!sale) return;
@@ -2067,10 +2728,10 @@ function viewPrintableInvoice(saleId) {
     <div style="border-bottom:2px solid #071b2b;padding-bottom:14px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:flex-start">
       <div>
         <h2 style="margin:0;color:#071b2b;font-size:22px;letter-spacing:.02em">DM MARİN MOTOR & TEKNİK</h2>
-        <p style="margin:4px 0 0;font-size:12px;color:#64748b">Mobil Marin Servis, Motor & Jeneratör Bakımı<br>Tuzla / Setur Kalamış / Ataköy Marinaları · Tel: 0543 724 09 92</p>
+        <p style="margin:4px 0 0;font-size:12px;color:#64748b">Mobil Marin Servis, Motor & Jeneratör Bakımı<br>Tuzla / Kalamış / Ataköy Marinaları · Tel: 0543 724 09 92</p>
       </div>
       <div style="text-align:right">
-        <b style="font-size:16px;color:#071b2b">SERVİS & SATIŞ FORMU</b><br>
+        <b style="font-size:16px;color:#071b2b">SERVİS & SATIŞ MAKBUZU</b><br>
         <span style="font-size:13px;font-weight:700;color:#0284c7">Fiş No: #${sale.id}</span><br>
         <small style="color:#64748b">Tarih: ${sale.date}</small>
       </div>
@@ -2078,14 +2739,15 @@ function viewPrintableInvoice(saleId) {
 
     <div style="background:#f8fafc;padding:12px 16px;border-radius:8px;margin-bottom:18px;display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12.5px">
       <div>
-        <span style="color:#64748b;font-size:11px;text-transform:uppercase">Müşteri Bilgileri</span><br>
+        <span style="color:#64748b;font-size:11px;text-transform:uppercase">Müşteri / Cari</span><br>
         <b>${escapeHtml(sale.customerName)}</b><br>
-        <span>Tel: ${escapeHtml(cust ? cust.phone : '')}</span>
+        <span>Tel: ${escapeHtml(cust ? cust.phone : '')}</span><br>
+        <span>${escapeHtml(cust?.taxInfo || '')}</span>
       </div>
       <div>
         <span style="color:#64748b;font-size:11px;text-transform:uppercase">Tekne & Konum</span><br>
         <b>⛵ ${escapeHtml(sale.boatName)}</b><br>
-        <span>📍 ${escapeHtml(cust ? cust.marina : '')}</span>
+        <span>📍 ${escapeHtml(cust ? cust.marina : 'Saha / Kasa Satışı')}</span>
       </div>
     </div>
 
@@ -2120,13 +2782,65 @@ function viewPrintableInvoice(saleId) {
 
     <div style="display:flex;justify-content:space-between;align-items:center;border-top:2px solid #071b2b;padding-top:12px">
       <div style="font-size:12px;color:#64748b">
-        Durum: <b style="color:${sale.status==='paid'?'#10b981':'#f59e0b'}">${sale.status==='paid'?'TAHSİL EDİLDİ (ÖDENDİ)':'AÇIK HESAP BORÇ'}</b>
+        Ödeme Türü: <b>${sale.payType || 'Nakit'}</b><br>
+        Durum: <b style="color:${sale.status==='paid'?'#10b981':'#f59e0b'}">${sale.status==='paid'?'TAHSİL EDİLDİ (KAPALI)':'AÇIK HESAP (BORÇ)'}</b>
       </div>
       <div style="text-align:right">
-        <span style="font-size:13px;color:#64748b">GENEL TOPLAM:</span><br>
+        <span style="font-size:12px;color:#64748b">KDV (%20 Dahil)</span><br>
         <b style="font-size:22px;color:#071b2b">₺ ${Number(sale.total).toLocaleString('tr-TR', {minimumFractionDigits:2})} TL</b>
       </div>
     </div>
+  `;
+
+  openModal("modal-print-invoice");
+}
+
+function openDailyZReport() {
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const todaySales = salesState.filter(s => s.date === todayStr);
+  const total = todaySales.reduce((s, i) => s + (Number(i.total) || 0), 0);
+  const cash = todaySales.filter(s => s.payType === 'Nakit').reduce((s, i) => s + (Number(i.total) || 0), 0);
+  const card = todaySales.filter(s => s.payType === 'Kredi Kartı').reduce((s, i) => s + (Number(i.total) || 0), 0);
+  const eft = todaySales.filter(s => s.payType === 'Havale / EFT').reduce((s, i) => s + (Number(i.total) || 0), 0);
+  const credit = todaySales.filter(s => s.status === 'pending').reduce((s, i) => s + (Number(i.total) || 0), 0);
+
+  document.getElementById("invoice-printable-area").innerHTML = `
+    <div style="text-align:center;border-bottom:2px solid #071b2b;padding-bottom:14px;margin-bottom:16px">
+      <h2 style="margin:0">DM MARİN · GÜN SONU KASA RAPORU (Z RAPORU)</h2>
+      <p style="margin:4px 0 0;font-size:13px;color:#64748b">Tarih: <b>${todayStr}</b> · Saat: ${new Date().toLocaleTimeString('tr-TR')}</p>
+    </div>
+
+    <div style="background:#f8fafc;padding:16px;border-radius:8px;margin-bottom:18px;font-size:13px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>Toplam Fiş Adedi:</span><b>${todaySales.length} İşlem</b></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>Nakit Tahsilat:</span><b>₺ ${cash.toLocaleString('tr-TR', {minimumFractionDigits:2})}</b></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>Kredi Kartı Tahsilat:</span><b>₺ ${card.toLocaleString('tr-TR', {minimumFractionDigits:2})}</b></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>Havale / EFT:</span><b>₺ ${eft.toLocaleString('tr-TR', {minimumFractionDigits:2})}</b></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;color:#f59e0b"><span>Açık Hesap (Veresiye):</span><b>₺ ${credit.toLocaleString('tr-TR', {minimumFractionDigits:2})}</b></div>
+      <div style="display:flex;justify-content:space-between;border-top:2px solid #071b2b;padding-top:8px;margin-top:8px;font-size:16px;color:#071b2b">
+        <span>GÜNLÜK NET CİRO:</span><b>₺ ${total.toLocaleString('tr-TR', {minimumFractionDigits:2})}</b>
+      </div>
+    </div>
+
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <thead>
+        <tr style="background:#f1f5f9;border-bottom:1px solid #cbd5e1">
+          <th style="padding:6px;text-align:left">Fiş No</th>
+          <th style="padding:6px;text-align:left">Müşteri</th>
+          <th style="padding:6px;text-align:left">Ödeme</th>
+          <th style="padding:6px;text-align:right">Tutar</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${todaySales.map(s => `
+          <tr style="border-bottom:1px solid #f1f5f9">
+            <td style="padding:6px">#${s.id}</td>
+            <td style="padding:6px">${escapeHtml(s.customerName)}</td>
+            <td style="padding:6px">${s.payType || 'Nakit'}</td>
+            <td style="padding:6px;text-align:right;font-weight:700">₺ ${Number(s.total).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
   `;
 
   openModal("modal-print-invoice");
@@ -2136,9 +2850,6 @@ function printInvoice() {
   window.print();
 }
 
-// ==========================================
-// 6. PURCHASES & EXPENSES
-// ==========================================
 function renderPurchases() {
   const tbody = document.getElementById("purchases-tbody");
   tbody.innerHTML = purchasesState.map(pu => `
@@ -2163,7 +2874,10 @@ function openPurchaseModal() {
   suppSel.innerHTML = suppliersState.map(s => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join("");
 
   const prodSel = document.getElementById("purch-prod-select");
-  prodSel.innerHTML = productsState.map(p => `<option value="${p.id}" data-price="${p.buyPrice}" data-cur="${p.currency}">${escapeHtml(p.name)} (${p.code})</option>`).join("");
+  prodSel.innerHTML = productsState.map(p => `<option value="${p.id}" data-price="${p.buyPrice}">${escapeHtml(p.name)} (${p.code})</option>`).join("");
+
+  const locSel = document.getElementById("purch-location");
+  locSel.innerHTML = locationsState.map(l => `<option value="${l.name}">${l.name}</option>`).join("");
 
   updatePurchPriceHint();
   openModal("modal-purchase");
@@ -2198,9 +2912,7 @@ function savePurchase(e) {
     prod.buyPrice = unitPrice;
   }
 
-  const cur = prod ? prod.currency : 'EUR';
-  const totalTL = (cur === 'EUR' ? unitPrice * EUR_RATE : cur === 'USD' ? unitPrice * USD_RATE : unitPrice) * qty;
-
+  const totalTL = unitPrice * qty;
   purchasesState.unshift({
     id: "pur-" + Date.now(),
     date,
@@ -2210,7 +2922,6 @@ function savePurchase(e) {
     prodName: prod ? prod.name : 'Parça',
     qty,
     unitPrice,
-    currency: cur,
     totalTL,
     status
   });
@@ -2225,7 +2936,6 @@ function savePurchase(e) {
   flash("✓ Mal alışı kaydedildi ve stok arttırıldı.");
 }
 
-// EXPENSES
 function renderExpenses() {
   const tbody = document.getElementById("expenses-tbody");
   tbody.innerHTML = expensesState.map(ex => `
@@ -2283,20 +2993,73 @@ function payExpense(id) {
   }
 }
 
-// ==========================================
-// 7. REPORTS & CHARTS
-// ==========================================
 let revChart = null;
 let expChart = null;
 
 function renderReports() {
-  const totalRev = salesState.reduce((sum, s) => sum + (Number(s.total) || 0), 0);
-  const totalExp = expensesState.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+  const period = document.getElementById("report-period-select")?.value || "this-month";
+  
+  let filteredSales = [...salesState];
+  let filteredExp = [...expensesState];
+
+  const now = new Date();
+  const currentYear = now.getFullYear().toString();
+  const currentMonth = (now.getMonth() + 1).toString().padStart(2, '0');
+
+  if (period === 'this-month') {
+    filteredSales = salesState.filter(s => s.date.startsWith(`${currentYear}-${currentMonth}`));
+    filteredExp = expensesState.filter(e => e.date.startsWith(`${currentYear}-${currentMonth}`));
+  } else if (period === 'this-year') {
+    filteredSales = salesState.filter(s => s.date.startsWith(currentYear));
+    filteredExp = expensesState.filter(e => e.date.startsWith(currentYear));
+  }
+
+  const totalRev = filteredSales.reduce((sum, s) => sum + (Number(s.total) || 0), 0);
+  const totalExp = filteredExp.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
   const netProfit = totalRev - totalExp;
 
   document.getElementById("rep-total-rev").textContent = `₺ ${totalRev.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
   document.getElementById("rep-total-exp").textContent = `₺ ${totalExp.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
   document.getElementById("rep-net-profit").textContent = `₺ ${netProfit.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+
+  const prodStats = {};
+  productsState.forEach(p => {
+    prodStats[p.id] = { id: p.id, name: p.name, code: p.code, category: p.category, qtySold: 0, totalRev: 0, unitCost: p.buyPrice };
+  });
+
+  filteredSales.forEach(s => {
+    s.items.forEach(it => {
+      if (it.prodId && prodStats[it.prodId]) {
+        prodStats[it.prodId].qtySold += Number(it.qty) || 0;
+        prodStats[it.prodId].totalRev += (Number(it.qty) || 0) * (Number(it.price) || 0);
+      }
+    });
+  });
+
+  const prodSalesArray = Object.values(prodStats).filter(x => x.qtySold > 0 || x.totalRev > 0);
+  prodSalesArray.sort((a, b) => b.totalRev - a.totalRev);
+
+  const repTbody = document.getElementById("rep-product-sales-tbody");
+  if (prodSalesArray.length === 0) {
+    repTbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px">Seçili dönemde ürün satışı bulunamadı.</td></tr>`;
+  } else {
+    repTbody.innerHTML = prodSalesArray.map(ps => {
+      const estCost = ps.qtySold * ps.unitCost;
+      const profit = ps.totalRev - estCost;
+      const avgPrice = ps.qtySold ? ps.totalRev / ps.qtySold : 0;
+      return `
+        <tr>
+          <td><b>${escapeHtml(ps.name)}</b><br><small style="color:var(--text-muted)">OEM: ${escapeHtml(ps.code)}</small></td>
+          <td><span class="badge-pill blue">${escapeHtml(ps.category)}</span></td>
+          <td style="font-weight:800;color:var(--navy);text-align:center">${ps.qtySold} Adet</td>
+          <td>₺ ${avgPrice.toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
+          <td style="font-weight:800;color:#0284c7">₺ ${ps.totalRev.toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
+          <td style="color:var(--text-muted)">₺ ${estCost.toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
+          <td style="font-weight:900;color:#059669">₺ ${profit.toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
+        </tr>
+      `;
+    }).join("");
+  }
 
   const ctxRev = document.getElementById("chart-rev");
   const ctxExp = document.getElementById("chart-exp");
@@ -2306,7 +3069,7 @@ function renderReports() {
     revChart = new Chart(ctxRev, {
       type: 'bar',
       data: {
-        labels: ['Temmuz', 'Ağustos', 'Eylül 2026'],
+        labels: ['Temmuz 2026', 'Ağustos 2026', 'Eylül 2026'],
         datasets: [
           { label: 'Ciro / Satış (₺)', data: [42000, 68000, totalRev], backgroundColor: '#2563eb' },
           { label: 'Giderler (₺)', data: [8500, 12000, totalExp], backgroundColor: '#ef4444' }
@@ -2321,7 +3084,7 @@ function renderReports() {
     expChart = new Chart(ctxExp, {
       type: 'doughnut',
       data: {
-        labels: ['Akaryakıt', 'Kira & Faturalar', 'Personel', 'Yedek Parça Alımları'],
+        labels: ['Akaryakıt & Araç', 'Kira & Faturalar', 'Personel', 'Malzeme Alımları'],
         datasets: [{
           data: [950, 3840, 1030, 26372],
           backgroundColor: ['#f59e0b', '#ef4444', '#0284c7', '#10b981']
@@ -2332,20 +3095,130 @@ function renderReports() {
   }
 }
 
-// CSV EXPORT
-function exportProductsCsv() {
-  let csv = "\uFEFFÜrün Adı;OEM Kodu;Marka;Kategori;Depo;Alış Fiyatı;Para Birimi;Satış Fiyatı (TL);Stok\n";
+function exportProductSalesReport() {
+  let csv = "﻿Ürün Adı;OEM Kodu;Kategori;Satılan Adet;Toplam Ciro (TL);Birim Maliyet;Tahmini Maliyet (TL);Net Kar (TL)
+";
   productsState.forEach(p => {
-    csv += `"${p.name}";"${p.code}";"${p.brand}";"${p.category}";"${p.location}";${p.buyPrice};"${p.currency}";${p.sellPrice};${p.qty}\n`;
+    let sold = 0;
+    let rev = 0;
+    salesState.forEach(s => {
+      s.items.forEach(it => {
+        if (it.prodId === p.id) {
+          sold += Number(it.qty) || 0;
+          rev += (Number(it.qty) || 0) * (Number(it.price) || 0);
+        }
+      });
+    });
+    const cost = sold * p.buyPrice;
+    const profit = rev - cost;
+    csv += `"${p.name}";"${p.code}";"${p.category}";${sold};${rev};${p.buyPrice};${cost};${profit}
+`;
   });
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = `DM-MARIN-Urun-Listesi.csv`;
+  a.download = `DM-MARIN-Urun-Bazinda-Satis-Raporu.csv`;
   a.click();
 }
 
-// UTILITIES
+function renderSettings() {
+  const catTbody = document.getElementById("settings-categories-tbody");
+  catTbody.innerHTML = categoriesState.map((cat, idx) => `
+    <tr>
+      <td><b>${escapeHtml(cat)}</b></td>
+      <td style="text-align:right">
+        <button class="btn danger sm" onclick="deleteCategory(${idx})">Sil</button>
+      </td>
+    </tr>
+  `).join("");
+
+  const brandTbody = document.getElementById("settings-brands-tbody");
+  brandTbody.innerHTML = brandsState.map((b, idx) => `
+    <tr>
+      <td><b>${escapeHtml(b)}</b></td>
+      <td style="text-align:right">
+        <button class="btn danger sm" onclick="deleteBrand(${idx})">Sil</button>
+      </td>
+    </tr>
+  `).join("");
+
+  const locTbody = document.getElementById("settings-locations-tbody");
+  locTbody.innerHTML = locationsState.map((l, idx) => `
+    <tr>
+      <td><b>📍 ${escapeHtml(l.name)}</b></td>
+      <td>${escapeHtml(l.desc || '-')}</td>
+      <td style="text-align:right">
+        <button class="btn danger sm" onclick="deleteLocation(${idx})">Sil</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function promptAddCategory() {
+  const name = prompt("Yeni Kategori Adını Giriniz:");
+  if (name && name.trim()) {
+    categoriesState.push(name.trim());
+    saveAll();
+    renderSettings();
+    flash("✓ Kategori eklendi.");
+  }
+}
+function deleteCategory(idx) {
+  if (confirm("Bu kategoriyi silmek istediğinize emin misiniz?")) {
+    categoriesState.splice(idx, 1);
+    saveAll();
+    renderSettings();
+  }
+}
+
+function promptAddBrand() {
+  const name = prompt("Yeni Marka Adını Giriniz (Örn: Yanmar, MAN):");
+  if (name && name.trim()) {
+    brandsState.push(name.trim());
+    saveAll();
+    renderSettings();
+    flash("✓ Marka eklendi.");
+  }
+}
+function deleteBrand(idx) {
+  if (confirm("Bu markayı silmek istediğinize emin misiniz?")) {
+    brandsState.splice(idx, 1);
+    saveAll();
+    renderSettings();
+  }
+}
+
+function promptAddLocation() {
+  const name = prompt("Yeni Depo veya Servis Aracı Adı:");
+  if (!name || !name.trim()) return;
+  const desc = prompt("Açıklama / Plaka / Lokasyon:", "");
+  locationsState.push({ id: "loc-" + Date.now(), name: name.trim(), desc: desc || "" });
+  saveAll();
+  renderSettings();
+  flash("✓ Depo / Lokasyon eklendi.");
+}
+function deleteLocation(idx) {
+  if (confirm("Bu depoyu silmek istediğinize emin misiniz?")) {
+    locationsState.splice(idx, 1);
+    saveAll();
+    renderSettings();
+  }
+}
+
+function exportProductsCsv() {
+  let csv = "﻿Ürün Adı;OEM Kodu;Barkod;Marka;Kategori;Depo;Alış Fiyatı;Satış Fiyatı (TL);Stok
+";
+  productsState.forEach(p => {
+    csv += `"${p.name}";"${p.code}";"${p.barcode||''}";"${p.brand}";"${p.category}";"${p.location}";${p.buyPrice};${p.sellPrice};${p.qty}
+`;
+  });
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `DM-MARIN-Envanter-Listesi.csv`;
+  a.click();
+}
+
 function openModal(id) { document.getElementById(id)?.classList.add("open"); }
 function closeModal(id) { document.getElementById(id)?.classList.remove("open"); }
 function escapeHtml(str) { return str ? String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : ''; }
@@ -2359,7 +3232,6 @@ function flash(msg) {
   window._ft = setTimeout(() => { el.style.display = "none"; }, 3500);
 }
 
-// ON LOAD
 window.addEventListener("DOMContentLoaded", () => {
   loadAll();
   renderDashboard();
