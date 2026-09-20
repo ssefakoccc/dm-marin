@@ -1420,7 +1420,6 @@ function filterAndRenderRequests() {
     );
   }
   renderRequestsTable(filtered);
-  updateAnalyticsWithRequests(allServiceRequests);
   if (document.getElementById("request-count-badge")) {
     document.getElementById("request-count-badge").textContent = filtered.length + " / " + allServiceRequests.length + " Talep";
   }
