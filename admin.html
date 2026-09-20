@@ -1129,7 +1129,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
   <div class="login-card">
     <img src="assets/dm-marin-logo-v2.webp" alt="DM MARİN" width="544" height="190">
     <h2>DM MARİN Yönetici Portalı</h2>
-    <p>Yönetim paneline erişmek için şifrenizle veya <b>Master PIN Kodu (1998)</b> ile giriş yapabilirsiniz.</p>
+    <p>Yönetim paneline erişmek için yetkili kullanıcı adı ve şifreniz / PIN kodunuz ile giriş yapınız.</p>
     <div class="login-feedback" id="login-feedback"></div>
     <form id="login-form">
       <div>
@@ -1453,12 +1453,12 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
   <div class="form-grid">
     <div class="field">
       <label for="erp-admin-pin">Yönetici (Master) PIN Kodu</label>
-      <input type="password" id="erp-admin-pin" placeholder="Varsayılan: 1998" maxlength="12">
+      <input type="password" id="erp-admin-pin" placeholder="••••••••" maxlength="12">
       <small>Tüm stok sıfırlama, mali rapor ve yetkili işlemler için geçerlidir.</small>
     </div>
     <div class="field">
       <label for="erp-staff-pin">Personel / Teknisyen Giriş PIN Kodu</label>
-      <input type="password" id="erp-staff-pin" placeholder="Varsayılan: dm1998" maxlength="12">
+      <input type="password" id="erp-staff-pin" placeholder="••••••••" maxlength="12">
       <small>Saha teknisyenlerinin POS ve stok giriş erişimi için geçerlidir.</small>
     </div>
     <div class="field full" style="display:flex;justify-content:flex-end;gap:10px;margin-top:8px">
@@ -3049,7 +3049,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
         fb.style.display = 'block';
         fb.style.background = '#fef2f2';
         fb.style.color = '#991b1b';
-        fb.textContent = error.message === 'Invalid login credentials' ? 'Geçersiz şifre veya PIN kodu. (Varsayılan Master PIN: 1998)' : error.message;
+        fb.textContent = error.message === 'Invalid login credentials' ? 'Geçersiz kullanıcı adı veya şifre/PIN kodu.' : error.message;
       } else if (data && data.session) {
         sessionStorage.setItem('dm_admin_session', JSON.stringify(data.session));
         closeLoginOverlay();
@@ -3066,7 +3066,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     fb.style.display = 'block';
     fb.style.background = '#fef2f2';
     fb.style.color = '#991b1b';
-    fb.textContent = 'Hatalı PIN veya şifre! Lütfen Yönetici PIN kodunuzu (1998 veya dm1998) giriniz.';
+    fb.textContent = 'Hatalı kullanıcı adı veya şifre! Lütfen bilgilerinizi kontrol ediniz.';
   }
 
   submitBtn.disabled = false;
@@ -4786,7 +4786,7 @@ function renderAdminUsersTable() {
         <td style="max-width:260px">${permsHtml}</td>
         <td>${escapeHtml(u.phone || '-')}</td>
         <td>📅 ${escapeHtml(u.birthDate || 'Belirtilmedi')}</td>
-        <td><span style="font-family:monospace;background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:2px 8px;border-radius:5px;font-size:12px;font-weight:800">🔒 ${escapeHtml(u.pin || '1998')}</span></td>
+        <td><span id="pin-mask-${idx}" style="font-family:monospace;background:#f1f5f9;border:1px solid #cbd5e1;color:#475569;padding:2px 8px;border-radius:5px;font-size:12px;font-weight:700">••••••••</span> <button type="button" class="btn" style="padding:1px 6px;min-height:22px;font-size:10px" onclick="togglePinVisibility(${idx}, '${escapeHtml(u.pin || '')}')">👁 Göster</button></td>
         <td><span class="pill ${u.active !== false ? 'ok' : 'danger'}">${u.active !== false ? 'Aktif' : 'Pasif'}</span></td>
         <td style="text-align:right;white-space:nowrap">
           <button type="button" class="btn" style="padding:4px 10px;min-height:30px;font-size:12px" onclick="editAdminUser('${u.id}')">✏️ Düzenle</button>
@@ -4932,7 +4932,7 @@ function saveAdminUser(e) {
     return false;
   }
   if (!pin) {
-    alert("Lütfen personele ait bir giriş PIN kodu belirleyiniz (Örn: 1998).");
+    alert("Lütfen personele ait en az 4 haneli güvenli bir giriş PIN kodu belirleyiniz.");
     if (pinEl) pinEl.focus();
     return false;
   }
@@ -4976,7 +4976,7 @@ function saveAdminUser(e) {
   closeAdminUserModal();
   renderAdminUsersTable();
   if (typeof initAgentDashboard === "function") initAgentDashboard();
-  flash(`✓ Kullanıcı "${name}" (${username}) yetkileriyle birlikte kaydedildi (PIN: ${pin})`);
+  flash(`✓ Kullanıcı "${name}" (${username}) yetkileriyle birlikte güvenle kaydedildi.`);
   return false;
 }
 
@@ -5962,7 +5962,7 @@ window.addEventListener("DOMContentLoaded", () => {
         </div>
         <div class="field">
           <label>Kişiye Özel Giriş PIN / Şifre *</label>
-          <input type="text" id="adm-user-pin" placeholder="Örn: 1998 veya dm1998" maxlength="16" required>
+          <input type="password" id="adm-user-pin" placeholder="••••••••" maxlength="16" required>
         </div>
         <div class="field full">
           <label>Hesap Durumu</label>

@@ -17,12 +17,10 @@ module.exports = async (req, res) => {
 
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
-    const {
-      path = '/',
-      ref = '',
-      vid = '',
-      device = 'desktop'
-    } = body;
+    const rawPath = typeof body.path === 'string' ? body.path.slice(0, 150) : '/';
+    const ref = typeof body.ref === 'string' ? body.ref.slice(0, 200) : '';
+    const vid = typeof body.vid === 'string' ? body.vid.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 64) : '';
+    const device = body.device === 'mobile' ? 'mobile' : 'desktop';
 
     const supabase = getServiceClient();
     if (!supabase) {
@@ -98,7 +96,7 @@ module.exports = async (req, res) => {
     analytics.sources[srcKey] = (analytics.sources[srcKey] || 0) + 1;
 
     // Page
-    const cleanPath = (path.split('?')[0] || '/').replace(/^\//, '') || 'index.html';
+    const cleanPath = (rawPath.split('?')[0] || '/').replace(/^\//, '') || 'index.html';
     analytics.pages[cleanPath] = (analytics.pages[cleanPath] || 0) + 1;
 
     // Keep only the last 60 days in analytics.days

@@ -10,6 +10,9 @@ module.exports = async (req, res) => {
     return res.status(503).json({ error: 'Supabase servisi yapılandırılmamış.' });
   }
 
+  const adminUser = await verifyAdmin(req, res);
+  if (!adminUser) return;
+
   const method = req.method;
   if (method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });

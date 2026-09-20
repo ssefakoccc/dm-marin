@@ -5,6 +5,10 @@ const { verifyAdmin } = require('../_lib/auth');
 module.exports = async (req, res) => {
   res.setHeader('Content-Type', 'application/json');
 
+  // SECURITY: Require verified admin for inventory access
+  const adminUser = await verifyAdmin(req, res);
+  if (!adminUser) return;
+
   const supabase = getServiceClient();
   if (!supabase) {
     return res.status(503).json({ error: 'Supabase servis bağlantısı yapılandırılmamış.' });
@@ -34,9 +38,6 @@ module.exports = async (req, res) => {
 
   // POST: Stok verilerini kaydet (Admin doğrulaması zorunlu)
   if (method === 'POST') {
-    const adminUser = await verifyAdmin(req, res);
-    if (!adminUser) return;
-
     try {
       const body = req.body || {};
       const inventoryData = body.inventory || body;
