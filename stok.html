@@ -949,6 +949,142 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
   box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
 }
 
+
+/* POS ENHANCED STYLES */
+.pos-top-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 18px;
+  background: #f1f5f9;
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+}
+.pos-shortcut-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 7px;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #475569;
+}
+.pos-shortcut-badge kbd {
+  background: #e2e8f0;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-weight: 800;
+  color: #0f172a;
+}
+.pos-quick-tender-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  padding: 8px 16px 4px;
+  background: #f8fafc;
+}
+.pos-tender-btn {
+  height: 34px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  color: #0f172a;
+  cursor: pointer;
+  transition: all .12s;
+}
+.pos-tender-btn:hover {
+  background: #e0f2fe;
+  border-color: #0284c7;
+  color: #0369a1;
+}
+.pos-hold-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 16px;
+  background: #fef3c7;
+  border-bottom: 1px solid #fde68a;
+  font-size: 12px;
+  font-weight: 700;
+  color: #92400e;
+}
+.pos-hold-tabs {
+  display: flex;
+  gap: 6px;
+}
+.pos-hold-tab {
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: #fff;
+  border: 1px solid #f59e0b;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 800;
+  color: #b45309;
+}
+.pos-hold-tab.active {
+  background: #f59e0b;
+  color: #fff;
+}
+.pos-change-calculator {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background: #ecfdf5;
+  border-top: 1px solid #a7f3d0;
+  font-size: 13px;
+  font-weight: 800;
+  color: #065f46;
+}
+.pos-change-input {
+  width: 90px;
+  height: 30px;
+  border: 2px solid #059669;
+  border-radius: 6px;
+  padding: 0 6px;
+  text-align: right;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+/* STOCK STATS BAR */
+.stock-stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.stock-stat-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.stock-stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+}
+.stock-stat-icon.blue { background: #e0f2fe; color: #0284c7; }
+.stock-stat-icon.green { background: #ecfdf5; color: #10b981; }
+.stock-stat-icon.red { background: #fef2f2; color: #ef4444; }
+.stock-stat-icon.orange { background: #fffbeb; color: #f59e0b; }
+.stock-stat-val { font-size: 18px; font-weight: 900; color: var(--navy); }
+.stock-stat-lbl { font-size: 11.5px; color: var(--text-muted); font-weight: 600; }
+
 </style>
 </head>
 <body>
@@ -1201,10 +1337,24 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
           <div class="pos-products-panel">
             <div class="pos-top-search">
               <div class="pos-search-wrapper">
-                <input type="text" id="pos-barcode-input" class="pos-barcode-input" placeholder="🔍 Barkod okutunuz veya OEM kodu / parça adı yazıp arayınız..." oninput="handlePosSearchInput(this.value)" onkeydown="handleBarcodeEnter(event)" autocomplete="off">
+                <input type="text" id="pos-barcode-input" class="pos-barcode-input" placeholder="🔍 Barkod okutunuz veya OEM kodu / parça adı yazıp arayınız (Kısayol: F2)..." oninput="handlePosSearchInput(this.value)" onkeydown="handleBarcodeEnter(event)" autocomplete="off">
                 <div id="pos-suggestions" class="pos-suggestions-dropdown"></div>
               </div>
               <button class="btn primary lg" onclick="handleBarcodeAdd()">➕ Ekle</button>
+            </div>
+
+            <div class="pos-top-actions">
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <span class="pos-shortcut-badge"><kbd>F2</kbd> Barkod</span>
+                <span class="pos-shortcut-badge"><kbd>F4</kbd> Nakit</span>
+                <span class="pos-shortcut-badge"><kbd>F8</kbd> Kredi Kartı</span>
+                <span class="pos-shortcut-badge"><kbd>F9</kbd> Askıya Al</span>
+                <span class="pos-shortcut-badge"><kbd>ESC</kbd> Temizle</span>
+              </div>
+              <div style="margin-left:auto;display:flex;gap:8px">
+                <button type="button" class="btn ghost sm" onclick="holdCurrentCart()" title="Mevcut sepeti bekletip yeni müşteriye geç">⏸️ Sepeti Askıya Al (F9)</button>
+                <div id="pos-held-carts-container" style="display:inline-flex;gap:4px"></div>
+              </div>
             </div>
 
             <div class="pos-cat-bar" id="pos-cat-container"></div>
@@ -1246,6 +1396,20 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
               </div>
             </div>
 
+            <!-- HIZLI NAKİT BUTONLARI & PARA ÜSTÜ HESAPLAYICI -->
+            <div class="pos-quick-tender-grid">
+              <button type="button" class="pos-tender-btn" onclick="applyQuickCash(100)">₺100</button>
+              <button type="button" class="pos-tender-btn" onclick="applyQuickCash(200)">₺200</button>
+              <button type="button" class="pos-tender-btn" onclick="applyQuickCash(500)">₺500</button>
+              <button type="button" class="pos-tender-btn" onclick="applyQuickCash(1000)">₺1.000</button>
+            </div>
+            <div class="pos-change-calculator">
+              <span>Verilen Nakit (₺):</span>
+              <input type="number" id="pos-cash-given" class="pos-change-input" placeholder="0.00" oninput="calcChange()">
+              <span>Para Üstü:</span>
+              <b id="pos-change-due" style="font-size:15px;color:#059669">₺ 0,00</b>
+            </div>
+
             <div class="pos-pay-btns">
               <button class="btn success lg" onclick="completePosSale('cash')">💵 Nakit Satış</button>
               <button class="btn primary lg" onclick="completePosSale('card')">💳 Kredi Kartı</button>
@@ -1258,6 +1422,39 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
 
       <!-- 3. PRODUCTS & INVENTORY VIEW -->
       <div id="view-products" style="display:none">
+        
+        <!-- STOCK INVENTORY STATS KPI STRIP -->
+        <div class="stock-stats-strip">
+          <div class="stock-stat-card">
+            <div class="stock-stat-icon blue">📦</div>
+            <div>
+              <div class="stock-stat-val" id="stock-kpi-total-kinds">0 Çeşit</div>
+              <div class="stock-stat-lbl">Kayıtlı Parça & Ürün</div>
+            </div>
+          </div>
+          <div class="stock-stat-card">
+            <div class="stock-stat-icon green">💰</div>
+            <div>
+              <div class="stock-stat-val" id="stock-kpi-total-val">₺ 0,00</div>
+              <div class="stock-stat-lbl">Toplam Envanter Maliyeti</div>
+            </div>
+          </div>
+          <div class="stock-stat-card">
+            <div class="stock-stat-icon orange">🏷️</div>
+            <div>
+              <div class="stock-stat-val" id="stock-kpi-total-items">0 Adet</div>
+              <div class="stock-stat-lbl">Depolardaki Toplam Parça</div>
+            </div>
+          </div>
+          <div class="stock-stat-card">
+            <div class="stock-stat-icon red">⚠️</div>
+            <div>
+              <div class="stock-stat-val" id="stock-kpi-critical" style="color:#ef4444">0 Parça</div>
+              <div class="stock-stat-lbl">Kritik Stok Uyarısı</div>
+            </div>
+          </div>
+        </div>
+
         <div class="toolbar-card">
           <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
             <input type="text" id="prod-search" class="search-input" placeholder="Ürün adı, OEM kodu veya marka ara..." oninput="renderProducts()">
@@ -2296,11 +2493,165 @@ function handleBarcodeAdd() {
     input.value = "";
     const dropdown = document.getElementById("pos-suggestions");
     if (dropdown) dropdown.style.display = "none";
+    playPosBeep("add");
     flash(`✓ Sepete eklendi: ${found.name}`);
   } else {
     alert("Ürün bulunamadı! Barkod veya parça kodunu kontrol ediniz.");
   }
 }
+
+
+// ADVANCED POS & SOUND EFFECTS (Web Audio API Synthesizer)
+let heldCarts = [];
+
+function playPosBeep(type = 'add') {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    if (type === 'add') {
+      osc.frequency.setValueAtTime(880, ctx.currentTime); // A5 note
+      gain.gain.setValueAtTime(0.1, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.1);
+    } else if (type === 'success') {
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+      osc.frequency.setValueAtTime(880, ctx.currentTime + 0.08); // A5
+      gain.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.25);
+    } else if (type === 'error') {
+      osc.frequency.setValueAtTime(220, ctx.currentTime);
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.2);
+    }
+  } catch(e) {}
+}
+
+// QUICK TENDER & CHANGE CALCULATION
+function applyQuickCash(amount) {
+  const input = document.getElementById("pos-cash-given");
+  if (input) {
+    input.value = amount;
+    calcChange();
+  }
+}
+
+function calcChange() {
+  const given = parseFloat(document.getElementById("pos-cash-given")?.value) || 0;
+  const subtotal = posCart.reduce((s, i) => s + (i.qty * (Number(i.price) || 0)), 0);
+  const discount = parseFloat(document.getElementById("pos-discount")?.value) || 0;
+  const grandTotal = Math.max(0, subtotal - discount);
+  const changeDueEl = document.getElementById("pos-change-due");
+
+  if (given >= grandTotal && grandTotal > 0) {
+    const change = given - grandTotal;
+    if (changeDueEl) {
+      changeDueEl.textContent = `₺ ${change.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+      changeDueEl.style.color = "#059669";
+    }
+  } else {
+    if (changeDueEl) {
+      changeDueEl.textContent = "₺ 0,00";
+      changeDueEl.style.color = "#64748b";
+    }
+  }
+}
+
+// HOLD CART SYSTEM (SEPETİ ASKIYA ALMA & BEKLETME)
+function holdCurrentCart() {
+  if (posCart.length === 0) {
+    alert("Askıya alınacak ürün bulunamadı. Sepetiniz boş.");
+    return;
+  }
+  const custVal = document.getElementById("pos-customer-select").value;
+  const custText = document.getElementById("pos-customer-select")?.selectedOptions[0]?.text || "Müşteri";
+  const label = prompt("Askıdaki Sepet İçin Açıklama / Tekne Adı:", custText.split('—')[0].trim());
+  if (label === null) return;
+
+  heldCarts.push({
+    id: Date.now(),
+    label: label || `Sepet #${heldCarts.length + 1}`,
+    cart: [...posCart],
+    customerVal: custVal,
+    discount: document.getElementById("pos-discount")?.value || "0"
+  });
+
+  posCart = [];
+  document.getElementById("pos-discount").value = "0";
+  renderPosCart();
+  renderHeldCarts();
+  flash("⏸️ Sepet askıya alındı. Yeni satış başlatabilirsiniz.");
+}
+
+function restoreHeldCart(idx) {
+  if (heldCarts[idx]) {
+    if (posCart.length > 0 && !confirm("Mevcut sepetteki ürünlerin üzerine askıdaki sepet yüklensin mi?")) {
+      return;
+    }
+    const item = heldCarts.splice(idx, 1)[0];
+    posCart = item.cart;
+    const custSel = document.getElementById("pos-customer-select");
+    if (custSel && item.customerVal) custSel.value = item.customerVal;
+    const discEl = document.getElementById("pos-discount");
+    if (discEl && item.discount) discEl.value = item.discount;
+
+    renderPosCart();
+    renderHeldCarts();
+    flash(`✓ Askıdaki sepet geri yüklendi: ${item.label}`);
+  }
+}
+
+function renderHeldCarts() {
+  const container = document.getElementById("pos-held-carts-container");
+  if (!container) return;
+  if (heldCarts.length === 0) {
+    container.innerHTML = "";
+    return;
+  }
+  container.innerHTML = heldCarts.map((h, idx) => `
+    <button type="button" class="btn warning sm" onclick="restoreHeldCart(${idx})" title="Askıdaki sepeti geri yükle">
+      📂 ${escapeHtml(h.label)} (${h.cart.length} Ürün)
+    </button>
+  `).join("");
+}
+
+// GLOBAL POS KEYBOARD SHORTCUTS (F2, F4, F8, F9, ESC)
+document.addEventListener("keydown", function(e) {
+  if (currentNav !== 'pos') return;
+
+  // F2: Focus Barcode input
+  if (e.key === 'F2') {
+    e.preventDefault();
+    const inp = document.getElementById("pos-barcode-input");
+    if (inp) {
+      inp.focus();
+      inp.select();
+    }
+  }
+  // F4: Complete Cash Sale
+  else if (e.key === 'F4') {
+    e.preventDefault();
+    completePosSale('cash');
+  }
+  // F8: Complete Card Sale
+  else if (e.key === 'F8') {
+    e.preventDefault();
+    completePosSale('card');
+  }
+  // F9: Hold Cart
+  else if (e.key === 'F9') {
+    e.preventDefault();
+    holdCurrentCart();
+  }
+});
 
 function addToPosCart(prodId) {
   const p = productsState.find(x => x.id === prodId);
@@ -2459,6 +2810,7 @@ function completePosSale(payMethod) {
   const discInput = document.getElementById("pos-discount");
   if (discInput) discInput.value = "0";
   renderPosCart();
+  playPosBeep("success");
   flash("✓ Satış tamamlandı ve stoktan düşüldü.");
   viewPrintableInvoice(newSale.id);
 }
@@ -2564,6 +2916,31 @@ function renderProducts() {
   const cat = document.getElementById("prod-cat-filter")?.value || "all";
   const loc = document.getElementById("prod-loc-filter")?.value || "all";
   const tbody = document.getElementById("products-tbody");
+
+  // Calculate & Update Stock KPI Strip
+  let totalKinds = productsState.length;
+  let totalItems = 0;
+  let totalVal = 0;
+  let criticalCount = 0;
+
+  productsState.forEach(p => {
+    const qty = Number(p.qty) || 0;
+    const buy = Number(p.buyPrice) || 0;
+    totalItems += qty;
+    totalVal += qty * buy;
+    if (qty <= (Number(p.minQty) || 2)) {
+      criticalCount += 1;
+    }
+  });
+
+  const kpiKinds = document.getElementById("stock-kpi-total-kinds");
+  if (kpiKinds) kpiKinds.textContent = `${totalKinds} Çeşit`;
+  const kpiVal = document.getElementById("stock-kpi-total-val");
+  if (kpiVal) kpiVal.textContent = `₺ ${totalVal.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+  const kpiItems = document.getElementById("stock-kpi-total-items");
+  if (kpiItems) kpiItems.textContent = `${totalItems.toLocaleString('tr-TR')} Adet`;
+  const kpiCrit = document.getElementById("stock-kpi-critical");
+  if (kpiCrit) kpiCrit.textContent = `${criticalCount} Parça`;
 
   const catFilter = document.getElementById("prod-cat-filter");
   if (catFilter && catFilter.options.length <= 1) {
