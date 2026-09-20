@@ -4899,15 +4899,31 @@ async function loadCriticalDataFromCloud() {
 
     const settings = data.data;
 
-    // 1. Personel verisi
-    if (settings.erp_staff && Array.isArray(settings.erp_staff) && settings.erp_staff.length > 0) {
-      const localRaw = localStorage.getItem("dm_erp_staff");
-      const localStaff = localRaw ? JSON.parse(localRaw) : [];
-      // Cloud daha fazla kullanıcı içeriyorsa veya local boşsa cloud'u al
-      if (!localStaff.length || settings.erp_staff.length >= localStaff.length) {
-        localStorage.setItem("dm_erp_staff", JSON.stringify(settings.erp_staff));
-        localStorage.setItem("dm_staff_users", JSON.stringify(settings.erp_staff));
-        console.log("✅ Cloud Sync: Personel verisi cloud'dan yüklendi (" + settings.erp_staff.length + " kişi)");
+    // 1. Personel verisi — Bidirectional merge (username bazlı)
+    {
+      const localRaw = localStorage.getItem("dm_erp_staff") || localStorage.getItem("dm_staff_users");
+      const localStaff = localRaw ? (JSON.parse(localRaw) || []) : [];
+      const cloudStaff = (settings.erp_staff && Array.isArray(settings.erp_staff)) ? settings.erp_staff : [];
+
+      // Username bazında merge: her kullanıcıyı bir kez al (local önce, sonra cloud'daki eksikler)
+      const mergedMap = {};
+      // Önce local'i ekle (local daha güncel kabul edilir aynı username için)
+      localStaff.forEach(u => { if (u.username) mergedMap[u.username] = u; });
+      // Cloud'daki kullanıcıları ekle — sadece local'de yoksa
+      cloudStaff.forEach(u => { if (u.username && !mergedMap[u.username]) mergedMap[u.username] = u; });
+
+      const merged = Object.values(mergedMap);
+
+      // Local'i güncelle
+      localStorage.setItem("dm_erp_staff", JSON.stringify(merged));
+      localStorage.setItem("dm_staff_users", JSON.stringify(merged));
+
+      // Eğer merged, cloud'dan farklıysa (local'de ekstra kullanıcı varsa) cloud'a yaz
+      if (merged.length !== cloudStaff.length) {
+        syncSettingToCloud("erp_staff", merged);
+        console.log("🔼 Cloud Sync: Personel verisi cloud'a yüklendi (" + merged.length + " kişi — local'deki eksikler eklendi)");
+      } else {
+        console.log("✅ Cloud Sync: Personel verisi senkron (" + merged.length + " kişi)");
       }
     }
 
