@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /admin.html
+Disallow: /stok.html
 
 User-agent: GPTBot
 Allow: /
