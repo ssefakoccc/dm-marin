@@ -1343,16 +1343,14 @@ function handleAuthSuccess(session) {
   const ind = document.getElementById('auth-indicator');
   const uinfo = document.getElementById('admin-user-info');
   const btn = document.getElementById('login-toggle-btn');
-  const noticeTitle = document.getElementById('notice-title');
-  const noticeDesc = document.getElementById('notice-desc');
+  const authNotice = document.getElementById('auth-notice');
   if (ind) {
     ind.textContent = 'Yönetici: ' + (currentUser.email || 'Giriş Yapıldı');
     ind.classList.add('auth-ok');
   }
   if (uinfo) uinfo.textContent = 'Oturum: ' + currentUser.email;
   if (btn) btn.textContent = '🚪 Çıkış Yap';
-  if (noticeTitle) noticeTitle.textContent = 'Yönetici Oturumu Açık';
-  if (noticeDesc) noticeDesc.textContent = 'Veritabanı bağlantısı aktif. Servis taleplerini yönetebilir, markaları ve SEO ayarlarını canlı kaydedebilirsiniz.';
+  if (authNotice) authNotice.style.display = 'none';
   loadServiceRequests();
   loadRemoteBrands();
   loadRemoteSeo();
@@ -1377,6 +1375,8 @@ function handleAuthLogout() {
   if (btn) btn.textContent = '🔐 Yönetici Girişi';
   if (noticeTitle) noticeTitle.textContent = 'Yönetici Girişi Gerekli';
   if (noticeDesc) noticeDesc.textContent = 'Yönetim paneline erişmek ve canlı verileri yönetmek için lütfen giriş yapın.';
+  const authNotice = document.getElementById('auth-notice');
+  if (authNotice) authNotice.style.display = 'flex';
   if (typeof updateBrandSyncPill === 'function') {
     updateBrandSyncPill('locked');
   }
