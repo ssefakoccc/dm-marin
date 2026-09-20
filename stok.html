@@ -8059,7 +8059,51 @@ function exportProductsCSV() {
   flash("📊 Stok listesi CSV olarak indirildi.");
 }
 
+// ─── ERP TOKEN (stok sayfası için local-admin-token kullan) ──────────────────
+async function getErpToken() {
+  try {
+    const saved = sessionStorage.getItem('dm_admin_session');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed && parsed.access_token) return parsed.access_token;
+    }
+  } catch(e) {}
+  return 'local-admin-token-' + Date.now();
+}
+
+// ─── ERP API yardımcı fetch ────────────────────────────────────────────────
+async function erpFetch(path, options = {}) {
+  const token = await getErpToken();
+  const res = await fetch(path, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token,
+      ...(options.headers || {})
+    }
+  });
+  return res;
+}
+
+// ─── localStorage cache (offline fallback) ────────────────────────────────
+function saveLocalCache() {
+  try {
+    localStorage.setItem("dm_erp_categories", JSON.stringify(categoriesState));
+    localStorage.setItem("dm_erp_brands", JSON.stringify(brandsState));
+    localStorage.setItem("dm_erp_locations", JSON.stringify(locationsState));
+    localStorage.setItem("dm_erp_products", JSON.stringify(productsState));
+    localStorage.setItem("dm_erp_customers", JSON.stringify(customersState));
+    localStorage.setItem("dm_erp_suppliers", JSON.stringify(suppliersState));
+    localStorage.setItem("dm_erp_sales", JSON.stringify(salesState));
+    localStorage.setItem("dm_erp_purchases", JSON.stringify(purchasesState));
+    localStorage.setItem("dm_erp_expenses", JSON.stringify(expensesState));
+    localStorage.setItem("dm_erp_staff", JSON.stringify(staffState));
+  } catch(e) {}
+}
+
+// ─── loadAll: önce localStorage cache göster, sonra DB'den taze veri çek ──
 function loadAll() {
+  // Anlık localStorage cache'den yükle (hızlı başlangıç)
   try {
     const cat = localStorage.getItem("dm_erp_categories");
     if (cat) categoriesState = JSON.parse(cat);
@@ -8067,7 +8111,6 @@ function loadAll() {
     if (br) brandsState = JSON.parse(br);
     const loc = localStorage.getItem("dm_erp_locations");
     if (loc) locationsState = JSON.parse(loc);
-
     const p = localStorage.getItem("dm_erp_products");
     if (p) productsState = JSON.parse(p);
     const c = localStorage.getItem("dm_erp_customers");
@@ -8095,21 +8138,142 @@ function loadAll() {
   } catch(e) {}
 }
 
+// ─── saveAll: eski localStorage tabanlı save (sadece cache için) ───────────
 function saveAll() {
-  localStorage.setItem("dm_erp_categories", JSON.stringify(categoriesState));
-  localStorage.setItem("dm_erp_brands", JSON.stringify(brandsState));
-  localStorage.setItem("dm_erp_locations", JSON.stringify(locationsState));
-  localStorage.setItem("dm_erp_products", JSON.stringify(productsState));
-  localStorage.setItem("dm_erp_customers", JSON.stringify(customersState));
-  localStorage.setItem("dm_erp_suppliers", JSON.stringify(suppliersState));
-  localStorage.setItem("dm_erp_sales", JSON.stringify(salesState));
-  localStorage.setItem("dm_erp_purchases", JSON.stringify(purchasesState));
-  localStorage.setItem("dm_erp_expenses", JSON.stringify(expensesState));
-  localStorage.setItem("dm_erp_staff", JSON.stringify(staffState));
+  saveLocalCache();
 }
 
-function syncCloud() {
-  flash("✓ Supabase bulut veritabanı ile senkronize edildi.");
+// ─── Supabase'den tüm verileri çek ────────────────────────────────────────
+async function loadAllFromDB() {
+  try {
+    const [prodRes, salesRes, custRes, suppRes, purchRes, expRes, staffRes, settRes] = await Promise.all([
+      erpFetch('/api/admin/erp/products'),
+      erpFetch('/api/admin/erp/sales'),
+      erpFetch('/api/admin/erp/customers'),
+      erpFetch('/api/admin/erp/suppliers'),
+      erpFetch('/api/admin/erp/purchases'),
+      erpFetch('/api/admin/erp/expenses'),
+      erpFetch('/api/admin/staff'),
+      erpFetch('/api/admin/erp/erpsettings')
+    ]);
+
+    if (prodRes.ok) {
+      const d = await prodRes.json();
+      if (d.success && d.data.length > 0) {
+        productsState = d.data.map(p => ({
+          id: p.id, name: p.name, oemRef: p.oem_ref || '', crossRef: p.cross_ref || '',
+          code: p.code || '', barcode: p.barcode || '', brand: p.brand || '',
+          category: p.category || '', location: p.location || '',
+          buyPrice: Number(p.buy_price) || 0, sellPrice: Number(p.sell_price) || 0,
+          qty: Number(p.qty) || 0, minQty: Number(p.min_qty) || 0, notes: p.notes || ''
+        }));
+      }
+    }
+
+    if (salesRes.ok) {
+      const d = await salesRes.json();
+      if (d.success && d.data.length > 0) {
+        salesState = d.data.map(s => ({
+          id: s.id, invoiceNo: s.invoice_no || '', customerId: s.customer_id || '',
+          customerName: s.customer_name || '', boatName: s.boat_name || '',
+          items: s.items || [], total: Number(s.total) || 0,
+          paid: Number(s.paid) || 0, discount: Number(s.discount) || 0,
+          payMethod: s.pay_method || 'cash', status: s.status || 'paid',
+          date: s.date || '', operator: s.operator || '', notes: s.notes || ''
+        }));
+      }
+    }
+
+    if (custRes.ok) {
+      const d = await custRes.json();
+      if (d.success && d.data.length > 0) {
+        customersState = d.data.map(c => ({
+          id: c.id, name: c.name, phone: c.phone || '', email: c.email || '',
+          boatName: c.boat_name || '', boatType: c.boat_type || '',
+          engineBrand: c.engine_brand || '', engineModel: c.engine_model || '',
+          engineSerial: c.engine_serial || '', marina: c.marina || '',
+          notes: c.notes || '', balance: Number(c.balance) || 0
+        }));
+      }
+    }
+
+    if (suppRes.ok) {
+      const d = await suppRes.json();
+      if (d.success && d.data.length > 0) {
+        suppliersState = d.data.map(s => ({
+          id: s.id, name: s.name, contact: s.contact || '', phone: s.phone || '',
+          email: s.email || '', address: s.address || '',
+          notes: s.notes || '', balance: Number(s.balance) || 0
+        }));
+      }
+    }
+
+    if (purchRes.ok) {
+      const d = await purchRes.json();
+      if (d.success && d.data.length > 0) {
+        purchasesState = d.data.map(p => ({
+          id: p.id, supplierId: p.supplier_id || '', supplierName: p.supplier_name || '',
+          items: p.items || [], total: Number(p.total) || 0, paid: Number(p.paid) || 0,
+          date: p.date || '', invoiceNo: p.invoice_no || '',
+          operator: p.operator || '', notes: p.notes || ''
+        }));
+      }
+    }
+
+    if (expRes.ok) {
+      const d = await expRes.json();
+      if (d.success && d.data.length > 0) {
+        expensesState = d.data.map(e => ({
+          id: e.id, description: e.description || '', amount: Number(e.amount) || 0,
+          category: e.category || '', date: e.date || '',
+          payMethod: e.pay_method || 'cash', operator: e.operator || '', notes: e.notes || ''
+        }));
+      }
+    }
+
+    if (staffRes.ok) {
+      const d = await staffRes.json();
+      if (d.success && d.data.length > 0) {
+        staffState = d.data.map(s => ({
+          id: s.id, name: s.name, username: s.username, role: s.role || '',
+          phone: s.phone || '', birthDate: s.birth_date || '', pin: s.pin || '',
+          active: s.active !== false,
+          permissions: Array.isArray(s.permissions) ? s.permissions : []
+        }));
+      }
+    }
+
+    if (settRes.ok) {
+      const d = await settRes.json();
+      if (d.success && d.data) {
+        if (d.data.erp_categories && Array.isArray(d.data.erp_categories)) categoriesState = d.data.erp_categories;
+        if (d.data.erp_brands && Array.isArray(d.data.erp_brands)) brandsState = d.data.erp_brands;
+        if (d.data.erp_locations && Array.isArray(d.data.erp_locations)) locationsState = d.data.erp_locations;
+      }
+    }
+
+    saveLocalCache();
+    console.log('✅ Supabase ERP verileri yüklendi:', {
+      ürünler: productsState.length, satışlar: salesState.length,
+      müşteriler: customersState.length, personel: staffState.length
+    });
+    return true;
+  } catch(e) {
+    console.warn('⚠️ Supabase yüklenemedi, localStorage cache kullanılıyor:', e);
+    return false;
+  }
+}
+
+// ─── syncCloud: manuel senkronizasyon butonu ──────────────────────────────
+async function syncCloud() {
+  flash('🔄 Supabase'den veriler güncelleniyor...');
+  const ok = await loadAllFromDB();
+  if (ok) {
+    renderDashboard();
+    flash('✅ Tüm veriler Supabase'den güncellendi!');
+  } else {
+    flash('⚠️ Bağlantı hatası — localStorage cache gösteriliyor.');
+  }
 }
 
 function switchNav(navId) {
@@ -8650,6 +8814,7 @@ function completePosSale(payMethod) {
   }
 
   saveAll();
+  dbSaveSale(newSale); // 🌐 Supabase'e kaydet
   posCart = [];
   const discInput = document.getElementById("pos-discount");
   if (discInput) discInput.value = "0";
@@ -8931,6 +9096,41 @@ function populateProductFormDropdowns() {
   locSel.innerHTML = locationsState.map(l => `<option value="${l.name}">${l.name}</option>`).join("");
 }
 
+// DB'ye ürün kaydet (create veya update)
+async function dbSaveProduct(product, isUpdate) {
+  try {
+    const path = isUpdate ? `/api/admin/erp/products?id=${encodeURIComponent(product.id)}` : '/api/admin/erp/products';
+    const method = isUpdate ? 'PUT' : 'POST';
+    const res = await erpFetch(path, { method, body: JSON.stringify(product) });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'DB hatası');
+    if (!isUpdate && data.data && data.data.id) {
+      // DB'nin verdiği UUID'yi state'e yaz
+      const idx = productsState.findIndex(p => p.id === product.id);
+      if (idx !== -1) productsState[idx].id = data.data.id;
+    }
+    saveLocalCache();
+    return true;
+  } catch(err) {
+    console.warn('Ürün DB kaydı başarısız (offline fallback):', err);
+    saveLocalCache();
+    return false;
+  }
+}
+
+// DB'den ürün sil
+async function dbDeleteProduct(productId) {
+  try {
+    const res = await erpFetch(`/api/admin/erp/products?id=${encodeURIComponent(productId)}`, { method: 'DELETE' });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'Silme hatası');
+    return true;
+  } catch(err) {
+    console.warn('Ürün DB silme başarısız:', err);
+    return false;
+  }
+}
+
 function saveProduct(e) {
   e.preventDefault();
   const id = document.getElementById("prod-id").value;
@@ -8979,6 +9179,8 @@ function saveProduct(e) {
   saveAll();
   renderProducts();
   closeModal("modal-product");
+  // 🌐 Supabase'e kaydet
+  dbSaveProduct(isUpdate ? productsState[existingIdx] : productsState[0], isUpdate);
 }
 
 function renderCustomers() {
@@ -9024,11 +9226,14 @@ function saveCustomer(e) {
   const taxInfo = document.getElementById("cust-tax-info").value.trim();
   const email = document.getElementById("cust-email").value.trim();
 
-  customersState.unshift({ id: "c-" + Date.now(), name, boatName, boatModel, marina, phone, taxInfo, email, balance: 0 });
+  const newCust = { id: "c-" + Date.now(), name, boatName, boatModel, marina, phone, taxInfo, email, balance: 0 };
+  customersState.unshift(newCust);
   saveAll();
   renderCustomers();
   closeModal("modal-customer");
   flash("✓ Müşteri ve tekne kaydı oluşturuldu.");
+  // 🌐 Supabase'e kaydet
+  dbSaveCustomer(newCust, false);
 }
 
 function collectReceivable(custId) {
@@ -9300,6 +9505,117 @@ function calculateSaleTotal() {
   return total;
 }
 
+// DB'ye satış kaydet
+async function dbSaveSale(sale) {
+  try {
+    const res = await erpFetch('/api/admin/erp/sales', { method: 'POST', body: JSON.stringify(sale) });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'DB hatası');
+    if (data.data && data.data.id) {
+      const idx = salesState.findIndex(s => s.id === sale.id);
+      if (idx !== -1) salesState[idx].id = data.data.id;
+    }
+    saveLocalCache();
+    return true;
+  } catch(err) {
+    console.warn('Satış DB kaydı başarısız (offline fallback):', err);
+    saveLocalCache();
+    return false;
+  }
+}
+
+async function dbDeleteSale(saleId) {
+  try {
+    const res = await erpFetch(`/api/admin/erp/sales?id=${encodeURIComponent(saleId)}`, { method: 'DELETE' });
+    const data = await res.json();
+    return res.ok && data.success;
+  } catch(err) { return false; }
+}
+
+// DB'ye müşteri kaydet
+async function dbSaveCustomer(customer, isUpdate) {
+  try {
+    const path = isUpdate ? `/api/admin/erp/customers?id=${encodeURIComponent(customer.id)}` : '/api/admin/erp/customers';
+    const method = isUpdate ? 'PUT' : 'POST';
+    const res = await erpFetch(path, { method, body: JSON.stringify(customer) });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'DB hatası');
+    if (!isUpdate && data.data && data.data.id) {
+      const idx = customersState.findIndex(c => c.id === customer.id);
+      if (idx !== -1) customersState[idx].id = data.data.id;
+    }
+    saveLocalCache();
+    return true;
+  } catch(err) { saveLocalCache(); return false; }
+}
+
+async function dbDeleteCustomer(customerId) {
+  try {
+    const res = await erpFetch(`/api/admin/erp/customers?id=${encodeURIComponent(customerId)}`, { method: 'DELETE' });
+    const data = await res.json();
+    return res.ok && data.success;
+  } catch(err) { return false; }
+}
+
+// DB'ye tedarikçi kaydet
+async function dbSaveSupplier(supplier, isUpdate) {
+  try {
+    const path = isUpdate ? `/api/admin/erp/suppliers?id=${encodeURIComponent(supplier.id)}` : '/api/admin/erp/suppliers';
+    const method = isUpdate ? 'PUT' : 'POST';
+    const res = await erpFetch(path, { method, body: JSON.stringify(supplier) });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'DB hatası');
+    saveLocalCache();
+    return true;
+  } catch(err) { saveLocalCache(); return false; }
+}
+
+async function dbDeleteSupplier(supplierId) {
+  try {
+    const res = await erpFetch(`/api/admin/erp/suppliers?id=${encodeURIComponent(supplierId)}`, { method: 'DELETE' });
+    const data = await res.json();
+    return res.ok && data.success;
+  } catch(err) { return false; }
+}
+
+// DB'ye gider kaydet
+async function dbSaveExpense(expense) {
+  try {
+    const res = await erpFetch('/api/admin/erp/expenses', { method: 'POST', body: JSON.stringify(expense) });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'DB hatası');
+    saveLocalCache();
+    return true;
+  } catch(err) { saveLocalCache(); return false; }
+}
+
+async function dbDeleteExpense(expenseId) {
+  try {
+    const res = await erpFetch(`/api/admin/erp/expenses?id=${encodeURIComponent(expenseId)}`, { method: 'DELETE' });
+    const data = await res.json();
+    return res.ok && data.success;
+  } catch(err) { return false; }
+}
+
+// DB'ye alım kaydet
+async function dbSavePurchase(purchase) {
+  try {
+    const res = await erpFetch('/api/admin/erp/purchases', { method: 'POST', body: JSON.stringify(purchase) });
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.error || 'DB hatası');
+    saveLocalCache();
+    return true;
+  } catch(err) { saveLocalCache(); return false; }
+}
+
+async function dbDeletePurchase(purchaseId) {
+  try {
+    const res = await erpFetch(`/api/admin/erp/purchases?id=${encodeURIComponent(purchaseId)}`, { method: 'DELETE' });
+    const data = await res.json();
+    return res.ok && data.success;
+  } catch(err) { return false; }
+}
+
 function saveSale(e) {
   e.preventDefault();
   const custId = document.getElementById("sale-cust-select").value;
@@ -9353,6 +9669,8 @@ function saveSale(e) {
   saveAll();
   renderSales();
   closeModal("modal-sale");
+  // 🌐 Supabase'e kaydet
+  dbSaveSale(isEditSale ? salesState.find(s => s.id === editSaleId) : salesState[0]);
   flash("✓ Satış & Servis faturası kaydedildi.");
   viewPrintableInvoice(newSale.id);
 }
@@ -9572,6 +9890,7 @@ function savePurchase(e) {
   saveAll();
   renderPurchases();
   closeModal("modal-purchase");
+  dbSavePurchase(purchasesState[0]); // 🌐 Supabase
   flash("✓ Mal alışı kaydedildi ve stok arttırıldı.");
 }
 
@@ -10318,6 +10637,14 @@ function logoutERP() {
 
 window.addEventListener("DOMContentLoaded", () => {
   loadAll();
+  // 🌐 Supabase'den güncel verileri çek (1 sn sonra — auth hazır olsun)
+  setTimeout(async () => {
+    const ok = await loadAllFromDB();
+    if (ok) {
+      renderDashboard();
+      console.log('✅ ERP Supabase sync tamamlandı');
+    }
+  }, 1000);
   checkAuth();
   renderStaff();
   renderDashboard();
