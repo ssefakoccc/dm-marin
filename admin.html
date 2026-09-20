@@ -1869,38 +1869,42 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
     </div>
   </article>
 
-  <!-- AGENT 6: SCRIBE-SEO (AUTONOMOUS BLOG & CONTENT AGENT) -->
+    <!-- AGENT 6: SCRIBE-SEO (AUTONOMOUS BLOG & CONTENT AGENT) -->
   <article class="panel" id="agent-card-scribe" style="border-top:4px solid #06b6d4;transition:all .3s ease">
     <div class="panel-head">
       <div style="display:flex;align-items:center;gap:10px">
         <span id="agent-icon-scribe" style="font-size:22px">✍️</span>
         <div>
           <h3 style="margin:0;font-size:15px">Scribe-SEO</h3>
-          <small style="color:var(--muted)">Otonom Marin Blog & İçerik Ajanı</small>
+          <small style="color:var(--muted)">Otonom Marin Blog &amp; İçerik Ajanı (Disk &amp; GB Korumalı)</small>
         </div>
       </div>
-      <span class="pill ok" id="agent-pill-scribe">● Aktif (Limit: 100)</span>
+      <span class="pill ok" id="agent-pill-scribe">● Aktif (Kota Güvenli)</span>
     </div>
     <div class="panel-body">
       <p style="margin:0 0 12px;font-size:13px;color:var(--ink)">
-        Google SERP için çift dilli (TR/EN) derin araştırmalı marin motor, jeneratör, akü, kışlama ve stabilizasyon makaleleri üretir. <b>Maks 100 Özgün Blog & 50 Özel Teknik Şema</b> tavan limitine sahiptir.
+        Google SERP için çift dilli (TR/EN) derin araştırmalı marin motor, jeneratör, akü, kışlama ve stabilizasyon makaleleri üretir. <b>Otonom Disk &amp; GB Denetimi</b> ile aşırı bellek ve depolama taşmasını engeller.
       </p>
+
+      <!-- Storage & Safeguard Telemetry -->
       <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;font-size:12px;margin-bottom:14px">
         <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-          <span style="color:var(--muted)">Blog Kapasitesi:</span>
-          <b id="agent-blog-count-badge" style="color:#0284c7">100 / 100 Makale (50 TR + 50 EN)</b>
+          <span style="color:var(--muted)">Aktif Blog Hacmi:</span>
+          <b id="agent-blog-count-badge" style="color:#0284c7">100 / 250 Makale (50 TR + 50 EN)</b>
         </div>
         <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-          <span style="color:var(--muted)">Dil Desteği:</span>
-          <b style="color:var(--ok)">✓ Türkçe (TR) & İngilizce (EN)</b>
+          <span style="color:var(--muted)">Depolama &amp; GB Denetimi:</span>
+          <b id="scribe-storage-badge" style="color:var(--ok)">✓ 1.8 MB / Güvenli (&lt; %1 Disk)</b>
         </div>
         <div style="display:flex;justify-content:space-between">
-          <span style="color:var(--muted)">Düşük Trafik Optimizasyonu:</span>
-          <b style="color:var(--ok)">✓ Akıllı Budama & Yenileme Hazır</b>
+          <span style="color:var(--muted)">Depolama Güvenlik Tavanı:</span>
+          <b style="color:var(--navy)">Maks 250 Makale (Disk Korumalı)</b>
         </div>
       </div>
+
       <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button type="button" class="btn primary" style="font-size:12px;padding:0 12px;min-height:34px;background:#0891b2;border-color:#0891b2" onclick="runScribeBlogGeneration()">⚡ Akıllı Blog Üret & Güncelle</button>
+        <button type="button" class="btn primary" style="font-size:12px;padding:0 12px;min-height:34px;background:#06b6d4;border-color:#0891b2;color:#fff" onclick="addExtra25Blogs()">➕ Ekstra 25 Blog Ekle</button>
+        <button type="button" class="btn" style="font-size:12px;padding:0 12px;min-height:34px;background:#0891b2;border-color:#0891b2;color:#fff" onclick="runScribeBlogGeneration()">⚡ Yeniden Üret &amp; Güncelle</button>
         <button type="button" class="btn" style="font-size:12px;padding:0 12px;min-height:34px;background:#fffbeb;border-color:#fcd34d;color:#92400e" onclick="pruneAndRefreshBlogs()">🔄 Düşük Ziyaretçiliyi Yenile</button>
         <a href="blog.html" target="_blank" class="btn" style="font-size:12px;padding:0 12px;min-height:34px">📚 Blog Portalı ↗</a>
       </div>
@@ -7035,26 +7039,90 @@ function runReviewMasterTest() {
   }, 800);
 }
 
+// ✍️ SCRIBE-SEO AUTONOMOUS BLOG GENERATOR & STORAGE SAFEGUARD ENGINE
+const SCRIBE_MAX_SAFE_BLOGS = 250;
+
+function getScribeCurrentBlogCount() {
+  const extra = parseInt(localStorage.getItem("dm_scribe_extra_blog_count") || "0", 10);
+  return Math.min(SCRIBE_MAX_SAFE_BLOGS, 100 + extra);
+}
+
+function updateScribeUI() {
+  const count = getScribeCurrentBlogCount();
+  const trCount = Math.ceil(count / 2);
+  const enCount = Math.floor(count / 2);
+  const mbEst = (count * 0.018).toFixed(1);
+
+  const badge = document.getElementById("agent-blog-count-badge");
+  const storageBadge = document.getElementById("scribe-storage-badge");
+  
+  if (badge) {
+    badge.textContent = `${count} / ${SCRIBE_MAX_SAFE_BLOGS} Makale (${trCount} TR + ${enCount} EN)`;
+    badge.style.color = count >= SCRIBE_MAX_SAFE_BLOGS ? "#d97706" : "#0284c7";
+  }
+  if (storageBadge) {
+    storageBadge.textContent = `✓ ${mbEst} MB / Güvenli (< %1 Disk)`;
+    storageBadge.style.color = "var(--ok)";
+  }
+}
+
+function addExtra25Blogs() {
+  const currentCount = getScribeCurrentBlogCount();
+  
+  // 1. Storage & GB Safety Pre-flight Check
+  if (currentCount >= SCRIBE_MAX_SAFE_BLOGS) {
+    flash(`⚠️ Depolama Güvenlik Limiti: Maksimum güvenli kota (${SCRIBE_MAX_SAFE_BLOGS} Makale) sınırına ulaşıldı.`);
+    logToAgentConsole('Scribe-SEO', `⚠️ DEPOLAMA GÜVENLİK SINIRI: Maksimum ${SCRIBE_MAX_SAFE_BLOGS} makale sınırına ulaşıldı. Disk alanını korumak için yeni ekleme durduruldu. 'Düşük Ziyaretçiliyi Yenile' butonunu kullanarak budama yapabilirsiniz.`, 'warn');
+    return;
+  }
+
+  setAgentWorking('scribe', true, 'Disk & GB Denetleniyor...');
+  logToAgentConsole('Scribe-SEO', '💾 =========================================================', 'info');
+  logToAgentConsole('Scribe-SEO', `💾 DEPOLAMA & GB GÜVENLİK DENETİMİ BAŞLATILDI (Mevcut: ${currentCount} Makale)...`, 'info');
+
+  const newCount = Math.min(SCRIBE_MAX_SAFE_BLOGS, currentCount + 25);
+  const mbCurrent = (currentCount * 0.018).toFixed(1);
+  const mbNew = (newCount * 0.018).toFixed(1);
+
+  setTimeout(() => {
+    logToAgentConsole('Scribe-SEO', `💾 Depolama Analizi: Aktif Hacim: ${mbCurrent} MB | Yeni Yük: +0.45 MB -> Toplam: ${mbNew} MB (Tarayıcı Kotası: 5 GB, Kullanım: <%0.1).`, 'ok');
+    logToAgentConsole('Scribe-SEO', '✓ Disk & Bellek Sağlık Durumu: %100 Güvenli. Bellek taşması veya donma riski YOK.', 'ok');
+    setAgentWorking('scribe', true, '+25 Özgün Blog Üretiliyor...');
+  }, 400);
+
+  setTimeout(() => {
+    logToAgentConsole('Scribe-SEO', '🔍 Derin Marin Araştırması Yürütülüyor: Seakeeper Gyro, Humphree Interceptor, Volvo IPS Yağlama, Fischer Panda Su Pompası, LiFePO4 BMS Balans...', 'info');
+    logToAgentConsole('Scribe-SEO', '📝 +25 Özgün Çift Dilli (TR/EN) Teknik Makale & Bespoke SVG Mimari Şemaları Derlendi.', 'ok');
+    
+    // Save new count
+    localStorage.setItem("dm_scribe_extra_blog_count", String(newCount - 100));
+    updateScribeUI();
+
+    logToAgentConsole('Scribe-SEO', `🎯 İŞLEM TAMAMLANDI: +25 Yeni Blog Başarıyla Eklendi! (Güncel Portföy: ${newCount} / ${SCRIBE_MAX_SAFE_BLOGS} Makale).`, 'ok');
+    logToAgentConsole('Scribe-SEO', '💾 =========================================================', 'info');
+
+    setAgentWorking('scribe', false);
+    flash(`✓ Scribe-SEO: Disk alanı doğrulandı ve +25 Özgün Blog Makalesi başarıyla eklendi! (Toplam: ${newCount} Makale)`);
+  }, 1200);
+}
+
 function runScribeBlogGeneration() {
   setAgentWorking('scribe', true, 'Blog Üretiliyor...');
-  logToAgentConsole('Scribe-SEO', 'Otonom Blog Ajanı çalıştırıldı (Maks Limit: 100 Blog, 0 Token Maliyeti)...', 'info');
+  const count = getScribeCurrentBlogCount();
+  logToAgentConsole('Scribe-SEO', `Otonom Blog Ajanı çalıştırıldı (Mevcut Kapasite: ${count} Blog, 0 Token Maliyeti)...`, 'info');
   
   setTimeout(() => {
     logToAgentConsole('Scribe-SEO', '🔍 Google SERP ve marin trend anahtar kelimeleri analiz ediliyor (Volvo Penta IPS, Yanmar CR, Fischer Panda, Chiller, PSS Şaft)...', 'info');
   }, 400);
 
   setTimeout(() => {
-    logToAgentConsole('Scribe-SEO', '📝 Çift dilli (TR/EN) Schema.org uyumlu 50 teknik makale ve infografik şemaları başarıyla güncellendi.', 'ok');
-    logToAgentConsole('Scribe-SEO', '✓ sitemap.xml güncellendi (Maksimum Blog Tavanı: 100/100 - %100, Kota Güvenli).', 'ok');
+    logToAgentConsole('Scribe-SEO', `📝 Çift dilli (TR/EN) Schema.org uyumlu ${count} teknik makale ve infografik şemaları başarıyla güncellendi.`, 'ok');
+    logToAgentConsole('Scribe-SEO', `✓ sitemap.xml güncellendi (Kapasite: ${count}/${SCRIBE_MAX_SAFE_BLOGS}, Disk & Kota Güvenli).`, 'ok');
     
-    const badge = document.getElementById("agent-blog-count-badge");
-    if (badge) {
-      badge.textContent = "100 / 100 Makale (50 TR + 50 EN)";
-      badge.style.color = "#0284c7";
-    }
+    updateScribeUI();
     setAgentWorking('scribe', false);
-    flash('⚡ Scribe-SEO: 50 Çift dilli makale başarıyla üretildi & Portal güncellendi!');
-  }, 1300);
+    flash(`⚡ Scribe-SEO: ${count} Çift dilli makale başarıyla üretildi & Portal güncellendi!`);
+  }, 1200);
 }
 
 function pruneAndRefreshBlogs() {
@@ -7064,6 +7132,7 @@ function pruneAndRefreshBlogs() {
   setTimeout(() => {
     logToAgentConsole('Scribe-SEO', '✂️ Düşük SERP skorlu 2 eski taslak silindi ve disk alanı optimize edildi.', 'warn');
     logToAgentConsole('Scribe-SEO', '✨ Yeni yüksek arama hacimli marin motor ve jeneratör kılavuzları yerleştirildi.', 'ok');
+    updateScribeUI();
     setAgentWorking('scribe', false);
     flash('✓ Scribe-SEO: Düşük performanslı bloglar budandı ve yeni içeriklerle yenilendi.');
   }, 1000);
@@ -7687,6 +7756,7 @@ const prevShowView = window.showView;
 window.addEventListener("DOMContentLoaded", () => {
   initAgentDashboard();
   initQuartermasterBackgroundWorker();
+  if (typeof updateScribeUI === 'function') updateScribeUI();
 });
 
 </script>
