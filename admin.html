@@ -1064,6 +1064,102 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 </article>
 
 
+
+<!-- 👥 KULLANICI & PERSONEL YÖNETİMİ (PİNLER VE DOĞUM GÜNLERİ) -->
+<article class="panel" style="grid-column: 1 / -1; border-left: 4px solid #0284c7">
+<div class="panel-head" style="justify-content:space-between;flex-wrap:wrap;gap:10px">
+  <div style="display:flex;align-items:center;gap:8px">
+    <span style="font-size:22px">👥</span>
+    <div>
+      <h3 style="margin:0">Kullanıcı & Personel Yönetimi</h3>
+      <small style="color:var(--muted)">Stok ve ERP sistemine giriş yapacak ustaları tanımlayın, kişiye özel PIN belirleyin ve doğum günlerini takip edin.</small>
+    </div>
+  </div>
+  <button type="button" class="btn primary" onclick="openAdminUserModal()">➕ Yeni Kullanıcı / Usta Aç</button>
+</div>
+<div class="panel-body">
+  <!-- BIRTHDAY ALERT BANNER IF APPLICABLE -->
+  <div id="admin-birthday-banner" style="display:none;margin-bottom:16px;background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(239,68,68,0.15));border:1px solid #f59e0b;padding:14px 18px;border-radius:12px;color:#92400e;align-items:center;gap:12px">
+    <span style="font-size:24px">🎂</span>
+    <div>
+      <b id="admin-birthday-text" style="font-size:14px;color:#78350f">Bugün Doğum Günü Olan Personelimiz Var!</b>
+      <small style="display:block;color:#92400e;margin-top:2px">Ekip arkadaşımızın doğum gününü kutlamayı unutmayınız. 🎉</small>
+    </div>
+  </div>
+
+  <div style="overflow-x:auto">
+    <table class="seo-table" style="width:100%">
+      <thead>
+        <tr>
+          <th>Personel Adı Soyadı</th>
+          <th>Kullanıcı Adı</th>
+          <th>Görevi / Ünvanı</th>
+          <th>Telefon</th>
+          <th>Doğum Tarihi</th>
+          <th>Giriş PIN'i</th>
+          <th>Durum</th>
+          <th style="text-align:right">İşlemler</th>
+        </tr>
+      </thead>
+      <tbody id="admin-users-tbody">
+      </tbody>
+    </table>
+  </div>
+</div>
+</article>
+
+<!-- ADD/EDIT USER MODAL IN ADMIN PANEL -->
+<div class="modal-backdrop" id="modal-admin-user">
+  <div class="modal-box" style="max-width:540px">
+    <div class="modal-head">
+      <h3 id="admin-user-modal-title">👤 Yeni Kullanıcı / Personel Tanımla</h3>
+      <button class="modal-close" onclick="closeAdminUserModal()">✕</button>
+    </div>
+    <form id="form-admin-user" onsubmit="saveAdminUser(event)" style="display:grid;gap:12px">
+      <input type="hidden" id="adm-user-id">
+      
+      <div class="form-grid">
+        <div class="field">
+          <label>Adı Soyadı *</label>
+          <input type="text" id="adm-user-name" placeholder="Örn: Ahmet Kaya" required>
+        </div>
+        <div class="field">
+          <label>Kullanıcı Adı / Kod</label>
+          <input type="text" id="adm-user-username" placeholder="Örn: ahmet.usta">
+        </div>
+        <div class="field">
+          <label>Görevi / Rolü *</label>
+          <input type="text" id="adm-user-role" placeholder="Örn: Baş Teknisyen / Mobil Servis" required>
+        </div>
+        <div class="field">
+          <label>Telefon Numarası</label>
+          <input type="tel" id="adm-user-phone" placeholder="0543 724 09 92">
+        </div>
+        <div class="field">
+          <label>Doğum Tarihi (Doğum Günü Takibi İçin) *</label>
+          <input type="date" id="adm-user-birthdate" required>
+        </div>
+        <div class="field">
+          <label>Kullanıcıya Özel Giriş PIN Kodu *</label>
+          <input type="text" id="adm-user-pin" placeholder="Örn: 1998, 3456" maxlength="12" required>
+        </div>
+        <div class="field full">
+          <label>Hesap Durumu</label>
+          <select id="adm-user-active">
+            <option value="true">Aktif (Sisteme Giriş Yapabilir)</option>
+            <option value="false">Pasif / İzinli (Giriş Yapamaz)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px">
+        <button type="button" class="btn" onclick="closeAdminUserModal()">İptal</button>
+        <button type="submit" class="btn primary">💾 Kullanıcıyı Kaydet</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- AUTONOMOUS SEO AGENT AUDIT PANEL -->
 <div class="panel" style="margin-top:24px;border-left:4px solid #10b981;box-shadow:0 8px 30px rgba(16,185,129,0.08)">
   <div class="panel-head" style="justify-content:space-between;flex-wrap:wrap;gap:12px">
@@ -4303,6 +4399,173 @@ document.addEventListener("click", function(e) {
 // ----------------------------------------------------
 // ERP PIN & SECURITY MANAGEMENT
 // ----------------------------------------------------
+
+// =========================================================================
+// ADMIN USER MANAGEMENT & BIRTHDAY SENTINEL
+// =========================================================================
+const DEFAULT_STAFF_USERS = [
+  { id: "st-1", name: "Ahmet Usta", username: "ahmet.usta", role: "Baş Teknisyen / Mobil Servis", phone: "0543 724 09 92", birthDate: "1988-09-20", pin: "1998", active: true },
+  { id: "st-2", name: "Mehmet K.", username: "mehmet.depo", role: "Depo & Mal Kabul Sorumlusu", phone: "0532 111 22 33", birthDate: "1992-04-15", pin: "2026", active: true },
+  { id: "st-3", name: "Can D.", username: "can.servis", role: "Saha Servis Teknisyeni", phone: "0541 222 33 44", birthDate: "1995-11-08", pin: "3456", active: true },
+  { id: "st-4", name: "Yönetici (Admin)", username: "admin", role: "Sistem Yöneticisi", phone: "0543 724 09 92", birthDate: "1985-01-01", pin: "dm1998", active: true }
+];
+
+function getStaffUsers() {
+  try {
+    const raw = localStorage.getItem("dm_erp_staff");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch(e) {}
+  return DEFAULT_STAFF_USERS;
+}
+
+function saveStaffUsers(list) {
+  localStorage.setItem("dm_erp_staff", JSON.stringify(list));
+}
+
+function checkBirthdays() {
+  const users = getStaffUsers();
+  const today = new Date();
+  const todayMMDD = String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+
+  const birthdayUsers = users.filter(u => {
+    if (!u.birthDate || !u.active) return false;
+    return u.birthDate.endsWith(todayMMDD);
+  });
+
+  const banner = document.getElementById("admin-birthday-banner");
+  const bannerText = document.getElementById("admin-birthday-text");
+  if (banner && bannerText) {
+    if (birthdayUsers.length > 0) {
+      banner.style.display = "flex";
+      const names = birthdayUsers.map(u => u.name).join(", ");
+      bannerText.innerHTML = `🎂 BUGÜN DOĞUM GÜNÜ: <b>${escapeHtml(names)}</b> personelimizin doğum günü! 🎉`;
+    } else {
+      banner.style.display = "none";
+    }
+  }
+}
+
+function renderAdminUsersTable() {
+  const users = getStaffUsers();
+  const tbody = document.getElementById("admin-users-tbody");
+  if (!tbody) return;
+
+  const today = new Date();
+  const todayMMDD = String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+
+  tbody.innerHTML = users.map(u => {
+    const isBirthday = u.birthDate && u.birthDate.endsWith(todayMMDD);
+    return `
+      <tr style="${isBirthday ? 'background:#fffbeb' : ''}">
+        <td>
+          <b>${escapeHtml(u.name)}</b>
+          ${isBirthday ? '<span style="margin-left:6px;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:800">🎂 BUGÜN DOĞUM GÜNÜ! 🎉</span>' : ''}
+        </td>
+        <td><code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:11.5px">${escapeHtml(u.username || u.name.toLowerCase().replace(/\s+/g, '.'))}</code></td>
+        <td><span style="background:#e0f2fe;color:#0369a1;padding:2px 8px;border-radius:6px;font-size:11.5px;font-weight:700">${escapeHtml(u.role)}</span></td>
+        <td>${escapeHtml(u.phone || '-')}</td>
+        <td>📅 ${escapeHtml(u.birthDate || 'Belirtilmedi')}</td>
+        <td><span style="font-family:monospace;background:#f8fafc;border:1px solid #cbd5e1;padding:2px 6px;border-radius:4px;font-size:11.5px;font-weight:750">🔒 ${escapeHtml(u.pin || '1998')}</span></td>
+        <td><span class="pill ${u.active ? 'ok' : 'danger'}">${u.active ? 'Aktif' : 'Pasif'}</span></td>
+        <td style="text-align:right;white-space:nowrap">
+          <button type="button" class="btn" style="padding:3px 8px;min-height:28px;font-size:11.5px" onclick="editAdminUser('${u.id}')">✏️ Düzenle</button>
+          <button type="button" class="btn danger" style="padding:3px 8px;min-height:28px;font-size:11.5px" onclick="deleteAdminUser('${u.id}')">✕</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  checkBirthdays();
+}
+
+function openAdminUserModal() {
+  document.getElementById("form-admin-user").reset();
+  document.getElementById("adm-user-id").value = "";
+  document.getElementById("admin-user-modal-title").textContent = "👤 Yeni Kullanıcı / Personel Tanımla";
+  document.getElementById("modal-admin-user").classList.add("open");
+}
+
+function closeAdminUserModal() {
+  document.getElementById("modal-admin-user").classList.remove("open");
+}
+
+function editAdminUser(id) {
+  const users = getStaffUsers();
+  const u = users.find(x => x.id === id);
+  if (!u) return;
+
+  document.getElementById("adm-user-id").value = u.id;
+  document.getElementById("adm-user-name").value = u.name || "";
+  document.getElementById("adm-user-username").value = u.username || "";
+  document.getElementById("adm-user-role").value = u.role || "";
+  document.getElementById("adm-user-phone").value = u.phone || "";
+  document.getElementById("adm-user-birthdate").value = u.birthDate || "";
+  document.getElementById("adm-user-pin").value = u.pin || "";
+  document.getElementById("adm-user-active").value = u.active ? "true" : "false";
+
+  document.getElementById("admin-user-modal-title").textContent = `✏️ Personel Düzenle: ${u.name}`;
+  document.getElementById("modal-admin-user").classList.add("open");
+}
+
+function saveAdminUser(e) {
+  e.preventDefault();
+  const id = document.getElementById("adm-user-id").value;
+  const name = document.getElementById("adm-user-name").value.trim();
+  const username = document.getElementById("adm-user-username").value.trim() || name.toLowerCase().replace(/\s+/g, '.');
+  const role = document.getElementById("adm-user-role").value.trim();
+  const phone = document.getElementById("adm-user-phone").value.trim();
+  const birthDate = document.getElementById("adm-user-birthdate").value;
+  const pin = document.getElementById("adm-user-pin").value.trim() || "1998";
+  const active = document.getElementById("adm-user-active").value === "true";
+
+  let users = getStaffUsers();
+
+  if (id) {
+    const idx = users.findIndex(x => x.id === id);
+    if (idx !== -1) {
+      users[idx] = { ...users[idx], name, username, role, phone, birthDate, pin, active };
+    }
+  } else {
+    users.push({
+      id: "st-" + Date.now(),
+      name,
+      username,
+      role,
+      phone,
+      birthDate,
+      pin,
+      active
+    });
+  }
+
+  saveStaffUsers(users);
+  closeAdminUserModal();
+  renderAdminUsersTable();
+  showToast(`✓ Kullanıcı ${name} kaydedildi (PIN: ${pin})`);
+}
+
+function deleteAdminUser(id) {
+  let users = getStaffUsers();
+  if (users.length <= 1) {
+    alert("Sistemde en az 1 kullanıcı kalmalıdır.");
+    return;
+  }
+  const u = users.find(x => x.id === id);
+  if (!confirm(`"${u?.name}" kullanıcısını silmek istediğinize emin misiniz?`)) return;
+
+  users = users.filter(x => x.id !== id);
+  saveStaffUsers(users);
+  renderAdminUsersTable();
+  showToast("✓ Kullanıcı silindi.");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderAdminUsersTable();
+});
+
 function loadErpSecuritySettings() {
   try {
     const raw = localStorage.getItem('dm_erp_settings');

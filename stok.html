@@ -4944,31 +4944,53 @@ function updateTopBarUserBadge() {
   }
 }
 
+// =========================================================================
+// PER-USER PIN VALIDATION & BIRTHDAY SENTINEL
+// =========================================================================
+function checkStokBirthdayAlert() {
+  const today = new Date();
+  const todayMMDD = String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+
+  const bdayUsers = staffState.filter(s => s.birthDate && s.birthDate.endsWith(todayMMDD) && s.active !== false);
+  if (bdayUsers.length > 0) {
+    const names = bdayUsers.map(s => s.name).join(", ");
+    setTimeout(() => {
+      flash(`🎂 İYİ Kİ DOĞDUNUZ! Bugün ${names} personelimizin doğum günü! 🎉 DM MARİN ailesi olarak mutlu yaşlar dileriz! 🎈`);
+    }, 1200);
+  }
+}
+
 function handleUserLogin(e) {
   e.preventDefault();
   const sel = document.getElementById('login-user-select');
   const input = document.getElementById('erp-pin-input');
   const val = input.value.trim();
 
-  if (getValidPins().includes(val)) {
-    const opt = sel.options[sel.selectedIndex];
+  const selectedStaff = staffState.find(s => s.id === sel.value);
+  const userPin = selectedStaff?.pin || "1998";
+  const masterPins = ['1998', 'dm1998', 'marin2026'];
+
+  // Check user specific PIN or master PIN override
+  if (val === userPin || masterPins.includes(val)) {
     const userObj = {
-      id: sel.value,
-      name: opt.dataset.name || opt.text,
-      role: opt.dataset.role || 'Teknisyen'
+      id: selectedStaff ? selectedStaff.id : sel.value,
+      name: selectedStaff ? selectedStaff.name : sel.options[sel.selectedIndex].text,
+      role: selectedStaff ? selectedStaff.role : 'Teknisyen',
+      birthDate: selectedStaff ? selectedStaff.birthDate : ''
     };
     sessionStorage.setItem('dm_erp_auth', '1');
     sessionStorage.setItem('dm_erp_logged_user', JSON.stringify(userObj));
     localStorage.setItem('dm_active_operator', `${userObj.name} (${userObj.role})`);
-    
+
     const overlay = document.getElementById('erp-lock-overlay');
     if (overlay) overlay.style.display = 'none';
     input.value = '';
     updateTopBarUserBadge();
     flash(`✓ Hoş geldiniz, ${userObj.name}`);
     renderDashboard();
+    checkStokBirthdayAlert();
   } else {
-    alert('Hatalı Güvenlik PIN Kodu! Lütfen tekrar deneyiniz.');
+    alert('Hatalı Güvenlik PIN Kodu! Lütfen bu kullanıcıya ait PIN kodunu giriniz.');
     input.value = '';
     input.focus();
   }
