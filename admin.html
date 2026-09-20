@@ -124,15 +124,15 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 
 <!-- CONTENT VIEW -->
 <section class="view" id="content">
-<div class="head"><div><h2>Site İçeriği</h2><p>Ana sayfadaki temel iletişim ve açılış metinleri için cihaz içi taslak oluşturun.</p></div></div>
+<div class="head"><div><h2>Site İçeriği</h2><p>Ana sayfadaki temel iletişim ve açılış metinlerini canlı olarak yönetin.</p></div></div>
 <article class="panel">
-<div class="panel-head"><h3>Açılış ve İletişim Bilgileri</h3><span class="pill">Cihaz içi taslak</span></div>
+<div class="panel-head"><h3>Açılış ve İletişim Bilgileri</h3><span class="pill ok">Veritabanı Entegre</span></div>
 <div class="panel-body form-grid">
 <div class="field full"><label for="hero-title">Ana başlık</label><input id="hero-title" data-key="heroTitle" value="Denizde kalmayın. Biz yola çıkarız."></div>
-<div class="field full"><label for="hero-text">Açıklama</label><textarea id="hero-text" data-key="heroText" rows="4">Motor ve mekanik bakım, marin jeneratör, elektrik-elektronik ve acil mobil servis ihtiyaçlarınızda teknenizin bulunduğu noktaya profesyonel destek.</textarea></div>
+<div class="field full"><label for="hero-text">Açıklama</label><textarea id="hero-text" data-key="heroText" rows="4">Tüm Türkiye mobil marin servis ekibimizle motor ve mekanik bakım, marin jeneratör, elektrik-elektronik ve acil servis ihtiyaçlarınızda teknenizin bulunduğu noktaya profesyonel destek.</textarea></div>
 <div class="field"><label for="phone">Telefon</label><input id="phone" data-key="phone" value="0543 724 09 92"></div>
 <div class="field"><label for="email">E-posta</label><input id="email" data-key="email" value="servis@dmmarin.com"></div>
-<div class="field"><label for="region">Hizmet bölgesi</label><input id="region" data-key="region" value="İstanbul ve Marmara Bölgesi"></div>
+<div class="field"><label for="region">Hizmet bölgesi</label><input id="region" data-key="region" value="Tüm Türkiye"></div>
 <div class="field"><label for="hours">Çalışma saatleri</label><input id="hours" data-key="hours" value="08:00–18:00 · Acil Hat 7/24"></div>
 </div>
 </article>
@@ -498,6 +498,7 @@ function handleAuthSuccess(session) {
   loadServiceRequests();
   loadRemoteBrands();
   loadRemoteSeo();
+  loadRemoteSettings();
 }
 
 function handleAuthLogout() {
@@ -891,6 +892,63 @@ async function syncSeoToDb() {
   } catch (e) {}
 }
 
+// REMOTE SETTINGS & SITE CONTENT SYNC
+async function loadRemoteSettings() {
+  try {
+    const res = await fetch('/api/admin/settings');
+    const data = await res.json();
+    if (res.ok && data.success && data.data) {
+      if (data.data.site_content) {
+        const sc = data.data.site_content;
+        Object.keys(sc).forEach(k => {
+          const el = document.querySelector(`[data-key="${k}"]`);
+          if (el) el.value = sc[k];
+        });
+      }
+      if (data.data.services) {
+        const srv = data.data.services;
+        Object.keys(srv).forEach(k => {
+          const el = document.querySelector(`[data-service="${k}"]`);
+          if (el) el.checked = srv[k] !== false;
+        });
+      }
+    }
+  } catch (e) {
+    console.warn("Remote settings load error:", e);
+  }
+}
+
+async function syncSettingsToDb() {
+  if (!currentSession) return;
+  const fields = {};
+  document.querySelectorAll('[data-key]').forEach(el => fields[el.dataset.key] = el.value.trim());
+  const services = {};
+  document.querySelectorAll('[data-service]').forEach(el => services[el.dataset.service] = el.checked);
+
+  try {
+    await Promise.all([
+      fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + currentSession.access_token
+        },
+        body: JSON.stringify({ key: 'site_content', value: fields })
+      }),
+      fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + currentSession.access_token
+        },
+        body: JSON.stringify({ key: 'services', value: services })
+      })
+    ]);
+  } catch (e) {
+    console.warn("Settings sync error:", e);
+  }
+}
+
 const labels = {
   dashboard: 'Genel Bakış',
   content: 'Site İçeriği',
@@ -1268,6 +1326,7 @@ function autoSave() {
   } catch(e) {}
   if (currentSession) {
     syncBrandsToDb();
+    syncSettingsToDb();
   }
 }
 
@@ -1275,10 +1334,10 @@ document.querySelector('#save').addEventListener('click', async () => {
   saveCurrentPageSeo();
   autoSave();
   if (currentSession) {
-    await Promise.all([syncBrandsToDb(), syncSeoToDb()]);
-    flash('✓ Değişiklikler hem tarayıcıya hem de veritabanına başarıyla kaydedildi.');
+    await Promise.all([syncBrandsToDb(), syncSeoToDb(), syncSettingsToDb()]);
+    flash('✓ Değişiklikler canlı veritabanına başarıyla kaydedildi.');
   } else {
-    flash('Tüm taslaklar tarayıcınızda (localStorage) kaydedildi. Canlı DB için giriş yapın.');
+    flash('Tüm taslaklar tarayıcınızda (localStorage) kaydedildi. Canlı DB için lütfen giriş yapın.');
   }
 });
 
@@ -1307,6 +1366,10 @@ function restoreFields() {
   }
 }
 
+// Attach input listeners for instant drafting
+document.querySelectorAll('[data-key]').forEach(el => el.addEventListener('input', autoSave));
+document.querySelectorAll('[data-service]').forEach(el => el.addEventListener('change', autoSave));
+
 // INITIALIZE
 restoreFields();
 renderBrands();
@@ -1314,6 +1377,7 @@ renderSeoSummaryTable();
 loadPageSeo('index');
 showView(location.hash.slice(1) in labels ? location.hash.slice(1) : 'dashboard');
 initSupabase();
+loadRemoteSettings();
 </script>
 <script>
 function trackDmEvent(eventName, params) {
