@@ -12,7 +12,7 @@
 <link rel="alternate" hreflang="tr" href="https://dmmarin.com/blog-fischer-panda-jenerator-bakimi-ve-inverter-arizalari.html">
 <link rel="alternate" hreflang="x-default" href="https://dmmarin.com/blog-fischer-panda-jenerator-bakimi-ve-inverter-arizalari.html">
 
-<!-- Open Graph / Schema -->
+<!-- Open Graph / Social -->
 <meta property="og:type" content="article">
 <meta property="og:title" content="Fischer Panda Encapsulated Genset & iSeries Inverter Service | DM MARIN">
 <meta property="og:description" content="Technical guide for Fischer Panda iSeries generators: water-cooled alternators, PMGI inverter failures, winding temperature sensors, and capsule ventilation.">
@@ -20,15 +20,76 @@
 <meta property="og:image" content="https://dmmarin.com/assets/marin-jenerator-servisi.webp">
 <meta property="og:site_name" content="DM MARİN">
 
+<!-- Schema.org Article & FAQ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://dmmarin.com/blog-fischer-panda-marine-generator-service-inverter.html#article",
+      "headline": "Fischer Panda Encapsulated Genset & iSeries Inverter Service | DM MARIN",
+      "description": "Technical guide for Fischer Panda iSeries generators: water-cooled alternators, PMGI inverter failures, winding temperature sensors, and capsule ventilation.",
+      "inLanguage": "en",
+      "mainEntityOfPage": "https://dmmarin.com/blog-fischer-panda-marine-generator-service-inverter.html",
+      "image": "https://dmmarin.com/assets/marin-jenerator-servisi.webp",
+      "author": {
+        "@type": "Organization",
+        "name": "DM MARİN Yat Bakım & Mühendislik",
+        "url": "https://dmmarin.com"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "DM MARİN",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://dmmarin.com/assets/dm-marin-logo.webp"
+        }
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://dmmarin.com/blog-fischer-panda-marine-generator-service-inverter.html#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Why does my Fischer Panda run but produce no 230V AC output?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "On classic models, failure of the excitation capacitors is the most common cause. On iSeries models, check the high-amperage PMGi DC input fuse and inverter thermal status."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can the PMGi inverter be installed inside the engine room?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The PMGi inverter contains sensitive power electronics and must be installed in a dry, well-ventilated, low-ambient-temperature utility space outside the hot engine bay."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the purpose of the exhaust temperature sensor on Fischer Panda gensets?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The sensor detects raw water loss instantly at the exhaust elbow, shutting down the engine within 2-3 seconds to prevent catastrophic exhaust hose burnout."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
 <link rel="stylesheet" href="service-page.css">
 <style>
 .article-header {
-  background: linear-gradient(135deg, #071b2b 0%, #0a2e46 100%);
+  background: linear-gradient(135deg, #04131f 0%, #0a253a 60%, #073a56 100%);
   color: #fff;
-  padding: 60px 0 40px;
+  padding: 60px 0 45px;
 }
 .article-container {
-  max-width: 860px;
+  max-width: 880px;
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -38,192 +99,204 @@
   gap: 12px;
   font-size: 13px;
   color: #94a3b8;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
   flex-wrap: wrap;
 }
 .article-badge {
   background: rgba(25,199,223,0.15);
   color: #19c7df;
   border: 1px solid rgba(25,199,223,0.3);
-  padding: 3px 10px;
+  padding: 3px 12px;
   border-radius: 999px;
   font-weight: 700;
-  font-size: 11.5px;
+  font-size: 12px;
 }
 .article-content {
   background: #fff;
-  padding: 40px 0 80px;
+  padding: 45px 0 80px;
   color: #334155;
-  font-size: 16px;
-  line-height: 1.8;
-}
-.article-content h2 {
-  color: #071b2b;
-  font-size: 24px;
-  margin: 36px 0 16px;
-  border-bottom: 2px solid #f1f5f9;
-  padding-bottom: 8px;
-}
-.article-content h3 {
-  color: #087f93;
-  font-size: 19px;
-  margin: 24px 0 12px;
+  font-size: 16.5px;
+  line-height: 1.85;
 }
 .diagram-box {
-  margin: 30px 0;
-  border-radius: 12px;
+  margin: 35px 0;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
   border: 1px solid #cbd5e1;
 }
-.protocol-card {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-left: 4px solid #087f93;
-  border-radius: 0 8px 8px 0;
-  padding: 16px 20px;
-  margin: 20px 0;
-}
 .breadcrumb {
-  font-size: 12px;
+  font-size: 12.5px;
   color: #94a3b8;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 .breadcrumb a {
   color: #19c7df;
   text-decoration: none;
 }
-</style>
-
-<!-- Schema.org Article & Breadcrumbs -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Article",
-      "headline": "Fischer Panda Marine Generator Care & Inverter Diagnostics",
-      "description": "Technical guide for Fischer Panda iSeries generators: water-cooled alternators, PMGI inverter failures, winding temperature sensors, and capsule ventilation.",
-      "image": "https://dmmarin.com/assets/marin-jenerator-servisi.webp",
-      "author": {
-        "@type": "Organization",
-        "name": "DM MARİN Yetkili Mühendislik Ekibi",
-        "url": "https://dmmarin.com"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "DM MARİN",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://dmmarin.com/assets/dm-marin-logo-v2.webp"
-        }
-      },
-      "datePublished": "2026-03-15T09:00:00+03:00",
-      "dateModified": "2026-09-20T19:40:00+03:00",
-      "mainEntityOfPage": "https://dmmarin.com/blog-fischer-panda-marine-generator-service-inverter.html"
-    },
-    {
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://dmmarin.com/index.html"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Blog & Guides",
-          "item": "https://dmmarin.com/blog-en.html"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "Fischer Panda Marine Generator Care & Inverter Diagnostics"
-        }
-      ]
-    }
-  ]
+.lang-switcher {
+  display: inline-flex;
+  gap: 6px;
+  background: rgba(255,255,255,0.08);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
 }
-</script>
+.lang-switcher a {
+  color: #cbd5e1;
+  text-decoration: none;
+}
+.lang-switcher a.active {
+  color: #19c7df;
+  font-weight: bold;
+}
+</style>
 </head>
 <body>
 
-<header class="header">
-  <div class="container header-in">
-    <a class="logo" href="index.html"><img src="assets/dm-marin-logo-v2.webp" alt="DM MARİN Logo" width="260" height="80"></a>
-    <nav class="nav">
-      <a href="index.html#hizmetler">Services</a>
-      <a href="index.html#markalar">Brands</a>
-      <a href="blog-en.html" style="color:#087f93;font-weight:700">Blog & Guides</a>
-      <div class="lang-switch" style="display:flex;gap:4px">
-        <a href="blog-fischer-panda-jenerator-bakimi-ve-inverter-arizalari.html" class="lang-btn " style="text-decoration:none;padding:3px 8px;border-radius:4px;border:1px solid #cbd5e1;font-size:11px;font-weight:700;background:#fff;color:#071b2b">TR</a>
-        <a href="blog-fischer-panda-marine-generator-service-inverter.html" class="lang-btn active" style="text-decoration:none;padding:3px 8px;border-radius:4px;border:1px solid #cbd5e1;font-size:11px;font-weight:700;background:#071b2b;color:#fff">EN</a>
+<!-- Global Navigation -->
+<header style="background:#071b2b;border-bottom:1px solid rgba(255,255,255,0.08);padding:14px 0">
+  <div class="article-container" style="display:flex;justify-content:space-between;align-items:center">
+    <a href="index-en.html" style="color:#fff;font-size:20px;font-weight:800;text-decoration:none;letter-spacing:1px">
+      DM <span style="color:#19c7df">MARİN</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:18px">
+      <a href="index-en.html" style="color:#cbd5e1;font-size:14px;text-decoration:none">Home</a>
+      <a href="blog-en.html" style="color:#19c7df;font-weight:700;font-size:14px;text-decoration:none">Blog & Guides</a>
+      <a href="contact.html" style="color:#cbd5e1;font-size:14px;text-decoration:none">Contact</a>
+      <div class="lang-switcher">
+        <a href="blog-fischer-panda-jenerator-bakimi-ve-inverter-arizalari.html" class="">TR</a> | 
+        <a href="blog-fischer-panda-marine-generator-service-inverter.html" class="active">EN</a>
       </div>
-      <a class="cta" href="index.html#randevu">Service Request</a>
-    </nav>
+    </div>
   </div>
 </header>
 
-<main>
-<article>
-<header class="article-header">
+<!-- Article Header -->
+<div class="article-header">
   <div class="article-container">
     <div class="breadcrumb">
-      <a href="index.html">Home</a> / <a href="blog-en.html">Blog & Guides</a> / <span>Generator & Power</span>
+      <a href="index-en.html">Home</a> &gt; <a href="blog-en.html">Blog & Guides</a> &gt; <span>Generator & Power</span>
     </div>
     <div class="article-meta">
       <span class="article-badge">Generator & Power</span>
-      <span>⏱ 6 min</span>
-      <span>•</span>
-      <span>DM MARIN Engineering Board</span>
+      <span>⏱️ 6 min</span>
+      <span>⚓ DM MARİN Mühendislik Masası</span>
+      <span>📅 2026 Güncellemesi</span>
     </div>
-    <h1 style="margin:0;font-size:32px;line-height:1.3;font-weight:900">Fischer Panda Marine Generator Care & Inverter Diagnostics</h1>
-  </div>
-</header>
-
-<div class="article-content">
-  <div class="article-container">
-    
-    <div class="protocol-card">
-      <b>📌 Executive Summary:</b> Technical guide for Fischer Panda iSeries generators: water-cooled alternators, PMGI inverter failures, winding temperature sensors, and capsule ventilation.
-    </div>
-
-    <h2>1. Engineering Overview & System Analysis</h2>
-    <p>Proper scheduled maintenance and OEM-level diagnostics for Fischer Panda Marine Generator Care & Inverter Diagnostics are paramount to ensuring peak performance and reliability. Technical guide for Fischer Panda iSeries generators: water-cooled alternators, PMGI inverter failures, winding temperature sensors, and capsule ventilation. Neglecting these protocols can lead to costly downtime and offshore safety hazards.</p>
-
-    <!-- Visual Diagram Embed -->
-    <div class="diagram-box">
-      <img src="assets/diagrams/fischer-panda-inverter-arizalari-diagram.svg" alt="Fischer Panda Marine Generator Care & Inverter Diagnostics Akış Şeması" style="width:100%;height:auto;display:block">
-    </div>
-
-    <h2>2. Critical Service Steps & Engineering Standards</h2>
-    <p>Standard operating procedures executed by our certified marine engineers:</p>
-    <ul>
-      <li><b>Adım 1:</b> Computerized Diagnostic Scan & Live Data Telemetry</li>
-      <li><b>Adım 2:</b> Authentic OEM Spare Parts, Filters & Lube Service</li>
-      <li><b>Adım 3:</b> Torque Verification, Pressure Testing & Sea Trial</li>
-    </ul>
-
-    <h2>3. DM MARIN On-Site Marina Engineering</h2>
-    <p>Equipped with advanced mobile service vans, DM MARIN provides shipyard-grade engineering directly to your marina berth or boatyard.</p>
-
-    <!-- CTA Box -->
-    <div style="background:linear-gradient(135deg,#071b2b 0%,#0a2e46 100%);color:#fff;border-radius:12px;padding:32px;text-align:center;margin-top:40px">
-      <h3 style="color:#fff;margin:0 0 10px;font-size:20px">Professional Mobile Marine Service for Your Yacht</h3>
-      <p style="color:#cbd5e1;font-size:14px;margin:0 0 20px">Certified on-site marine engineering support across Istanbul, Bodrum, Marmaris, Gocek, and all Turkish Marinas.</p>
-      <a href="index.html#randevu" class="btn primary" style="background:#19c7df;color:#071b2b;font-weight:800;padding:12px 24px;text-decoration:none;border-radius:8px;display:inline-block">Book Service Now →</a>
-    </div>
-
+    <h1 style="font-size: 32px; font-weight: 800; line-height: 1.35; margin: 0 0 16px; color: #fff;">Fischer Panda Marine Generator Care & Inverter Diagnostics</h1>
+    <p style="font-size: 17px; color: #cbd5e1; line-height: 1.65; margin: 0; max-width: 800px;">Technical guide for Fischer Panda iSeries generators: water-cooled alternators, PMGI inverter failures, winding temperature sensors, and capsule ventilation.</p>
   </div>
 </div>
-</article>
+
+<!-- Article Body -->
+<main class="article-content">
+  <div class="article-container">
+    
+    <!-- Bespoke SVG Technical Diagram -->
+    <div class="diagram-box">
+      <img src="assets/diagrams/fischer-panda-inverter-arizalari-diagram.svg" alt="Fischer Panda Marine Generator Care & Inverter Diagnostics - Teknik Sistem Mimarisi ve Teşhis Şeması" style="width:100%;height:auto;display:block;" loading="lazy">
+    </div>
+
+    <!-- Technical Specs Table -->
+    
+    <div style="margin: 35px 0; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+      <div style="background: #071b2b; color: #fff; padding: 14px 18px; font-weight: 800; font-size: 15px; display:flex; justify-content:space-between; align-items:center;">
+        <span>📊 Engineering & Technical Specifications</span>
+        <span style="font-size: 11px; background: rgba(25,199,223,0.2); color: #19c7df; padding: 2px 8px; border-radius: 4px;">ISO 8846 / ABYC</span>
+      </div>
+      <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+        <tbody>
+          
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 10px 14px; font-weight: 700; color: #071b2b; width: 35%; background: #f8fafc;">Applicable Models / Engines</td>
+              <td style="padding: 10px 14px; color: #334155; font-family: monospace; font-size: 13.5px;">Fischer Panda Panda 4000s, 5000i Neo, 8000i, 10000i, 15000i, 25i, 45i</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 10px 14px; font-weight: 700; color: #071b2b; width: 35%; background: #f8fafc;">Lube / Fluid Specification</td>
+              <td style="padding: 10px 14px; color: #334155; font-family: monospace; font-size: 13.5px;">SAE 15W-40 veya 10W-40 Sentetik Dizel Motor Yağı</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 10px 14px; font-weight: 700; color: #071b2b; width: 35%; background: #f8fafc;">Tolerances & Clearances</td>
+              <td style="padding: 10px 14px; color: #334155; font-family: monospace; font-size: 13.5px;">Kubota EA300 / Z482: Emme ve Egzoz 0.15 mm (Soğuk)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 10px 14px; font-weight: 700; color: #071b2b; width: 35%; background: #f8fafc;">Operating Pressure Range</td>
+              <td style="padding: 10px 14px; color: #334155; font-family: monospace; font-size: 13.5px;">Elektrikli Yakıt Pompası: 0.25 - 0.40 Bar</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 10px 14px; font-weight: 700; color: #071b2b; width: 35%; background: #f8fafc;">Temperature & Thermal Limits</td>
+              <td style="padding: 10px 14px; color: #334155; font-family: monospace; font-size: 13.5px;">Stator Su Sıcaklığı: Maks. 75°C, Motor Sıcaklığı: 82°C - 88°C</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 10px 14px; font-weight: 700; color: #071b2b; width: 35%; background: #f8fafc;">Key OEM / Cross Part References</td>
+              <td style="padding: 10px 14px; color: #334155; font-family: monospace; font-size: 13.5px;">İmpeller Kiti: 0000858 | PMGi İnverter Sigortası: 250A ANL | Yağ Filtresi: 0001854</td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+    
+
+    <!-- In-Depth Detailed Sections -->
+    
+        <div style="margin-bottom: 32px;">
+          <h2 style="color: #071b2b; font-size: 22px; font-weight: 800; margin: 30px 0 14px; border-left: 4px solid #f59e0b; padding-left: 12px;">1. Fischer Panda 100% Water-Cooled Stator & iSeries Inverter Design</h2>
+          <p style="font-size: 16px; line-height: 1.85; color: #334155; margin: 0 0 16px;">Fischer Panda marine generators utilize a fully water-jacketed asynchronous alternator encapsulated in a fiberglass sound capsule. In iSeries variable-speed units, engine RPM dynamically modulates between 2,200 and 2,800 RPM depending on electrical load. The raw high-frequency AC output is processed through a solid-state PMGi power inverter to generate a pure 230V 50Hz sine wave with THD < 3%.</p>
+        </div>
+        <div style="margin-bottom: 32px;">
+          <h2 style="color: #071b2b; font-size: 22px; font-weight: 800; margin: 30px 0 14px; border-left: 4px solid #f59e0b; padding-left: 12px;">2. PMGi Inverter Overheating, DC Bus Faults & IGBT Protection</h2>
+          <p style="font-size: 16px; line-height: 1.85; color: #334155; margin: 0 0 16px;">The PMGi power inverter incorporates high-efficiency IGBT switching modules. Restricted cooling airflow, internal fan failure, or high ambient locker temperatures trigger the 'Inverter Over-Temp' interlock. Voltage irregularities or winding short-circuits trigger 'DC Link Voltage Mismatch' faults, requiring oscilloscope waveform diagnostics.</p>
+        </div>
+        <div style="margin-bottom: 32px;">
+          <h2 style="color: #071b2b; font-size: 22px; font-weight: 800; margin: 30px 0 14px; border-left: 4px solid #f59e0b; padding-left: 12px;">3. Asynchronous Stator Cooling & Excitation Capacitors</h2>
+          <p style="font-size: 16px; line-height: 1.85; color: #334155; margin: 0 0 16px;">Traditional Fischer Panda gensets rely on excitation capacitors to regulate voltage. Over time, capacitor capacitance degrades, causing output voltage to drop under load. Capacitors must be measured with a calibrated microfarad meter and replaced if values deviate beyond ±5% of factory ratings.</p>
+        </div>
+        <div style="margin-bottom: 32px;">
+          <h2 style="color: #071b2b; font-size: 22px; font-weight: 800; margin: 30px 0 14px; border-left: 4px solid #f59e0b; padding-left: 12px;">4. iControl 2 Telemetry, Error Codes & On-Site Diagnostics</h2>
+          <p style="font-size: 16px; line-height: 1.85; color: #334155; margin: 0 0 16px;">The iControl 2 digital interface logs real-time operational parameters. Errors such as 'Error 01: Engine Overheat' or 'Error 10: Inverter Comm Error' are systematically isolated by checking thermistor resistances and CAN wiring continuity.</p>
+        </div>
+
+    <!-- Technical FAQ -->
+    <div style="margin-top: 45px; padding-top: 30px; border-top: 2px solid #f1f5f9;">
+      <h2 style="color: #071b2b; font-size: 24px; font-weight: 800; margin: 0 0 20px;">Frequently Asked Technical Questions (FAQ)</h2>
+      
+        <div style="margin-bottom: 18px; padding: 18px 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;">
+          <h3 style="color: #071b2b; font-size: 16.5px; font-weight: 700; margin: 0 0 8px;">❓ Why does my Fischer Panda run but produce no 230V AC output?</h3>
+          <p style="color: #475569; font-size: 15px; line-height: 1.75; margin: 0;">💡 On classic models, failure of the excitation capacitors is the most common cause. On iSeries models, check the high-amperage PMGi DC input fuse and inverter thermal status.</p>
+        </div>
+        <div style="margin-bottom: 18px; padding: 18px 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;">
+          <h3 style="color: #071b2b; font-size: 16.5px; font-weight: 700; margin: 0 0 8px;">❓ Can the PMGi inverter be installed inside the engine room?</h3>
+          <p style="color: #475569; font-size: 15px; line-height: 1.75; margin: 0;">💡 No. The PMGi inverter contains sensitive power electronics and must be installed in a dry, well-ventilated, low-ambient-temperature utility space outside the hot engine bay.</p>
+        </div>
+        <div style="margin-bottom: 18px; padding: 18px 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;">
+          <h3 style="color: #071b2b; font-size: 16.5px; font-weight: 700; margin: 0 0 8px;">❓ What is the purpose of the exhaust temperature sensor on Fischer Panda gensets?</h3>
+          <p style="color: #475569; font-size: 15px; line-height: 1.75; margin: 0;">💡 The sensor detects raw water loss instantly at the exhaust elbow, shutting down the engine within 2-3 seconds to prevent catastrophic exhaust hose burnout.</p>
+        </div>
+    </div>
+
+    <!-- Conversion & CTA Card -->
+    <div style="margin-top: 50px; background: linear-gradient(135deg, #071b2b 0%, #0a2e46 100%); color: #fff; border-radius: 14px; padding: 36px 30px; text-align: center; border: 1px solid rgba(25,199,223,0.3);">
+      <h2 style="color: #fff; font-size: 24px; font-weight: 800; margin: 0 0 10px;">Get Certified Marine Engineering Support</h2>
+      <p style="color: #cbd5e1; font-size: 15.5px; max-width: 650px; margin: 0 auto 24px;">Mobile shipyard-grade engineering directly to your marina berth across Istanbul, Bodrum, Marmaris, and Gocek.</p>
+      <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+        <a href="contact.html" class="btn primary" style="background: #19c7df; color: #04131f; font-weight: 800; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-size: 15px;">Book Mobile Marine Service ↗</a>
+        <a href="tel:+905324578965" style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.25); font-weight: 700; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 15px;">📞 +90 (532) 457 89 65</a>
+      </div>
+    </div>
+
+  </div>
 </main>
 
-<footer class="footer" style="background:#071b2b;color:#cbd5e1;padding:40px 0;text-align:center;font-size:13px">
-  <div class="container">
-    <p>© 2026 DM MARİN — Mobil Marin Servis Hizmetleri. Tüm Hakları Saklıdır.</p>
+<!-- Global Footer -->
+<footer style="background:#04131f;color:#94a3b8;padding:40px 0 30px;border-top:1px solid rgba(255,255,255,0.08);font-size:13.5px">
+  <div class="article-container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px">
+    <div>
+      <p style="margin:0 0 6px;color:#fff;font-weight:700">DM MARİN YAT BAKIM &amp; MÜHENDİSLİK HİZMETLERİ</p>
+      <p style="margin:0">Kalamış · Fenerbahçe · Ataköy · Pendik Marinturk · Viaport Tuzla · Bodrum · Marmaris · Göcek</p>
+    </div>
+    <div>
+      <p style="margin:0">© 2026 DM MARİN. Tüm hakları saklıdır.</p>
+    </div>
   </div>
 </footer>
 
