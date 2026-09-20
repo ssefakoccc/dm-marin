@@ -173,7 +173,7 @@ if(serviceForm){
 // DYNAMIC SETTINGS HYDRATION FROM SUPABASE
 (async function() {
   try {
-    const res = await fetch('/api/settings');
+    const res = await fetch('/api/admin/settings');
     if (!res.ok) return;
     const json = await res.json();
     if (!json.success || !json.data) return;
