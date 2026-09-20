@@ -1166,23 +1166,23 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
       </div>
 
       <!-- CUSTOMER & VESSEL GRID (2 BALANCED COLUMNS - FULLY EDITABLE) -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;font-size:12.5px" class="report-section">
-        <div style="border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fbfdfe">
-          <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:5px;margin-bottom:8px">
-            <b style="color:var(--navy);font-size:12px;letter-spacing:.03em;text-transform:uppercase">👤 Müşteri Bilgileri</b>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;font-size:12px" class="report-section">
+        <div style="border:1px solid var(--line);border-radius:8px;padding:9px 12px;background:#fbfdfe">
+          <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:4px;margin-bottom:6px">
+            <b style="color:var(--navy);font-size:11.5px;letter-spacing:.03em;text-transform:uppercase">👤 Müşteri Bilgileri</b>
           </div>
-          <div style="display:grid;grid-template-columns:95px 1fr;gap:6px;align-items:center;line-height:1.4">
+          <div style="display:grid;grid-template-columns:85px 1fr;gap:4px 8px;align-items:center;line-height:1.35">
             <span style="color:var(--muted)">Adı Soyadı:</span> <input type="text" class="rep-input" id="rep-cust-name-input" style="font-weight:700;color:#0f172a" placeholder="Müşteri Ad Soyad">
             <span style="color:var(--muted)">Telefon:</span> <input type="text" class="rep-input" id="rep-cust-phone-input" style="font-weight:700;color:var(--cyan2)" placeholder="05xx xxx xx xx">
             <span style="color:var(--muted)">E-Posta:</span> <input type="text" class="rep-input" id="rep-cust-email-input" placeholder="ornek@alanadi.com">
           </div>
         </div>
 
-        <div style="border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fbfdfe">
-          <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:5px;margin-bottom:8px">
-            <b style="color:var(--navy);font-size:12px;letter-spacing:.03em;text-transform:uppercase">🚤 Tekne & Konum Bilgileri</b>
+        <div style="border:1px solid var(--line);border-radius:8px;padding:9px 12px;background:#fbfdfe">
+          <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:4px;margin-bottom:6px">
+            <b style="color:var(--navy);font-size:11.5px;letter-spacing:.03em;text-transform:uppercase">🚤 Tekne & Konum Bilgileri</b>
           </div>
-          <div style="display:grid;grid-template-columns:95px 1fr;gap:6px;align-items:center;line-height:1.4">
+          <div style="display:grid;grid-template-columns:95px 1fr;gap:4px 8px;align-items:center;line-height:1.35">
             <span style="color:var(--muted)">Tekne / Model:</span> <input type="text" class="rep-input" id="rep-boat-name-input" style="font-weight:700;color:#0f172a" placeholder="Marka / Model">
             <span style="color:var(--muted)">Marina / Konum:</span> <input type="text" class="rep-input" id="rep-location-input" style="font-weight:700;color:#0369a1" placeholder="Örn: Kalamış Marina / F-Pontonu">
             <span style="color:var(--muted)">Hizmet Türü:</span> <input type="text" class="rep-input" id="rep-service-type-input" style="font-weight:700;color:#087f93" placeholder="Motor & Jeneratör Bakımı">
@@ -1191,66 +1191,66 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
       </div>
 
       <!-- TECHNICAL ENGINE PARAMETERS (3-COLUMN BALANCED GRID) -->
-      <div style="border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:14px;background:#fbfdfe;font-size:12px" class="report-section">
-        <b style="color:var(--navy);display:block;margin-bottom:8px;border-bottom:1px solid var(--line);padding-bottom:4px;letter-spacing:.03em;text-transform:uppercase">⚙️ Makine, Jeneratör & Seyir Test Parametreleri</b>
-        <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:10px">
+      <div style="border:1px solid var(--line);border-radius:8px;padding:9px 12px;margin-bottom:10px;background:#fbfdfe;font-size:11.5px" class="report-section">
+        <b style="color:var(--navy);display:block;margin-bottom:6px;border-bottom:1px solid var(--line);padding-bottom:3px;letter-spacing:.03em;text-transform:uppercase">⚙️ Makine, Jeneratör & Seyir Test Parametreleri</b>
+        <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:8px 10px">
           <div>
-            <label style="font-size:11px;font-weight:700;color:var(--muted);display:block;margin-bottom:3px">Motor / Jeneratör Modeli</label>
+            <label style="font-size:10.5px;font-weight:700;color:var(--muted);display:block;margin-bottom:2px">Motor / Jeneratör Modeli</label>
             <input type="text" class="rep-input" id="rep-engine-model" style="width:100%;font-weight:600" value="Volvo Penta D6-370 / Kohler 9EFOZD">
           </div>
           <div>
-            <label style="font-size:11px;font-weight:700;color:var(--muted);display:block;margin-bottom:3px">Seri No (ESN)</label>
+            <label style="font-size:10.5px;font-weight:700;color:var(--muted);display:block;margin-bottom:2px">Seri No (ESN)</label>
             <input type="text" class="rep-input" id="rep-serial-no" style="width:100%" placeholder="Örn: 2006048192">
           </div>
           <div>
-            <label style="font-size:11px;font-weight:700;color:var(--muted);display:block;margin-bottom:3px">Çalışma Saati (Moto-Saat)</label>
+            <label style="font-size:10.5px;font-weight:700;color:var(--muted);display:block;margin-bottom:2px">Çalışma Saati (Moto-Saat)</label>
             <input type="text" class="rep-input" id="rep-hours" style="width:100%" placeholder="Örn: 842 Saat">
           </div>
           <div>
-            <label style="font-size:11px;font-weight:700;color:var(--muted);display:block;margin-bottom:3px">Tahrik / Şanzıman Tipi</label>
+            <label style="font-size:10.5px;font-weight:700;color:var(--muted);display:block;margin-bottom:2px">Tahrik / Şanzıman Tipi</label>
             <input type="text" class="rep-input" id="rep-drive-type" style="width:100%" value="Şaftlı / ZF Şanzıman (Kuyruk / IPS)">
           </div>
           <div>
-            <label style="font-size:11px;font-weight:700;color:var(--muted);display:block;margin-bottom:3px">Test Yağ Basıncı (Nominal)</label>
+            <label style="font-size:10.5px;font-weight:700;color:var(--muted);display:block;margin-bottom:2px">Test Yağ Basıncı (Nominal)</label>
             <input type="text" class="rep-input" id="rep-oil-pressure" style="width:100%" value="4.5 Bar (Nominal)">
           </div>
           <div>
-            <label style="font-size:11px;font-weight:700;color:var(--muted);display:block;margin-bottom:3px">Hararet & Akü Voltajı</label>
+            <label style="font-size:10.5px;font-weight:700;color:var(--muted);display:block;margin-bottom:2px">Hararet & Akü Voltajı</label>
             <input type="text" class="rep-input" id="rep-temp-volt" style="width:100%" value="82°C / 13.8V (Normal)">
           </div>
         </div>
       </div>
 
       <!-- COMPLETED PROCEDURES CHECKLIST (2 COLUMNS) -->
-      <div style="margin-bottom:14px" class="report-section">
-        <b style="color:var(--navy);font-size:12px;display:block;margin-bottom:6px;letter-spacing:.03em;text-transform:uppercase">🔧 Yapılan Teknik İşlemler & Kontroller</b>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;font-size:11.5px;background:#fbfdfe;border:1px solid var(--line);border-radius:10px;padding:12px 14px">
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="rep-chk-1" style="width:16px;height:16px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Motor & Mekanik Periyodik Bakımı</span></label>
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="rep-chk-2" style="width:16px;height:16px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Motor Yağı ve Orijinal Filtre Değişimi</span></label>
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="rep-chk-3" style="width:16px;height:16px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Deniz Suyu Pompası & İmpeller Değişimi</span></label>
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="rep-chk-4" style="width:16px;height:16px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Cihazlı ECU / Arıza Kodu Taraması & Kalibrasyon</span></label>
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="rep-chk-5" style="width:16px;height:16px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Yakıt Separatör & Filtre Değişimi</span></label>
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="rep-chk-6" style="width:16px;height:16px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Şanzıman / Kuyruk Yağ Seviyesi & Tutya Kontrolü</span></label>
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="rep-chk-7" style="width:16px;height:16px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Jeneratör Yük, Frekans & Voltaj Testi</span></label>
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="rep-chk-8" style="width:16px;height:16px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Deniz Seyir Testi & Hararet / Basınç Kontrolü</span></label>
+      <div style="margin-bottom:10px" class="report-section">
+        <b style="color:var(--navy);font-size:11.5px;display:block;margin-bottom:4px;letter-spacing:.03em;text-transform:uppercase">🔧 Yapılan Teknik İşlemler & Kontroller</b>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;font-size:11px;background:#fbfdfe;border:1px solid var(--line);border-radius:8px;padding:9px 12px">
+          <label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" id="rep-chk-1" style="width:15px;height:15px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Motor & Mekanik Periyodik Bakımı</span></label>
+          <label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" id="rep-chk-2" style="width:15px;height:15px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Motor Yağı ve Orijinal Filtre Değişimi</span></label>
+          <label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" id="rep-chk-3" style="width:15px;height:15px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Deniz Suyu Pompası & İmpeller Değişimi</span></label>
+          <label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" id="rep-chk-4" style="width:15px;height:15px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Cihazlı ECU / Arıza Kodu Taraması & Kalibrasyon</span></label>
+          <label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" id="rep-chk-5" style="width:15px;height:15px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Yakıt Separatör & Filtre Değişimi</span></label>
+          <label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" id="rep-chk-6" style="width:15px;height:15px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Şanzıman / Kuyruk Yağ Seviyesi & Tutya Kontrolü</span></label>
+          <label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" id="rep-chk-7" style="width:15px;height:15px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Jeneratör Yük, Frekans & Voltaj Testi</span></label>
+          <label style="display:flex;align-items:center;gap:7px;cursor:pointer"><input type="checkbox" id="rep-chk-8" style="width:15px;height:15px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Deniz Seyir Testi & Hararet / Basınç Kontrolü</span></label>
         </div>
       </div>
 
       <!-- DYNAMIC PARTS & MATERIALS TABLE -->
-      <div style="margin-bottom:14px" class="report-section">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-          <b style="color:var(--navy);font-size:12px;letter-spacing:.03em;text-transform:uppercase">📦 Kullanılan Yedek Parça & Sarf Malzemeler (<span id="rep-parts-count" style="color:var(--cyan2)">0 Kalem</span>)</b>
-          <button type="button" class="btn report-hide-print" id="rep-add-part-btn" style="min-height:28px;padding:0 12px;font-size:11.5px;background:#e0f2fe;color:#0369a1;border:1px dashed #7dd3fc;font-weight:700">➕ Parça / Malzeme Ekle</button>
+      <div style="margin-bottom:10px" class="report-section">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+          <b style="color:var(--navy);font-size:11.5px;letter-spacing:.03em;text-transform:uppercase">📦 Kullanılan Yedek Parça & Sarf Malzemeler (<span id="rep-parts-count" style="color:var(--cyan2)">0 Kalem</span>)</b>
+          <button type="button" class="btn report-hide-print" id="rep-add-part-btn" style="min-height:26px;padding:0 10px;font-size:11px;background:#e0f2fe;color:#0369a1;border:1px dashed #7dd3fc;font-weight:700">➕ Parça / Malzeme Ekle</button>
         </div>
         <table class="report-table">
           <thead>
             <tr>
-              <th style="width:32px;text-align:center">#</th>
+              <th style="width:30px;text-align:center">#</th>
               <th style="width:42%">Parça / Malzeme Tanımı</th>
               <th style="width:22%">Referans / Parça Kodu</th>
               <th style="width:16%">Miktar / Birim</th>
               <th style="width:20%">Parça Durumu</th>
-              <th class="report-hide-print" style="width:36px;text-align:center">Sil</th>
+              <th class="report-hide-print" style="width:32px;text-align:center">Sil</th>
             </tr>
           </thead>
           <tbody id="rep-parts-tbody">
@@ -1259,31 +1259,31 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
         </table>
       </div>
 
-      <!-- TECHNICIAN NOTES & RECOMMENDATIONS -->
-      <div style="border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:14px;background:#fbfdfe;font-size:12px" class="report-section">
-        <b style="color:var(--navy);display:block;margin-bottom:4px;letter-spacing:.03em;text-transform:uppercase">📋 Teknisyen Değerlendirmesi & Gelecek Bakım Tavsiyesi</b>
-        <textarea class="rep-input" id="rep-tech-notes" rows="2" style="width:100%;line-height:1.45;font-size:12px">Makinelerin rölanti, seyir devri, yağ basıncı ve hararet değerleri deniz testinde test edilmiş ve nominal değerlerde çalışmaktadır. Bir sonraki periyodik bakımın 100 moto-saat sonra veya sezon başında yapılması tavsiye edilir.</textarea>
+      <!-- TECHNICIAN NOTES & RECOMMENDATIONS (DYNAMIC AUTO-GROWING TEXTAREA) -->
+      <div style="border:1px solid var(--line);border-radius:8px;padding:9px 12px;margin-bottom:10px;background:#fbfdfe;font-size:11.5px" class="report-section">
+        <b style="color:var(--navy);display:block;margin-bottom:5px;letter-spacing:.03em;text-transform:uppercase">📋 Teknisyen Değerlendirmesi & Gelecek Bakım Tavsiyesi</b>
+        <textarea class="rep-input" id="rep-tech-notes" placeholder="Makinelerin rölanti, seyir devri, yağ basıncı ve hararet değerleri deniz testinde test edilmiş..." style="width:100%;min-height:75px;line-height:1.5;font-size:12px;padding:8px 10px;overflow-y:hidden;resize:vertical;display:block;box-sizing:border-box" oninput="this.style.height='auto';this.style.height=Math.max(75,this.scrollHeight+4)+'px'">Makinelerin rölanti, seyir devri, yağ basıncı ve hararet değerleri deniz testinde test edilmiş ve nominal değerlerde çalışmaktadır. Bir sonraki periyodik bakımın 100 moto-saat sonra veya sezon başında yapılması tavsiye edilir.</textarea>
       </div>
 
       <!-- WARRANTY & DISCLAIMER NOTICE -->
-      <div style="font-size:10.5px;color:var(--muted);line-height:1.4;margin-bottom:14px;border-top:1px dashed var(--line);padding-top:8px" class="report-section">
+      <div style="font-size:10px;color:var(--muted);line-height:1.35;margin-bottom:10px;border-top:1px dashed var(--line);padding-top:6px" class="report-section">
         <b>Güvence & Servis Beyanı:</b> DM MARİN bağımsız özel marin servistir. Bu raporda listelenen tüm parça değişimleri ve mekanik müdahaleler uzman teknisyenlerimizce denizcilik standartlarına uygun olarak gerçekleştirilmiş, test edilmiş ve tekne faal olarak teslim edilmiştir.
       </div>
 
       <!-- SIGNATURES & STAMPS (2 BALANCED COLUMNS) -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:36px;padding-top:12px;border-top:2px solid var(--navy);font-size:11.5px" class="report-section">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;padding-top:8px;border-top:2px solid var(--navy);font-size:11px" class="report-section">
         <div>
           <b style="color:var(--navy);display:block;margin-bottom:2px">SERVİSİ YÜRÜTEN TEKNİK SORUMLU</b>
-          <div style="color:var(--cyan2);font-weight:800;font-size:12.5px">DM MARİN TEKNİK SERVİS</div>
-          <div style="height:44px;margin:6px 0;display:flex;align-items:center;color:#94a3b8;font-style:italic;font-size:11px">
+          <div style="color:var(--cyan2);font-weight:800;font-size:12px">DM MARİN TEKNİK SERVİS</div>
+          <div style="height:36px;margin:4px 0;display:flex;align-items:center;color:#94a3b8;font-style:italic;font-size:10.5px">
             [Kaşe & Yetkili Teknisyen İmzası]
           </div>
           <small style="color:var(--muted);display:block">Tarih: <span id="rep-sign-date">20.09.2026</span></small>
         </div>
         <div style="text-align:right">
           <b style="color:var(--navy);display:block;margin-bottom:2px">TEKNE SAHİBİ / YETKİLİ TESLİM ALAN</b>
-          <div style="color:var(--navy);font-weight:700;font-size:12.5px" id="rep-sign-cust-name">-</div>
-          <div style="height:44px;margin:6px 0;display:flex;align-items:center;justify-content:flex-end;color:#94a3b8;font-style:italic;font-size:11px">
+          <div style="color:var(--navy);font-weight:700;font-size:12px" id="rep-sign-cust-name">-</div>
+          <div style="height:36px;margin:4px 0;display:flex;align-items:center;justify-content:flex-end;color:#94a3b8;font-style:italic;font-size:10.5px">
             [İsim & Teslim Onay İmzası]
           </div>
           <small style="color:var(--muted);display:block">Tekne Teslim ve Seyir Onayı</small>
@@ -2028,15 +2028,16 @@ function openServiceReportModal(req) {
     document.getElementById('rep-engine-model').value = req.boat_name || req.boat;
   }
 
-  // Auto-expand technician notes textarea
+  // Auto-expand technician notes textarea dynamically to fit all text perfectly
   const techNotesArea = document.getElementById('rep-tech-notes');
   if (techNotesArea) {
-    techNotesArea.style.height = 'auto';
-    techNotesArea.style.height = (techNotesArea.scrollHeight + 4) + 'px';
-    techNotesArea.addEventListener('input', function() {
-      this.style.height = 'auto';
-      this.style.height = (this.scrollHeight + 4) + 'px';
-    });
+    const adjustArea = () => {
+      techNotesArea.style.height = 'auto';
+      techNotesArea.style.height = Math.max(75, techNotesArea.scrollHeight + 4) + 'px';
+    };
+    techNotesArea.oninput = adjustArea;
+    techNotesArea.onkeyup = adjustArea;
+    setTimeout(adjustArea, 60);
   }
 
   // Parçaları klonla ve tabloyu çiz
@@ -2066,16 +2067,22 @@ function downloadServiceReportPdf(onComplete) {
     return Promise.resolve();
   }
 
-  // 1. Deep clone the report element for 100% clean A4 PDF rendering
+  // 1. Deep clone the report element for 100% clean single-page A4 PDF rendering
   const clone = source.cloneNode(true);
   clone.style.width = '780px';
-  clone.style.padding = '12px 16px';
+  clone.style.padding = '8px 12px';
   clone.style.background = '#ffffff';
   clone.style.color = '#071b2b';
   clone.style.boxSizing = 'border-box';
 
   // 2. Remove all interactive buttons & columns (Parça Ekle, Sil butonları)
   clone.querySelectorAll('.report-hide-print').forEach(el => el.remove());
+
+  // Avoid page break splits
+  clone.querySelectorAll('.report-section').forEach(el => {
+    el.style.pageBreakInside = 'avoid';
+    el.style.breakInside = 'avoid';
+  });
 
   // 3. Map all input/select/textarea and checkbox values from live DOM into clean static elements
   source.querySelectorAll('input, select, textarea').forEach(origEl => {
@@ -2127,23 +2134,23 @@ function downloadServiceReportPdf(onComplete) {
       const textDiv = document.createElement('div');
       textDiv.style.whiteSpace = 'pre-wrap';
       textDiv.style.wordBreak = 'break-word';
-      textDiv.style.lineHeight = '1.55';
-      textDiv.style.fontSize = '11.5px';
+      textDiv.style.lineHeight = '1.45';
+      textDiv.style.fontSize = '11px';
       textDiv.style.color = '#0f172a';
-      textDiv.style.minHeight = '32px';
-      textDiv.style.padding = '4px 0';
+      textDiv.style.minHeight = 'auto';
+      textDiv.style.padding = '2px 0';
       textDiv.textContent = origEl.value || '-';
       cloneEl.parentNode.replaceChild(textDiv, cloneEl);
     } else if (origEl.tagName === 'SELECT') {
       const textSpan = document.createElement('span');
-      textSpan.style.fontSize = '11.5px';
+      textSpan.style.fontSize = '11px';
       textSpan.style.fontWeight = '600';
       textSpan.style.color = '#0f172a';
       textSpan.textContent = origEl.value || '-';
       cloneEl.parentNode.replaceChild(textSpan, cloneEl);
     } else {
       const textSpan = document.createElement('span');
-      textSpan.style.fontSize = origEl.style.fontSize || '11.5px';
+      textSpan.style.fontSize = origEl.style.fontSize || '11px';
       textSpan.style.fontWeight = origEl.style.fontWeight || '600';
       textSpan.style.color = origEl.style.color || '#0f172a';
       textSpan.textContent = origEl.value || '-';
@@ -2161,7 +2168,7 @@ function downloadServiceReportPdf(onComplete) {
   document.body.appendChild(wrapper);
 
   const opt = {
-    margin:       [6, 6, 6, 6],
+    margin:       [3, 4, 3, 4],
     filename:     `DM-MARIN-Servis-Raporu-${repNo}.pdf`,
     image:        { type: 'jpeg', quality: 0.98 },
     html2canvas:  { scale: 2, useCORS: true, logging: false, width: 780 },
