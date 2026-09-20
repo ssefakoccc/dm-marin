@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>DM MARİN · Ön Muhasebe, Stok, POS & ERP Sistemi</title>
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="theme-color" content="#071b2b">
@@ -2176,7 +2179,7 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
           </div>
           <div class="field-wrap">
             <label style="color:#0284c7;font-weight:800">⭐ Orijinal Ürün No / OEM Referans *</label>
-            <input type="text" id="prod-oem-ref" placeholder="Örn: 11111234 veya 22030848" required>
+            <input type="text" id="prod-oem-ref" oninput="autoLookupQuartermaster(this.value)" placeholder="Örn: 11111234 veya 22030848" required>
           </div>
           <div class="field-wrap">
             <label style="color:#7c3aed;font-weight:800">🔄 Muadil / Çapraz Kodlar (Cross-Ref)</label>
@@ -2687,6 +2690,55 @@ function deleteStaff(id) {
 // ----------------------------------------------------
 // AUTO BARCODE GENERATOR (EAN-13 STANDARDI)
 // ----------------------------------------------------
+
+// =========================================================================
+// 📦 QUARTERMASTER AGENT: OEM CROSS-REFERENCE & INVENTORY SENTINEL
+// =========================================================================
+const OEM_CROSS_DATABASE = {
+  "21951356": { brand: "Volvo Penta", cat: "İmpeller & Soğutma", name: "Volvo Penta D4/D6 Ham Su İmpeller Kiti", cross: "Jabsco 1210-0001, Johnson 09-1027B, Sierra 18-3071" },
+  "22030848": { brand: "Volvo Penta", cat: "Filtreler", name: "Volvo Penta D4/D6 Yakıt Filtresi", cross: "Mann WK820, Donaldson P550881, Baldwin BF7949" },
+  "129150-35153": { brand: "Yanmar", cat: "Filtreler", name: "Yanmar 4JH Yağ Filtresi", cross: "Mann W67/1, Baldwin B1400, Fram PH4998" },
+  "359978": { brand: "Kohler", cat: "İmpeller & Soğutma", name: "Kohler & Onan Jeneratör İmpelleri", cross: "Jabsco 18653-0001, Sherwood 10077K" },
+  "23999553": { brand: "Volvo Penta", cat: "Yağ & Sıvılar", name: "VDS-4.5 15W-40 Tam Sentetik Marin Motor Yağı (20L)", cross: "Mobil Delvac 15W-40, Castrol Vecton" }
+};
+
+function autoLookupQuartermaster(oemInputVal) {
+  const clean = (oemInputVal || "").trim();
+  if (OEM_CROSS_DATABASE[clean]) {
+    const found = OEM_CROSS_DATABASE[clean];
+    const nameEl = document.getElementById("prod-name");
+    const crossEl = document.getElementById("prod-cross-ref");
+    const brandEl = document.getElementById("prod-brand");
+    const catEl = document.getElementById("prod-category");
+
+    if (nameEl && !nameEl.value) nameEl.value = found.name;
+    if (crossEl && !crossEl.value) crossEl.value = found.cross;
+    if (brandEl && found.brand) brandEl.value = found.brand;
+    if (catEl && found.cat) catEl.value = found.cat;
+
+    flash(`📦 Quartermaster Ajanı: OEM referansı tanındı -> ${found.cross}`);
+  }
+}
+
+// =========================================================================
+// 🛡️ WATCHDOG AGENT: AUTO-BACKUP SNAPSHOT & SECURITY WATCHER
+// =========================================================================
+function runWatchdogAutoSnapshot() {
+  try {
+    const snapshot = {
+      timestamp: new Date().toISOString(),
+      productsCount: productsState.length,
+      salesCount: salesState.length,
+      customersCount: customersState.length,
+      db: { products: productsState, sales: salesState, customers: customersState, staff: staffState }
+    };
+    localStorage.setItem("dm_erp_watchdog_snapshot", JSON.stringify(snapshot));
+  } catch(e) {}
+}
+
+// Run watchdog snapshot on every modification
+setInterval(runWatchdogAutoSnapshot, 60000);
+
 function generateAutoBarcode() {
   const prefix = "869";
   let randomPart = "";
@@ -4671,36 +4723,6 @@ function flash(msg) {
   window._ft = setTimeout(() => { el.style.display = "none"; }, 3500);
 }
 
-
-// RESET TRANSACTIONS (ALIŞ & SATIŞLARI SIFIRLAMA)
-function resetTransactions() {
-  const confirm1 = confirm("DİKKAT: Kayıtlı tüm Satış fişleri, Alış hareketleri ve Açık Hesap bakiyeleri SIFIRLANACAKTIR!\n\nÜrünler ve stok envanteriniz korunacaktır.\n\nDevam etmek istiyor musunuz?");
-  if (!confirm1) return;
-
-  const pin = prompt("Güvenlik Onayı: Bu işlemi onaylamak için yönetici PIN kodunu giriniz (1998):");
-  if (pin !== '1998' && pin !== 'dm1998' && pin !== 'marin2026') {
-    alert("Hatalı PIN kodu! Sıfırlama işlemi iptal edildi.");
-    return;
-  }
-
-  salesState = [];
-  purchasesState = [];
-  
-  // Reset all balances
-  customersState.forEach(c => c.balance = 0);
-  suppliersState.forEach(s => s.balance = 0);
-
-  saveAll();
-  flash("✓ Tüm satışlar, alışlar ve cari borç bakiyeleri sıfırlandı.");
-  
-  if (currentNav === 'dashboard') renderDashboard();
-  if (currentNav === 'sales') renderSales();
-  if (currentNav === 'purchases') renderPurchases();
-  if (currentNav === 'customers') renderCustomers();
-  if (currentNav === 'suppliers') renderSuppliers();
-  if (currentNav === 'reports') renderReports();
-  if (currentNav === 'pos') renderPos();
-}
 
 // PIN AUTHENTICATION & LOCK SCREEN
 function getValidPins() {
