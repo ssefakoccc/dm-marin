@@ -2,4 +2,19 @@ User-agent: *
 Allow: /
 Disallow: /admin.html
 
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
 Sitemap: https://dmmarin.com/sitemap.xml
