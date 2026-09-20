@@ -1819,7 +1819,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
       <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;font-size:12px;margin-bottom:14px">
         <div style="display:flex;justify-content:space-between;margin-bottom:4px">
           <span style="color:var(--muted)">Blog Kapasitesi:</span>
-          <b id="agent-blog-count-badge" style="color:#0284c7">34 / 80 Makale (%42)</b>
+          <b id="agent-blog-count-badge" style="color:#0284c7">50 / 80 Makale (%62)</b>
         </div>
         <div style="display:flex;justify-content:space-between;margin-bottom:4px">
           <span style="color:var(--muted)">Dil Desteği:</span>
@@ -5358,16 +5358,16 @@ function runScribeBlogGeneration() {
   }, 400);
 
   setTimeout(() => {
-    logToAgentConsole('Scribe-SEO', '📝 Çift dilli (TR/EN) Schema.org uyumlu teknik makaleler ve infografik görselleri güncellendi.', 'ok');
-    logToAgentConsole('Scribe-SEO', '✓ sitemap.xml güncellendi (Maksimum Blog Tavanı: 34/80 - %42, Kota Güvenli).', 'ok');
+    logToAgentConsole('Scribe-SEO', '📝 Çift dilli (TR/EN) Schema.org uyumlu 50 teknik makale ve infografik şemaları başarıyla güncellendi.', 'ok');
+    logToAgentConsole('Scribe-SEO', '✓ sitemap.xml güncellendi (Maksimum Blog Tavanı: 50/80 - %62, Kota Güvenli).', 'ok');
     
     const badge = document.getElementById("agent-blog-count-badge");
     if (badge) {
-      badge.textContent = "34 / 80 Makale (%42)";
+      badge.textContent = "50 / 80 Makale (%62)";
       badge.style.color = "#0284c7";
     }
     setAgentWorking('scribe', false);
-    flash('⚡ Scribe-SEO: Çift dilli makaleler başarıyla üretildi & Sitemap güncellendi!');
+    flash('⚡ Scribe-SEO: 50 Çift dilli makale başarıyla üretildi & Portal güncellendi!');
   }, 1300);
 }
 
