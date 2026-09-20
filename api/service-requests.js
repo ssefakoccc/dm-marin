@@ -126,18 +126,22 @@ module.exports = async (req, res) => {
       return res.status(500).json({ error: 'Talep kaydedilirken veritabanı hatası oluştu: ' + error.message });
     }
 
-    // Asenkron bildirim gönder (Telegram / Webhook / Discord)
-    sendNotification({
-      id: data.id,
-      name,
-      phone,
-      email,
-      boat_name: boatName,
-      marina_location: marinaLocation,
-      service_type: serviceType,
-      message,
-      source_page: sourcePage
-    }).catch(e => console.error('Background notification dispatch error:', e));
+    // Serverless ortamında bildirimlerin tamamlanmasını bekle (Resend Email / Telegram / Webhook)
+    try {
+      await sendNotification({
+        id: data.id,
+        name,
+        phone,
+        email,
+        boat_name: boatName,
+        marina_location: marinaLocation,
+        service_type: serviceType,
+        message,
+        source_page: sourcePage
+      });
+    } catch (e) {
+      console.error('Notification dispatch error:', e.message);
+    }
 
     return res.status(201).json({
       success: true,
