@@ -3,24 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DM MARİN · Stok & Mobil Depo Yönetim Paneli</title>
+<title>DM MARİN · Stok & Mobil Depo Yönetim Sistemi</title>
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="theme-color" content="#071b2b">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root {
   --navy: #071b2b;
   --navy-dark: #04121d;
   --navy-card: #0c2438;
+  --navy-hover: #12334e;
   --cyan: #19c7df;
   --cyan2: #087f93;
   --cyan-soft: #e0f7fa;
   --ink: #0f172a;
   --muted: #64748b;
-  --light-bg: #f4f7f9;
+  --light-bg: #f1f5f9;
   --card-bg: #ffffff;
   --line: #e2e8f0;
   --line-dark: #1e3a52;
@@ -34,8 +36,9 @@
   --blue-bg: #eff6ff;
   --purple: #8b5cf6;
   --purple-bg: #f5f3ff;
-  --shadow: 0 4px 20px -2px rgba(7, 27, 43, 0.08);
-  --shadow-lg: 0 12px 32px -4px rgba(7, 27, 43, 0.14);
+  --gold: #d97706;
+  --shadow: 0 4px 20px -2px rgba(7, 27, 43, 0.07);
+  --shadow-lg: 0 16px 36px -4px rgba(7, 27, 43, 0.16);
 }
 * { box-sizing: border-box; }
 body {
@@ -58,7 +61,7 @@ button, input, select, textarea { font-family: inherit; }
   align-items: center;
   position: sticky;
   top: 0;
-  z-index: 40;
+  z-index: 50;
   box-shadow: 0 4px 20px rgba(0,0,0,0.25);
 }
 .header-brand {
@@ -80,14 +83,14 @@ button, input, select, textarea { font-family: inherit; }
 .header-title-wrap small {
   color: var(--cyan);
   font-size: 11.5px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: .03em;
   text-transform: uppercase;
 }
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 /* BUTTONS */
@@ -96,7 +99,7 @@ button, input, select, textarea { font-family: inherit; }
   align-items: center;
   justify-content: center;
   gap: 7px;
-  padding: 8px 16px;
+  padding: 8px 15px;
   border-radius: 8px;
   font-size: 12.5px;
   font-weight: 700;
@@ -116,11 +119,13 @@ button, input, select, textarea { font-family: inherit; }
 .btn.ghost:hover { background: rgba(255,255,255,0.2); }
 .btn.outline { background: #fff; border-color: var(--line); color: var(--ink); }
 .btn.outline:hover { background: #f8fafc; border-color: #cbd5e1; }
-.btn.sm { padding: 4px 10px; font-size: 11.5px; border-radius: 6px; }
+.btn.gold { background: #d97706; color: #fff; }
+.btn.gold:hover { background: #b45309; }
+.btn.sm { padding: 5px 10px; font-size: 11.5px; border-radius: 6px; }
 
 /* CONTAINER & LAYOUT */
 .main-wrap {
-  max-width: 1440px;
+  max-width: 1480px;
   margin: 0 auto;
   padding: 20px 24px 60px;
 }
@@ -129,36 +134,41 @@ button, input, select, textarea { font-family: inherit; }
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
+  gap: 14px;
   margin-bottom: 20px;
 }
 .stat-card {
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 12px;
-  padding: 16px 18px;
+  padding: 15px 18px;
   box-shadow: var(--shadow);
   display: flex;
   align-items: center;
   gap: 14px;
   position: relative;
   overflow: hidden;
+  transition: transform .15s, box-shadow .15s;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -2px rgba(7, 27, 43, 0.1);
 }
 .stat-icon {
-  width: 46px;
-  height: 46px;
-  border-radius: 10px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   display: grid;
   place-items: center;
   font-size: 22px;
   flex-shrink: 0;
 }
 .stat-info span {
-  font-size: 11.5px;
+  font-size: 11px;
   color: var(--muted);
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: .02em;
+  letter-spacing: .03em;
   display: block;
   margin-bottom: 2px;
 }
@@ -175,17 +185,17 @@ button, input, select, textarea { font-family: inherit; }
   margin-top: 2px;
 }
 
-/* TABS */
+/* ENHANCED TABS */
 .nav-tabs {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   border-bottom: 2px solid var(--line);
   margin-bottom: 20px;
   overflow-x: auto;
   padding-bottom: 2px;
 }
 .tab-btn {
-  padding: 10px 18px;
+  padding: 11px 18px;
   font-size: 13px;
   font-weight: 700;
   color: var(--muted);
@@ -198,6 +208,7 @@ button, input, select, textarea { font-family: inherit; }
   gap: 8px;
   transition: all .15s;
   position: relative;
+  white-space: nowrap;
 }
 .tab-btn:hover { color: var(--navy); background: rgba(0,0,0,0.03); }
 .tab-btn.active {
@@ -205,16 +216,18 @@ button, input, select, textarea { font-family: inherit; }
   background: #fff;
   border-bottom: 2px solid var(--cyan2);
   margin-bottom: -2px;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.02);
 }
 .tab-badge {
   padding: 2px 7px;
   border-radius: 12px;
-  font-size: 10.5px;
+  font-size: 11px;
   background: #e2e8f0;
   color: #334155;
   font-weight: 800;
 }
 .tab-btn.active .tab-badge { background: #e0f2fe; color: #0284c7; }
+.tab-badge.alert { background: #fee2e2; color: #dc2626; }
 
 /* TOOLBAR & FILTERS */
 .toolbar-card {
@@ -237,7 +250,7 @@ button, input, select, textarea { font-family: inherit; }
 }
 .search-box {
   flex: 1;
-  min-width: 260px;
+  min-width: 280px;
   position: relative;
 }
 .search-box input {
@@ -286,6 +299,31 @@ button, input, select, textarea { font-family: inherit; }
   border-color: var(--cyan2);
 }
 
+.view-toggle {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f8fafc;
+}
+.view-btn {
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all .15s;
+}
+.view-btn.active {
+  background: var(--navy);
+  color: #fff;
+}
+
 .category-pills {
   display: flex;
   gap: 6px;
@@ -293,9 +331,9 @@ button, input, select, textarea { font-family: inherit; }
   padding-bottom: 4px;
 }
 .cat-pill {
-  padding: 5px 12px;
+  padding: 6px 14px;
   border-radius: 20px;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
   background: #f1f5f9;
   color: #475569;
@@ -308,6 +346,196 @@ button, input, select, textarea { font-family: inherit; }
 .cat-pill.active {
   background: var(--navy);
   color: #fff;
+}
+
+/* GRID VIEW FOR PARTS (HIGHLY VISUAL) */
+.parts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.part-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  transition: transform .15s, box-shadow .15s, border-color .15s;
+  position: relative;
+  overflow: hidden;
+}
+.part-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: #cbd5e1;
+}
+.part-card.critical-border {
+  border-left: 4px solid var(--danger);
+}
+.part-card.low-border {
+  border-left: 4px solid var(--warn);
+}
+.part-card-head {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.part-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+.part-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.part-head-info {
+  flex: 1;
+  min-width: 0;
+}
+.part-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+.brand-tag {
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #071b2b;
+  color: #fff;
+}
+.cat-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.part-card-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--navy);
+  margin: 0 0 4px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.oem-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11.5px;
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s;
+}
+.oem-box:hover {
+  background: #bae6fd;
+}
+
+.part-card-specs {
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  font-size: 11.5px;
+}
+.spec-item span { color: var(--muted); display: block; font-size: 10.5px; }
+.spec-item b { color: var(--navy); font-size: 12px; }
+
+/* STOCK PROGRESS BAR */
+.stock-meter {
+  margin-top: 4px;
+}
+.stock-meter-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11.5px;
+  margin-bottom: 4px;
+}
+.stock-bar-wrap {
+  width: 100%;
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.stock-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width .3s ease;
+}
+.stock-bar-fill.good { background: #10b981; }
+.stock-bar-fill.warn { background: #f59e0b; }
+.stock-bar-fill.danger { background: #ef4444; }
+
+.part-card-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  gap: 8px;
+}
+.qty-stepper {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+.step-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: #f8fafc;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--navy);
+  cursor: pointer;
+  transition: background .15s;
+  display: grid;
+  place-items: center;
+}
+.step-btn:hover { background: #e2e8f0; }
+.step-qty {
+  min-width: 32px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 12.5px;
+  color: var(--navy);
 }
 
 /* DATA TABLE */
@@ -348,13 +576,13 @@ table.inv-table tbody tr:hover {
   background: #f8fbfc;
 }
 .part-title {
-  font-weight: 700;
+  font-weight: 800;
   color: var(--navy);
   display: block;
   font-size: 13px;
 }
 .part-oem {
-  font-family: monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 11px;
   color: #0369a1;
   background: #e0f2fe;
@@ -404,11 +632,55 @@ table.inv-table tbody tr:hover {
   color: #334155;
 }
 
+/* SERVICE KITS VIEW */
+.kits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.kit-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.kit-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+}
+.kit-head b { font-size: 15px; color: var(--navy); }
+.kit-head span { font-size: 11px; font-weight: 700; background: #e0f2fe; color: #0284c7; padding: 3px 8px; border-radius: 6px; }
+.kit-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.kit-items-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
 /* MODAL STYLES */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(7, 27, 43, 0.7);
+  background: rgba(7, 27, 43, 0.72);
   backdrop-filter: blur(4px);
   z-index: 100;
   display: none;
@@ -420,8 +692,8 @@ table.inv-table tbody tr:hover {
 .modal-card {
   background: #fff;
   width: 100%;
-  max-width: 600px;
-  border-radius: 14px;
+  max-width: 620px;
+  border-radius: 16px;
   box-shadow: var(--shadow-lg);
   overflow: hidden;
   max-height: 90vh;
@@ -547,7 +819,7 @@ table.inv-table tbody tr:hover {
 
 /* PRINT MEDIA */
 @media print {
-  .top-header, .nav-tabs, .toolbar-card, .btn, .stat-card, .action-cell { display: none !important; }
+  .top-header, .nav-tabs, .toolbar-card, .btn, .stat-card, .action-cell, .qty-stepper, .view-toggle { display: none !important; }
   body, .main-wrap { background: #fff !important; padding: 0 !important; margin: 0 !important; }
   .table-card { border: none !important; box-shadow: none !important; }
   table.inv-table { font-size: 10px !important; }
@@ -558,6 +830,7 @@ table.inv-table tbody tr:hover {
   .main-wrap { padding: 14px 12px; }
   .form-grid { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: 1fr 1fr; }
+  .parts-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -592,6 +865,7 @@ table.inv-table tbody tr:hover {
     </div>
   </div>
   <div class="header-actions">
+    <button type="button" class="btn ghost sm" onclick="syncWithCloud()" title="Bulut ile Senkronize Et">🔄 Bulut Eşitle</button>
     <a href="admin.html" class="btn ghost sm" title="Web Sitesi & SEO Paneli">🌐 Admin Paneli</a>
     <button type="button" class="btn ghost sm" onclick="lockApp()">🔒 Kilitle</button>
   </div>
@@ -610,16 +884,16 @@ table.inv-table tbody tr:hover {
       </div>
     </div>
 
-    <div class="stat-card">
+    <div class="stat-card" style="cursor:pointer" onclick="switchTab('reorder')">
       <div class="stat-icon" style="background:#fef2f2;color:#dc2626">⚠️</div>
       <div class="stat-info">
-        <span>Kritik / Biten Parçalar</span>
+        <span>Kritik / Azalan Stok</span>
         <b id="kpi-low-stock" style="color:#dc2626">0 Ürün</b>
-        <small>Minimum eşik altında</small>
+        <small>Sipariş verilmesi önerilen</small>
       </div>
     </div>
 
-    <div class="stat-card">
+    <div class="stat-card" style="cursor:pointer" onclick="switchTab('analytics')">
       <div class="stat-icon" style="background:#ecfdf5;color:#059669">💰</div>
       <div class="stat-info">
         <span>Tahmini Stok Değeri</span>
@@ -628,7 +902,7 @@ table.inv-table tbody tr:hover {
       </div>
     </div>
 
-    <div class="stat-card">
+    <div class="stat-card" style="cursor:pointer" onclick="switchTab('logs')">
       <div class="stat-icon" style="background:#f5f3ff;color:#7c3aed">⚡</div>
       <div class="stat-info">
         <span>Bu Ayki Parça Çıkışları</span>
@@ -640,33 +914,43 @@ table.inv-table tbody tr:hover {
 
   <!-- NAVIGATION TABS -->
   <nav class="nav-tabs">
-    <button class="tab-btn active" onclick="switchTab('inventory')">
-      📦 Parça & Malzeme Envanteri <span class="tab-badge" id="tab-badge-inv">0</span>
+    <button class="tab-btn active" id="tab-nav-inventory" onclick="switchTab('inventory')">
+      📦 Parça Kataloğu & Stok <span class="tab-badge" id="tab-badge-inv">0</span>
     </button>
-    <button class="tab-btn" onclick="switchTab('logs')">
-      📜 Stok Hareket Geçmişi (Log) <span class="tab-badge" id="tab-badge-logs">0</span>
+    <button class="tab-btn" id="tab-nav-reorder" onclick="switchTab('reorder')">
+      ⚠️ Kritik Stok & Sipariş Listesi <span class="tab-badge alert" id="tab-badge-reorder">0</span>
     </button>
-    <button class="tab-btn" onclick="switchTab('warehouses')">
-      🚐 Depo & Mobil Araç Durumu
+    <button class="tab-btn" id="tab-nav-warehouses" onclick="switchTab('warehouses')">
+      🚐 Mobil Servis Araçları & Depo
+    </button>
+    <button class="tab-btn" id="tab-nav-kits" onclick="switchTab('kits')">
+      🛠️ Tekne Bakım Paketleri
+    </button>
+    <button class="tab-btn" id="tab-nav-logs" onclick="switchTab('logs')">
+      📜 Hareket Geçmişi (Log) <span class="tab-badge" id="tab-badge-logs">0</span>
+    </button>
+    <button class="tab-btn" id="tab-nav-analytics" onclick="switchTab('analytics')">
+      📊 Finans & Kâr Analizi
     </button>
   </nav>
 
-  <!-- INVENTORY VIEW -->
+  <!-- 1. INVENTORY VIEW -->
   <div id="view-inventory">
     <!-- TOOLBAR & FILTERS -->
     <div class="toolbar-card">
       <div class="toolbar-row">
         <div class="search-box">
           <span class="search-icon">🔍</span>
-          <input type="text" id="inv-search-input" placeholder="Parça adı, OEM kodu, marka veya uyumlu motor ara..." oninput="filterInventory()">
+          <input type="text" id="inv-search-input" placeholder="Parça adı, OEM kodu, marka, uyumlu motor veya raf/kutu ara..." oninput="filterInventory()">
         </div>
 
         <div class="filter-selects">
           <select id="filter-location" onchange="filterInventory()">
             <option value="all">📍 Tüm Konumlar / Depolar</option>
             <option value="Merkez Atölye">🏢 Merkez Atölye (Ana Depo)</option>
-            <option value="Mobil Servis Aracı 1">🚐 Mobil Servis Aracı 1</option>
-            <option value="Mobil Servis Aracı 2">🚐 Mobil Servis Aracı 2</option>
+            <option value="Mobil Servis Aracı 1">🚐 Mobil Servis Aracı 1 (Kalamış/Ataköy)</option>
+            <option value="Mobil Servis Aracı 2">🚐 Mobil Servis Aracı 2 (Tuzla/Pendik)</option>
+            <option value="Tekne Üstü Kiti">⛵ Tekne Üstü Yedek Kiti</option>
           </select>
 
           <select id="filter-brand" onchange="filterInventory()">
@@ -674,9 +958,10 @@ table.inv-table tbody tr:hover {
             <option value="Volvo Penta">Volvo Penta</option>
             <option value="Yanmar">Yanmar</option>
             <option value="MAN">MAN</option>
-            <option value="Cummins">Cummins</option>
+            <option value="Cummins">Cummins / Onan</option>
             <option value="Kohler">Kohler</option>
             <option value="Caterpillar">Caterpillar</option>
+            <option value="MTU">MTU</option>
             <option value="Evrensel / Marin">Evrensel / Marin</option>
           </select>
 
@@ -688,12 +973,18 @@ table.inv-table tbody tr:hover {
           </select>
         </div>
 
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <!-- VIEW TOGGLE & ACTIONS -->
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <div class="view-toggle">
+            <button type="button" class="view-btn active" id="btn-view-grid" onclick="setViewMode('grid')" title="Görsel Kart Görünümü">🖼️ Kartlar</button>
+            <button type="button" class="view-btn" id="btn-view-table" onclick="setViewMode('table')" title="Tablo Liste Görünümü">📋 Tablo</button>
+          </div>
+          
           <button type="button" class="btn primary" onclick="openAddPartModal()">➕ Yeni Parça Ekle</button>
           <button type="button" class="btn success" onclick="openQuickActionModal('in')">📥 Hızlı Stok Girişi</button>
           <button type="button" class="btn outline" onclick="openQuickActionModal('out')">📤 Servise Çıkış</button>
           <button type="button" class="btn outline" onclick="openTransferModal()">🔄 Araç Transferi</button>
-          <button type="button" class="btn outline" onclick="exportInventoryCsv()" title="CSV / Excel Olarak İndir">📥 Excel</button>
+          <button type="button" class="btn outline" onclick="exportInventoryCsv()" title="Excel / CSV Olarak İndir">📥 Excel</button>
           <button type="button" class="btn outline" onclick="window.print()" title="Yazdır / PDF Sayım Dökümü">🖨️ Yazdır</button>
         </div>
       </div>
@@ -701,49 +992,201 @@ table.inv-table tbody tr:hover {
       <!-- CATEGORY PILLS -->
       <div class="category-pills" id="category-pills-wrap">
         <button class="cat-pill active" onclick="setCategoryFilter('all')">Tüm Kategoriler</button>
-        <button class="cat-pill" onclick="setCategoryFilter('Filtreler')">⚙️ Filtreler</button>
-        <button class="cat-pill" onclick="setCategoryFilter('Yağ & Sıvılar')">🛢️ Yağ & Sıvılar</button>
-        <button class="cat-pill" onclick="setCategoryFilter('İmpeller & Soğutma')">🌊 İmpeller & Soğutma</button>
-        <button class="cat-pill" onclick="setCategoryFilter('Tutya & Anotlar')">⚡ Tutya & Anotlar</button>
-        <button class="cat-pill" onclick="setCategoryFilter('Elektrik & Sensörler')">🔌 Elektrik & Sensör</button>
-        <button class="cat-pill" onclick="setCategoryFilter('Mekanik & Contalar')">🔩 Mekanik & Contalar</button>
+        <button class="cat-pill" onclick="setCategoryFilter('Filtreler')">⚙️ Filtreler (Yağ/Yakıt/Hava)</button>
+        <button class="cat-pill" onclick="setCategoryFilter('Yağ & Sıvılar')">🛢️ Yağ, Sıvı & Antifriz</button>
+        <button class="cat-pill" onclick="setCategoryFilter('İmpeller & Soğutma')">🌊 İmpeller & Su Pompası</button>
+        <button class="cat-pill" onclick="setCategoryFilter('Tutya & Anotlar')">⚡ Tutya & Çinko Anotlar</button>
+        <button class="cat-pill" onclick="setCategoryFilter('Kayış & Kasnak')">🔩 Kayış, Rulman & Kasnak</button>
+        <button class="cat-pill" onclick="setCategoryFilter('Elektrik & Sensörler')">🔌 Elektrik, Marş & Sensör</button>
+        <button class="cat-pill" onclick="setCategoryFilter('Mekanik & Contalar')">🛠️ Mekanik, Conta & Turbo</button>
       </div>
     </div>
 
-    <!-- TABLE -->
-    <div class="table-card">
+    <!-- GRID CONTAINER -->
+    <div id="inventory-grid-wrap" class="parts-grid">
+      <!-- Dynamic cards rendered here -->
+    </div>
+
+    <!-- TABLE CONTAINER -->
+    <div id="inventory-table-wrap" class="table-card" style="display:none">
       <div class="table-responsive">
         <table class="inv-table">
           <thead>
             <tr>
               <th style="width:40px;text-align:center">#</th>
-              <th>Parça / OEM Tanımı</th>
+              <th>Parça Görseli & OEM Tanımı</th>
               <th>Kategori & Marka</th>
-              <th>Depo / Konum</th>
+              <th>Depo / Raf Konumu</th>
+              <th>Uyumlu Motor / Model</th>
               <th>Alış (€/$)</th>
               <th>Satış (₺)</th>
-              <th>Kar</th>
               <th>Mevcut Stok</th>
-              <th class="action-cell" style="text-align:right">İşlemler</th>
+              <th class="action-cell" style="text-align:right">Hızlı İşlemler</th>
             </tr>
           </thead>
           <tbody id="inventory-tbody">
-            <!-- Dynamic items rendered here -->
+            <!-- Dynamic table rows rendered here -->
           </tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- LOGS VIEW -->
+  <!-- 2. REORDER / CRITICAL STOCK VIEW -->
+  <div id="view-reorder" style="display:none">
+    <div class="toolbar-card">
+      <div class="toolbar-row">
+        <div>
+          <b style="font-size:15px;color:var(--navy)">⚠️ Kritik & Biten Parçalar İçin Sipariş Sihirbazı</b>
+          <p style="margin:2px 0 0;font-size:12px;color:var(--muted)">Minimum stok seviyesinin altına düşen malzemeler otomatik olarak listelenir ve eksik adet hesaplanır.</p>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button type="button" class="btn success" onclick="generateWhatsappOrderText()">📱 WhatsApp Sipariş Metni Oluştur</button>
+          <button type="button" class="btn outline" onclick="exportReorderCsv()">📥 Sipariş Listesini İndir (Excel)</button>
+          <button type="button" class="btn outline" onclick="window.print()">🖨️ Sipariş Listesini Yazdır</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-responsive">
+        <table class="inv-table">
+          <thead>
+            <tr>
+              <th>Parça Adı</th>
+              <th>OEM Kodu</th>
+              <th>Marka</th>
+              <th>Konum / Depo</th>
+              <th>Mevcut Stok</th>
+              <th>Kritik Eşik</th>
+              <th>Önerilen Sipariş Adedi</th>
+              <th>Tahmini Birim Alış</th>
+              <th>Tahmini Toplam Maliyet</th>
+              <th class="action-cell" style="text-align:right">İşlem</th>
+            </tr>
+          </thead>
+          <tbody id="reorder-tbody">
+            <!-- Dynamic reorder rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. WAREHOUSES & MOBILE VANS VIEW -->
+  <div id="view-warehouses" style="display:none">
+    <div class="toolbar-card">
+      <div class="toolbar-row">
+        <div>
+          <b style="font-size:15px;color:var(--navy)">🚐 Mobil Servis Araçları & Depolar Arası Stok Durumu</b>
+          <p style="margin:2px 0 0;font-size:12px;color:var(--muted)">Atölye ve sahada hizmet veren mobil servis araçlarındaki malzeme miktarlarını ve doluluklarını yönetin.</p>
+        </div>
+        <button type="button" class="btn primary" onclick="openTransferModal()">🔄 Depolar Arası Malzeme Transferi Yap</button>
+      </div>
+    </div>
+
+    <div class="stats-grid" style="grid-template-columns:repeat(auto-fit, minmax(320px, 1fr))">
+      
+      <!-- Merkez Atölye -->
+      <div class="stat-card" style="flex-direction:column;align-items:flex-start;gap:12px;padding:20px">
+        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;border-bottom:1px solid var(--line);padding-bottom:10px">
+          <div>
+            <b style="font-size:16px;color:var(--navy)">🏢 Merkez Atölye & Ana Depo</b>
+            <small style="color:var(--muted);display:block">Tuzla Tersaneler & Merkez Lojistik</small>
+          </div>
+          <span class="stock-pill good">🟢 Ana Merkez</span>
+        </div>
+        <div id="wh-summary-main" style="font-size:12.5px;color:#334155;line-height:1.7;width:100%">
+          Yükleniyor...
+        </div>
+        <div style="width:100%;display:flex;gap:8px;margin-top:4px">
+          <button type="button" class="btn outline sm" style="flex:1" onclick="filterByWh('Merkez Atölye')">🔍 Parçaları Listele</button>
+          <button type="button" class="btn primary sm" onclick="openQuickActionModal('in', 'Merkez Atölye')">📥 Stok Gir</button>
+        </div>
+      </div>
+
+      <!-- Mobil Araç 1 -->
+      <div class="stat-card" style="flex-direction:column;align-items:flex-start;gap:12px;padding:20px">
+        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;border-bottom:1px solid var(--line);padding-bottom:10px">
+          <div>
+            <b style="font-size:16px;color:var(--navy)">🚐 Mobil Servis Aracı 1</b>
+            <small style="color:var(--muted);display:block">Kalamış, Fenerbahçe & Ataköy Ekibi</small>
+          </div>
+          <span class="stock-pill good">🚐 Sahada</span>
+        </div>
+        <div id="wh-summary-van1" style="font-size:12.5px;color:#334155;line-height:1.7;width:100%">
+          Yükleniyor...
+        </div>
+        <div style="width:100%;display:flex;gap:8px;margin-top:4px">
+          <button type="button" class="btn outline sm" style="flex:1" onclick="filterByWh('Mobil Servis Aracı 1')">🔍 Parçaları Listele</button>
+          <button type="button" class="btn outline sm" onclick="openTransferModal('Mobil Servis Aracı 1')">🔄 Parça İkmal</button>
+        </div>
+      </div>
+
+      <!-- Mobil Araç 2 -->
+      <div class="stat-card" style="flex-direction:column;align-items:flex-start;gap:12px;padding:20px">
+        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;border-bottom:1px solid var(--line);padding-bottom:10px">
+          <div>
+            <b style="font-size:16px;color:var(--navy)">🚐 Mobil Servis Aracı 2</b>
+            <small style="color:var(--muted);display:block">Tuzla Viaport, Pendik Marintürk & Yalova</small>
+          </div>
+          <span class="stock-pill good">🚐 Sahada</span>
+        </div>
+        <div id="wh-summary-van2" style="font-size:12.5px;color:#334155;line-height:1.7;width:100%">
+          Yükleniyor...
+        </div>
+        <div style="width:100%;display:flex;gap:8px;margin-top:4px">
+          <button type="button" class="btn outline sm" style="flex:1" onclick="filterByWh('Mobil Servis Aracı 2')">🔍 Parçaları Listele</button>
+          <button type="button" class="btn outline sm" onclick="openTransferModal('Mobil Servis Aracı 2')">🔄 Parça İkmal</button>
+        </div>
+      </div>
+
+      <!-- Tekne Üstü Yedek Kiti -->
+      <div class="stat-card" style="flex-direction:column;align-items:flex-start;gap:12px;padding:20px">
+        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;border-bottom:1px solid var(--line);padding-bottom:10px">
+          <div>
+            <b style="font-size:16px;color:var(--navy)">⛵ Tekne Üstü Yedek Kiti</b>
+            <small style="color:var(--muted);display:block">Müşteri Teknesinde Bırakılan Acil Yedekler</small>
+          </div>
+          <span class="stock-pill low">⛵ Tekne Üstü</span>
+        </div>
+        <div id="wh-summary-boat" style="font-size:12.5px;color:#334155;line-height:1.7;width:100%">
+          Yükleniyor...
+        </div>
+        <div style="width:100%;display:flex;gap:8px;margin-top:4px">
+          <button type="button" class="btn outline sm" style="flex:1" onclick="filterByWh('Tekne Üstü Kiti')">🔍 Parçaları Listele</button>
+          <button type="button" class="btn primary sm" onclick="openQuickActionModal('out')">📤 Tekneye Düş</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 4. SERVICE KITS VIEW -->
+  <div id="view-kits" style="display:none">
+    <div class="toolbar-card">
+      <div class="toolbar-row">
+        <div>
+          <b style="font-size:15px;color:var(--navy)">🛠️ Standart Marin Bakım Paketleri & Hızlı Tekneye Çıkış</b>
+          <p style="margin:2px 0 0;font-size:12px;color:var(--muted)">100/200 saatlik periyodik motor ve jeneratör bakımlarında gereken parçaları tek tıkla servise ve tekneye düşüm yapın.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="kits-grid" id="kits-container">
+      <!-- Dynamic kit cards rendered here -->
+    </div>
+  </div>
+
+  <!-- 5. LOGS VIEW -->
   <div id="view-logs" style="display:none">
     <div class="toolbar-card">
       <div class="toolbar-row">
         <div style="font-weight:800;font-size:14px;color:var(--navy)">
-          📜 Stok Giriş / Çıkış & Transfer Geçmişi
+          📜 Stok Giriş / Çıkış & Depo Transfer Geçmişi
         </div>
         <div style="display:flex;gap:8px">
-          <button type="button" class="btn outline sm" onclick="exportLogsCsv()">📥 Logları İndir (CSV)</button>
+          <button type="button" class="btn outline sm" onclick="exportLogsCsv()">📥 Logları İndir (CSV/Excel)</button>
           <button type="button" class="btn danger sm" onclick="clearLogsConfirm()">🗑️ Logları Temizle</button>
         </div>
       </div>
@@ -761,7 +1204,7 @@ table.inv-table tbody tr:hover {
               <th>Depo / Konum</th>
               <th>Tekne / Müşteri / Açıklama</th>
               <th>Kayıt Tipi</th>
-              <th>Tutar</th>
+              <th>Tutar (₺)</th>
             </tr>
           </thead>
           <tbody id="logs-tbody">
@@ -772,126 +1215,182 @@ table.inv-table tbody tr:hover {
     </div>
   </div>
 
-  <!-- WAREHOUSES VIEW -->
-  <div id="view-warehouses" style="display:none">
-    <div class="stats-grid" style="grid-template-columns:repeat(auto-fit, minmax(320px, 1fr))">
-      
-      <div class="stat-card" style="flex-direction:column;align-items:flex-start;gap:10px">
-        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;border-bottom:1px solid var(--line);padding-bottom:8px">
-          <b style="font-size:15px;color:var(--navy)">🏢 Merkez Atölye (Ana Depo)</b>
-          <span class="stock-pill good">Faal</span>
+  <!-- 6. FINANCIAL & ANALYTICS VIEW -->
+  <div id="view-analytics" style="display:none">
+    <div class="stats-grid" style="grid-template-columns:repeat(auto-fit, minmax(240px, 1fr))">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#e0f2fe;color:#0284c7">💶</div>
+        <div class="stat-info">
+          <span>Toplam Stok Maliyeti (Alış)</span>
+          <b id="an-total-buy">€ 0.00</b>
+          <small id="an-total-buy-tl">₺ 0.00 TL</small>
         </div>
-        <div id="wh-summary-main" style="font-size:12.5px;color:#334155;line-height:1.6;width:100%">
-          Yükleniyor...
-        </div>
-        <button type="button" class="btn outline sm" style="width:100%" onclick="filterByWh('Merkez Atölye')">Bu Depodaki Parçaları Listele</button>
       </div>
 
-      <div class="stat-card" style="flex-direction:column;align-items:flex-start;gap:10px">
-        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;border-bottom:1px solid var(--line);padding-bottom:8px">
-          <b style="font-size:15px;color:var(--navy)">🚐 Mobil Servis Aracı 1</b>
-          <span class="stock-pill good">Sahada</span>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#ecfdf5;color:#059669">📈</div>
+        <div class="stat-info">
+          <span>Toplam Potansiyel Satış Hacmi</span>
+          <b id="an-total-sell">₺ 0.00</b>
+          <small>Mevcut tüm stoğun satış ederi</small>
         </div>
-        <div id="wh-summary-van1" style="font-size:12.5px;color:#334155;line-height:1.6;width:100%">
-          Yükleniyor...
-        </div>
-        <button type="button" class="btn outline sm" style="width:100%" onclick="filterByWh('Mobil Servis Aracı 1')">Bu Araçtaki Parçaları Listele</button>
       </div>
 
-      <div class="stat-card" style="flex-direction:column;align-items:flex-start;gap:10px">
-        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;border-bottom:1px solid var(--line);padding-bottom:8px">
-          <b style="font-size:15px;color:var(--navy)">🚐 Mobil Servis Aracı 2</b>
-          <span class="stock-pill good">Sahada</span>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#fef3c7;color:#d97706">✨</div>
+        <div class="stat-info">
+          <span>Beklenen Brüt Kâr</span>
+          <b id="an-total-margin" style="color:#d97706">₺ 0.00</b>
+          <small id="an-margin-percent">Ortalama Kâr Marjı: %0</small>
         </div>
-        <div id="wh-summary-van2" style="font-size:12.5px;color:#334155;line-height:1.6;width:100%">
-          Yükleniyor...
-        </div>
-        <button type="button" class="btn outline sm" style="width:100%" onclick="filterByWh('Mobil Servis Aracı 2')">Bu Araçtaki Parçaları Listele</button>
       </div>
 
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#f5f3ff;color:#7c3aed">📦</div>
+        <div class="stat-info">
+          <span>Ortalama Kalem Başına Stok</span>
+          <b id="an-avg-qty">0 Adet</b>
+          <small>Devir hızı yüksek parçalar</small>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px">
+      <div class="table-card" style="padding:20px">
+        <b style="font-size:14px;color:var(--navy);display:block;margin-bottom:12px">📊 Kategori Bazlı Stok Değer Dağılımı</b>
+        <div style="height:280px;position:relative">
+          <canvas id="chart-category"></canvas>
+        </div>
+      </div>
+
+      <div class="table-card" style="padding:20px">
+        <b style="font-size:14px;color:var(--navy);display:block;margin-bottom:12px">⚙️ Marka Bazlı Parça Dağılımı (Volvo, Yanmar, MAN...)</b>
+        <div style="height:280px;position:relative">
+          <canvas id="chart-brands"></canvas>
+        </div>
+      </div>
     </div>
   </div>
 
 </main>
 
-<!-- MODAL: ADD / EDIT PART -->
+<!-- ADD / EDIT PART MODAL -->
 <div class="modal-overlay" id="modal-part">
   <div class="modal-card">
     <div class="modal-head">
-      <h3 id="modal-part-title">➕ Yeni Parça Kartı Ekle</h3>
-      <button type="button" class="modal-close" onclick="closeModal('modal-part')">✕</button>
+      <h3 id="modal-part-title">📦 Yeni Parça Kartı Tanımla</h3>
+      <button class="modal-close" onclick="closeModal('modal-part')">✕</button>
     </div>
     <form id="form-part" onsubmit="savePartForm(event)">
+      <input type="hidden" id="part-id">
       <div class="modal-body">
-        <input type="hidden" id="part-form-id">
         <div class="form-grid">
           <div class="form-field full">
-            <label>Parça / Malzeme Adı *</label>
-            <input type="text" id="part-name" placeholder="Örn: Volvo Penta D6 Yağ Filtresi" required>
+            <label>Parça Tanımı / Adı *</label>
+            <input type="text" id="part-name" placeholder="Örn: Volvo Penta D4/D6 Yağ Filtresi" required>
           </div>
+
           <div class="form-field">
-            <label>OEM / Referans Kodu *</label>
-            <input type="text" id="part-code" placeholder="Örn: 21718912" required>
+            <label>Orijinal OEM Parça Kodu *</label>
+            <input type="text" id="part-code" placeholder="Örn: 22030848 veya 119593-35100" required>
           </div>
+
+          <div class="form-field">
+            <label>Muadil / Çapraz Kod (Mann, Racor vb.)</label>
+            <input type="text" id="part-cross-code" placeholder="Örn: Mann W 940/25">
+          </div>
+
+          <div class="form-field">
+            <label>Marka / Üretici *</label>
+            <select id="part-brand" required>
+              <option value="Volvo Penta">Volvo Penta</option>
+              <option value="Yanmar">Yanmar</option>
+              <option value="MAN">MAN</option>
+              <option value="Cummins">Cummins / Onan</option>
+              <option value="Kohler">Kohler</option>
+              <option value="Caterpillar">Caterpillar</option>
+              <option value="MTU">MTU</option>
+              <option value="Evrensel / Marin">Evrensel / Marin</option>
+            </select>
+          </div>
+
           <div class="form-field">
             <label>Kategori *</label>
             <select id="part-category" required>
-              <option value="Filtreler">⚙️ Filtreler</option>
+              <option value="Filtreler">⚙️ Filtreler (Yağ/Yakıt/Hava)</option>
               <option value="Yağ & Sıvılar">🛢️ Yağ & Sıvılar</option>
               <option value="İmpeller & Soğutma">🌊 İmpeller & Soğutma</option>
               <option value="Tutya & Anotlar">⚡ Tutya & Anotlar</option>
+              <option value="Kayış & Kasnak">🔩 Kayış & Kasnak</option>
               <option value="Elektrik & Sensörler">🔌 Elektrik & Sensörler</option>
-              <option value="Mekanik & Contalar">🔩 Mekanik & Contalar</option>
-              <option value="Genel Sarf">📦 Genel Sarf</option>
+              <option value="Mekanik & Contalar">🛠️ Mekanik & Contalar</option>
             </select>
           </div>
-          <div class="form-field">
-            <label>Uyumlu Marka / Motor</label>
-            <input type="text" id="part-brand" placeholder="Örn: Volvo Penta / Yanmar">
+
+          <div class="form-field full">
+            <label>Uyumlu Motor / Model Ailesi</label>
+            <input type="text" id="part-compat" placeholder="Örn: Volvo Penta D4-260, D4-300, D6-370, D6-435">
           </div>
+
           <div class="form-field">
-            <label>Depo / Konum *</label>
+            <label>Bulunduğu Depo / Araç *</label>
             <select id="part-location" required>
               <option value="Merkez Atölye">🏢 Merkez Atölye (Ana Depo)</option>
               <option value="Mobil Servis Aracı 1">🚐 Mobil Servis Aracı 1</option>
               <option value="Mobil Servis Aracı 2">🚐 Mobil Servis Aracı 2</option>
+              <option value="Tekne Üstü Kiti">⛵ Tekne Üstü Yedek Kiti</option>
             </select>
           </div>
+
           <div class="form-field">
-            <label>Alış Fiyatı & Para Birimi</label>
+            <label>Raf / Göz / Takım Çantası Konumu</label>
+            <input type="text" id="part-shelf" placeholder="Örn: Raf A-3 / Çanta 2">
+          </div>
+
+          <div class="form-field">
+            <label>Alış Maliyeti *</label>
             <div style="display:flex;gap:6px">
-              <input type="number" step="0.01" id="part-buy-price" placeholder="0.00" style="flex:1">
-              <select id="part-currency" style="width:75px">
-                <option value="EUR">€ EUR</option>
-                <option value="USD">$ USD</option>
-                <option value="TRY">₺ TL</option>
+              <input type="number" step="0.01" id="part-buy-price" placeholder="0.00" style="flex:1" required>
+              <select id="part-currency" style="width:85px">
+                <option value="EUR">EUR (€)</option>
+                <option value="USD">USD ($)</option>
+                <option value="TRY">TL (₺)</option>
               </select>
             </div>
           </div>
+
           <div class="form-field">
-            <label>Satış Fiyatı (₺ TL)</label>
-            <input type="number" step="0.01" id="part-sell-price" placeholder="0.00">
+            <label>Müşteri Satış Fiyatı (₺ TL) *</label>
+            <input type="number" step="0.01" id="part-sell-price" placeholder="0.00" required>
           </div>
+
           <div class="form-field">
-            <label>Mevcut Stok Miktarı *</label>
+            <label>Mevcut Stok Adedi *</label>
             <div style="display:flex;gap:6px">
-              <input type="number" step="1" id="part-qty" placeholder="0" required style="flex:1">
+              <input type="number" id="part-qty" placeholder="0" style="flex:1" required>
               <select id="part-unit" style="width:90px">
                 <option value="Adet">Adet</option>
                 <option value="Litre">Litre</option>
-                <option value="Takım">Takım</option>
                 <option value="Kutu">Kutu</option>
+                <option value="Set">Set</option>
                 <option value="Metre">Metre</option>
               </select>
             </div>
           </div>
+
           <div class="form-field">
-            <label>Kritik Stok Uyarısı (Min. Adet)</label>
-            <input type="number" step="1" id="part-min-qty" value="2" placeholder="2">
+            <label>Kritik Minimum Stok Sınırı</label>
+            <input type="number" id="part-min-qty" value="2" placeholder="2">
           </div>
+
           <div class="form-field full">
-            <label>Notlar / Raf Konumu</label>
-            <textarea id="part-notes" placeholder="Raf No, Tedarikçi Bilgisi veya Açıklama..."></textarea>
+            <label>Parça Görseli URL veya Fotoğrafı</label>
+            <input type="text" id="part-image-url" placeholder="https://... veya boş bırakın (otomatik marin ikonu kullanılır)">
+          </div>
+
+          <div class="form-field full">
+            <label>Teknik Notlar / Tedarikçi Bilgisi</label>
+            <textarea id="part-notes" placeholder="Örn: Orijinal İsveç malı, yetkili toptancıdan temin edilir."></textarea>
           </div>
         </div>
       </div>
@@ -903,69 +1402,77 @@ table.inv-table tbody tr:hover {
   </div>
 </div>
 
-<!-- MODAL: QUICK ACTION (IN / OUT) -->
+<!-- QUICK ACTION MODAL (IN / OUT) -->
 <div class="modal-overlay" id="modal-action">
   <div class="modal-card">
     <div class="modal-head">
       <h3 id="modal-action-title">📥 Stok Hareketi</h3>
-      <button type="button" class="modal-close" onclick="closeModal('modal-action')">✕</button>
+      <button class="modal-close" onclick="closeModal('modal-action')">✕</button>
     </div>
     <form id="form-action" onsubmit="saveActionForm(event)">
+      <input type="hidden" id="action-type" value="in">
       <div class="modal-body">
-        <input type="hidden" id="action-type">
         <div class="form-grid">
           <div class="form-field full">
             <label>İşlem Yapılacak Parça *</label>
             <select id="action-part-select" required onchange="updateActionPartInfo()">
-              <!-- Injected dynamically -->
+              <!-- Options populated dynamically -->
             </select>
           </div>
+
           <div class="form-field">
-            <label>Miktar *</label>
-            <input type="number" id="action-qty" min="1" step="1" value="1" required>
+            <label>İşlem Adedi *</label>
+            <input type="number" id="action-qty" min="1" value="1" required>
           </div>
+
           <div class="form-field">
-            <label>İlgili Depo / Araç *</label>
+            <label>Depo / Konum</label>
             <select id="action-warehouse" required>
-              <option value="Merkez Atölye">🏢 Merkez Atölye (Ana Depo)</option>
+              <option value="Merkez Atölye">🏢 Merkez Atölye</option>
               <option value="Mobil Servis Aracı 1">🚐 Mobil Servis Aracı 1</option>
               <option value="Mobil Servis Aracı 2">🚐 Mobil Servis Aracı 2</option>
+              <option value="Tekne Üstü Kiti">⛵ Tekne Üstü Kiti</option>
             </select>
           </div>
+
           <div class="form-field full">
-            <label id="action-partner-label">Tedarikçi / Müşteri / Tekne Adı</label>
-            <input type="text" id="action-partner" placeholder="Örn: M/Y Blue Star / Ali Bey / Distribütör">
+            <label id="action-partner-label">Tekne / Müşteri / Tedarikçi Adı</label>
+            <input type="text" id="action-partner" placeholder="Örn: M/Y SEA BREEZE (Kalamış) veya Parça Toptancısı">
           </div>
-          <div class="form-field full">
-            <label>İşlem Tipi (Mali Kayıt Ayrımı) *</label>
-            <select id="action-bookkeeping" required style="font-weight:700">
-              <option value="official">🟢 Resmi / Faturalı İşlem (e-Fatura)</option>
-              <option value="internal" selected>🔵 Servis İçi / Operasyonel Takip (Faturasız / İç Kayıt)</option>
+
+          <div class="form-field">
+            <label>Kayıt / Muhasebe Tipi</label>
+            <select id="action-bookkeeping">
+              <option value="internal">🔵 Servis İçi (Dahili Bakım/Tekneye Kullanım)</option>
+              <option value="official">🟢 Faturalı Parça Satışı / Resmi Giriş</option>
             </select>
-            <small style="color:var(--muted);margin-top:3px">
-              ℹ️ "Servis İçi" seçildiğinde sadece dahili parça ve kar durumunuz güncellenir; resmi muhasebe kayıtlarını etkilemez.
-            </small>
           </div>
+
+          <div class="form-field">
+            <label>İşlemi Yapan Teknisyen</label>
+            <input type="text" id="action-technician" placeholder="Örn: Teknisyen Serkan / Ahmet">
+          </div>
+
           <div class="form-field full">
-            <label>İşlem Notu / Servis Rapor No</label>
-            <input type="text" id="action-note" placeholder="Örn: 200 Saatlik motor periyodik bakımında takıldı">
+            <label>Açıklama / Servis Notu</label>
+            <input type="text" id="action-note" placeholder="Örn: 200 saatlik motor bakımında değiştirildi.">
           </div>
         </div>
       </div>
       <div class="modal-foot">
-        <button type="button" class="btn outline" onclick="closeModal('modal-action')">İptal</button>
-        <button type="submit" class="btn primary" id="action-submit-btn">✓ İşlemi Onayla</button>
+        <button type="button" class="btn outline" onclick="closeModal('modal-action')">Vazgeç</button>
+        <button type="submit" class="btn success" id="action-submit-btn">✓ İşlemi Onayla</button>
       </div>
     </form>
   </div>
 </div>
 
-<!-- MODAL: TRANSFER BETWEEN WAREHOUSES -->
+<!-- TRANSFER MODAL -->
 <div class="modal-overlay" id="modal-transfer">
   <div class="modal-card">
     <div class="modal-head">
-      <h3>🔄 Araç / Depo Arası Malzeme Transferi</h3>
-      <button type="button" class="modal-close" onclick="closeModal('modal-transfer')">✕</button>
+      <h3>🔄 Depolar / Araçlar Arası Malzeme Transferi</h3>
+      <button class="modal-close" onclick="closeModal('modal-transfer')">✕</button>
     </div>
     <form id="form-transfer" onsubmit="saveTransferForm(event)">
       <div class="modal-body">
@@ -973,32 +1480,38 @@ table.inv-table tbody tr:hover {
           <div class="form-field full">
             <label>Transfer Edilecek Parça *</label>
             <select id="transfer-part-select" required>
-              <!-- Injected -->
+              <!-- Options populated dynamically -->
             </select>
           </div>
+
           <div class="form-field">
-            <label>Kaynak Depo (Çıkış) *</label>
+            <label>Kaynak Depo / Araç *</label>
             <select id="transfer-from" required>
               <option value="Merkez Atölye">🏢 Merkez Atölye (Ana Depo)</option>
               <option value="Mobil Servis Aracı 1">🚐 Mobil Servis Aracı 1</option>
               <option value="Mobil Servis Aracı 2">🚐 Mobil Servis Aracı 2</option>
+              <option value="Tekne Üstü Kiti">⛵ Tekne Üstü Kiti</option>
             </select>
           </div>
+
           <div class="form-field">
-            <label>Hedef Depo (Giriş) *</label>
+            <label>Hedef Depo / Araç *</label>
             <select id="transfer-to" required>
               <option value="Mobil Servis Aracı 1">🚐 Mobil Servis Aracı 1</option>
               <option value="Mobil Servis Aracı 2">🚐 Mobil Servis Aracı 2</option>
               <option value="Merkez Atölye">🏢 Merkez Atölye (Ana Depo)</option>
+              <option value="Tekne Üstü Kiti">⛵ Tekne Üstü Kiti</option>
             </select>
           </div>
+
           <div class="form-field">
-            <label>Transfer Miktarı *</label>
+            <label>Transfer Adedi *</label>
             <input type="number" id="transfer-qty" min="1" value="1" required>
           </div>
+
           <div class="form-field">
-            <label>Teslim Alan / Teknisyen</label>
-            <input type="text" id="transfer-person" placeholder="Teknisyen Adı">
+            <label>Teslim Alan / Eden Teknisyen</label>
+            <input type="text" id="transfer-person" placeholder="Örn: Teknisyen Serkan">
           </div>
         </div>
       </div>
@@ -1010,475 +1523,1047 @@ table.inv-table tbody tr:hover {
   </div>
 </div>
 
-<!-- TOAST -->
+<!-- FLASH MESSAGE -->
 <div class="flash-msg" id="flash-msg"></div>
 
 <script>
-// INITIAL DATA & STATE
-const DEFAULT_PIN = "1998"; // Default PIN or Supabase auth
-const STORAGE_KEY = "dm_marin_inventory_v1";
+// ==========================================
+// STATE & DEFAULT SAMPLE DATA
+// ==========================================
+const STORAGE_KEY_AUTH = 'dm_marin_stock_auth';
+const STORAGE_KEY_INVENTORY = 'dm_marin_stock_items_v2';
+const STORAGE_KEY_LOGS = 'dm_marin_stock_logs_v2';
+const STORAGE_KEY_VIEW = 'dm_marin_stock_view_mode';
 
-const DEFAULT_PARTS = [
+const EUR_RATE = 38.50; // Reference conversion
+const USD_RATE = 35.50;
+
+let currentViewMode = localStorage.getItem(STORAGE_KEY_VIEW) || 'grid';
+let activeCategory = 'all';
+let activeTab = 'inventory';
+
+const DEFAULT_INVENTORY = [
   {
     id: "part-1",
-    name: "Marin Motor Yağı (15W-40 VDS-4.5)",
-    code: "OEM-OIL-15W40",
-    category: "Yağ & Sıvılar",
+    name: "Volvo Penta D4/D6 Yağ Filtresi (Orijinal)",
+    code: "22030848",
+    crossCode: "Mann W 940/25",
+    category: "Filtreler",
     brand: "Volvo Penta",
+    compat: "Volvo Penta D4-225, D4-260, D4-300, D6-330, D6-370, D6-435",
     location: "Merkez Atölye",
-    buyPrice: 120,
+    shelf: "Raf A-1",
+    buyPrice: 32.50,
     currency: "EUR",
-    sellPrice: 6500,
-    qty: 18,
-    unit: "Litre",
-    minQty: 5,
-    notes: "20L Varil ve 5L bidonlar"
+    sellPrice: 1750.00,
+    qty: 6,
+    unit: "Adet",
+    minQty: 3,
+    imageUrl: "",
+    notes: "D4 ve D6 makinelerde standart periyodik 200 saatlik yağ filtresi."
   },
   {
     id: "part-2",
-    name: "Volvo Penta D4 / D6 Orijinal Yağ Filtresi",
+    name: "Volvo Penta D4/D6 Yakıt / Mazot Filtresi",
     code: "21718912",
+    crossCode: "Racor R26P",
     category: "Filtreler",
     brand: "Volvo Penta",
+    compat: "Volvo Penta D4 & D6 Serisi Tüm Dizel Makineler",
     location: "Mobil Servis Aracı 1",
-    buyPrice: 42,
+    shelf: "Çanta 1 / Göz 2",
+    buyPrice: 48.00,
     currency: "EUR",
-    sellPrice: 2400,
-    qty: 6,
-    unit: "Adet",
-    minQty: 2,
-    notes: "D4-260, D4-300, D6-370, D6-435 uyumlu"
-  },
-  {
-    id: "part-3",
-    name: "Volvo Penta D4 / D6 Yakıt Separatör Filtresi",
-    code: "21718914",
-    category: "Filtreler",
-    brand: "Volvo Penta",
-    location: "Mobil Servis Aracı 1",
-    buyPrice: 48,
-    currency: "EUR",
-    sellPrice: 2750,
+    sellPrice: 2450.00,
     qty: 4,
     unit: "Adet",
     minQty: 2,
-    notes: "Orijinal kutulu"
+    imageUrl: "",
+    notes: "Su ayırıcı ön filtre ile birlikte takım değiştirilmesi tavsiye edilir."
+  },
+  {
+    id: "part-3",
+    name: "Yanmar 4JH / 3JH Serisi Yağ Filtresi",
+    code: "129150-35153",
+    crossCode: "Fram PH3593A",
+    category: "Filtreler",
+    brand: "Yanmar",
+    compat: "Yanmar 3JH4E, 3JH5E, 4JH4E, 4JH5E, 4JH-TE",
+    location: "Merkez Atölye",
+    shelf: "Raf B-2",
+    buyPrice: 18.00,
+    currency: "EUR",
+    sellPrice: 950.00,
+    qty: 8,
+    unit: "Adet",
+    minQty: 4,
+    imageUrl: "",
+    notes: "Yelkenli teknelerde en çok kullanılan orijinal Yanmar filtresi."
   },
   {
     id: "part-4",
-    name: "Deniz Suyu Pompası İmpeller Kiti (Conta & O-Ring Dahil)",
+    name: "Volvo Penta D4/D6 Ham Su Pompası İmpeller Kiti",
     code: "21951356",
+    crossCode: "Jabsco 17937-0001",
     category: "İmpeller & Soğutma",
     brand: "Volvo Penta",
+    compat: "Volvo Penta D4/D6 Deniz Suyu Pompası",
     location: "Mobil Servis Aracı 1",
-    buyPrice: 65,
+    shelf: "Çanta 2",
+    buyPrice: 72.00,
     currency: "EUR",
-    sellPrice: 3800,
+    sellPrice: 3800.00,
     qty: 3,
-    unit: "Takım",
+    unit: "Adet",
     minQty: 2,
-    notes: "D6 serisi için neopren impeller"
+    imageUrl: "",
+    notes: "Conta ve gliserin kaydırıcı montaj kitiyle birlikte verilir."
   },
   {
     id: "part-5",
-    name: "Yanmar 4JH / 4LHA Orijinal Yağ Filtresi",
-    code: "119773-42570",
-    category: "Filtreler",
-    brand: "Yanmar",
-    location: "Merkez Atölye",
-    buyPrice: 28,
+    name: "Kohler & Cummins Onan Jeneratör İmpelleri",
+    code: "359978",
+    crossCode: "Johnson 09-810B-1",
+    category: "İmpeller & Soğutma",
+    brand: "Kohler",
+    compat: "Kohler 5EFOD, 7EFOD, 9EFOD, 11EFOZD",
+    location: "Mobil Servis Aracı 2",
+    shelf: "Çanta 1",
+    buyPrice: 42.00,
     currency: "EUR",
-    sellPrice: 1650,
+    sellPrice: 2200.00,
     qty: 5,
     unit: "Adet",
     minQty: 2,
-    notes: "Yelkenli ve motoryat yanmar motorları"
+    imageUrl: "",
+    notes: "Jeneratör hararet şikayetlerinde ilk kontrol edilen aşınma parçası."
   },
   {
     id: "part-6",
-    name: "Çinko Şaft Tutya (Anot) - 35mm / 40mm",
-    code: "ANO-SHAFT-40",
-    category: "Tutya & Anotlar",
-    brand: "Evrensel / Marin",
-    location: "Mobil Servis Aracı 2",
-    buyPrice: 22,
+    name: "Volvo Penta VDS-4.5 15W-40 Tam Sentetik Marin Motor Yağı (20L)",
+    code: "23999553",
+    crossCode: "VDS-4.5 20L",
+    category: "Yağ & Sıvılar",
+    brand: "Volvo Penta",
+    compat: "Volvo Penta D3, D4, D6, D8, D11, D13",
+    location: "Merkez Atölye",
+    shelf: "Varil Alanı",
+    buyPrice: 110.00,
     currency: "EUR",
-    sellPrice: 1300,
-    qty: 8,
-    unit: "Adet",
-    minQty: 3,
-    notes: "Yüksek saflıkta deniz suyu çinkosu"
+    sellPrice: 5800.00,
+    qty: 12,
+    unit: "Kutu",
+    minQty: 5,
+    imageUrl: "",
+    notes: "20 litrelik orijinal marin bidon. Ağır hizmet turbo marin koruması."
   },
   {
     id: "part-7",
-    name: "Karter Tapası Pulu & O-Ring Conta Seti",
-    code: "GSK-990-SET",
-    category: "Mekanik & Contalar",
-    brand: "Evrensel / Marin",
-    location: "Mobil Servis Aracı 1",
-    buyPrice: 8,
+    name: "Volvo Penta DPH / DPR Kuyruk Tutya / Anot Seti (Çinko)",
+    code: "3588745",
+    crossCode: "Tecnoseal 00713",
+    category: "Tutya & Anotlar",
+    brand: "Volvo Penta",
+    compat: "Volvo Penta Aquamatic DPH-A, DPH-B, DPH-C, DPR",
+    location: "Mobil Servis Aracı 2",
+    shelf: "Kutu 4",
+    buyPrice: 85.00,
     currency: "EUR",
-    sellPrice: 450,
-    qty: 24,
+    sellPrice: 4600.00,
+    qty: 1,
     unit: "Set",
-    minQty: 5,
-    notes: "Bakır pul ve Viton O-ring seti"
+    minQty: 3,
+    imageUrl: "",
+    notes: "Kritik seviyede! Kuyruk galvanik korozyon koruma takımı."
   },
   {
     id: "part-8",
-    name: "Kohler Marin Jeneratör Yağ & Mazot Filtre Kiti",
-    code: "KOH-FLT-9E",
-    category: "Filtreler",
-    brand: "Kohler",
+    name: "Volvo Penta D4/D6 Alternatör & Su Pompası Serpantin Kayışı",
+    code: "21404502",
+    crossCode: "Gates 7PK1550",
+    category: "Kayış & Kasnak",
+    brand: "Volvo Penta",
+    compat: "Volvo Penta D4/D6 Serisi",
     location: "Merkez Atölye",
-    buyPrice: 55,
-    currency: "USD",
-    sellPrice: 3100,
+    shelf: "Askı K-2",
+    buyPrice: 38.00,
+    currency: "EUR",
+    sellPrice: 1950.00,
     qty: 2,
-    unit: "Takım",
-    minQty: 1,
-    notes: "Kohler 9EFOZD ve 11EFOZD jeneratörler"
+    unit: "Adet",
+    minQty: 2,
+    imageUrl: "",
+    notes: "Periyodik 2 yılda bir veya çatlama durumunda yenilenmelidir."
+  }
+];
+
+const PRESET_KITS = [
+  {
+    id: "kit-volvo-d6-200h",
+    title: "Volvo Penta D6 200 Saatlik Periyodik Bakım Kiti",
+    brand: "Volvo Penta",
+    targetEngine: "Volvo Penta D6 (330 / 370 / 435 HP)",
+    items: [
+      { name: "Volvo Penta D4/D6 Yağ Filtresi (22030848)", qty: 1, unit: "Adet" },
+      { name: "Volvo Penta D4/D6 Mazot Filtresi (21718912)", qty: 1, unit: "Adet" },
+      { name: "Racor Ön Yakıt Ayrıştırıcı Filtre Kartuşu", qty: 1, unit: "Adet" },
+      { name: "Volvo Penta D6 Ham Su İmpeller Kiti (21951356)", qty: 1, unit: "Adet" },
+      { name: "VDS-4.5 15W-40 Marin Motor Yağı", qty: 20, unit: "Litre" }
+    ],
+    notes: "Tekne başına standart 1 makine için gerekli tam bakım seti."
+  },
+  {
+    id: "kit-yanmar-4jh-season",
+    title: "Yanmar 4JH Sezonluk Yelkenli Bakım Paketi",
+    brand: "Yanmar",
+    targetEngine: "Yanmar 4JH4E / 4JH5E / 4JH-TE",
+    items: [
+      { name: "Yanmar 4JH Yağ Filtresi (129150-35153)", qty: 1, unit: "Adet" },
+      { name: "Yanmar 4JH Yakıt Filtresi (129470-55810)", qty: 1, unit: "Adet" },
+      { name: "Yanmar Orijinal İmpeller Kiti (129670-42531)", qty: 1, unit: "Adet" },
+      { name: "15W-40 Marin Motor Yağı", qty: 6, unit: "Litre" },
+      { name: "Motor Çinko Tutya Anotu", qty: 2, unit: "Adet" }
+    ],
+    notes: "Yelkenli motoryat ve gezi teknelerinde sezon başı standart servis kiti."
+  },
+  {
+    id: "kit-genset-service",
+    title: "Marin Jeneratör (Kohler / Onan) 250 Saat Bakım Paketi",
+    brand: "Kohler",
+    targetEngine: "Kohler 5-11 kW & Cummins Onan 4-13 kW",
+    items: [
+      { name: "Jeneratör Yağ Filtresi", qty: 1, unit: "Adet" },
+      { name: "Jeneratör Yakıt Filtresi & O-Ring", qty: 1, unit: "Adet" },
+      { name: "Kohler/Onan Su Pompası İmpelleri", qty: 1, unit: "Adet" },
+      { name: "Marin Jeneratör Yağı 15W-40", qty: 4, unit: "Litre" }
+    ],
+    notes: "Tekne içi jeneratörlerin düzenli sezonluk filtre ve impeller yenilemesi."
   }
 ];
 
 let inventoryState = [];
 let logsState = [];
-let activeCategoryFilter = "all";
-let activeTab = "inventory";
 
-// EUR / USD to TRY approx rates for instant KPI
-const RATES = { EUR: 38.50, USD: 35.20, TRY: 1.0 };
-
+// ==========================================
+// INITIALIZATION & AUTH
+// ==========================================
 function initApp() {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) {
-    try {
-      const parsed = JSON.parse(saved);
-      inventoryState = parsed.inventory || DEFAULT_PARTS;
-      logsState = parsed.logs || [];
-    } catch(e) {
-      inventoryState = DEFAULT_PARTS;
-      logsState = [];
-    }
-  } else {
-    inventoryState = DEFAULT_PARTS;
-    logsState = [];
-    saveToStorage();
-  }
-
-  // Check auth session
-  if (sessionStorage.getItem("dm_stok_auth") === "true") {
+  const isAuthed = sessionStorage.getItem(STORAGE_KEY_AUTH);
+  if (isAuthed === 'true') {
     document.getElementById("lock-screen").style.display = "none";
   }
 
-  renderInventory();
-  renderLogs();
-  updateKpis();
-  renderWarehouseSummaries();
-  loadRemoteInventory();
+  loadData();
+  renderAll();
 }
 
 function handleLockLogin(e) {
   e.preventDefault();
   const input = document.getElementById("lock-pin-input").value.trim();
-  if (input === DEFAULT_PIN || input === "dm1998" || input === "marin2026" || input.length >= 4) {
-    sessionStorage.setItem("dm_stok_auth", "true");
+  if (input === '1907' || input === '1923' || input === '2026' || input.length >= 4) {
+    sessionStorage.setItem(STORAGE_KEY_AUTH, 'true');
     document.getElementById("lock-screen").style.display = "none";
-    flash("✓ Giriş başarılı. Hoş geldiniz.");
+    flash("✓ Giriş başarılı. DM MARİN Envanter Sistemi hazır.");
   } else {
-    alert("Hatalı PIN kodu veya şifre!");
+    alert("Hatalı PIN veya şifre!");
   }
 }
 
 function lockApp() {
-  sessionStorage.removeItem("dm_stok_auth");
+  sessionStorage.removeItem(STORAGE_KEY_AUTH);
   document.getElementById("lock-screen").style.display = "flex";
   document.getElementById("lock-pin-input").value = "";
 }
 
-function saveToStorage() {
-  const data = {
-    updatedAt: new Date().toISOString(),
-    inventory: inventoryState,
-    logs: logsState
-  };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  updateKpis();
-  renderWarehouseSummaries();
-  syncRemoteInventory();
-}
-
-// REMOTE API SYNC
-async function loadRemoteInventory() {
-  try {
-    const res = await fetch('/api/admin/inventory');
-    const data = await res.json();
-    if (res.ok && data.success && data.data) {
-      if (Array.isArray(data.data.inventory) && data.data.inventory.length > 0) {
-        inventoryState = data.data.inventory;
-      }
-      if (Array.isArray(data.data.logs)) {
-        logsState = data.data.logs;
-      }
-      renderInventory();
-      renderLogs();
-      updateKpis();
-      renderWarehouseSummaries();
+// ==========================================
+// DATA LOADING & PERSISTENCE
+// ==========================================
+function loadData() {
+  const savedInv = localStorage.getItem(STORAGE_KEY_INVENTORY);
+  if (savedInv) {
+    try {
+      inventoryState = JSON.parse(savedInv);
+    } catch(e) {
+      inventoryState = DEFAULT_INVENTORY;
     }
-  } catch(e) {}
+  } else {
+    inventoryState = DEFAULT_INVENTORY;
+  }
+
+  const savedLogs = localStorage.getItem(STORAGE_KEY_LOGS);
+  if (savedLogs) {
+    try {
+      logsState = JSON.parse(savedLogs);
+    } catch(e) {
+      logsState = [];
+    }
+  } else {
+    logsState = [];
+  }
 }
 
-async function syncRemoteInventory() {
+function saveToStorage() {
+  localStorage.setItem(STORAGE_KEY_INVENTORY, JSON.stringify(inventoryState));
+  localStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify(logsState));
+  syncWithCloud(true);
+}
+
+async function syncWithCloud(silent = false) {
   try {
-    await fetch('/api/admin/inventory', {
+    const res = await fetch('/api/admin/inventory', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         inventory: {
-          inventory: inventoryState,
+          items: inventoryState,
           logs: logsState,
-          updatedAt: new Date().toISOString()
+          lastSync: new Date().toISOString()
         }
       })
     });
-  } catch(e) {}
+    if (res.ok) {
+      if (!silent) flash("✓ Supabase bulut veritabanı ile eşitlendi.");
+    }
+  } catch (err) {
+    if (!silent) console.log("Cloud sync fallback to local storage:", err);
+  }
 }
 
-// KPIS CALCULATION
-function updateKpis() {
-  const totalItems = inventoryState.length;
-  const totalUnits = inventoryState.reduce((sum, item) => sum + (Number(item.qty) || 0), 0);
-  const lowStockCount = inventoryState.filter(item => Number(item.qty) <= Number(item.minQty || 2)).length;
+// ==========================================
+// RENDERING FUNCTIONS
+// ==========================================
+function renderAll() {
+  updateKPIs();
+  renderInventory();
+  renderReorderTable();
+  renderWarehouseSummaries();
+  renderKits();
+  renderLogs();
+  renderAnalytics();
+}
 
-  let totalEur = 0;
-  inventoryState.forEach(item => {
-    const qty = Number(item.qty) || 0;
-    const price = Number(item.buyPrice) || 0;
-    const curr = item.currency || "EUR";
-    if (curr === "EUR") totalEur += qty * price;
-    else if (curr === "USD") totalEur += (qty * price * RATES.USD) / RATES.EUR;
-    else totalEur += (qty * price) / RATES.EUR;
+function updateKPIs() {
+  const totalItems = inventoryState.length;
+  const totalUnits = inventoryState.reduce((sum, p) => sum + (Number(p.qty) || 0), 0);
+  const lowStockCount = inventoryState.filter(p => (Number(p.qty) || 0) <= (Number(p.minQty) || 2)).length;
+
+  let totalValEur = 0;
+  let totalValTl = 0;
+  inventoryState.forEach(p => {
+    const q = Number(p.qty) || 0;
+    const bp = Number(p.buyPrice) || 0;
+    if (p.currency === 'EUR') {
+      totalValEur += bp * q;
+      totalValTl += (bp * EUR_RATE) * q;
+    } else if (p.currency === 'USD') {
+      totalValEur += (bp * (USD_RATE / EUR_RATE)) * q;
+      totalValTl += (bp * USD_RATE) * q;
+    } else {
+      totalValTl += bp * q;
+      totalValEur += (bp / EUR_RATE) * q;
+    }
   });
 
-  const totalTl = totalEur * RATES.EUR;
-
-  // Month outputs
-  const thisMonth = new Date().getMonth();
-  const monthOuts = logsState
-    .filter(l => l.type === 'out' && new Date(l.date).getMonth() === thisMonth)
-    .reduce((s, l) => s + (Number(l.qty) || 0), 0);
+  const now = new Date();
+  const currentMonthLogs = logsState.filter(l => {
+    const d = new Date(l.date);
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear() && l.type === 'out';
+  });
+  const monthOutUnits = currentMonthLogs.reduce((sum, l) => sum + (Number(l.qty) || 0), 0);
 
   document.getElementById("kpi-total-items").textContent = `${totalItems} Kalem`;
   document.getElementById("kpi-total-units").textContent = `${totalUnits} Adet / Birim Stokta`;
   document.getElementById("kpi-low-stock").textContent = `${lowStockCount} Ürün`;
-  document.getElementById("kpi-total-val-eur").textContent = `€ ${totalEur.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-  document.getElementById("kpi-total-val-tl").textContent = `₺ ${totalTl.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} TL`;
-  document.getElementById("kpi-month-out").textContent = `${monthOuts} Adet`;
+  document.getElementById("kpi-total-val-eur").textContent = `€ ${totalValEur.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+  document.getElementById("kpi-total-val-tl").textContent = `₺ ${totalValTl.toLocaleString('tr-TR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} TL`;
+  document.getElementById("kpi-month-out").textContent = `${monthOutUnits} Adet`;
 
   document.getElementById("tab-badge-inv").textContent = totalItems;
+  document.getElementById("tab-badge-reorder").textContent = lowStockCount;
   document.getElementById("tab-badge-logs").textContent = logsState.length;
 }
 
-// RENDER INVENTORY TABLE
-function renderInventory() {
-  const tbody = document.getElementById("inventory-tbody");
-  tbody.innerHTML = "";
+// ==========================================
+// INVENTORY VIEW (GRID & TABLE)
+// ==========================================
+function getFilteredInventory() {
+  const q = (document.getElementById("inv-search-input")?.value || "").toLowerCase().trim();
+  const loc = document.getElementById("filter-location")?.value || "all";
+  const brand = document.getElementById("filter-brand")?.value || "all";
+  const status = document.getElementById("filter-status")?.value || "all";
 
-  const query = (document.getElementById("inv-search-input")?.value || "").toLowerCase().trim();
-  const filterLoc = document.getElementById("filter-location")?.value || "all";
-  const filterBr = document.getElementById("filter-brand")?.value || "all";
-  const filterSt = document.getElementById("filter-status")?.value || "all";
-
-  const filtered = inventoryState.filter(item => {
-    // Search query
-    if (query) {
-      const match = (item.name || "").toLowerCase().includes(query) ||
-                    (item.code || "").toLowerCase().includes(query) ||
-                    (item.brand || "").toLowerCase().includes(query) ||
-                    (item.category || "").toLowerCase().includes(query) ||
-                    (item.notes || "").toLowerCase().includes(query);
-      if (!match) return false;
+  return inventoryState.filter(p => {
+    if (q) {
+      const matchName = (p.name || "").toLowerCase().includes(q);
+      const matchCode = (p.code || "").toLowerCase().includes(q);
+      const matchCross = (p.crossCode || "").toLowerCase().includes(q);
+      const matchBrand = (p.brand || "").toLowerCase().includes(q);
+      const matchCompat = (p.compat || "").toLowerCase().includes(q);
+      const matchShelf = (p.shelf || "").toLowerCase().includes(q);
+      if (!matchName && !matchCode && !matchCross && !matchBrand && !matchCompat && !matchShelf) return false;
     }
-    // Category pill
-    if (activeCategoryFilter !== "all" && item.category !== activeCategoryFilter) return false;
-    // Location
-    if (filterLoc !== "all" && item.location !== filterLoc) return false;
-    // Brand
-    if (filterBr !== "all" && item.brand !== filterBr) return false;
-    // Status
-    if (filterSt === "low" && Number(item.qty) > Number(item.minQty || 2)) return false;
-    if (filterSt === "in_stock" && Number(item.qty) <= 0) return false;
-    if (filterSt === "out_of_stock" && Number(item.qty) > 0) return false;
+
+    if (activeCategory !== 'all' && p.category !== activeCategory) return false;
+    if (loc !== 'all' && p.location !== loc) return false;
+    if (brand !== 'all' && p.brand !== brand) return false;
+
+    const qty = Number(p.qty) || 0;
+    const min = Number(p.minQty) || 2;
+    if (status === 'low' && qty > min) return false;
+    if (status === 'in_stock' && qty <= 0) return false;
+    if (status === 'out_of_stock' && qty > 0) return false;
 
     return true;
   });
+}
 
-  if (filtered.length === 0) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="9" style="text-align:center;padding:36px;color:var(--muted)">
-          <div style="font-size:28px;margin-bottom:8px">📦</div>
-          <b>Eşleşen parça veya malzeme bulunamadı.</b>
-          <p style="margin:4px 0 0;font-size:12px">Arama filtrenizi temizleyebilir veya yeni parça ekleyebilirsiniz.</p>
-        </td>
-      </tr>
+function getCategoryIcon(cat) {
+  if (cat.includes('Filtre')) return '⚙️';
+  if (cat.includes('Yağ')) return '🛢️';
+  if (cat.includes('İmpeller') || cat.includes('Soğutma')) return '🌊';
+  if (cat.includes('Tutya') || cat.includes('Anot')) return '⚡';
+  if (cat.includes('Kayış')) return '🔩';
+  if (cat.includes('Elektrik')) return '🔌';
+  return '🛠️';
+}
+
+function renderInventory() {
+  const items = getFilteredInventory();
+  renderGrid(items);
+  renderTable(items);
+}
+
+function renderGrid(items) {
+  const gridWrap = document.getElementById("inventory-grid-wrap");
+  if (!gridWrap) return;
+
+  if (items.length === 0) {
+    gridWrap.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:50px 20px;background:#fff;border-radius:12px;border:1px dashed var(--line);color:var(--muted)">
+        <div style="font-size:36px;margin-bottom:8px">🔍</div>
+        <b>Arama kriterlerine uygun parça bulunamadı.</b>
+        <p style="font-size:12px;margin-top:4px">Filtreleri sıfırlayabilir veya yeni parça tanımlayabilirsiniz.</p>
+        <button type="button" class="btn primary sm" onclick="openAddPartModal()">➕ Yeni Parça Ekle</button>
+      </div>
     `;
     return;
   }
 
-  filtered.forEach((item, idx) => {
-    const tr = document.createElement("tr");
-    const qty = Number(item.qty) || 0;
-    const minQty = Number(item.minQty || 2);
-    
-    let stockClass = "good";
-    let stockLabel = `${qty} ${item.unit || 'Adet'}`;
-    if (qty <= 0) {
-      stockClass = "out";
-      stockLabel = "Tükendi (0)";
-    } else if (qty <= minQty) {
-      stockClass = "low";
-      stockLabel = `⚠️ Kritik: ${qty} ${item.unit || 'Adet'}`;
+  gridWrap.innerHTML = items.map(p => {
+    const qty = Number(p.qty) || 0;
+    const minQty = Number(p.minQty) || 2;
+    const isCritical = qty <= 0;
+    const isLow = qty > 0 && qty <= minQty;
+
+    let borderClass = '';
+    let barClass = 'good';
+    let statusPill = `<span class="stock-pill good">✓ Stokta (${qty} ${p.unit})</span>`;
+
+    if (isCritical) {
+      borderClass = 'critical-border';
+      barClass = 'danger';
+      statusPill = `<span class="stock-pill out">❌ Tükendi (0)</span>`;
+    } else if (isLow) {
+      borderClass = 'low-border';
+      barClass = 'warn';
+      statusPill = `<span class="stock-pill low">⚠️ Azaldı (${qty} ${p.unit})</span>`;
     }
 
-    const currSym = item.currency === "EUR" ? "€" : item.currency === "USD" ? "$" : "₺";
-    const buyPriceStr = item.buyPrice ? `${currSym} ${Number(item.buyPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})}` : '-';
-    const sellPriceStr = item.sellPrice ? `₺ ${Number(item.sellPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})}` : '-';
-    
-    // Profit margin estimate
-    let profitBadge = '-';
-    if (item.buyPrice && item.sellPrice) {
-      const buyTl = Number(item.buyPrice) * (RATES[item.currency || 'EUR'] || 38.5);
-      const sellTl = Number(item.sellPrice);
-      const margin = Math.round(((sellTl - buyTl) / sellTl) * 100);
-      profitBadge = `<span style="font-size:11px;font-weight:700;color:${margin > 0 ? '#15803d':'#dc2626'}">%${margin}</span>`;
-    }
+    const pct = Math.min(100, Math.round((qty / (minQty * 2.5 || 5)) * 100));
 
-    tr.innerHTML = `
-      <td style="text-align:center;color:var(--muted);font-weight:700">${idx + 1}</td>
-      <td>
-        <span class="part-title">${escapeHtml(item.name)}</span>
-        <span class="part-oem" title="Kopyala" onclick="copyOem('${escapeHtml(item.code)}')">🏷️ ${escapeHtml(item.code)}</span>
-      </td>
-      <td>
-        <span style="font-weight:600;color:#334155">${escapeHtml(item.category)}</span><br>
-        <small style="color:var(--muted)">${escapeHtml(item.brand || 'Evrensel')}</small>
-      </td>
-      <td>
-        <span class="loc-badge">${item.location.includes('Aracı') ? '🚐' : '🏢'} ${escapeHtml(item.location)}</span>
-      </td>
-      <td style="font-weight:700;color:#0369a1">${buyPriceStr}</td>
-      <td style="font-weight:800;color:var(--navy)">${sellPriceStr}</td>
-      <td>${profitBadge}</td>
-      <td>
-        <span class="stock-pill ${stockClass}">${stockLabel}</span>
-      </td>
-      <td class="action-cell" style="text-align:right;white-space:nowrap">
-        <button type="button" class="btn sm outline" title="Stok Ekle" onclick="quickAdjustStock('${item.id}', 1)">➕</button>
-        <button type="button" class="btn sm outline" title="Stok Düş" onclick="quickAdjustStock('${item.id}', -1)">➖</button>
-        <button type="button" class="btn sm outline" onclick="editPart('${item.id}')">✏️</button>
-        <button type="button" class="btn sm danger" onclick="deletePart('${item.id}')">🗑️</button>
-      </td>
+    const avatarContent = p.imageUrl 
+      ? `<img src="${escapeHtml(p.imageUrl)}" alt="${escapeHtml(p.name)}">`
+      : `<span style="font-size:26px">${getCategoryIcon(p.category || '')}</span>`;
+
+    return `
+      <div class="part-card ${borderClass}">
+        <div>
+          <div class="part-card-head">
+            <div class="part-avatar">${avatarContent}</div>
+            <div class="part-head-info">
+              <div class="part-badge-row">
+                <span class="brand-tag">${escapeHtml(p.brand || 'Marin')}</span>
+                <span class="cat-tag">${escapeHtml(p.category || 'Genel')}</span>
+              </div>
+              <h4 class="part-card-title" title="${escapeHtml(p.name)}">${escapeHtml(p.name)}</h4>
+              <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+                <span class="oem-box" onclick="copyOem('${escapeHtml(p.code)}')" title="Kopyalamak için tıklayın">
+                  📋 ${escapeHtml(p.code)}
+                </span>
+                ${p.crossCode ? `<span style="font-size:10.5px;color:var(--muted);font-family:monospace">Muadil: ${escapeHtml(p.crossCode)}</span>` : ''}
+              </div>
+            </div>
+          </div>
+
+          <div class="part-card-specs" style="margin-top:12px">
+            <div class="spec-item">
+              <span>Depo & Konum</span>
+              <b>📍 ${escapeHtml(p.location)}</b>
+              ${p.shelf ? `<small style="color:var(--cyan2);font-weight:700">(${escapeHtml(p.shelf)})</small>` : ''}
+            </div>
+            <div class="spec-item">
+              <span>Müşteri Satış Fiyatı</span>
+              <b style="color:#059669">₺ ${Number(p.sellPrice || 0).toLocaleString('tr-TR', {minimumFractionDigits:2})}</b>
+              <small style="color:var(--muted)">Alış: ${p.currency==='EUR'?'€':p.currency==='USD'?'$':'₺'}${Number(p.buyPrice||0).toFixed(2)}</small>
+            </div>
+          </div>
+
+          ${p.compat ? `
+            <div style="font-size:11px;color:#475569;margin-top:8px;background:#f1f5f9;padding:4px 8px;border-radius:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${escapeHtml(p.compat)}">
+              ⚙️ Uyum: <b>${escapeHtml(p.compat)}</b>
+            </div>
+          ` : ''}
+
+          <div class="stock-meter" style="margin-top:10px">
+            <div class="stock-meter-head">
+              <span style="font-weight:700;color:var(--navy)">Stok Seviyesi</span>
+              ${statusPill}
+            </div>
+            <div class="stock-bar-wrap">
+              <div class="stock-bar-fill ${barClass}" style="width:${pct}%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="part-card-foot">
+          <div class="qty-stepper">
+            <button type="button" class="step-btn" onclick="quickAdjustStock('${p.id}', -1)" title="1 Adet Düş">-</button>
+            <span class="step-qty">${qty}</span>
+            <button type="button" class="step-btn" onclick="quickAdjustStock('${p.id}', 1)" title="1 Adet Ekle">+</button>
+          </div>
+
+          <div style="display:flex;gap:5px">
+            <button type="button" class="btn outline sm" onclick="openDirectBoatDispatchModal('${p.id}')" title="Bu parçayı servise düş">⛵ Servise Ver</button>
+            <button type="button" class="btn outline sm" onclick="openEditPartModal('${p.id}')" title="Düzenle">✏️</button>
+            <button type="button" class="btn outline sm" style="color:#dc2626" onclick="deletePart('${p.id}')" title="Sil">🗑️</button>
+          </div>
+        </div>
+      </div>
     `;
-    tbody.appendChild(tr);
+  }).join("");
+}
+
+function renderTable(items) {
+  const tbody = document.getElementById("inventory-tbody");
+  if (!tbody) return;
+
+  if (items.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:30px;color:var(--muted)">Arama kriterine uygun parça bulunamadı.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = items.map((p, idx) => {
+    const qty = Number(p.qty) || 0;
+    const minQty = Number(p.minQty) || 2;
+    let statusPill = `<span class="stock-pill good">${qty} ${p.unit}</span>`;
+    if (qty <= 0) statusPill = `<span class="stock-pill out">❌ Tükendi (0)</span>`;
+    else if (qty <= minQty) statusPill = `<span class="stock-pill low">⚠️ Kritik (${qty})</span>`;
+
+    return `
+      <tr>
+        <td style="text-align:center;color:var(--muted)">${idx + 1}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:20px">${getCategoryIcon(p.category || '')}</span>
+            <div>
+              <span class="part-title">${escapeHtml(p.name)}</span>
+              <span class="part-oem" onclick="copyOem('${escapeHtml(p.code)}')">📋 ${escapeHtml(p.code)}</span>
+              ${p.crossCode ? `<small style="color:var(--muted);margin-left:4px">(${escapeHtml(p.crossCode)})</small>` : ''}
+            </div>
+          </div>
+        </td>
+        <td>
+          <b>${escapeHtml(p.brand || '-')}</b><br>
+          <span style="color:var(--muted);font-size:11.5px">${escapeHtml(p.category)}</span>
+        </td>
+        <td>
+          <span class="loc-badge">📍 ${escapeHtml(p.location)}</span>
+          ${p.shelf ? `<br><small style="color:var(--cyan2);font-weight:700">${escapeHtml(p.shelf)}</small>` : ''}
+        </td>
+        <td style="font-size:11.5px;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${escapeHtml(p.compat || '-')}">
+          ${escapeHtml(p.compat || '-')}
+        </td>
+        <td style="font-weight:700">
+          ${p.currency === 'EUR' ? '€' : p.currency === 'USD' ? '$' : '₺'} ${Number(p.buyPrice || 0).toFixed(2)}
+        </td>
+        <td style="font-weight:800;color:#059669">
+          ₺ ${Number(p.sellPrice || 0).toLocaleString('tr-TR', {minimumFractionDigits: 2})}
+        </td>
+        <td>${statusPill}</td>
+        <td class="action-cell" style="text-align:right;white-space:nowrap">
+          <div style="display:inline-flex;gap:4px">
+            <button type="button" class="btn outline sm" onclick="quickAdjustStock('${p.id}', -1)" title="1 Düş">-</button>
+            <button type="button" class="btn outline sm" onclick="quickAdjustStock('${p.id}', 1)" title="1 Ekle">+</button>
+            <button type="button" class="btn outline sm" onclick="openDirectBoatDispatchModal('${p.id}')" title="Tekneye Ver">⛵</button>
+            <button type="button" class="btn outline sm" onclick="openEditPartModal('${p.id}')">✏️</button>
+            <button type="button" class="btn outline sm" style="color:#dc2626" onclick="deletePart('${p.id}')">🗑️</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function setViewMode(mode) {
+  currentViewMode = mode;
+  localStorage.setItem(STORAGE_KEY_VIEW, mode);
+
+  document.getElementById("btn-view-grid").classList.toggle("active", mode === 'grid');
+  document.getElementById("btn-view-table").classList.toggle("active", mode === 'table');
+
+  document.getElementById("inventory-grid-wrap").style.display = mode === 'grid' ? 'grid' : 'none';
+  document.getElementById("inventory-table-wrap").style.display = mode === 'table' ? 'block' : 'none';
+}
+
+function setCategoryFilter(cat) {
+  activeCategory = cat;
+  document.querySelectorAll(".category-pills .cat-pill").forEach(btn => {
+    btn.classList.toggle("active", btn.textContent.includes(cat) || (cat === 'all' && btn.textContent === 'Tüm Kategoriler'));
   });
+  renderInventory();
 }
 
 function filterInventory() {
   renderInventory();
 }
 
-function setCategoryFilter(cat) {
-  activeCategoryFilter = cat;
-  document.querySelectorAll("#category-pills-wrap .cat-pill").forEach(btn => {
-    btn.classList.toggle("active", btn.textContent.includes(cat) || (cat === 'all' && btn.textContent.includes('Tüm')));
-  });
-  renderInventory();
-}
-
-function filterByWh(wh) {
+function filterByWh(whName) {
   switchTab('inventory');
   const sel = document.getElementById("filter-location");
   if (sel) {
-    sel.value = wh;
-    filterInventory();
+    sel.value = whName;
+    renderInventory();
+    flash(`✓ Filtrelendi: ${whName}`);
   }
 }
 
-// MODAL OPEN / CLOSE
-function openModal(id) {
-  const modal = document.getElementById(id);
-  if (modal) modal.classList.add("open");
-}
-function closeModal(id) {
-  const modal = document.getElementById(id);
-  if (modal) modal.classList.remove("open");
+// ==========================================
+// 2. REORDER & CRITICAL STOCK VIEW
+// ==========================================
+function renderReorderTable() {
+  const tbody = document.getElementById("reorder-tbody");
+  if (!tbody) return;
+
+  const lowItems = inventoryState.filter(p => (Number(p.qty) || 0) <= (Number(p.minQty) || 2));
+
+  if (lowItems.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="10" style="text-align:center;padding:40px;color:#059669;font-weight:700">
+          🎉 Harika! Şu an kritik eşik altında veya tükenen hiçbir parça bulunmuyor. Stoklar yeterli.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = lowItems.map(p => {
+    const currentQty = Number(p.qty) || 0;
+    const minQty = Number(p.minQty) || 2;
+    const suggestedOrder = Math.max(minQty * 2 - currentQty, 2);
+    const buyPrice = Number(p.buyPrice) || 0;
+    const totalCost = buyPrice * suggestedOrder;
+
+    return `
+      <tr>
+        <td><b>${escapeHtml(p.name)}</b></td>
+        <td><span class="part-oem" onclick="copyOem('${escapeHtml(p.code)}')">📋 ${escapeHtml(p.code)}</span></td>
+        <td><span class="brand-tag">${escapeHtml(p.brand || '-')}</span></td>
+        <td><span class="loc-badge">${escapeHtml(p.location)}</span></td>
+        <td style="font-weight:800;color:#dc2626">${currentQty} ${p.unit}</td>
+        <td>${minQty} ${p.unit}</td>
+        <td style="font-weight:800;color:#0284c7"><b>+${suggestedOrder} ${p.unit}</b></td>
+        <td>${p.currency === 'EUR' ? '€' : p.currency === 'USD' ? '$' : '₺'} ${buyPrice.toFixed(2)}</td>
+        <td style="font-weight:700">${p.currency === 'EUR' ? '€' : p.currency === 'USD' ? '$' : '₺'} ${totalCost.toFixed(2)}</td>
+        <td class="action-cell" style="text-align:right">
+          <button type="button" class="btn success sm" onclick="openQuickActionModal('in', '${p.location}', '${p.id}')">📥 Sipariş Girişi Yap</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
 }
 
-// ADD / EDIT PART FORM
+function generateWhatsappOrderText() {
+  const lowItems = inventoryState.filter(p => (Number(p.qty) || 0) <= (Number(p.minQty) || 2));
+  if (lowItems.length === 0) return alert("Sipariş verilecek kritik parça bulunmuyor.");
+
+  let text = `*DM MARİN YEDEK PARÇA SİPARİŞ LİSTESİ* 📋\n`;
+  text += `Tarih: ${new Date().toLocaleDateString('tr-TR')}\n`;
+  text += `----------------------------------------\n`;
+  
+  lowItems.forEach((p, idx) => {
+    const current = Number(p.qty) || 0;
+    const min = Number(p.minQty) || 2;
+    const needed = Math.max(min * 2 - current, 2);
+    text += `${idx + 1}. *${p.name}*\n   OEM: ${p.code} | Marka: ${p.brand}\n   Mevcut: ${current} | *İstenen: ${needed} ${p.unit}*\n\n`;
+  });
+
+  text += `----------------------------------------\nLütfen stok durumu ve teslim süresi bildiriniz. Teşekkürler.`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    flash("✓ WhatsApp sipariş metni panoya kopyalandı! WhatsApp'a yapıştırabilirsiniz.");
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+  });
+}
+
+function exportReorderCsv() {
+  let csv = "\uFEFFParça Adı;OEM Kodu;Marka;Konum;Mevcut Stok;Kritik Sınır;Önerilen Sipariş;Birim Alış;Para Birimi\n";
+  const lowItems = inventoryState.filter(p => (Number(p.qty) || 0) <= (Number(p.minQty) || 2));
+  lowItems.forEach(p => {
+    const current = Number(p.qty) || 0;
+    const min = Number(p.minQty) || 2;
+    const needed = Math.max(min * 2 - current, 2);
+    csv += `"${p.name}";"${p.code}";"${p.brand}";"${p.location}";${current};${min};${needed};${p.buyPrice};"${p.currency}"\n`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `DM-MARIN-Siparis-Listesi-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+// ==========================================
+// 3. WAREHOUSES & FLEET SUMMARY
+// ==========================================
+function renderWarehouseSummaries() {
+  const getWhData = (whName) => {
+    const items = inventoryState.filter(p => p.location === whName);
+    const count = items.length;
+    const units = items.reduce((s, p) => s + (Number(p.qty)||0), 0);
+    const low = items.filter(p => Number(p.qty) <= Number(p.minQty||2)).length;
+    let valEur = 0;
+    items.forEach(p => {
+      const q = Number(p.qty)||0;
+      const bp = Number(p.buyPrice)||0;
+      if (p.currency==='EUR') valEur += bp*q;
+      else if (p.currency==='USD') valEur += (bp*(USD_RATE/EUR_RATE))*q;
+      else valEur += (bp/EUR_RATE)*q;
+    });
+
+    return `
+      <div>• <b>${count}</b> Farklı Parça Kalemi</div>
+      <div>• <b>${units}</b> Toplam Adet / Birim Malzeme</div>
+      <div>• <b>${low}</b> Kritik / Azalan Parça</div>
+      <div>• Depo Değeri: <b style="color:#059669">€ ${valEur.toLocaleString('tr-TR', {maximumFractionDigits:0})}</b></div>
+    `;
+  };
+
+  const elMain = document.getElementById("wh-summary-main");
+  const elVan1 = document.getElementById("wh-summary-van1");
+  const elVan2 = document.getElementById("wh-summary-van2");
+  const elBoat = document.getElementById("wh-summary-boat");
+
+  if (elMain) elMain.innerHTML = getWhData("Merkez Atölye");
+  if (elVan1) elVan1.innerHTML = getWhData("Mobil Servis Aracı 1");
+  if (elVan2) elVan2.innerHTML = getWhData("Mobil Servis Aracı 2");
+  if (elBoat) elBoat.innerHTML = getWhData("Tekne Üstü Kiti");
+}
+
+// ==========================================
+// 4. SERVICE KITS & WORK ORDER DISPATCH
+// ==========================================
+function renderKits() {
+  const container = document.getElementById("kits-container");
+  if (!container) return;
+
+  container.innerHTML = PRESET_KITS.map(kit => `
+    <div class="kit-card">
+      <div class="kit-head">
+        <div>
+          <b>${escapeHtml(kit.title)}</b>
+          <div style="font-size:11.5px;color:var(--muted);margin-top:2px">⚙️ ${escapeHtml(kit.targetEngine)}</div>
+        </div>
+        <span>${escapeHtml(kit.brand)}</span>
+      </div>
+
+      <ul class="kit-items-list">
+        ${kit.items.map(item => `
+          <li>
+            <span>• ${escapeHtml(item.name)}</span>
+            <b>${item.qty} ${item.unit}</b>
+          </li>
+        `).join("")}
+      </ul>
+
+      <p style="font-size:11.5px;color:var(--muted);margin:0">💡 ${escapeHtml(kit.notes)}</p>
+
+      <button type="button" class="btn primary sm" style="width:100%;margin-top:6px" onclick="dispatchKitToBoat('${kit.id}')">
+        ⛵ Bu Paketi Tekne Servisine Düş
+      </button>
+    </div>
+  `).join("");
+}
+
+function dispatchKitToBoat(kitId) {
+  const kit = PRESET_KITS.find(k => k.id === kitId);
+  if (!kit) return;
+
+  const boatName = prompt(`"${kit.title}" paketinin uygulanacağı Tekne / Müşteri Adını giriniz:`, "M/Y AZIMUT");
+  if (!boatName) return;
+
+  kit.items.forEach(item => {
+    const matched = inventoryState.find(p => p.name.toLowerCase().includes(item.name.toLowerCase().split(" ")[0]));
+    if (matched) {
+      matched.qty = Math.max(0, (Number(matched.qty) || 0) - item.qty);
+      logAction("out", matched, item.qty, matched.location, `${boatName} · ${kit.title}`, "internal", (matched.sellPrice || 0) * item.qty);
+    }
+  });
+
+  saveToStorage();
+  renderAll();
+  flash(`✓ ${kit.title} parçaları "${boatName}" teknesine düşüldü ve loglandı.`);
+}
+
+function openDirectBoatDispatchModal(partId) {
+  openQuickActionModal('out', null, partId);
+}
+
+// ==========================================
+// 5. STOK HAREKET LOGLARI
+// ==========================================
+function logAction(type, part, qty, warehouse, note, bookkeeping, amount) {
+  logsState.unshift({
+    id: "log-" + Date.now(),
+    date: new Date().toISOString(),
+    type,
+    partName: part.name,
+    partCode: part.code,
+    qty,
+    unit: part.unit || 'Adet',
+    warehouse,
+    note: note || '-',
+    bookkeeping: bookkeeping || 'internal',
+    amount: amount || 0
+  });
+}
+
+function renderLogs() {
+  const tbody = document.getElementById("logs-tbody");
+  if (!tbody) return;
+
+  if (logsState.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted)">Henüz kayıtlı bir stok hareketi bulunmuyor.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = logsState.map(log => {
+    const dateStr = new Date(log.date).toLocaleString('tr-TR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    
+    let typeBadge = '';
+    if (log.type === 'in') typeBadge = `<span class="stock-pill good">📥 Giriş (+${log.qty})</span>`;
+    else if (log.type === 'out') typeBadge = `<span class="stock-pill out">📤 Çıkış (-${log.qty})</span>`;
+    else typeBadge = `<span class="stock-pill low">🔄 Transfer (${log.qty})</span>`;
+
+    const bookBadge = log.bookkeeping === 'official' 
+      ? '<span class="type-badge official">🟢 Faturalı</span>'
+      : '<span class="type-badge internal">🔵 Servis İçi</span>';
+
+    return `
+      <tr>
+        <td style="color:var(--muted);white-space:nowrap">${dateStr}</td>
+        <td>${typeBadge}</td>
+        <td>
+          <b>${escapeHtml(log.partName)}</b><br>
+          <span class="part-oem" onclick="copyOem('${escapeHtml(log.partCode)}')">📋 ${escapeHtml(log.partCode)}</span>
+        </td>
+        <td style="font-weight:700">${log.qty} ${log.unit || 'Adet'}</td>
+        <td><span class="loc-badge">📍 ${escapeHtml(log.warehouse)}</span></td>
+        <td>${escapeHtml(log.note)}</td>
+        <td>${bookBadge}</td>
+        <td style="font-weight:800;color:var(--navy)">${log.amount ? '₺ ' + Number(log.amount).toLocaleString('tr-TR', {minimumFractionDigits:2}) : '-'}</td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function clearLogsConfirm() {
+  if (!confirm("Tüm stok hareket geçmişini temizlemek istediğinize emin misiniz?")) return;
+  logsState = [];
+  saveToStorage();
+  renderLogs();
+  updateKPIs();
+  flash("Loglar temizlendi.");
+}
+
+function exportLogsCsv() {
+  let csv = "\uFEFFTarih;İşlem Türü;Parça Adı;OEM Kodu;Miktar;Birim;Depo;Açıklama;Kayıt Tipi;Tutar\n";
+  logsState.forEach(log => {
+    csv += `"${log.date}";"${log.type}";"${log.partName}";"${log.partCode}";${log.qty};"${log.unit}";"${log.warehouse}";"${log.note}";"${log.bookkeeping}";${log.amount}\n`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `DM-MARIN-Stok-Loglari-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+// ==========================================
+// 6. FINANCIAL & ANALYTICS CHARTS
+// ==========================================
+let catChartInstance = null;
+let brandChartInstance = null;
+
+function renderAnalytics() {
+  let totalBuyEur = 0;
+  let totalBuyTl = 0;
+  let totalSellTl = 0;
+  const catMap = {};
+  const brandMap = {};
+
+  inventoryState.forEach(p => {
+    const q = Number(p.qty) || 0;
+    const bp = Number(p.buyPrice) || 0;
+    const sp = Number(p.sellPrice) || 0;
+
+    let costTl = 0;
+    if (p.currency === 'EUR') {
+      totalBuyEur += bp * q;
+      costTl = (bp * EUR_RATE) * q;
+    } else if (p.currency === 'USD') {
+      totalBuyEur += (bp * (USD_RATE / EUR_RATE)) * q;
+      costTl = (bp * USD_RATE) * q;
+    } else {
+      costTl = bp * q;
+      totalBuyEur += (bp / EUR_RATE) * q;
+    }
+    totalBuyTl += costTl;
+    totalSellTl += sp * q;
+
+    catMap[p.category] = (catMap[p.category] || 0) + (sp * q);
+    brandMap[p.brand] = (brandMap[p.brand] || 0) + q;
+  });
+
+  const grossProfit = Math.max(0, totalSellTl - totalBuyTl);
+  const profitMargin = totalSellTl > 0 ? ((grossProfit / totalSellTl) * 100).toFixed(1) : 0;
+  const avgQty = inventoryState.length > 0 ? (inventoryState.reduce((s,p)=>s+(Number(p.qty)||0),0) / inventoryState.length).toFixed(1) : 0;
+
+  document.getElementById("an-total-buy").textContent = `€ ${totalBuyEur.toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+  document.getElementById("an-total-buy-tl").textContent = `₺ ${totalBuyTl.toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2})} TL`;
+  document.getElementById("an-total-sell").textContent = `₺ ${totalSellTl.toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2})} TL`;
+  document.getElementById("an-total-margin").textContent = `₺ ${grossProfit.toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2})} TL`;
+  document.getElementById("an-margin-percent").textContent = `Ortalama Brüt Kâr Marjı: %${profitMargin}`;
+  document.getElementById("an-avg-qty").textContent = `${avgQty} Adet / Kalem`;
+
+  const ctxCat = document.getElementById("chart-category");
+  const ctxBrand = document.getElementById("chart-brands");
+
+  if (ctxCat && window.Chart) {
+    if (catChartInstance) catChartInstance.destroy();
+    catChartInstance = new Chart(ctxCat, {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(catMap),
+        datasets: [{
+          data: Object.values(catMap),
+          backgroundColor: ['#087f93', '#059669', '#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444', '#071b2b']
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } } }
+      }
+    });
+  }
+
+  if (ctxBrand && window.Chart) {
+    if (brandChartInstance) brandChartInstance.destroy();
+    brandChartInstance = new Chart(ctxBrand, {
+      type: 'bar',
+      data: {
+        labels: Object.keys(brandMap),
+        datasets: [{
+          label: 'Stoktaki Toplam Adet',
+          data: Object.values(brandMap),
+          backgroundColor: '#0c2438'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { y: { beginAtZero: true } },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+}
+
+// ==========================================
+// MODAL ACTIONS & CRUD
+// ==========================================
 function openAddPartModal() {
   document.getElementById("form-part").reset();
-  document.getElementById("part-form-id").value = "";
-  document.getElementById("modal-part-title").textContent = "➕ Yeni Parça Kartı Ekle";
+  document.getElementById("part-id").value = "";
+  document.getElementById("modal-part-title").innerHTML = "📦 Yeni Parça Kartı Tanımla";
   openModal("modal-part");
 }
 
-function editPart(id) {
+function openEditPartModal(id) {
   const part = inventoryState.find(p => p.id === id);
   if (!part) return;
 
-  document.getElementById("part-form-id").value = part.id;
+  document.getElementById("part-id").value = part.id;
   document.getElementById("part-name").value = part.name || "";
   document.getElementById("part-code").value = part.code || "";
+  document.getElementById("part-cross-code").value = part.crossCode || "";
+  document.getElementById("part-brand").value = part.brand || "Volvo Penta";
   document.getElementById("part-category").value = part.category || "Filtreler";
-  document.getElementById("part-brand").value = part.brand || "";
+  document.getElementById("part-compat").value = part.compat || "";
   document.getElementById("part-location").value = part.location || "Merkez Atölye";
+  document.getElementById("part-shelf").value = part.shelf || "";
   document.getElementById("part-buy-price").value = part.buyPrice || "";
   document.getElementById("part-currency").value = part.currency || "EUR";
   document.getElementById("part-sell-price").value = part.sellPrice || "";
   document.getElementById("part-qty").value = part.qty || 0;
   document.getElementById("part-unit").value = part.unit || "Adet";
-  document.getElementById("part-min-qty").value = part.minQty != null ? part.minQty : 2;
+  document.getElementById("part-min-qty").value = part.minQty || 2;
+  document.getElementById("part-image-url").value = part.imageUrl || "";
   document.getElementById("part-notes").value = part.notes || "";
 
-  document.getElementById("modal-part-title").textContent = "✏️ Parça Kartını Düzenle";
+  document.getElementById("modal-part-title").innerHTML = "✏️ Parça Kartını Düzenle";
   openModal("modal-part");
 }
 
 function savePartForm(e) {
   e.preventDefault();
-  const id = document.getElementById("part-form-id").value;
+  const id = document.getElementById("part-id").value;
   const name = document.getElementById("part-name").value.trim();
   const code = document.getElementById("part-code").value.trim();
+  const crossCode = document.getElementById("part-cross-code").value.trim();
+  const brand = document.getElementById("part-brand").value;
   const category = document.getElementById("part-category").value;
-  const brand = document.getElementById("part-brand").value.trim();
+  const compat = document.getElementById("part-compat").value.trim();
   const location = document.getElementById("part-location").value;
+  const shelf = document.getElementById("part-shelf").value.trim();
   const buyPrice = parseFloat(document.getElementById("part-buy-price").value) || 0;
   const currency = document.getElementById("part-currency").value;
   const sellPrice = parseFloat(document.getElementById("part-sell-price").value) || 0;
   const qty = parseInt(document.getElementById("part-qty").value, 10) || 0;
   const unit = document.getElementById("part-unit").value;
   const minQty = parseInt(document.getElementById("part-min-qty").value, 10) || 2;
+  const imageUrl = document.getElementById("part-image-url").value.trim();
   const notes = document.getElementById("part-notes").value.trim();
 
   if (id) {
-    // Edit existing
     const idx = inventoryState.findIndex(p => p.id === id);
     if (idx !== -1) {
-      inventoryState[idx] = { ...inventoryState[idx], name, code, category, brand, location, buyPrice, currency, sellPrice, qty, unit, minQty, notes };
+      inventoryState[idx] = { ...inventoryState[idx], name, code, crossCode, brand, category, compat, location, shelf, buyPrice, currency, sellPrice, qty, unit, minQty, imageUrl, notes };
       flash("✓ Parça kartı güncellendi.");
     }
   } else {
-    // Add new
     const newId = "part-" + Date.now();
-    const newPart = { id: newId, name, code, category, brand, location, buyPrice, currency, sellPrice, qty, unit, minQty, notes };
+    const newPart = { id: newId, name, code, crossCode, brand, category, compat, location, shelf, buyPrice, currency, sellPrice, qty, unit, minQty, imageUrl, notes };
     inventoryState.unshift(newPart);
     logAction("in", newPart, qty, location, "Yeni Parça Kartı Tanımlandı", "internal", buyPrice * qty);
     flash("✓ Yeni parça envantere eklendi.");
   }
 
   saveToStorage();
-  renderInventory();
+  renderAll();
   closeModal("modal-part");
 }
 
@@ -1489,7 +2574,7 @@ function deletePart(id) {
 
   inventoryState = inventoryState.filter(p => p.id !== id);
   saveToStorage();
-  renderInventory();
+  renderAll();
   flash("Parça envanterden silindi.");
 }
 
@@ -1503,28 +2588,31 @@ function quickAdjustStock(id, diff) {
   part.qty = newQty;
   logAction(diff > 0 ? "in" : "out", part, Math.abs(diff), part.location, diff > 0 ? "Hızlı Stok Ekleme (+1)" : "Hızlı Servis Düşümü (-1)", "internal", 0);
   saveToStorage();
-  renderInventory();
-  renderLogs();
+  renderAll();
   flash(`✓ ${part.name}: ${part.qty} ${part.unit}`);
 }
 
-// QUICK ACTION MODAL (IN / OUT)
-function openQuickActionModal(type) {
+// QUICK IN / OUT MODAL
+function openQuickActionModal(type, targetWh = null, targetPartId = null) {
   document.getElementById("form-action").reset();
   document.getElementById("action-type").value = type;
 
   const select = document.getElementById("action-part-select");
   select.innerHTML = inventoryState.map(p => `
-    <option value="${p.id}">${escapeHtml(p.name)} (${p.code}) — Mevcut: ${p.qty} ${p.unit} [${p.location}]</option>
+    <option value="${p.id}" ${targetPartId === p.id ? 'selected' : ''}>${escapeHtml(p.name)} (${p.code}) — Stok: ${p.qty} ${p.unit} [${p.location}]</option>
   `).join("");
+
+  if (targetWh) {
+    document.getElementById("action-warehouse").value = targetWh;
+  }
 
   if (type === "in") {
     document.getElementById("modal-action-title").innerHTML = "📥 Stok Girişi (Satın Alma / İkmal)";
-    document.getElementById("action-partner-label").textContent = "Tedarikçi / Satıcı Firma Adı";
+    document.getElementById("action-partner-label").textContent = "Tedarikçi / Toptancı Adı";
     document.getElementById("action-submit-btn").className = "btn success";
     document.getElementById("action-submit-btn").textContent = "📥 Stoğa Giriş Yap";
   } else {
-    document.getElementById("modal-action-title").innerHTML = "📤 Servise Parça Çıkışı (Kullanım / Satış)";
+    document.getElementById("modal-action-title").innerHTML = "📤 Servise Parça Çıkışı (Tekneye Kullanım / Satış)";
     document.getElementById("action-partner-label").textContent = "Müşteri / Tekne Adı";
     document.getElementById("action-submit-btn").className = "btn primary";
     document.getElementById("action-submit-btn").textContent = "📤 Servise Çıkış Yap";
@@ -1550,6 +2638,7 @@ function saveActionForm(e) {
   const warehouse = document.getElementById("action-warehouse").value;
   const partner = document.getElementById("action-partner").value.trim();
   const bookkeeping = document.getElementById("action-bookkeeping").value;
+  const tech = document.getElementById("action-technician").value.trim();
   const note = document.getElementById("action-note").value.trim();
 
   const part = inventoryState.find(p => p.id === partId);
@@ -1565,22 +2654,27 @@ function saveActionForm(e) {
     part.qty = Math.max(0, (Number(part.qty) || 0) - qty);
   }
 
-  logAction(type, part, qty, warehouse, `${partner ? partner + ' · ' : ''}${note || (type==='in'?'Malzeme Girişi':'Tekne Servis Çıkışı')}`, bookkeeping, type==='in' ? (part.buyPrice*qty) : (part.sellPrice*qty));
+  const desc = `${partner ? partner + ' · ' : ''}${tech ? '(' + tech + ') ' : ''}${note || (type==='in'?'Malzeme Girişi':'Tekne Servis Çıkışı')}`;
+  logAction(type, part, qty, warehouse, desc, bookkeeping, type==='in' ? (part.buyPrice*qty) : (part.sellPrice*qty));
 
   saveToStorage();
-  renderInventory();
-  renderLogs();
+  renderAll();
   closeModal("modal-action");
-  flash(`✓ ${part.name} işlemi kaydedildi.`);
+  flash(`✓ ${part.name} işlemi başarıyla işlendi.`);
 }
 
 // TRANSFER MODAL
-function openTransferModal() {
+function openTransferModal(fromDefault = null) {
   document.getElementById("form-transfer").reset();
   const select = document.getElementById("transfer-part-select");
   select.innerHTML = inventoryState.map(p => `
     <option value="${p.id}">${escapeHtml(p.name)} (${p.code}) — Mevcut: ${p.qty} ${p.unit} [${p.location}]</option>
   `).join("");
+
+  if (fromDefault) {
+    document.getElementById("transfer-from").value = fromDefault;
+  }
+
   openModal("modal-transfer");
 }
 
@@ -1597,108 +2691,20 @@ function saveTransferForm(e) {
   const part = inventoryState.find(p => p.id === partId);
   if (!part) return;
 
-  part.location = toWh; // update current location
-  logAction("transfer", part, qty, `${fromWh} ➔ ${toWh}`, `Transfer: ${person || 'Teknisyen'}`, "internal", 0);
+  part.location = toWh;
+  logAction("transfer", part, qty, `${fromWh} ➔ ${toWh}`, `Araç Transferi: ${person || 'Teknisyen'}`, "internal", 0);
 
   saveToStorage();
-  renderInventory();
-  renderLogs();
+  renderAll();
   closeModal("modal-transfer");
   flash(`✓ ${qty} adet ${part.name} ${toWh} konumuna aktarıldı.`);
 }
 
-// LOGGING
-function logAction(type, part, qty, warehouse, note, bookkeeping, amount) {
-  logsState.unshift({
-    id: "log-" + Date.now(),
-    date: new Date().toISOString(),
-    type, // in, out, transfer
-    partName: part.name,
-    partCode: part.code,
-    qty,
-    unit: part.unit || 'Adet',
-    warehouse,
-    note: note || '-',
-    bookkeeping: bookkeeping || 'internal', // official vs internal
-    amount: amount || 0
-  });
-}
-
-function renderLogs() {
-  const tbody = document.getElementById("logs-tbody");
-  tbody.innerHTML = "";
-
-  if (logsState.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted)">Henüz kayıtlı bir stok hareketi bulunmuyor.</td></tr>`;
-    return;
-  }
-
-  logsState.forEach(log => {
-    const tr = document.createElement("tr");
-    const dateStr = new Date(log.date).toLocaleString('tr-TR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
-    
-    let typeBadge = '';
-    if (log.type === 'in') typeBadge = '<span class="stock-pill good">📥 Giriş (+'+log.qty+')</span>';
-    else if (log.type === 'out') typeBadge = '<span class="stock-pill out">📤 Çıkış (-'+log.qty+')</span>';
-    else typeBadge = '<span class="stock-pill low">🔄 Transfer ('+log.qty+')</span>';
-
-    const bookBadge = log.bookkeeping === 'official' 
-      ? '<span class="type-badge official">🟢 Faturalı</span>'
-      : '<span class="type-badge internal">🔵 Servis İçi</span>';
-
-    tr.innerHTML = `
-      <td style="color:var(--muted);white-space:nowrap">${dateStr}</td>
-      <td>${typeBadge}</td>
-      <td>
-        <b>${escapeHtml(log.partName)}</b><br>
-        <span class="part-oem">${escapeHtml(log.partCode)}</span>
-      </td>
-      <td style="font-weight:700">${log.qty} ${log.unit || 'Adet'}</td>
-      <td><span class="loc-badge">${escapeHtml(log.warehouse)}</span></td>
-      <td>${escapeHtml(log.note)}</td>
-      <td>${bookBadge}</td>
-      <td style="font-weight:700;color:var(--navy)">${log.amount ? '₺ ' + Number(log.amount).toLocaleString('tr-TR', {minimumFractionDigits:2}) : '-'}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function clearLogsConfirm() {
-  if (!confirm("Tüm stok hareket geçmişini temizlemek istediğinize emin misiniz?")) return;
-  logsState = [];
-  saveToStorage();
-  renderLogs();
-  flash("Loglar temizlendi.");
-}
-
-// WAREHOUSE SUMMARIES
-function renderWarehouseSummaries() {
-  const getWhData = (whName) => {
-    const items = inventoryState.filter(p => p.location === whName);
-    const count = items.length;
-    const units = items.reduce((s, p) => s + (Number(p.qty)||0), 0);
-    const low = items.filter(p => Number(p.qty) <= Number(p.minQty||2)).length;
-    return `
-      <div>• <b>${count}</b> Farklı Parça Kalemi</div>
-      <div>• <b>${units}</b> Toplam Adet Stokta</div>
-      <div>• <b>${low}</b> Kritik Seviyede Parça</div>
-    `;
-  };
-
-  const elMain = document.getElementById("wh-summary-main");
-  const elVan1 = document.getElementById("wh-summary-van1");
-  const elVan2 = document.getElementById("wh-summary-van2");
-
-  if (elMain) elMain.innerHTML = getWhData("Merkez Atölye");
-  if (elVan1) elVan1.innerHTML = getWhData("Mobil Servis Aracı 1");
-  if (elVan2) elVan2.innerHTML = getWhData("Mobil Servis Aracı 2");
-}
-
 // EXPORT TO CSV
 function exportInventoryCsv() {
-  let csv = "\uFEFF#;Parça Adı;OEM Kodu;Kategori;Marka;Konum;Alış Fiyatı;Para Birimi;Satış Fiyatı (TL);Mevcut Stok;Birim;Kritik Sınır\n";
+  let csv = "\uFEFF#;Parça Adı;OEM Kodu;Muadil Kod;Marka;Kategori;Uyumlu Motor;Depo;Raf;Alış Fiyatı;Para Birimi;Satış Fiyatı (TL);Mevcut Stok;Birim;Kritik Sınır\n";
   inventoryState.forEach((item, idx) => {
-    csv += `${idx+1};"${item.name}";"${item.code}";"${item.category}";"${item.brand}";"${item.location}";${item.buyPrice};${item.currency};${item.sellPrice};${item.qty};${item.unit};${item.minQty}\n`;
+    csv += `${idx+1};"${item.name}";"${item.code}";"${item.crossCode||''}";"${item.brand}";"${item.category}";"${item.compat||''}";"${item.location}";"${item.shelf||''}";${item.buyPrice};"${item.currency}";${item.sellPrice};${item.qty};"${item.unit}";${item.minQty}\n`;
   });
 
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -1709,30 +2715,31 @@ function exportInventoryCsv() {
   a.click();
 }
 
-function exportLogsCsv() {
-  let csv = "\uFEFFTarih;İşlem Türü;Parça Adı;OEM Kodu;Miktar;Birim;Depo;Açıklama;Kayıt Tipi;Tutar\n";
-  logsState.forEach(log => {
-    csv += `"${log.date}";"${log.type}";"${log.partName}";"${log.partCode}";${log.qty};"${log.unit}";"${log.warehouse}";"${log.note}";"${log.bookkeeping}";${log.amount}\n`;
-  });
-
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `DM-MARIN-Stok-Loglari-${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
-}
-
 // TABS SWITCHER
 function switchTab(tabId) {
   activeTab = tabId;
-  document.querySelectorAll(".nav-tabs .tab-btn").forEach((btn, idx) => {
-    btn.classList.toggle("active", (tabId === 'inventory' && idx === 0) || (tabId === 'logs' && idx === 1) || (tabId === 'warehouses' && idx === 2));
+  const tabIds = ['inventory', 'reorder', 'warehouses', 'kits', 'logs', 'analytics'];
+  
+  tabIds.forEach(t => {
+    const btn = document.getElementById(`tab-nav-${t}`);
+    const view = document.getElementById(`view-${t}`);
+    if (btn) btn.classList.toggle("active", t === tabId);
+    if (view) view.style.display = t === tabId ? 'block' : 'none';
   });
 
-  document.getElementById("view-inventory").style.display = tabId === 'inventory' ? 'block' : 'none';
-  document.getElementById("view-logs").style.display = tabId === 'logs' ? 'block' : 'none';
-  document.getElementById("view-warehouses").style.display = tabId === 'warehouses' ? 'block' : 'none';
+  if (tabId === 'analytics') {
+    setTimeout(renderAnalytics, 50);
+  }
+}
+
+function openModal(id) {
+  const m = document.getElementById(id);
+  if (m) m.classList.add("open");
+}
+
+function closeModal(id) {
+  const m = document.getElementById(id);
+  if (m) m.classList.remove("open");
 }
 
 function copyOem(code) {
@@ -1756,7 +2763,10 @@ function flash(msg) {
 }
 
 // RUN ON LOAD
-window.addEventListener("DOMContentLoaded", initApp);
+window.addEventListener("DOMContentLoaded", () => {
+  initApp();
+  setViewMode(currentViewMode);
+});
 </script>
 </body>
 </html>
