@@ -889,6 +889,55 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 </div>
 <label class="switch" aria-label="İndeksleme durumu"><input type="checkbox" id="page-seo-indexed" checked><span></span></label>
 </div>
+
+<!-- GOOGLE SERP SITELINKS (SITE İÇİ HIZLI BAĞLANTILAR) DÜZENLEME -->
+<div class="field full" style="padding:18px;border:1px solid #dfe1e5;border-radius:12px;background:#f8fafc;margin-top:6px">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+    <div>
+      <b style="font-size:14px;color:var(--navy);display:block">🔗 Google SERP Site İçi Hızlı Bağlantıları (Sitelinks)</b>
+      <small style="color:var(--muted)">Google arama sonucunun altında listelenen 4 ana servis/sayfa bağlantısını ve metinlerini buradan değiştirin.</small>
+    </div>
+    <span class="pill badge" style="background:#e0f2fe;color:#0284c7;font-weight:700">Canlı Önizleme Eşitlemeli</span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+    <div class="field">
+      <label for="page-seo-sitelink-1-title" style="font-size:11.5px;font-weight:700">1. Bağlantı Başlığı</label>
+      <input id="page-seo-sitelink-1-title" placeholder="Örn: Servis Talebi Oluştur" value="Servis Talebi Oluştur">
+    </div>
+    <div class="field">
+      <label for="page-seo-sitelink-1-url" style="font-size:11.5px;font-weight:700">1. Hedef URL / Çapa</label>
+      <input id="page-seo-sitelink-1-url" placeholder="Örn: #talep veya https://dmmarin.com/#talep" value="#talep">
+    </div>
+
+    <div class="field">
+      <label for="page-seo-sitelink-2-title" style="font-size:11.5px;font-weight:700">2. Bağlantı Başlığı</label>
+      <input id="page-seo-sitelink-2-title" placeholder="Örn: Volvo Penta Özel Servis" value="Volvo Penta Özel Servis">
+    </div>
+    <div class="field">
+      <label for="page-seo-sitelink-2-url" style="font-size:11.5px;font-weight:700">2. Hedef URL</label>
+      <input id="page-seo-sitelink-2-url" placeholder="Örn: volvo-penta-servisi.html" value="volvo-penta-servisi.html">
+    </div>
+
+    <div class="field">
+      <label for="page-seo-sitelink-3-title" style="font-size:11.5px;font-weight:700">3. Bağlantı Başlığı</label>
+      <input id="page-seo-sitelink-3-title" placeholder="Örn: Marin Jeneratör Bakımı" value="Marin Jeneratör Bakımı">
+    </div>
+    <div class="field">
+      <label for="page-seo-sitelink-3-url" style="font-size:11.5px;font-weight:700">3. Hedef URL</label>
+      <input id="page-seo-sitelink-3-url" placeholder="Örn: marin-jenerator-servisi.html" value="marin-jenerator-servisi.html">
+    </div>
+
+    <div class="field">
+      <label for="page-seo-sitelink-4-title" style="font-size:11.5px;font-weight:700">4. Bağlantı Başlığı</label>
+      <input id="page-seo-sitelink-4-title" placeholder="Örn: 7/24 Acil Yol Yardımı" value="7/24 Acil Yol Yardımı">
+    </div>
+    <div class="field">
+      <label for="page-seo-sitelink-4-url" style="font-size:11.5px;font-weight:700">4. Hedef URL</label>
+      <input id="page-seo-sitelink-4-url" placeholder="Örn: acil-mobil-marin-servis.html" value="acil-mobil-marin-servis.html">
+    </div>
+  </div>
+</div>
 </div>
 
 <div style="margin-top:20px;display:flex;justify-content:flex-end">
@@ -3661,6 +3710,7 @@ const seoSummaryBody = document.querySelector('#seo-summary-table-body');
 const googleTitleEl = document.querySelector('#google-preview-title');
 const googleDescEl = document.querySelector('#google-preview-desc');
 const googleUrlEl = document.querySelector('#google-preview-url');
+const googleSitelinksEl = document.querySelector('#google-preview-sitelinks');
 const seoTitleHealth = document.querySelector('#seo-title-health');
 const seoTitleStatus = document.querySelector('#seo-title-status');
 const seoDescHealth = document.querySelector('#seo-desc-health');
@@ -3668,6 +3718,15 @@ const seoDescStatus = document.querySelector('#seo-desc-status');
 const serpMobileBtn = document.querySelector('#serp-view-mobile');
 const serpDesktopBtn = document.querySelector('#serp-view-desktop');
 const googleSnippetContainer = document.querySelector('#google-snippet-container');
+
+const sitelink1Title = document.querySelector('#page-seo-sitelink-1-title');
+const sitelink1Url = document.querySelector('#page-seo-sitelink-1-url');
+const sitelink2Title = document.querySelector('#page-seo-sitelink-2-title');
+const sitelink2Url = document.querySelector('#page-seo-sitelink-2-url');
+const sitelink3Title = document.querySelector('#page-seo-sitelink-3-title');
+const sitelink3Url = document.querySelector('#page-seo-sitelink-3-url');
+const sitelink4Title = document.querySelector('#page-seo-sitelink-4-title');
+const sitelink4Url = document.querySelector('#page-seo-sitelink-4-url');
 
 function updateCharCounters() {
   updateGooglePreview();
@@ -3695,6 +3754,21 @@ function updateGooglePreview() {
     } catch(e) {
       googleUrlEl.textContent = canonical || 'https://dmmarin.com';
     }
+  }
+
+  // Update Google Sitelinks Snippet in Preview Card
+  const st1 = (sitelink1Title?.value || '').trim() || 'Servis Talebi Oluştur';
+  const st2 = (sitelink2Title?.value || '').trim() || 'Volvo Penta Özel Servis';
+  const st3 = (sitelink3Title?.value || '').trim() || 'Marin Jeneratör Bakımı';
+  const st4 = (sitelink4Title?.value || '').trim() || '7/24 Acil Yol Yardımı';
+
+  if (googleSitelinksEl) {
+    googleSitelinksEl.innerHTML = `
+      <span onclick="document.querySelector('#page-seo-sitelink-1-title')?.focus()" style="color:#1a0dab;cursor:pointer;text-decoration:underline" title="Düzenlemek için tıklayın">${escapeHtml(st1)}</span>
+      <span onclick="document.querySelector('#page-seo-sitelink-2-title')?.focus()" style="color:#1a0dab;cursor:pointer;text-decoration:underline" title="Düzenlemek için tıklayın">${escapeHtml(st2)}</span>
+      <span onclick="document.querySelector('#page-seo-sitelink-3-title')?.focus()" style="color:#1a0dab;cursor:pointer;text-decoration:underline" title="Düzenlemek için tıklayın">${escapeHtml(st3)}</span>
+      <span onclick="document.querySelector('#page-seo-sitelink-4-title')?.focus()" style="color:#1a0dab;cursor:pointer;text-decoration:underline" title="Düzenlemek için tıklayın">${escapeHtml(st4)}</span>
+    `;
   }
 
   const tLen = (titleInput?.value || '').length;
@@ -3787,9 +3861,13 @@ if (googleDescEl) {
   });
 }
 
-titleInput.addEventListener('input', updateCharCounters);
-descInput.addEventListener('input', updateCharCounters);
-canonicalInput.addEventListener('input', updateCharCounters);
+titleInput?.addEventListener('input', updateCharCounters);
+descInput?.addEventListener('input', updateCharCounters);
+canonicalInput?.addEventListener('input', updateCharCounters);
+
+[sitelink1Title, sitelink1Url, sitelink2Title, sitelink2Url, sitelink3Title, sitelink3Url, sitelink4Title, sitelink4Url].forEach(el => {
+  if (el) el.addEventListener('input', updateGooglePreview);
+});
 
 function loadPageSeo(pageId) {
   const page = pagesSeoState.find(p => p.id === pageId) || pagesSeoState[0];
@@ -3801,6 +3879,23 @@ function loadPageSeo(pageId) {
   if (keywordsInput) keywordsInput.value = page.keywords || '';
   canonicalInput.value = page.canonical || '';
   indexToggle.checked = page.indexed !== false;
+
+  const sitelinks = page.sitelinks || [
+    { title: 'Servis Talebi Oluştur', url: '#talep' },
+    { title: 'Volvo Penta Özel Servis', url: 'volvo-penta-servisi.html' },
+    { title: 'Marin Jeneratör Bakımı', url: 'marin-jenerator-servisi.html' },
+    { title: '7/24 Acil Yol Yardımı', url: 'acil-mobil-marin-servis.html' }
+  ];
+
+  if (sitelink1Title) sitelink1Title.value = sitelinks[0]?.title || 'Servis Talebi Oluştur';
+  if (sitelink1Url) sitelink1Url.value = sitelinks[0]?.url || '#talep';
+  if (sitelink2Title) sitelink2Title.value = sitelinks[1]?.title || 'Volvo Penta Özel Servis';
+  if (sitelink2Url) sitelink2Url.value = sitelinks[1]?.url || 'volvo-penta-servisi.html';
+  if (sitelink3Title) sitelink3Title.value = sitelinks[2]?.title || 'Marin Jeneratör Bakımı';
+  if (sitelink3Url) sitelink3Url.value = sitelinks[2]?.url || 'marin-jenerator-servisi.html';
+  if (sitelink4Title) sitelink4Title.value = sitelinks[3]?.title || '7/24 Acil Yol Yardımı';
+  if (sitelink4Url) sitelink4Url.value = sitelinks[3]?.url || 'acil-mobil-marin-servis.html';
+
   updateCharCounters();
 }
 
@@ -3814,9 +3909,17 @@ function saveCurrentPageSeo() {
     if (keywordsInput) page.keywords = keywordsInput.value.trim();
     page.canonical = canonicalInput.value.trim();
     page.indexed = indexToggle.checked;
+    
+    page.sitelinks = [
+      { title: sitelink1Title?.value.trim() || 'Servis Talebi Oluştur', url: sitelink1Url?.value.trim() || '#talep' },
+      { title: sitelink2Title?.value.trim() || 'Volvo Penta Özel Servis', url: sitelink2Url?.value.trim() || 'volvo-penta-servisi.html' },
+      { title: sitelink3Title?.value.trim() || 'Marin Jeneratör Bakımı', url: sitelink3Url?.value.trim() || 'marin-jenerator-servisi.html' },
+      { title: sitelink4Title?.value.trim() || '7/24 Acil Yol Yardımı', url: sitelink4Url?.value.trim() || 'acil-mobil-marin-servis.html' }
+    ];
+
     renderSeoSummaryTable();
     autoSave();
-    flash(`${page.name} SEO ayarları güncellendi.`);
+    flash(`${page.name} SEO ve Google Sitelinks ayarları güncellendi.`);
   }
 }
 
