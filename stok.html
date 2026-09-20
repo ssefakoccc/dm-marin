@@ -782,9 +782,192 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
   .sidebar { width: 68px; }
   .sidebar-title, .sidebar-foot, .nav-item span:not(.icon), .nav-category-title, .nav-badge { display: none; }
 }
+
+/* PIN LOCK OVERLAY */
+.lock-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.96);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.lock-box {
+  background: #ffffff;
+  border-radius: 16px;
+  max-width: 420px;
+  width: 100%;
+  padding: 32px 28px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+.lock-logo {
+  height: 48px;
+  margin-bottom: 12px;
+}
+.lock-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+.lock-sub {
+  font-size: 12.5px;
+  color: #64748b;
+  margin-bottom: 24px;
+}
+.lock-pin-input {
+  width: 100%;
+  height: 52px;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 8px;
+  text-align: center;
+  border: 2px solid #0284c7;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  outline: none;
+  background: #f8fafc;
+  box-sizing: border-box;
+}
+.lock-pin-input:focus {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.25);
+  background: #fff;
+}
+.lock-btn {
+  width: 100%;
+  height: 48px;
+  background: #0284c7;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all .15s;
+}
+.lock-btn:hover {
+  background: #0369a1;
+}
+
+/* POS DROPDOWN SUGGESTIONS AUTOCOMPLETE */
+.pos-search-wrapper {
+  position: relative;
+  flex: 1;
+}
+.pos-suggestions-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+  max-height: 380px;
+  overflow-y: auto;
+  z-index: 100;
+  display: none;
+}
+.pos-suggest-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+  transition: background .12s;
+}
+.pos-suggest-item:hover, .pos-suggest-item.selected {
+  background: #f0f9ff;
+}
+.pos-suggest-item:last-child {
+  border-bottom: none;
+}
+.pos-suggest-main {
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 13px;
+}
+.pos-suggest-sub {
+  font-size: 11.5px;
+  color: #64748b;
+  display: flex;
+  gap: 8px;
+  margin-top: 2px;
+}
+.pos-suggest-price-badge {
+  text-align: right;
+}
+.pos-suggest-price {
+  font-weight: 800;
+  color: #0284c7;
+  font-size: 13.5px;
+}
+.pos-suggest-stock {
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #ecfdf5;
+  color: #059669;
+  font-weight: 700;
+}
+.pos-suggest-stock.low {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+/* POS CART ITEM EDITING */
+.pos-cart-edit-grid {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+.pos-cart-num-input {
+  height: 26px;
+  padding: 0 4px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #fff;
+  text-align: right;
+}
+.pos-cart-num-input:focus {
+  outline: none;
+  border-color: #0284c7;
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
+}
+
 </style>
 </head>
 <body>
+
+<!-- ERP PIN LOCK OVERLAY -->
+<div class="lock-overlay" id="erp-lock-overlay" style="display:none">
+  <div class="lock-box">
+    <img src="assets/dm-marin-logo.webp" alt="DM MARİN" class="lock-logo" onerror="this.style.display='none'">
+    <div class="lock-title">DM MARİN ERP GİRİŞİ</div>
+    <div class="lock-sub">Ön Muhasebe & Stok Sistemine Erişmek İçin Güvenlik PIN Kodunuzu Giriniz</div>
+    <form onsubmit="handlePinLogin(event)">
+      <input type="password" id="erp-pin-input" class="lock-pin-input" maxlength="12" placeholder="••••" autocomplete="off" autofocus>
+      <button type="submit" class="lock-btn">🔓 Giriş Yap</button>
+    </form>
+    <div style="margin-top:16px;font-size:11.5px;color:#94a3b8">
+      Varsayılan PIN: <b>1998</b> veya <b>dm1998</b>
+    </div>
+  </div>
+</div>
 
 <div class="app-container">
 
@@ -843,6 +1026,7 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
     <div class="sidebar-foot">
       <a href="admin.html">🌐 Site & SEO Yönetimi</a>
       <a href="index.html" target="_blank">⚓ DM Marin Ana Sayfa</a>
+      <button type="button" class="btn danger sm" style="width:100%;margin-top:6px;font-weight:700;justify-content:center" onclick="logoutERP()">🚪 Çıkış Yap</button>
     </div>
   </aside>
 
@@ -870,7 +1054,9 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
         </div>
         <button type="button" class="btn success sm" onclick="switchNav('pos')">⚡ Hızlı Satış (POS)</button>
         <button type="button" class="btn primary sm" onclick="openNewSaleModal()">➕ Servis Faturası</button>
+        <button type="button" class="btn outline sm" onclick="resetTransactions()">🗑️ Alış/Satışları Sıfırla</button>
         <button type="button" class="btn outline sm" onclick="syncCloud()">🔄 Eşitle</button>
+        <button type="button" class="btn danger sm" onclick="logoutERP()" title="Oturumu Kapat">🚪 Çıkış</button>
       </div>
     </header>
 
@@ -1014,7 +1200,10 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
         <div class="pos-container">
           <div class="pos-products-panel">
             <div class="pos-top-search">
-              <input type="text" id="pos-barcode-input" class="pos-barcode-input" placeholder="🔍 Barkod okutunuz veya OEM kodu / parça adı yazıp Enter'a basınız..." onkeydown="handleBarcodeEnter(event)">
+              <div class="pos-search-wrapper">
+                <input type="text" id="pos-barcode-input" class="pos-barcode-input" placeholder="🔍 Barkod okutunuz veya OEM kodu / parça adı yazıp arayınız..." oninput="handlePosSearchInput(this.value)" onkeydown="handleBarcodeEnter(event)" autocomplete="off">
+                <div id="pos-suggestions" class="pos-suggestions-dropdown"></div>
+              </div>
               <button class="btn primary lg" onclick="handleBarcodeAdd()">➕ Ekle</button>
             </div>
 
@@ -1383,6 +1572,20 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
               </thead>
               <tbody id="settings-locations-tbody"></tbody>
             </table>
+          </div>
+
+          <!-- VERİ TEMİZLEME & İŞLEM SIFIRLAMA -->
+          <div class="widget-card" style="grid-column: 1 / -1; border-left: 4px solid #ef4444">
+            <div class="widget-head">
+              <b style="color:#b91c1c">⚠️ SİSTEM VERİLERİNİ VE HAREKETLERİ SIFIRLAMA</b>
+            </div>
+            <div style="padding:16px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+              <div>
+                <b style="font-size:14px;color:#0f172a">Tüm Alış ve Satış Faturalarını Sıfırla</b>
+                <p style="margin:4px 0 0;font-size:12px;color:#64748b">Test veya geçmiş döneme ait tüm satış fişlerini, müşteri/tedarikçi borç bakiyelerini ve alış hareketlerini temizler. Ürün kartları ve stok adetleri korunur.</p>
+              </div>
+              <button class="btn danger" onclick="resetTransactions()">🗑️ Alış ve Satışları Sıfırla</button>
+            </div>
           </div>
         </div>
       </div>
@@ -1808,88 +2011,19 @@ let productsState = [
 
 let customersState = [
   { id: "c-1", name: "Ahmet Barış Kaya", boatName: "M/Y AZIMUT 55", boatModel: "Azimut 55 (Twin Volvo D6-435)", marina: "Setur Kalamış Marina B-14", phone: "0532 411 22 33", email: "ahmet@kaya.com", taxInfo: "Kadıköy VD 489211029", balance: 0 },
-  { id: "c-2", name: "Serdar Özkan", boatName: "S/Y AEGEAN WIND", boatModel: "Bavaria 46 (Yanmar 4JH5E)", marina: "Ataköy Marina Ponton C", phone: "0542 998 77 66", email: "serdar@ozkan.com", taxInfo: "Bakırköy VD 192837465", balance: 14500 },
-  { id: "c-3", name: "Bora Denizcilik Ltd.", boatName: "M/Y BLUE DREAM", boatModel: "Princess 62 (MAN V8-1200)", marina: "Pendik Marintürk", phone: "0216 444 88 99", email: "bora@denizcilik.com", taxInfo: "Tuzla VD 9876543210", balance: 35680 }
+  { id: "c-2", name: "Serdar Özkan", boatName: "S/Y AEGEAN WIND", boatModel: "Bavaria 46 (Yanmar 4JH5E)", marina: "Ataköy Marina Ponton C", phone: "0542 998 77 66", email: "serdar@ozkan.com", taxInfo: "Bakırköy VD 192837465", balance: 0 },
+  { id: "c-3", name: "Bora Denizcilik Ltd.", boatName: "M/Y BLUE DREAM", boatModel: "Princess 62 (MAN V8-1200)", marina: "Pendik Marintürk", phone: "0216 444 88 99", email: "bora@denizcilik.com", taxInfo: "Tuzla VD 9876543210", balance: 0 }
 ];
 
 let suppliersState = [
-  { id: "s-1", name: "Şampiyon Filtre & Marin Dağıtım A.Ş.", category: "Filtre & Yağ Grubu", contact: "Hakan Bey", phone: "0216 395 11 22", city: "Tuzla / İstanbul", balance: 35684.34 },
-  { id: "s-2", name: "Marintek Volvo Penta Yetkili Toptan", category: "Orijinal Volvo Penta", contact: "Kemal Bey", phone: "0216 488 44 55", city: "Kadıköy / İstanbul", balance: 14930.00 },
-  { id: "s-3", name: "MC Power Jeneratör & Yedek Parça", category: "Kohler & Cummins Onan", contact: "Murat Bey", phone: "0212 544 33 22", city: "İkitelli / İstanbul", balance: 1060.00 }
+  { id: "s-1", name: "Şampiyon Filtre & Marin Dağıtım A.Ş.", category: "Filtre & Yağ Grubu", contact: "Hakan Bey", phone: "0216 395 11 22", city: "Tuzla / İstanbul", balance: 0 },
+  { id: "s-2", name: "Marintek Volvo Penta Yetkili Toptan", category: "Orijinal Volvo Penta", contact: "Kemal Bey", phone: "0216 488 44 55", city: "Kadıköy / İstanbul", balance: 0 },
+  { id: "s-3", name: "MC Power Jeneratör & Yedek Parça", category: "Kohler & Cummins Onan", contact: "Murat Bey", phone: "0212 544 33 22", city: "İkitelli / İstanbul", balance: 0 }
 ];
 
-let salesState = [
-  {
-    id: "sale-101",
-    date: "2026-09-18",
-    customerId: "c-1",
-    customerName: "Ahmet Barış Kaya",
-    boatName: "M/Y AZIMUT 55",
-    items: [
-      { prodId: "p-1", name: "Volvo Penta D4/D6 Yağ Filtresi", qty: 2, price: 1750 },
-      { prodId: "p-4", name: "Volvo Penta D4/D6 İmpeller Kiti", qty: 2, price: 3800 }
-    ],
-    laborCost: 4500,
-    total: 15600,
-    payType: "Kredi Kartı",
-    status: "paid"
-  },
-  {
-    id: "sale-102",
-    date: "2026-09-19",
-    customerId: "c-2",
-    customerName: "Serdar Özkan",
-    boatName: "S/Y AEGEAN WIND",
-    items: [
-      { prodId: "p-3", name: "Yanmar 4JH Yağ Filtresi", qty: 1, price: 950 }
-    ],
-    laborCost: 2500,
-    total: 3450,
-    payType: "Açık Hesap",
-    status: "pending"
-  },
-  {
-    id: "sale-103",
-    date: "2026-09-20",
-    customerId: "c-3",
-    customerName: "Bora Denizcilik Ltd.",
-    boatName: "M/Y BLUE DREAM",
-    items: [
-      { prodId: "p-6", name: "VDS-4.5 15W-40 Marin Yağ (20L)", qty: 4, price: 5800 }
-    ],
-    laborCost: 8780,
-    total: 31980,
-    payType: "Havale / EFT",
-    status: "paid"
-  }
-];
+let salesState = [];
 
-let purchasesState = [
-  {
-    id: "pur-201",
-    date: "2026-09-14",
-    supplierId: "s-1",
-    supplierName: "Şampiyon Filtre & Marin Dağıtım A.Ş.",
-    prodId: "p-1",
-    prodName: "Volvo Penta D4/D6 Yağ Filtresi",
-    qty: 10,
-    unitPrice: 1250,
-    totalTL: 12500,
-    status: "paid"
-  },
-  {
-    id: "pur-202",
-    date: "2026-09-15",
-    supplierId: "s-2",
-    supplierName: "Marintek Volvo Penta Yetkili Toptan",
-    prodId: "p-4",
-    prodName: "Volvo Penta D4/D6 Ham Su İmpeller Kiti",
-    qty: 5,
-    unitPrice: 2750,
-    totalTL: 13750,
-    status: "pending"
-  }
-];
+let purchasesState = [];
 
 let expensesState = [
   { id: "e-1", date: "2026-09-22", category: "Akaryakıt & Saha Aracı", desc: "Mobil Servis Aracı 1 Shell Mazot İkmali", amount: 950.40, status: "pending" },
@@ -2024,29 +2158,35 @@ let posSelectedCat = 'all';
 
 function renderPos() {
   const catContainer = document.getElementById("pos-cat-container");
-  catContainer.innerHTML = `<button class="pos-cat-btn ${posSelectedCat==='all'?'active':''}" onclick="setPosCat('all')">Tüm Parçalar (${productsState.length})</button>` +
-    categoriesState.map(cat => `
-      <button class="pos-cat-btn ${posSelectedCat===cat?'active':''}" onclick="setPosCat('${cat}')">${escapeHtml(cat)}</button>
-    `).join("");
+  if (catContainer) {
+    catContainer.innerHTML = `<button class="pos-cat-btn ${posSelectedCat==='all'?'active':''}" onclick="setPosCat('all')">Tüm Parçalar (${productsState.length})</button>` +
+      categoriesState.map(cat => `
+        <button class="pos-cat-btn ${posSelectedCat===cat?'active':''}" onclick="setPosCat('${cat}')">${escapeHtml(cat)}</button>
+      `).join("");
+  }
 
   const grid = document.getElementById("pos-grid-container");
-  const filtered = productsState.filter(p => posSelectedCat === 'all' || p.category === posSelectedCat);
-  grid.innerHTML = filtered.map(p => `
-    <div class="pos-item-card" onclick="addToPosCart('${p.id}')">
-      <div>
-        <div class="pos-item-name">${escapeHtml(p.name)}</div>
-        <div class="pos-item-code">📋 ${escapeHtml(p.code)} ${p.barcode ? `| 🏷️ ${p.barcode}` : ''}</div>
+  if (grid) {
+    const filtered = productsState.filter(p => posSelectedCat === 'all' || p.category === posSelectedCat);
+    grid.innerHTML = filtered.map(p => `
+      <div class="pos-item-card" onclick="addToPosCart('${p.id}')">
+        <div>
+          <div class="pos-item-name">${escapeHtml(p.name)}</div>
+          <div class="pos-item-code">📋 ${escapeHtml(p.code)} ${p.barcode ? `| 🏷️ ${p.barcode}` : ''}</div>
+        </div>
+        <div class="pos-item-foot">
+          <span class="pos-item-price">₺ ${Number(p.sellPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})}</span>
+          <span class="pos-item-stock ${p.qty<=p.minQty?'style="background:#fee2e2;color:#b91c1c"':''}">${p.qty} Stk</span>
+        </div>
       </div>
-      <div class="pos-item-foot">
-        <span class="pos-item-price">₺ ${Number(p.sellPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})}</span>
-        <span class="pos-item-stock ${p.qty<=p.minQty?'style="background:#fee2e2;color:#b91c1c"':''}">${p.qty} Stk</span>
-      </div>
-    </div>
-  `).join("");
+    `).join("");
+  }
 
   const custSel = document.getElementById("pos-customer-select");
-  custSel.innerHTML = `<option value="walk-in">👤 Perakende / Hızlı Müşteri</option>` +
-    customersState.map(c => `<option value="${c.id}">${escapeHtml(c.name)} — ⛵ ${escapeHtml(c.boatName)}</option>`).join("");
+  if (custSel) {
+    custSel.innerHTML = `<option value="walk-in">👤 Perakende / Hızlı Müşteri</option>` +
+      customersState.map(c => `<option value="${c.id}">${escapeHtml(c.name)} — ⛵ ${escapeHtml(c.boatName)}</option>`).join("");
+  }
 
   renderPosCart();
   setTimeout(() => document.getElementById("pos-barcode-input")?.focus(), 100);
@@ -2057,9 +2197,88 @@ function setPosCat(cat) {
   renderPos();
 }
 
+// AUTOCOMPLETE LIVE SEARCH WHILE TYPING BARCODE / OEM / PRODUCT NAME
+function handlePosSearchInput(val) {
+  const query = (val || '').trim().toLowerCase();
+  const dropdown = document.getElementById("pos-suggestions");
+  if (!dropdown) return;
+
+  if (!query) {
+    dropdown.style.display = "none";
+    dropdown.innerHTML = "";
+    return;
+  }
+
+  // Filter products by name, code, barcode, brand
+  const matches = productsState.filter(p => 
+    (p.barcode && p.barcode.toLowerCase().includes(query)) ||
+    (p.code && p.code.toLowerCase().includes(query)) ||
+    (p.name && p.name.toLowerCase().includes(query)) ||
+    (p.brand && p.brand.toLowerCase().includes(query))
+  ).slice(0, 10);
+
+  if (matches.length === 0) {
+    dropdown.innerHTML = `<div style="padding:12px;font-size:12.5px;color:var(--text-muted);text-align:center">Eşleşen parça veya barkod bulunamadı.</div>`;
+    dropdown.style.display = "block";
+    return;
+  }
+
+  dropdown.innerHTML = matches.map((p, idx) => `
+    <div class="pos-suggest-item ${idx===0?'selected':''}" onclick="selectSuggestProd('${p.id}')">
+      <div>
+        <div class="pos-suggest-main">${escapeHtml(p.name)}</div>
+        <div class="pos-suggest-sub">
+          <span>📋 OEM: <b>${escapeHtml(p.code)}</b></span>
+          ${p.barcode ? `<span>🏷️ Barkod: <b>${escapeHtml(p.barcode)}</b></span>` : ''}
+          <span>⚓ ${escapeHtml(p.brand)}</span>
+        </div>
+      </div>
+      <div class="pos-suggest-price-badge">
+        <div class="pos-suggest-price">₺ ${Number(p.sellPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})}</div>
+        <span class="pos-suggest-stock ${p.qty<=p.minQty?'low':''}">${p.qty} Adet Stok</span>
+      </div>
+    </div>
+  `).join("");
+
+  dropdown.style.display = "block";
+}
+
+function selectSuggestProd(prodId) {
+  addToPosCart(prodId);
+  const input = document.getElementById("pos-barcode-input");
+  const dropdown = document.getElementById("pos-suggestions");
+  if (input) input.value = "";
+  if (dropdown) {
+    dropdown.style.display = "none";
+    dropdown.innerHTML = "";
+  }
+  const p = productsState.find(x => x.id === prodId);
+  if (p) flash(`✓ Sepete eklendi: ${p.name}`);
+  if (input) input.focus();
+}
+
+// Close suggestions dropdown when clicking outside
+document.addEventListener("click", function(e) {
+  const wrapper = document.querySelector(".pos-search-wrapper");
+  const dropdown = document.getElementById("pos-suggestions");
+  if (wrapper && dropdown && !wrapper.contains(e.target)) {
+    dropdown.style.display = "none";
+  }
+});
+
 function handleBarcodeEnter(e) {
   if (e.key === 'Enter') {
-    handleBarcodeAdd();
+    e.preventDefault();
+    const dropdown = document.getElementById("pos-suggestions");
+    const firstItem = dropdown?.querySelector(".pos-suggest-item");
+    if (dropdown && dropdown.style.display !== 'none' && firstItem) {
+      firstItem.click();
+    } else {
+      handleBarcodeAdd();
+    }
+  } else if (e.key === 'Escape') {
+    const dropdown = document.getElementById("pos-suggestions");
+    if (dropdown) dropdown.style.display = "none";
   }
 }
 
@@ -2075,6 +2294,8 @@ function handleBarcodeAdd() {
   if (found) {
     addToPosCart(found.id);
     input.value = "";
+    const dropdown = document.getElementById("pos-suggestions");
+    if (dropdown) dropdown.style.display = "none";
     flash(`✓ Sepete eklendi: ${found.name}`);
   } else {
     alert("Ürün bulunamadı! Barkod veya parça kodunu kontrol ediniz.");
@@ -2093,7 +2314,9 @@ function addToPosCart(prodId) {
       prodId: p.id,
       name: p.name,
       code: p.code,
-      price: p.sellPrice,
+      price: Number(p.sellPrice) || 0,
+      origPrice: Number(p.sellPrice) || 0,
+      discountPct: 0,
       qty: 1
     });
   }
@@ -2109,6 +2332,23 @@ function updatePosCartQty(idx, delta) {
   renderPosCart();
 }
 
+function updatePosCartPrice(idx, newPrice) {
+  if (!posCart[idx]) return;
+  const p = Math.max(0, parseFloat(newPrice) || 0);
+  posCart[idx].price = p;
+  renderPosCart();
+}
+
+function updatePosCartDiscount(idx, discPct) {
+  if (!posCart[idx]) return;
+  const d = Math.max(0, Math.min(100, parseFloat(discPct) || 0));
+  posCart[idx].discountPct = d;
+  if (posCart[idx].origPrice) {
+    posCart[idx].price = Math.round(posCart[idx].origPrice * (1 - d / 100) * 100) / 100;
+  }
+  renderPosCart();
+}
+
 function clearPosCart() {
   if (posCart.length === 0) return;
   if (confirm("Hızlı satış sepeti temizlensin mi?")) {
@@ -2119,33 +2359,43 @@ function clearPosCart() {
 
 function renderPosCart() {
   const container = document.getElementById("pos-cart-items-container");
+  if (!container) return;
+
   if (posCart.length === 0) {
-    container.innerHTML = `<div style="text-align:center;color:var(--text-muted);padding:40px 10px;font-size:13px">Sepetiniz boş.<br>Sol taraftan ürün seçin veya barkod okutun.</div>`;
+    container.innerHTML = `<div style="text-align:center;color:var(--text-muted);padding:40px 10px;font-size:13px">Sepetiniz boş.<br>Sol taraftan ürün seçin veya barkod/OEM kodu yazarak aratın.</div>`;
     document.getElementById("pos-subtotal").textContent = "₺ 0,00";
     document.getElementById("pos-vat-included").textContent = "₺ 0,00";
     document.getElementById("pos-grand-total").textContent = "₺ 0,00";
     return;
   }
 
-  container.innerHTML = posCart.map((it, idx) => `
-    <div class="pos-cart-row">
-      <div class="pos-cart-row-info">
-        <div class="pos-cart-row-title">${escapeHtml(it.name)}</div>
-        <div class="pos-cart-row-sub">₺${Number(it.price).toFixed(2)} x ${it.qty}</div>
+  container.innerHTML = posCart.map((it, idx) => {
+    const lineTotal = it.qty * (Number(it.price) || 0);
+    return `
+      <div class="pos-cart-row">
+        <div class="pos-cart-row-info">
+          <div class="pos-cart-row-title">${escapeHtml(it.name)}</div>
+          <div class="pos-cart-edit-grid">
+            <span style="font-size:11px;color:#64748b">Fiyat ₺:</span>
+            <input type="number" step="0.01" class="pos-cart-num-input" style="width:72px" value="${Number(it.price).toFixed(2)}" onchange="updatePosCartPrice(${idx}, this.value)" title="Birim satış fiyatını değiştir">
+            <span style="font-size:11px;color:#64748b;margin-left:4px">İndirim %:</span>
+            <input type="number" min="0" max="100" class="pos-cart-num-input" style="width:48px" value="${it.discountPct || 0}" onchange="updatePosCartDiscount(${idx}, this.value)" title="Satır indirimi (%)">
+          </div>
+        </div>
+        <div class="pos-qty-ctrl">
+          <button class="pos-qty-btn" onclick="updatePosCartQty(${idx}, -1)">-</button>
+          <span style="font-weight:800;width:20px;text-align:center">${it.qty}</span>
+          <button class="pos-qty-btn" onclick="updatePosCartQty(${idx}, 1)">+</button>
+        </div>
+        <div style="font-weight:800;color:var(--navy);min-width:70px;text-align:right">
+          ₺ ${lineTotal.toLocaleString('tr-TR', {minimumFractionDigits:2})}
+        </div>
       </div>
-      <div class="pos-qty-ctrl">
-        <button class="pos-qty-btn" onclick="updatePosCartQty(${idx}, -1)">-</button>
-        <span style="font-weight:800;width:20px;text-align:center">${it.qty}</span>
-        <button class="pos-qty-btn" onclick="updatePosCartQty(${idx}, 1)">+</button>
-      </div>
-      <div style="font-weight:800;color:var(--navy)">
-        ₺ ${(it.qty * it.price).toLocaleString('tr-TR', {minimumFractionDigits:2})}
-      </div>
-    </div>
-  `).join("");
+    `;
+  }).join("");
 
-  const subtotal = posCart.reduce((s, i) => s + (i.qty * i.price), 0);
-  const discount = parseFloat(document.getElementById("pos-discount").value) || 0;
+  const subtotal = posCart.reduce((s, i) => s + (i.qty * (Number(i.price) || 0)), 0);
+  const discount = parseFloat(document.getElementById("pos-discount")?.value) || 0;
   const grandTotal = Math.max(0, subtotal - discount);
   const vat = grandTotal * 0.20;
 
@@ -2174,7 +2424,7 @@ function completePosSale(payMethod) {
   }
 
   const discount = parseFloat(document.getElementById("pos-discount").value) || 0;
-  const subtotal = posCart.reduce((s, i) => s + (i.qty * i.price), 0);
+  const subtotal = posCart.reduce((s, i) => s + (i.qty * (Number(i.price) || 0)), 0);
   const grandTotal = Math.max(0, subtotal - discount);
 
   posCart.forEach(it => {
@@ -2201,12 +2451,13 @@ function completePosSale(payMethod) {
 
   salesState.unshift(newSale);
   if (payMethod === 'credit' && customer) {
-    customer.balance += grandTotal;
+    customer.balance = (Number(customer.balance) || 0) + grandTotal;
   }
 
   saveAll();
   posCart = [];
-  document.getElementById("pos-discount").value = "0";
+  const discInput = document.getElementById("pos-discount");
+  if (discInput) discInput.value = "0";
   renderPosCart();
   flash("✓ Satış tamamlandı ve stoktan düşüldü.");
   viewPrintableInvoice(newSale.id);
@@ -3228,8 +3479,82 @@ function flash(msg) {
   window._ft = setTimeout(() => { el.style.display = "none"; }, 3500);
 }
 
+
+// RESET TRANSACTIONS (ALIŞ & SATIŞLARI SIFIRLAMA)
+function resetTransactions() {
+  const confirm1 = confirm("DİKKAT: Kayıtlı tüm Satış fişleri, Alış hareketleri ve Açık Hesap bakiyeleri SIFIRLANACAKTIR!\n\nÜrünler ve stok envanteriniz korunacaktır.\n\nDevam etmek istiyor musunuz?");
+  if (!confirm1) return;
+
+  const pin = prompt("Güvenlik Onayı: Bu işlemi onaylamak için yönetici PIN kodunu giriniz (1998):");
+  if (pin !== '1998' && pin !== 'dm1998' && pin !== 'marin2026') {
+    alert("Hatalı PIN kodu! Sıfırlama işlemi iptal edildi.");
+    return;
+  }
+
+  salesState = [];
+  purchasesState = [];
+  
+  // Reset all balances
+  customersState.forEach(c => c.balance = 0);
+  suppliersState.forEach(s => s.balance = 0);
+
+  saveAll();
+  flash("✓ Tüm satışlar, alışlar ve cari borç bakiyeleri sıfırlandı.");
+  
+  if (currentNav === 'dashboard') renderDashboard();
+  if (currentNav === 'sales') renderSales();
+  if (currentNav === 'purchases') renderPurchases();
+  if (currentNav === 'customers') renderCustomers();
+  if (currentNav === 'suppliers') renderSuppliers();
+  if (currentNav === 'reports') renderReports();
+  if (currentNav === 'pos') renderPos();
+}
+
+// PIN AUTHENTICATION & LOCK SCREEN
+const VALID_PINS = ['1998', 'dm1998', 'marin2026'];
+
+function checkAuth() {
+  const isAuth = sessionStorage.getItem('dm_erp_auth');
+  const overlay = document.getElementById('erp-lock-overlay');
+  if (overlay) {
+    if (isAuth === '1') {
+      overlay.style.display = 'none';
+    } else {
+      overlay.style.display = 'flex';
+      setTimeout(() => document.getElementById('erp-pin-input')?.focus(), 100);
+    }
+  }
+}
+
+function handlePinLogin(e) {
+  e.preventDefault();
+  const input = document.getElementById('erp-pin-input');
+  const val = input.value.trim();
+  if (VALID_PINS.includes(val)) {
+    sessionStorage.setItem('dm_erp_auth', '1');
+    const overlay = document.getElementById('erp-lock-overlay');
+    if (overlay) overlay.style.display = 'none';
+    input.value = '';
+    flash('✓ Güvenli ERP Girişi Başarılı');
+    renderDashboard();
+  } else {
+    alert('Hatalı Güvenlik PIN Kodu! Lütfen tekrar deneyiniz.');
+    input.value = '';
+    input.focus();
+  }
+}
+
+function logoutERP() {
+  if (confirm("ERP oturumundan çıkış yapmak istiyor musunuz?")) {
+    sessionStorage.removeItem('dm_erp_auth');
+    checkAuth();
+    flash("🔒 ERP Güvenli Çıkış Yapıldı");
+  }
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   loadAll();
+  checkAuth();
   renderDashboard();
 });
 </script>
