@@ -2076,25 +2076,46 @@ function downloadServiceReportPdf(onComplete) {
     el.style.breakInside = 'avoid';
   });
 
-  // 3. Map all input/select/textarea and checkbox values from live DOM into clean static elements
-  source.querySelectorAll('input, select, textarea').forEach(origEl => {
-    let cloneEl = null;
-    if (origEl.id) {
-      cloneEl = clone.querySelector('#' + origEl.id);
-    } else if (origEl.classList.contains('part-name-input')) {
-      const idx = Array.from(source.querySelectorAll('.part-name-input')).indexOf(origEl);
-      cloneEl = clone.querySelectorAll('.part-name-input')[idx];
-    } else if (origEl.classList.contains('part-code-input')) {
-      const idx = Array.from(source.querySelectorAll('.part-code-input')).indexOf(origEl);
-      cloneEl = clone.querySelectorAll('.part-code-input')[idx];
-    } else if (origEl.classList.contains('part-qty-input')) {
-      const idx = Array.from(source.querySelectorAll('.part-qty-input')).indexOf(origEl);
-      cloneEl = clone.querySelectorAll('.part-qty-input')[idx];
-    } else if (origEl.classList.contains('part-status-select')) {
-      const idx = Array.from(source.querySelectorAll('.part-status-select')).indexOf(origEl);
-      cloneEl = clone.querySelectorAll('.part-status-select')[idx];
+  // 3. Map table rows from live DOM into 100% clean static text cells (No input boxes / borders)
+  const sourceRows = source.querySelectorAll('#rep-parts-tbody tr');
+  const cloneRows = clone.querySelectorAll('#rep-parts-tbody tr');
+  sourceRows.forEach((sRow, idx) => {
+    const cRow = cloneRows[idx];
+    if (!cRow) return;
+    
+    // Part Name
+    const sName = sRow.querySelector('.part-name-input')?.value || '-';
+    const cNameTd = cRow.children[1];
+    if (cNameTd) {
+      cNameTd.innerHTML = `<span style="font-size:11px;font-weight:600;color:#0f172a;display:block">${escapeHtml(sName)}</span>`;
     }
+    
+    // Part Code
+    const sCode = sRow.querySelector('.part-code-input')?.value || '-';
+    const cCodeTd = cRow.children[2];
+    if (cCodeTd) {
+      cCodeTd.innerHTML = `<span style="font-size:11px;color:#334155;font-family:monospace;display:block">${escapeHtml(sCode)}</span>`;
+    }
+    
+    // Part Qty
+    const sQty = sRow.querySelector('.part-qty-input')?.value || '-';
+    const cQtyTd = cRow.children[3];
+    if (cQtyTd) {
+      cQtyTd.innerHTML = `<span style="font-size:11px;font-weight:600;color:#0f172a;display:block">${escapeHtml(sQty)}</span>`;
+    }
+    
+    // Part Status
+    const sStatus = sRow.querySelector('.part-status-select')?.value || '-';
+    const cStatusTd = cRow.children[4];
+    if (cStatusTd) {
+      cStatusTd.innerHTML = `<span style="font-size:11px;color:#0f172a;display:block">${escapeHtml(sStatus)}</span>`;
+    }
+  });
 
+  // 4. Map all top inputs/select/textarea and checkboxes by ID into clean flat text
+  source.querySelectorAll('#print-service-report input, #print-service-report select, #print-service-report textarea').forEach(origEl => {
+    if (!origEl.id) return;
+    const cloneEl = clone.querySelector('#' + origEl.id);
     if (!cloneEl || !cloneEl.parentNode) return;
 
     if (origEl.type === 'checkbox') {
@@ -2133,13 +2154,6 @@ function downloadServiceReportPdf(onComplete) {
       textDiv.style.padding = '2px 0';
       textDiv.textContent = origEl.value || '-';
       cloneEl.parentNode.replaceChild(textDiv, cloneEl);
-    } else if (origEl.tagName === 'SELECT') {
-      const textSpan = document.createElement('span');
-      textSpan.style.fontSize = '11px';
-      textSpan.style.fontWeight = '600';
-      textSpan.style.color = '#0f172a';
-      textSpan.textContent = origEl.value || '-';
-      cloneEl.parentNode.replaceChild(textSpan, cloneEl);
     } else {
       const textSpan = document.createElement('span');
       textSpan.style.fontSize = origEl.style.fontSize || '11px';
@@ -2148,6 +2162,15 @@ function downloadServiceReportPdf(onComplete) {
       textSpan.textContent = origEl.value || '-';
       cloneEl.parentNode.replaceChild(textSpan, cloneEl);
     }
+  });
+
+  // 5. Fallback safety: strip any leftover input/select/textarea elements in clone
+  clone.querySelectorAll('input, select, textarea').forEach(el => {
+    const fallbackSpan = document.createElement('span');
+    fallbackSpan.style.fontSize = '11px';
+    fallbackSpan.style.color = '#0f172a';
+    fallbackSpan.textContent = el.value || '-';
+    if (el.parentNode) el.parentNode.replaceChild(fallbackSpan, el);
   });
 
   // 4. Temporarily mount clone off-screen for html2pdf to measure and capture
