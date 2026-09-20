@@ -140,8 +140,10 @@ input:focus,textarea:focus,select:focus{outline:3px solid rgba(25,199,223,.16);b
 .domain{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:15px;border:1px solid var(--line);border-radius:13px;background:#fbfdfe}
 .domain b,.domain small{display:block}
 .domain small{color:var(--muted)}
-.pill{padding:5px 9px;border-radius:999px;background:#fff3da;color:#8d5b08;font-size:11.5px;font-weight:800}
-.pill.ok{background:#e8f8f1;color:#0d7a50}
+.pill{padding:5px 9px;border-radius:999px;background:#fff3da;color:#8d5b08;font-size:11.5px;font-weight:800;transition:all .2s ease}
+.pill.ok{background:#e8f8f1;color:#0d7a50;border:1px solid #a7f3d0}
+.pill.warn{background:#fef3c7;color:#92400e;border:1px solid #fcd34d;box-shadow:0 0 0 2px rgba(245,158,11,0.15)}
+.pill.danger{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
 .pill.badge{background:#e9f7fa;color:#08788b}
 .pill.pill-new{background:#fef3c7;color:#92400e}
 .pill.pill-contacted{background:#e0f2fe;color:#0369a1}
@@ -1354,6 +1356,9 @@ function handleAuthLogout() {
   if (btn) btn.textContent = '🔐 Yönetici Girişi';
   if (noticeTitle) noticeTitle.textContent = 'Yönetici Girişi Gerekli';
   if (noticeDesc) noticeDesc.textContent = 'Yönetim paneline erişmek ve canlı verileri yönetmek için lütfen giriş yapın.';
+  if (typeof updateBrandSyncPill === 'function') {
+    updateBrandSyncPill('locked');
+  }
   renderRequestsTable([]);
 }
 
@@ -2140,8 +2145,19 @@ async function loadRemoteBrands() {
         id: b.id
       }));
       renderBrands();
+      if (typeof updateBrandSyncPill === 'function') {
+        updateBrandSyncPill(currentSession ? 'synced' : 'locked');
+      }
+    } else {
+      if (typeof updateBrandSyncPill === 'function') {
+        updateBrandSyncPill(currentSession ? 'synced' : 'locked');
+      }
     }
-  } catch (e) {}
+  } catch (e) {
+    if (typeof updateBrandSyncPill === 'function') {
+      updateBrandSyncPill(currentSession ? 'error' : 'locked');
+    }
+  }
 }
 
 async function syncBrandsToDb() {
@@ -2884,6 +2900,24 @@ let brandState = (savedState.brands || defaultBrands.map(name => ({ name, visibl
 // BRANDS MANAGEMENT
 const brandEditor = document.querySelector('#brand-editor');
 
+function updateBrandSyncPill(status, customMsg) {
+  const pill = document.getElementById('brands-sync-pill');
+  if (!pill) return;
+  if (status === 'synced') {
+    pill.className = 'pill ok';
+    pill.innerHTML = '✓ Canlı DB Senkronize';
+  } else if (status === 'unsaved') {
+    pill.className = 'pill warn';
+    pill.innerHTML = '⚠️ Canlı DB senkronize değil! Canlıya aktarılabilir';
+  } else if (status === 'locked') {
+    pill.className = 'pill danger';
+    pill.innerHTML = customMsg || '🔴 Canlı DB senkronize değil! (Yönetici girişi gerekli)';
+  } else if (status === 'error') {
+    pill.className = 'pill danger';
+    pill.innerHTML = customMsg || '🔴 Canlıya alınamadı! (Hata oluştu)';
+  }
+}
+
 function renderBrands() {
   if (!brandEditor) return;
   brandEditor.innerHTML = '';
@@ -2912,12 +2946,14 @@ function renderBrands() {
     input.addEventListener('input', () => {
       brand.name = input.value;
       autoSave();
+      updateBrandSyncPill(currentSession ? 'unsaved' : 'locked');
     });
 
     const toggle = row.querySelector('input[type="checkbox"]');
     toggle.addEventListener('change', () => {
       brand.visible = toggle.checked;
       autoSave();
+      updateBrandSyncPill(currentSession ? 'unsaved' : 'locked');
     });
 
     row.querySelector('.brand-up-btn')?.addEventListener('click', () => {
@@ -2927,6 +2963,7 @@ function renderBrands() {
         brandState[index] = temp;
         renderBrands();
         autoSave();
+        updateBrandSyncPill(currentSession ? 'unsaved' : 'locked');
       }
     });
 
@@ -2937,6 +2974,7 @@ function renderBrands() {
         brandState[index] = temp;
         renderBrands();
         autoSave();
+        updateBrandSyncPill(currentSession ? 'unsaved' : 'locked');
       }
     });
 
@@ -2944,6 +2982,7 @@ function renderBrands() {
       brandState.splice(index, 1);
       renderBrands();
       autoSave();
+      updateBrandSyncPill(currentSession ? 'unsaved' : 'locked');
       flash('Marka listeden kaldırıldı. Canlı kaydetmek için "Markaları Canlı Kaydet" butonuna basınız.');
     });
 
@@ -2964,6 +3003,7 @@ function addBrandFromInput() {
   if (input) input.value = '';
   renderBrands();
   autoSave();
+  updateBrandSyncPill(currentSession ? 'unsaved' : 'locked');
   flash(`"${name}" eklendi. Canlı siteye aktarmak için "Markaları Canlı Kaydet" butonuna tıklayınız.`);
 }
 
@@ -2995,6 +3035,8 @@ async function saveBrandsToDb() {
   autoSave();
 
   if (!currentSession) {
+    updateBrandSyncPill('locked', '🔴 Canlıya alınamadı! (Yönetici girişi gerekli)');
+    openLoginOverlay();
     return flash('⚠️ Giriş yapılmadı! Markalar tarayıcı taslağına kaydedildi. Canlı veritabanı için yönetici girişi yapın.');
   }
 
@@ -3014,15 +3056,13 @@ async function saveBrandsToDb() {
     const data = await res.json();
     if (res.ok && data.success) {
       flash(`✓ ${brandState.length} Marka veritabanına ve canlı siteye başarıyla kaydedildi.`);
-      const pill = document.getElementById('brands-sync-pill');
-      if (pill) {
-        pill.textContent = 'Canlı DB Senkronize ✓';
-        pill.className = 'pill ok';
-      }
+      updateBrandSyncPill('synced');
     } else {
+      updateBrandSyncPill('error', '🔴 Canlıya alınamadı! (' + (data.error || 'Hata') + ')');
       flash(data.error || 'Markalar kaydedilemedi.');
     }
   } catch (err) {
+    updateBrandSyncPill('error', '🔴 Canlıya alınamadı! (Bağlantı Hatası)');
     flash('Kayıt hatası: ' + err.message);
   } finally {
     [btnTop, btnBtm].forEach(b => { if (b) { b.disabled = false; b.textContent = '💾 Markaları Canlı Kaydet'; } });
