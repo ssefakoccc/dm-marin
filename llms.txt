@@ -1,29 +1,47 @@
-# DM MARİN - Mobil Marin Servis ve Teknik Çözümler
+# DM MARİN - Mobil Marin Servis
 
-> İstanbul ve Marmara Bölgesi genelinde 26 yıllık saha tecrübesiyle 7/24 yerinde mobil marin teknik servis, motor ve mekanik bakım, cihazlı arıza tespiti, marin jeneratör servisi ve orijinal yedek parça desteği sunan bağımsız özel marin servis kuruluşu.
+> İstanbul ve Marmara Bölgesi genelinde 26 yıllık saha tecrübesiyle 7/24 yerinde mobil marin teknik servis, tekne motoru ve mekanik bakım, cihazlı arıza tespiti, marin jeneratör servisi ve orijinal yedek parça desteği sağlayan bağımsız özel marin servis kuruluşu.
 
-## İletişim & Acil Hat
-- **Telefon & Acil Servis (7/24):** +90 543 724 09 92
+## Ana Hizmet Sayfaları
+
+- [Ana Sayfa](https://dmmarin.com/): DM MARİN mobil marin servis genel bakış, hızlı arıza bildirimi ve online servis talep formu.
+- [Motor ve Mekanik Bakım](https://dmmarin.com/motor-mekanik-bakim.html): Tekne motor tamiri, periyodik bakım, mekanik revizyon ve parça değişimi.
+- [Marin Jeneratör Servisi](https://dmmarin.com/marin-jenerator-servisi.html): Kohler, Cummins Onan, Fischer Panda ve diğer marin jeneratör tamir ve bakım hizmetleri.
+- [7/24 Acil Mobil Marin Servis](https://dmmarin.com/acil-mobil-marin-servis.html): İstanbul ve Marmara marinalarında yerinde arıza tespiti ve acil marin servis desteği.
+- [Marin Elektrik & Elektronik](https://dmmarin.com/marin-elektrik-elektronik.html): Akü, şarj dinamoları, inverter, sintine ve seyir elektroniği teknik servisi.
+- [Marin Yedek Parça](https://dmmarin.com/marin-yedek-parca.html): Orijinal ve yüksek kaliteli muadil marin yedek parça tedariği ve danışmanlığı.
+- [Tekne Periyodik Bakım](https://dmmarin.com/tekne-periyodik-bakim.html): Planlı motor, jeneratör ve yardımcı sistemler periyodik bakım servisi.
+
+## Özel Servis Sayfaları (Marka Bazlı)
+
+- [Volvo Penta D4 / D6 Özel Servis](https://dmmarin.com/volvo-penta-d4-d6-ozel-servis.html): Volvo Penta D4 ve D6 marin motorlar için cihazlı teşhis, bakım ve onarım servisi.
+- [Yanmar 4JH / 6LY Özel Servis](https://dmmarin.com/yanmar-4jh-6ly-ozel-servis.html): Yanmar 4JH ve 6LY dizel marin motorlar için yerinde periyodik bakım ve arıza servisi.
+- [Kohler Marin Jeneratör Servisi](https://dmmarin.com/kohler-marin-jenerator-servisi.html): Kohler dizel jeneratörlerde elektrik ve mekanik bakım servisi.
+- [Cummins Onan Jeneratör Servisi](https://dmmarin.com/cummins-onan-jenerator-servisi.html): Cummins Onan jeneratörler için periyodik bakım ve arıza teşhis servisi.
+- [Kohler & Onan Jeneratör Servisi](https://dmmarin.com/kohler-onan-marin-jenerator-servisi.html): Çok markalı jeneratör bakım ve arıza giderme servisi.
+- [CAT Marine Özel Servis](https://dmmarin.com/cat-marine-ozel-servis.html): Caterpillar marin motorlar için periyodik bakım ve kontrol servisi.
+- [MAN Marine V8 / V12 Özel Servis](https://dmmarin.com/man-marine-v8-v12-ozel-servis.html): MAN Marine yüksek güçlü V8 ve V12 dizel motorlar için özel bakım servisi.
+- [MTU Series 2000 Özel Servis](https://dmmarin.com/mtu-series-2000-ozel-servis.html): MTU Series 2000 yat motorları için profesyonel teşhis ve bakım servisi.
+
+## Bölgesel Marina Servis Noktaları
+
+- [Kalamış & Fenerbahçe Marin Servis](https://dmmarin.com/kalamis-volvo-penta-servis.html): Setur Kalamış ve Fenerbahçe marinalarında yerinde mobil servis desteği.
+- [Pendik Marintürk Mobil Marin Servis](https://dmmarin.com/pendik-marinturk-mobil-marin-servis.html): Marintürk İstanbul City Port marinasında hızlı mobil servis.
+- [Tuzla Marin Jeneratör & Motor Tamiri](https://dmmarin.com/tuzla-marin-jenerator-tamiri.html): Viaport Marina Tuzla ve tersaneler bölgesinde yerinde servis.
+- [Ataköy Marina Acil Tekne Servisi](https://dmmarin.com/atakoy-tekne-motoru-acil-servis.html): Ataköy Marina ve Bakırköy bölgesinde 7/24 acil mobil tekne servisi.
+- [West İstanbul Marina Servis](https://dmmarin.com/atakoy-west-istanbul-marina-servis.html): Beylikdüzü West Istanbul Marina pontonlarında servis desteği.
+
+## Teknik Rehberler ve Bilgi Bankası
+
+- [Kışlık Tekne Motoru Bakım Rehberi](https://dmmarin.com/rehber-kislik-tekne-motoru-bakimi.html): Kışlama sürecinde antifriz, tatlı su devirdaimi ve karter koruma adımları.
+- [Marin Jeneratör Arıza Kodları ve Çözümleri](https://dmmarin.com/rehber-marin-jenerator-ariza-kodlari.html): Jeneratör frekans, voltaj ve hararet arızalarında ilk müdahale rehberi.
+- [Tekne Akü ve Şarj Sistemi Rehberi](https://dmmarin.com/rehber-tekne-aku-ve-sarj-sistemi.html): Servis aküsü, motor start aküsü ve redresör şarj kontrolleri.
+- [Volvo Penta D4/D6 Periyodik Bakım Kılavuzu](https://dmmarin.com/rehber-volvo-penta-d4-d6-periyodik-bakim.html): 100 saatlik ve yıllık bakım takvimi detayları.
+
+## İletişim Bilgileri
+
+- **Telefon / Acil Servis (7/24):** +90 543 724 09 92
 - **E-posta:** servis@dmmarin.com
-- **Web:** https://dmmarin.com/
-- **Merkez & Hizmet Bölgesi:** İstanbul ve Marmara Bölgesi genelindeki tüm marinalar ve çekek yerleri.
-
-## Temel Hizmet Alanları
-- **İstanbul Mobil Marin Servis:** Donanımlı mobil araçlar ve taşınabilir test üniteleriyle doğrudan pontonda, marinada veya tersanede teknenin yanında yerinde servis.
-- **Motor ve Mekanik Bakım:** Marin dizel ve benzinli ana makinelerde planlı periyodik bakım, valf/subap ayarları, soğutma eşanjör temizliği, yakıt pompası ve enjektör revizyonu.
-- **Marin Jeneratör Arıza Tespiti & Servisi:** Kohler, Cummins Onan, Fischer Panda, Northern Lights ve Coelmo marin jeneratörlerinde voltaj regülasyonu, yük testi ve mekanik onarım.
-- **Cihazlı Arıza Tespiti:** Dijital marin teşhis cihazları, ECU bağlantıları ve osiloskop ölçümleriyle hata kodu analizi ve gereksiz parça değişimini önleyen ölçüm odaklı teşhis.
-- **Periyodik Tekne Bakımı:** Sezon öncesi/sonrası motor yağı, filtreler, deniz suyu impelleri, V-kayışları, tutyalar (çinko anotlar) ve sintine kontrolleri.
-- **Marin Yedek Parça:** Marka, model ve seri numarası doğrulamalı orijinal ve OEM marin filtreler, kayışlar, impellerler ve conta takımları tedariği.
-
-## Hizmet Verilen Başlıca Marinalar
-- **Kalamış & Fenerbahçe Marinaları** (Kadıköy, İstanbul)
-- **Ataköy Marina** (Bakırköy, İstanbul)
-- **West İstanbul Marina (WIM)** (Beylikdüzü, İstanbul)
-- **Viaport Marina Tuzla** (Tuzla, İstanbul)
-- **Pendik Marintürk Marina** (Pendik, İstanbul)
-- **Marmara Bölgesi:** Yalova, Bursa, Balıkesir, Tekirdağ ve Çanakkale kıyı marinaları ve tersaneleri.
-
-## Özel Servis Verilen Motor ve Jeneratör Markaları
-Volvo Penta, MAN Marine, MTU, CAT (Caterpillar Marine), Yanmar, Yamaha Marine, Suzuki Marine, Cummins Onan, Kohler, Fischer Panda, Northern Lights, Baudouin, Nanni Diesel, Mitsubishi Marine, Kubota.
-*(Not: DM MARİN bağımsız bir özel servistir; adı geçen markaların resmî yetkili servisi değildir.)*
+- **Web Sitesi:** https://dmmarin.com/
+- **Hizmet Bölgesi:** İstanbul ve Marmara Bölgesi genelindeki tüm marinalar ve çekek yerleri.
+- **Yasal Bilgilendirme:** DM MARİN bağımsız bir özel marin servistir; sitede ve raporda adı geçen motor/jeneratör markalarının resmî yetkili servisi değildir.
