@@ -2963,14 +2963,15 @@ function loadAll() {
     if (pu) purchasesState = JSON.parse(pu);
     const ex = localStorage.getItem("dm_erp_expenses");
     if (ex) expensesState = JSON.parse(ex);
-    const st = localStorage.getItem("dm_erp_staff");
+    const st = localStorage.getItem("dm_erp_staff") || localStorage.getItem("dm_staff_users");
     if (st) {
       const parsed = JSON.parse(st);
       if (Array.isArray(parsed) && parsed.length > 0) {
         staffState = parsed.map(s => ({
           ...s,
-          username: s.username || s.name.toLowerCase().replace(/[^a-z0-9]/g, ''),
-          pin: s.pin || '1998'
+          username: (s.username || s.name.toLowerCase().replace(/[^a-z0-9]/g, '')).trim().toLowerCase(),
+          pin: s.pin || '1998',
+          permissions: Array.isArray(s.permissions) ? s.permissions : []
         }));
       }
     }
@@ -5104,6 +5105,7 @@ function handleUserLogin(e) {
       name: foundStaff.name,
       username: foundStaff.username || rawUser,
       role: foundStaff.role,
+      permissions: Array.isArray(foundStaff.permissions) && foundStaff.permissions.length > 0 ? foundStaff.permissions : ["stock_manage", "service_manage", "pos_sale"],
       birthDate: foundStaff.birthDate || ''
     };
     sessionStorage.setItem('dm_erp_auth', '1');
@@ -5125,6 +5127,7 @@ function handleUserLogin(e) {
       name: 'Yönetici (Admin)',
       username: 'admin',
       role: 'Sistem Yöneticisi',
+      permissions: ["admin", "stock_manage", "prices_view", "service_manage", "pos_sale", "user_manage", "db_backup"],
       birthDate: ''
     };
     sessionStorage.setItem('dm_erp_auth', '1');

@@ -1545,10 +1545,10 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
   <div class="panel-head" style="justify-content:space-between;flex-wrap:wrap;gap:12px">
     <div>
       <h3 style="margin:0;font-size:16px">Tanımlı Personel & Kullanıcı Listesi</h3>
-      <small style="color:var(--muted)">Sistemde tanımlı tüm ustalar, rolleri, kişisel PIN kodları ve doğum tarihleri</small>
+      <small style="color:var(--muted)">Sistemde tanımlı tüm ustalar, rolleri, modül yetkileri, kişisel PIN kodları ve doğum tarihleri</small>
     </div>
     <div style="display:flex;gap:8px">
-      <button type="button" class="btn primary" onclick="openAdminUserModal()">➕ Personel Ekle</button>
+      <button type="button" class="btn primary" onclick="openAdminUserModal()">➕ Yeni Kullanıcı / Personel Ekle</button>
     </div>
   </div>
   <div class="panel-body">
@@ -1557,11 +1557,12 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
         <thead>
           <tr>
             <th>Personel Adı Soyadı</th>
-            <th>Kullanıcı Adı / Kod</th>
-            <th>Görevi / Ünvanı</th>
+            <th>Kullanıcı Adı</th>
+            <th>Görevi / Rolü</th>
+            <th>Erişim Yetkileri</th>
             <th>Telefon</th>
             <th>Doğum Tarihi</th>
-            <th>Giriş PIN'i</th>
+            <th>Giriş PIN / Şifre</th>
             <th>Durum</th>
             <th style="text-align:right">İşlemler</th>
           </tr>
@@ -4624,13 +4625,63 @@ document.addEventListener("click", function(e) {
 // ----------------------------------------------------
 
 // =========================================================================
-// ADMIN USER MANAGEMENT & BIRTHDAY SENTINEL
+// ADMIN USER MANAGEMENT & PERMISSIONS MATRIX (admin#users)
 // =========================================================================
+const SYSTEM_PERMISSIONS = [
+  { key: "admin", label: "👑 Tam Yönetici (Admin)", color: "#7c3aed", bg: "#f5f3ff", short: "👑 Tam Yönetici", desc: "Tüm sistem, yedekleme, ayarlar ve kullanıcı yönetimi" },
+  { key: "stock_manage", label: "📦 Stok & Envanter Yönetimi", color: "#0284c7", bg: "#f0f9ff", short: "📦 Stok", desc: "Ürün ekleme, düzenleme, miktar ve kritik stok kontrolü" },
+  { key: "prices_view", label: "💰 Maliyet & Fiyat Görme", color: "#059669", bg: "#ecfdf5", short: "💰 Fiyatlar", desc: "Alış-satış fiyatları, kar marjları ve mali raporlar" },
+  { key: "service_manage", label: "🛠️ Servis Talepleri & Bakım Fişi", color: "#d97706", bg: "#fffbeb", short: "🛠️ Servis", desc: "Servis açılışı, iş emri, tekne bakım kartı yönetimi" },
+  { key: "pos_sale", label: "🛒 POS & Hızlı Satış", color: "#0891b2", bg: "#ecfeff", short: "🛒 POS", desc: "Hızlı perakende satış, kasa tahsilatı ve fiş kesme" },
+  { key: "user_manage", label: "👥 Kullanıcı & Yetki Yönetimi", color: "#db2777", bg: "#fdf2f8", short: "👥 Kullanıcılar", desc: "Yeni usta/teknisyen tanımlama ve PIN kodu değiştirme" },
+  { key: "db_backup", label: "💾 Veritabanı Yedeği & Geri Yükleme", color: "#4f46e5", bg: "#eef2ff", short: "💾 Yedek", desc: "Tam sistem JSON yedeği alma ve sisteme geri yükleme" }
+];
+
 const DEFAULT_STAFF_USERS = [
-  { id: "st-1", name: "Ahmet Usta", username: "ahmet.usta", role: "Baş Teknisyen / Mobil Servis", phone: "0543 724 09 92", birthDate: "1988-09-20", pin: "1998", active: true },
-  { id: "st-2", name: "Mehmet K.", username: "mehmet.depo", role: "Depo & Mal Kabul Sorumlusu", phone: "0532 111 22 33", birthDate: "1992-04-15", pin: "2026", active: true },
-  { id: "st-3", name: "Can D.", username: "can.servis", role: "Saha Servis Teknisyeni", phone: "0541 222 33 44", birthDate: "1995-11-08", pin: "3456", active: true },
-  { id: "st-4", name: "Yönetici (Admin)", username: "admin", role: "Sistem Yöneticisi", phone: "0543 724 09 92", birthDate: "1985-01-01", pin: "dm1998", active: true }
+  {
+    id: "st-admin",
+    name: "Yönetici (Admin)",
+    username: "admin",
+    role: "Sistem Yöneticisi",
+    phone: "0543 724 09 92",
+    birthDate: "1985-01-01",
+    pin: "1998",
+    active: true,
+    permissions: ["admin", "stock_manage", "prices_view", "service_manage", "pos_sale", "user_manage", "db_backup"]
+  },
+  {
+    id: "st-ahmet",
+    name: "Ahmet Usta",
+    username: "ahmet",
+    role: "Baş Teknisyen / Mobil Servis",
+    phone: "0543 724 09 92",
+    birthDate: "1988-09-20",
+    pin: "1998",
+    active: true,
+    permissions: ["stock_manage", "prices_view", "service_manage", "pos_sale"]
+  },
+  {
+    id: "st-mehmet",
+    name: "Mehmet K.",
+    username: "mehmet",
+    role: "Depo & Mal Kabul Sorumlusu",
+    phone: "0532 111 22 33",
+    birthDate: "1992-04-15",
+    pin: "1998",
+    active: true,
+    permissions: ["stock_manage", "prices_view"]
+  },
+  {
+    id: "st-can",
+    name: "Can D.",
+    username: "can",
+    role: "Saha Servis Teknisyeni",
+    phone: "0541 222 33 44",
+    birthDate: "1995-11-08",
+    pin: "1998",
+    active: true,
+    permissions: ["service_manage", "pos_sale"]
+  }
 ];
 
 function getStaffUsers() {
@@ -4638,7 +4689,13 @@ function getStaffUsers() {
     const raw = localStorage.getItem("dm_erp_staff") || localStorage.getItem("dm_staff_users");
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed.map(u => ({
+          ...u,
+          permissions: Array.isArray(u.permissions) && u.permissions.length > 0 ? u.permissions : 
+            (u.username === "admin" ? ["admin", "stock_manage", "prices_view", "service_manage", "pos_sale", "user_manage", "db_backup"] : ["stock_manage", "service_manage", "pos_sale"])
+        }));
+      }
     }
   } catch(e) {}
   return DEFAULT_STAFF_USERS;
@@ -4694,32 +4751,94 @@ function renderAdminUsersTable() {
 
   if (!tbody) return;
 
-  const today = new Date();
-  const todayMMDD = String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
-
   tbody.innerHTML = users.map(u => {
     const isBirthday = u.birthDate && u.birthDate.endsWith(todayMMDD);
+    const perms = Array.isArray(u.permissions) ? u.permissions : [];
+
+    let permsHtml = '';
+    if (perms.includes("admin")) {
+      permsHtml = `<span style="display:inline-block;padding:3px 9px;border-radius:6px;background:#f5f3ff;color:#7c3aed;border:1px solid #ddd6fe;font-size:11.5px;font-weight:750">👑 Tam Yönetici</span>`;
+    } else if (perms.length === 0) {
+      permsHtml = `<span class="pill" style="background:#f1f5f9;color:#64748b;font-size:11px">Yetki Yok</span>`;
+    } else {
+      permsHtml = perms.map(k => {
+        const p = SYSTEM_PERMISSIONS.find(x => x.key === k);
+        if (!p) return '';
+        return `<span style="display:inline-block;margin:1px;padding:2px 6px;border-radius:4px;background:${p.bg};color:${p.color};font-size:11px;font-weight:650">${p.short}</span>`;
+      }).join(" ");
+    }
+
     return `
       <tr style="${isBirthday ? 'background:#fffbeb' : ''}">
         <td>
-          <b>${escapeHtml(u.name)}</b>
-          ${isBirthday ? '<span style="margin-left:6px;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:800">🎂 BUGÜN DOĞUM GÜNÜ! 🎉</span>' : ''}
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#e0f2fe;color:#0369a1;font-size:13px;font-weight:bold">
+              ${escapeHtml((u.name || "U")[0].toUpperCase())}
+            </span>
+            <div>
+              <b>${escapeHtml(u.name)}</b>
+              ${isBirthday ? '<span style="margin-left:6px;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:800">🎂 BUGÜN DOĞUM GÜNÜ! 🎉</span>' : ''}
+            </div>
+          </div>
         </td>
-        <td><code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:11.5px">${escapeHtml(u.username || u.name.toLowerCase().replace(/\s+/g, '.'))}</code></td>
-        <td><span style="background:#e0f2fe;color:#0369a1;padding:2px 8px;border-radius:6px;font-size:11.5px;font-weight:700">${escapeHtml(u.role)}</span></td>
+        <td><code style="background:#f1f5f9;padding:3px 8px;border-radius:5px;font-size:12px;font-weight:700;color:#0f172a">${escapeHtml(u.username || u.name.toLowerCase().replace(/\s+/g, ''))}</code></td>
+        <td><span style="background:#f8fafc;border:1px solid #e2e8f0;color:#334155;padding:2px 8px;border-radius:6px;font-size:11.5px;font-weight:600">${escapeHtml(u.role)}</span></td>
+        <td style="max-width:260px">${permsHtml}</td>
         <td>${escapeHtml(u.phone || '-')}</td>
         <td>📅 ${escapeHtml(u.birthDate || 'Belirtilmedi')}</td>
-        <td><span style="font-family:monospace;background:#f8fafc;border:1px solid #cbd5e1;padding:2px 6px;border-radius:4px;font-size:11.5px;font-weight:750">🔒 ${escapeHtml(u.pin || '1998')}</span></td>
-        <td><span class="pill ${u.active ? 'ok' : 'danger'}">${u.active ? 'Aktif' : 'Pasif'}</span></td>
+        <td><span style="font-family:monospace;background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:2px 8px;border-radius:5px;font-size:12px;font-weight:800">🔒 ${escapeHtml(u.pin || '1998')}</span></td>
+        <td><span class="pill ${u.active !== false ? 'ok' : 'danger'}">${u.active !== false ? 'Aktif' : 'Pasif'}</span></td>
         <td style="text-align:right;white-space:nowrap">
-          <button type="button" class="btn" style="padding:3px 8px;min-height:28px;font-size:11.5px" onclick="editAdminUser('${u.id}')">✏️ Düzenle</button>
-          <button type="button" class="btn danger" style="padding:3px 8px;min-height:28px;font-size:11.5px" onclick="deleteAdminUser('${u.id}')">✕</button>
+          <button type="button" class="btn" style="padding:4px 10px;min-height:30px;font-size:12px" onclick="editAdminUser('${u.id}')">✏️ Düzenle</button>
+          <button type="button" class="btn danger" style="padding:4px 10px;min-height:30px;font-size:12px" onclick="deleteAdminUser('${u.id}')">✕ Sil</button>
         </td>
       </tr>
     `;
   }).join("");
 
   checkBirthdays();
+}
+
+function renderPermissionCheckboxes(selectedPerms = []) {
+  const container = document.getElementById("adm-permissions-grid");
+  if (!container) return;
+
+  container.innerHTML = SYSTEM_PERMISSIONS.map(p => {
+    const isChecked = selectedPerms.includes(p.key);
+    return `
+      <label style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:#fff;border:1px solid ${isChecked ? p.color : '#cbd5e1'};border-radius:8px;cursor:pointer;transition:border-color .2s">
+        <input type="checkbox" id="perm-${p.key}" value="${p.key}" class="adm-perm-checkbox" ${isChecked ? 'checked' : ''} style="margin-top:2px;accent-color:${p.color}">
+        <div>
+          <b style="display:block;font-size:12.5px;color:#0f172a">${p.label}</b>
+          <small style="color:var(--muted);font-size:11px">${p.desc}</small>
+        </div>
+      </label>
+    `;
+  }).join("");
+}
+
+function applyPermTemplate(templateKey) {
+  const permBoxes = document.querySelectorAll(".adm-perm-checkbox");
+  permBoxes.forEach(cb => cb.checked = false);
+
+  if (templateKey === "admin") {
+    permBoxes.forEach(cb => cb.checked = true);
+  } else if (templateKey === "lead_tech") {
+    ["stock_manage", "prices_view", "service_manage", "pos_sale"].forEach(k => {
+      const el = document.getElementById(`perm-${k}`);
+      if (el) el.checked = true;
+    });
+  } else if (templateKey === "warehouse") {
+    ["stock_manage", "prices_view"].forEach(k => {
+      const el = document.getElementById(`perm-${k}`);
+      if (el) el.checked = true;
+    });
+  } else if (templateKey === "field_tech") {
+    ["service_manage", "pos_sale"].forEach(k => {
+      const el = document.getElementById(`perm-${k}`);
+      if (el) el.checked = true;
+    });
+  }
 }
 
 function openAdminUserModal() {
@@ -4729,6 +4848,9 @@ function openAdminUserModal() {
   if (idEl) idEl.value = "";
   const titleEl = document.getElementById("admin-user-modal-title");
   if (titleEl) titleEl.textContent = "👤 Yeni Kullanıcı / Personel Tanımla";
+  
+  // Default to Lead Technician permissions
+  renderPermissionCheckboxes(["stock_manage", "prices_view", "service_manage", "pos_sale"]);
   
   const modal = document.getElementById("modal-admin-user");
   if (modal) {
@@ -4766,10 +4888,12 @@ function editAdminUser(id) {
   if (phoneEl) phoneEl.value = u.phone || "";
   if (birthEl) birthEl.value = u.birthDate || "";
   if (pinEl) pinEl.value = u.pin || "1998";
-  if (actEl) actEl.value = u.active ? "true" : "false";
+  if (actEl) actEl.value = u.active !== false ? "true" : "false";
+
+  renderPermissionCheckboxes(Array.isArray(u.permissions) ? u.permissions : []);
 
   const titleEl = document.getElementById("admin-user-modal-title");
-  if (titleEl) titleEl.textContent = `✏️ Personel Düzenle: ${u.name}`;
+  if (titleEl) titleEl.textContent = `✏️ Personel & Yetki Düzenle: ${u.name}`;
   
   const modal = document.getElementById("modal-admin-user");
   if (modal) {
@@ -4814,19 +4938,25 @@ function saveAdminUser(e) {
   }
 
   const id = idEl ? idEl.value : "";
-  const username = (userEl && userEl.value.trim()) ? userEl.value.trim() : name.toLowerCase().replace(/\s+/g, '.');
+  const username = (userEl && userEl.value.trim()) ? userEl.value.trim().toLowerCase() : name.toLowerCase().replace(/\s+/g, '');
   const phone = phoneEl ? phoneEl.value.trim() : "";
   const birthDate = birthEl ? birthEl.value : "";
   const active = actEl ? (actEl.value === "true") : true;
+
+  // Collect checked permissions
+  const checkedPerms = [];
+  document.querySelectorAll(".adm-perm-checkbox:checked").forEach(cb => {
+    checkedPerms.push(cb.value);
+  });
 
   let users = getStaffUsers();
 
   if (id) {
     const idx = users.findIndex(x => x.id === id);
     if (idx !== -1) {
-      users[idx] = { ...users[idx], name, username, role, phone, birthDate, pin, active };
+      users[idx] = { ...users[idx], name, username, role, phone, birthDate, pin, active, permissions: checkedPerms };
     } else {
-      users.push({ id: id || ("st-" + Date.now()), name, username, role, phone, birthDate, pin, active });
+      users.push({ id: id || ("st-" + Date.now()), name, username, role, phone, birthDate, pin, active, permissions: checkedPerms });
     }
   } else {
     users.push({
@@ -4837,7 +4967,8 @@ function saveAdminUser(e) {
       phone,
       birthDate,
       pin,
-      active
+      active,
+      permissions: checkedPerms
     });
   }
 
@@ -4845,7 +4976,7 @@ function saveAdminUser(e) {
   closeAdminUserModal();
   renderAdminUsersTable();
   if (typeof initAgentDashboard === "function") initAgentDashboard();
-  flash(`✓ Kullanıcı "${name}" başarıyla kaydedildi (PIN: ${pin})`);
+  flash(`✓ Kullanıcı "${name}" (${username}) yetkileriyle birlikte kaydedildi (PIN: ${pin})`);
   return false;
 }
 
@@ -4862,18 +4993,8 @@ function deleteAdminUser(id) {
   saveStaffUsers(users);
   renderAdminUsersTable();
   if (typeof initAgentDashboard === "function") initAgentDashboard();
-  flash("✓ Kullanıcı silindi.");
+  flash("✓ Kullanıcı sistemden silindi.");
 }
-  const u = users.find(x => x.id === id);
-  if (!confirm(`"${u?.name}" kullanıcısını silmek istediğinize emin misiniz?`)) return;
-
-  users = users.filter(x => x.id !== id);
-  saveStaffUsers(users);
-  renderAdminUsersTable();
-  if (typeof initAgentDashboard === "function") initAgentDashboard();
-  flash("✓ Kullanıcı silindi.");
-}
-
 
 document.addEventListener("DOMContentLoaded", () => {
   renderAdminUsersTable();
@@ -5334,25 +5455,25 @@ window.addEventListener("DOMContentLoaded", () => {
 
 <!-- ADD/EDIT USER MODAL -->
 <div class="modal-backdrop" id="modal-admin-user">
-  <div class="modal-box" style="max-width:540px">
+  <div class="modal-box" style="max-width:620px">
     <div class="modal-head">
       <h3 id="admin-user-modal-title">👤 Yeni Kullanıcı / Personel Tanımla</h3>
       <button class="modal-close" onclick="closeAdminUserModal()">✕</button>
     </div>
-    <form id="form-admin-user" onsubmit="saveAdminUser(event)" style="display:grid;gap:12px">
+    <form id="form-admin-user" onsubmit="saveAdminUser(event)" style="display:grid;gap:14px">
       <input type="hidden" id="adm-user-id">
       
       <div class="form-grid">
         <div class="field">
-          <label>Adı Soyadı *</label>
-          <input type="text" id="adm-user-name" placeholder="Örn: Ahmet Kaya" required>
+          <label>Personel Adı Soyadı *</label>
+          <input type="text" id="adm-user-name" placeholder="Örn: Ahmet Usta" required>
         </div>
         <div class="field">
-          <label>Kullanıcı Adı / Kod</label>
-          <input type="text" id="adm-user-username" placeholder="Örn: ahmet.usta">
+          <label>Kullanıcı Adı (Giriş Kodu) *</label>
+          <input type="text" id="adm-user-username" placeholder="Örn: ahmet, mehmet, can, admin" required>
         </div>
         <div class="field">
-          <label>Görevi / Rolü *</label>
+          <label>Görevi / Rol Ünvanı *</label>
           <input type="text" id="adm-user-role" placeholder="Örn: Baş Teknisyen / Mobil Servis" required>
         </div>
         <div class="field">
@@ -5360,25 +5481,46 @@ window.addEventListener("DOMContentLoaded", () => {
           <input type="tel" id="adm-user-phone" placeholder="0543 724 09 92">
         </div>
         <div class="field">
-          <label>Doğum Tarihi (Doğum Günü Takibi İçin) *</label>
+          <label>Doğum Tarihi (Nöbetçi & Kutlama Takibi) *</label>
           <input type="date" id="adm-user-birthdate" required>
         </div>
         <div class="field">
-          <label>Kullanıcıya Özel Giriş PIN Kodu *</label>
-          <input type="text" id="adm-user-pin" placeholder="Örn: 1998, 3456" maxlength="12" required>
+          <label>Kişiye Özel Giriş PIN / Şifre *</label>
+          <input type="text" id="adm-user-pin" placeholder="Örn: 1998 veya dm1998" maxlength="16" required>
         </div>
         <div class="field full">
           <label>Hesap Durumu</label>
           <select id="adm-user-active">
-            <option value="true">Aktif (Sisteme Giriş Yapabilir)</option>
-            <option value="false">Pasif / İzinli (Giriş Yapamaz)</option>
+            <option value="true">🟢 Aktif (Sisteme ve Stok/ERP'ye Giriş Yapabilir)</option>
+            <option value="false">🔴 Pasif / İzinli (Giriş Yetkisi Askıya Alındı)</option>
           </select>
+        </div>
+      </div>
+
+      <!-- MODULAR PERMISSIONS SECTION -->
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+          <div>
+            <b style="font-size:13.5px;color:var(--navy)">🔐 Modül Yetkileri &amp; Erişim İzinleri</b>
+            <small style="display:block;color:var(--muted);font-size:11.5px">Kullanıcının erişebileceği yetkileri ve modülleri seçin</small>
+          </div>
+          <select id="adm-user-perm-template" onchange="applyPermTemplate(this.value)" style="font-size:12px;padding:5px 9px;border-radius:6px;border:1px solid #cbd5e1;background:#fff;font-weight:600">
+            <option value="">⚡ Hızlı Yetki Şablonu...</option>
+            <option value="admin">👑 Süper Yönetici (Tam Yetki)</option>
+            <option value="lead_tech">🛠️ Baş Teknisyen (Stok + Fiyat + Servis + POS)</option>
+            <option value="warehouse">📦 Depo Sorumlusu (Stok + Fiyat)</option>
+            <option value="field_tech">⚡ Saha Teknisyeni (Servis + POS)</option>
+          </select>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:8px;margin-top:10px" id="adm-permissions-grid">
+          <!-- Populated by renderPermissionCheckboxes() -->
         </div>
       </div>
 
       <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px">
         <button type="button" class="btn" onclick="closeAdminUserModal()">İptal</button>
-        <button type="submit" class="btn primary">💾 Kullanıcıyı Kaydet</button>
+        <button type="submit" class="btn primary" style="min-height:38px;padding:0 18px">💾 Kullanıcıyı &amp; Yetkileri Kaydet</button>
       </div>
     </form>
   </div>
