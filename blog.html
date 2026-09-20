@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2Q19CJBPQB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2Q19CJBPQB');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Marin Blog & Teknik Rehberler | DM MARİN Yat Servisi</title>
+<meta name="description" content="Tekne sahipleri ve kaptanlar için kapsamlı marin rehberler: Volvo Penta, MAN, MTU, Yanmar motor bakımı, Onan/Kohler jeneratör arızaları, lityum akü ve kışlama kılavuzları.">
+<link rel="canonical" href="https://dmmarin.com/blog.html">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="keywords" content="tekne motor bakımı blog, marin teknik rehber, volvo penta arıza rehberi, tekne jeneratör arızaları, tekne lityum akü, tekne kışlama, marin servis istanbul">
+<meta name="theme-color" content="#071b2b">
+<link rel="stylesheet" href="service-page.css">
+<link rel="stylesheet" href="brand-page.css">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:title" content="Marin Blog & Teknik Rehberler | DM MARİN">
+<meta property="og:description" content="Tekne sahipleri ve kaptanlar için marin motor, jeneratör, elektrik, kışlama ve arıza teşhis rehberleri.">
+<meta property="og:url" content="https://dmmarin.com/blog.html">
+<meta property="og:image" content="https://dmmarin.com/assets/dm-marin-logo-v2.webp">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "name": "DM MARİN Blog & Marin Teknik Rehberler",
+      "description": "Marin motor, jeneratör, elektrik ve kışlama alanında uzman mühendislik makaleleri.",
+      "url": "https://dmmarin.com/blog.html"
+    },
+    {
+      "@type": ["LocalBusiness", "ProfessionalService"],
+      "@id": "https://dmmarin.com/#business",
+      "name": "DM MARİN",
+      "telephone": "+905437240992",
+      "email": "servis@dmmarin.com",
+      "url": "https://dmmarin.com/",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "İstanbul",
+        "addressCountry": "TR"
+      },
+      "hasMap": "https://maps.google.com/?cid=12028604724976771691",
+      "sameAs": [
+        "https://dmmarin.com",
+        "https://maps.google.com/?q=DM+Marin+Gemi+ve+Deniz+Teknolojisi+Mühendisi+İstanbul",
+        "https://wa.me/905437240992",
+        "https://www.instagram.com/dmmarin_servis"
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5.0",
+        "reviewCount": "24",
+        "bestRating": "5",
+        "worstRating": "1"
+      }
+    }
+  ]
+}
+</script>
+<style>
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  margin-top: 30px;
+}
+.blog-card {
+  background: #fff;
+  border: 1px solid #dce7ea;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(3,22,35,0.04);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.blog-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(3,22,35,0.1);
+}
+.blog-card-img {
+  position: relative;
+  height: 200px;
+  background: #071b2b;
+  overflow: hidden;
+}
+.blog-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.blog-card:hover .blog-card-img img {
+  transform: scale(1.04);
+}
+.blog-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(7,27,43,0.85);
+  color: #19c7df;
+  backdrop-filter: blur(8px);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 800;
+  border: 1px solid rgba(25,199,223,0.3);
+}
+.blog-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.blog-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.blog-card h3 {
+  margin: 0 0 10px;
+  font-size: 17px;
+  line-height: 1.4;
+  font-weight: 800;
+  color: #071b2b;
+}
+.blog-card h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+.blog-card h3 a:hover {
+  color: #087f93;
+}
+.blog-card p {
+  margin: 0 0 16px;
+  color: #475569;
+  font-size: 13.5px;
+  line-height: 1.6;
+  flex: 1;
+}
+.blog-read-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #087f93;
+  font-weight: 800;
+  font-size: 13px;
+  text-decoration: none;
+  margin-top: auto;
+}
+.blog-read-link:hover {
+  text-decoration: underline;
+}
+.filter-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.filter-btn {
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.filter-btn.active, .filter-btn:hover {
+  background: #071b2b;
+  color: #fff;
+  border-color: #071b2b;
+}
+</style>
+<!-- Vercel Web Analytics -->
+<script>
+window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<header class="header">
+  <div class="container header-in">
+    <a class="logo" href="index.html"><img src="assets/dm-marin-logo-v2.webp" alt="DM MARİN Profesyonel Marin Servis" width="260" height="80"></a>
+    <nav class="nav">
+      <a href="index.html#hizmetler">Hizmetler</a>
+      <a href="index.html#markalar">Markalar</a>
+      <a href="blog.html" style="color:#087f93;font-weight:700">Blog & Rehberler</a>
+      <a class="cta" href="index.html#randevu">Servis Talebi</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section class="hero" style="min-height:360px">
+  <img src="assets/motor-mekanik-bakim.webp" alt="DM MARİN Teknik Blog" width="1672" height="941" fetchpriority="high">
+  <div class="container hero-copy">
+    <span class="eyebrow">Bilgi Merkezi · Mühendislik Blogu</span>
+    <h1>Marin Blog & Teknik Rehberler</h1>
+    <p>Tekne sahipleri, kaptanlar ve denizciler için motor bakımı, jeneratör arızaları, elektrik sistemleri ve marin kışlama kılavuzları.</p>
+  </div>
+</section>
+
+<section class="section" style="background:var(--paper);padding:40px 0 80px">
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px">
+      <h2 style="margin:0;font-size:24px">Tüm Teknik Makaleler (14 Rehber)</h2>
+      <div class="filter-tabs">
+        <button class="filter-btn active" onclick="filterBlog('all', this)">Tümü</button>
+        <button class="filter-btn" onclick="filterBlog('Motor & Mekanik Bakım', this)">Motor & Mekanik</button>
+        <button class="filter-btn" onclick="filterBlog('Jeneratör & Elektrik', this)">Jeneratör</button>
+        <button class="filter-btn" onclick="filterBlog('Marin Elektrik', this)">Elektrik & Akü</button>
+        <button class="filter-btn" onclick="filterBlog('Kışlama & Koruma', this)">Kışlama & Tutya</button>
+      </div>
+    </div>
+
+    <div class="blog-grid" id="blog-grid-container">
+      
+<article class="blog-card" data-category="Motor & Mekanik Bakım">
+  <div class="blog-card-img">
+    <img src="assets/volvo-penta-d4-d6-ozel-servis.webp" alt="Volvo Penta D4, D6 ve D13 Bakım Rehberi ve Arıza Teşhisi" loading="lazy">
+    <span class="blog-badge">Motor & Mekanik Bakım</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 7 dk okuma</span>
+      <span>•</span>
+      <span>Mühendislik Rehberi</span>
+    </div>
+    <h3><a href="blog-volvo-penta-d4-d6-d13-bakim-ve-arizalar.html">Volvo Penta D4, D6 ve D13 Bakım Rehberi ve Arıza Teşhisi</a></h3>
+    <p>Volvo Penta D4, D6 ve D13 Common Rail marin dizel motorlarda 100/200/500 saatlik periyodik bakım takvimi, kompresör yağı, aftercooler ve EVC arıza kodları rehberi.</p>
+    <a class="blog-read-link" href="blog-volvo-penta-d4-d6-d13-bakim-ve-arizalar.html">Rehberi Oku →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Jeneratör & Elektrik">
+  <div class="blog-card-img">
+    <img src="assets/cummins-onan-jenerator-servisi.webp" alt="Marin Jeneratör Arıza Teşhisi ve Deniz Suyu Soğutma Sistemi" loading="lazy">
+    <span class="blog-badge">Jeneratör & Elektrik</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 6 dk okuma</span>
+      <span>•</span>
+      <span>Mühendislik Rehberi</span>
+    </div>
+    <h3><a href="blog-marin-jenerator-ariza-ve-deniz-suyu-sogutma.html">Marin Jeneratör Arıza Teşhisi ve Deniz Suyu Soğutma Sistemi</a></h3>
+    <p>Cummins Onan, Kohler, Fischer Panda ve Westerbeke marin jeneratörlerde aşırı ısınma, deniz suyu basmama, hata kodları ve alternatör voltaj arıza çözümleri.</p>
+    <a class="blog-read-link" href="blog-marin-jenerator-ariza-ve-deniz-suyu-sogutma.html">Rehberi Oku →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Marin Elektrik">
+  <div class="blog-card-img">
+    <img src="assets/marin-elektrik-elektronik.webp" alt="Marin Akü Seçimi ve LiFePO4 Lityum Akü Dönüşüm Rehberi" loading="lazy">
+    <span class="blog-badge">Marin Elektrik</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 8 dk okuma</span>
+      <span>•</span>
+      <span>Mühendislik Rehberi</span>
+    </div>
+    <h3><a href="blog-tekne-aku-secimi-ve-lityum-donusumu.html">Marin Akü Seçimi ve LiFePO4 Lityum Akü Dönüşüm Rehberi</a></h3>
+    <p>Teknelerde servis ve marş aküleri: Sulu, AGM, Jel ve Lityum LiFePO4 akülerin karşılaştırması, redresör ayarları, BMS güvenliği ve alternatör koruma kılavuzu.</p>
+    <a class="blog-read-link" href="blog-tekne-aku-secimi-ve-lityum-donusumu.html">Rehberi Oku →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Kışlama & Koruma">
+  <div class="blog-card-img">
+    <img src="assets/motor-mekanik-bakim.webp" alt="Kışlık Tekne Motoru Kışlama ve Donma Koruması Rehberi" loading="lazy">
+    <span class="blog-badge">Kışlama & Koruma</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 6 dk okuma</span>
+      <span>•</span>
+      <span>Mühendislik Rehberi</span>
+    </div>
+    <h3><a href="blog-kislik-tekne-motoru-ve-antifriz-kislama.html">Kışlık Tekne Motoru Kışlama ve Donma Koruması Rehberi</a></h3>
+    <p>Teknelerde kışlık motor kışlama rehberi: Deniz suyu devresine antifriz basılması, yakıt stabilizatörü, tatlı su tesisatı koruması ve bahar sezonuna hazırlık.</p>
+    <a class="blog-read-link" href="blog-kislik-tekne-motoru-ve-antifriz-kislama.html">Rehberi Oku →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Arıza & Diagnostik">
+  <div class="blog-card-img">
+    <img src="assets/yanmar-4jh-6ly-ozel-servis.webp" alt="Marin Dizel Motorlarda Duman Renkleri: Siyah, Beyaz ve Mavi Duman Teşhisi" loading="lazy">
+    <span class="blog-badge">Arıza & Diagnostik</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 5 dk okuma</span>
+      <span>•</span>
+      <span>Mühendislik Rehberi</span>
+    </div>
+    <h3><a href="blog-yanmar-dizel-motor-duman-renkleri-ve-teshis.html">Marin Dizel Motorlarda Duman Renkleri: Siyah, Beyaz ve Mavi Duman Teşhisi</a></h3>
+    <p>Yanmar, Volvo Penta ve CAT marin motorlarda egzozdan siyah, beyaz veya mavi duman çıkmasının nedenleri, enjektör, turbo ve segman arıza kılavuzu.</p>
+    <a class="blog-read-link" href="blog-yanmar-dizel-motor-duman-renkleri-ve-teshis.html">Rehberi Oku →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Motor & Mekanik Bakım">
+  <div class="blog-card-img">
+    <img src="assets/man-marine-v8-v12-ozel-servis.webp" alt="MAN & MTU Marine V8/V12 Yüksek Güçlü Dizel Motor Bakımı" loading="lazy">
+    <span class="blog-badge">Motor & Mekanik Bakım</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 9 dk okuma</span>
+      <span>•</span>
+      <span>Mühendislik Rehberi</span>
+    </div>
+    <h3><a href="blog-man-mtu-marine-yuksek-devirli-dizel-bakimi.html">MAN & MTU Marine V8/V12 Yüksek Güçlü Dizel Motor Bakımı</a></h3>
+    <p>MAN V8/V12 ve MTU Series 2000 marin motorlarda ağır bakım, W4/W5/W6 revizyon periyotları, common rail enjektör kalibrasyonu ve soğutma eşanjör temizliği.</p>
+    <a class="blog-read-link" href="blog-man-mtu-marine-yuksek-devirli-dizel-bakimi.html">Rehberi Oku →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Kışlama & Koruma">
+  <div class="blog-card-img">
+    <img src="assets/marin-elektrik-elektronik.webp" alt="Galvanik Korozyon Nedir? Çinko, Alüminyum ve Magnezyum Tutya Seçimi" loading="lazy">
+    <span class="blog-badge">Kışlama & Koruma</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 6 dk okuma</span>
+      <span>•</span>
+      <span>Mühendislik Rehberi</span>
+    </div>
+    <h3><a href="blog-tutya-anot-ve-galvanik-korozyon-korunma.html">Galvanik Korozyon Nedir? Çinko, Alüminyum ve Magnezyum Tutya Seçimi</a></h3>
+    <p>Teknelerde galvanik ve elektrolitik korozyonu önleme: Şaft, pervane, bow thruster, kuyruk ve motor içi çinko anotların kontrolü ve izolasyon trafosu rehberi.</p>
+    <a class="blog-read-link" href="blog-tutya-anot-ve-galvanik-korozyon-korunma.html">Rehberi Oku →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Motor & Mekanik Bakım">
+  <div class="blog-card-img">
+    <img src="assets/marin-yedek-parca.webp" alt="Tekne Yakıt Deposu Temizliği ve Dizel Mikrobu (Diesel Bug) Çözümü" loading="lazy">
+    <span class="blog-badge">Motor & Mekanik Bakım</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 7 dk okuma</span>
+      <span>•</span>
+      <span>Mühendislik Rehberi</span>
+    </div>
+    <h3><a href="blog-tekne-yakit-deposu-temizligi-ve-diesel-bug.html">Tekne Yakıt Deposu Temizliği ve Dizel Mikrobu (Diesel Bug) Çözümü</a></h3>
+    <p>Teknelerde mazot deposu kirliliği, su birikmesi, dizel bakterisi (diesel bug), separ filtre tıkanması ve yakıt parlatma (fuel polishing) rehberi.</p>
+    <a class="blog-read-link" href="blog-tekne-yakit-deposu-temizligi-ve-diesel-bug.html">Rehberi Oku →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Motor & Mekanik Bakım">
+  <div class="blog-card-img">
+    <img src="assets/motor-mekanik-bakim.webp" alt="Marin Turboşarj ve Egzoz Dirseği (Exhaust Elbow) Çürüme ve Bakım Rehberi" loading="lazy">
+    <span class="blog-badge">Motor & Mekanik Bakım</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 6 dk okuma</span>
+      <span>•</span>
+      <span>Mühendislik Rehberi</span>
+    </div>
+    <h3><a href="blog-marin-turbosarj-ve-egzoz-manifoldu-bakimi.html">Marin Turboşarj ve Egzoz Dirseği (Exhaust Elbow) Çürüme ve Bakım Rehberi</a></h3>
+    <p>Volvo Penta, Yanmar ve MAN motorlarda marin turboşarj arızaları, egzoz dirseği çürümesi, geri su basması ve paslanmaz riser değişimi kılavuzu.</p>
+    <a class="blog-read-link" href="blog-marin-turbosarj-ve-egzoz-manifoldu-bakimi.html">Rehberi Oku →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Marin Rehberler">
+  <div class="blog-card-img">
+    <img src="assets/acil-mobil-marin-servis.webp" alt="Marinalarda Mobil Marin Servis Seçerken Nelere Dikkat Edilmelidir?" loading="lazy">
+    <span class="blog-badge">Marin Rehberler</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 5 dk okuma</span>
+      <span>•</span>
+      <span>Mühendislik Rehberi</span>
+    </div>
+    <h3><a href="blog-mobil-marin-servis-secimi-ve-marina-hizmetleri.html">Marinalarda Mobil Marin Servis Seçerken Nelere Dikkat Edilmelidir?</a></h3>
+    <p>İstanbul, Marmara, Ege ve Akdeniz marinalarında tekneniz için mobil servis çağırırken dikkat edilmesi gerekenler, teşhis cihazları, fatura ve garanti güvencesi.</p>
+    <a class="blog-read-link" href="blog-mobil-marin-servis-secimi-ve-marina-hizmetleri.html">Rehberi Oku →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Motor & Mekanik Bakım">
+  <div class="blog-card-img">
+    <img src="assets/volvo-penta-d4-d6-ozel-servis.webp" alt="Volvo Penta D4 & D6 Bakım Çizelgesi ve İpuçları" loading="lazy">
+    <span class="blog-badge">Motor & Mekanik Bakım</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 6 dk okuma</span>
+      <span>•</span>
+      <span>Teknik Rehber</span>
+    </div>
+    <h3><a href="rehber-volvo-penta-d4-d6-periyodik-bakim.html">Volvo Penta D4 & D6 Bakım Çizelgesi ve İpuçları</a></h3>
+    <p>Volvo Penta D4 ve D6 dizel marin motorlarda 100/200 saat ve yıllık periyodik bakım çizelgesi, impeller ve kompresör yağı kontrolü.</p>
+    <a class="blog-read-link" href="rehber-volvo-penta-d4-d6-periyodik-bakim.html">Rehberi Oku →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Jeneratör & Elektrik">
+  <div class="blog-card-img">
+    <img src="assets/cummins-onan-jenerator-servisi.webp" alt="Marin Jeneratör Arıza Kodları ve Hızlı Çözüm Rehberi" loading="lazy">
+    <span class="blog-badge">Jeneratör & Elektrik</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 5 dk okuma</span>
+      <span>•</span>
+      <span>Teknik Rehber</span>
+    </div>
+    <h3><a href="rehber-marin-jenerator-ariza-kodlari.html">Marin Jeneratör Arıza Kodları ve Hızlı Çözüm Rehberi</a></h3>
+    <p>Cummins Onan, Kohler, Fischer Panda jeneratörlerde aşırı ısınma, deniz suyu basmama ve voltaj arıza kodları.</p>
+    <a class="blog-read-link" href="rehber-marin-jenerator-ariza-kodlari.html">Rehberi Oku →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Marin Elektrik">
+  <div class="blog-card-img">
+    <img src="assets/marin-elektrik-elektronik.webp" alt="Tekne Akü ve Şarj Sistemi Seçim Rehberi (AGM, Jel, Lityum)" loading="lazy">
+    <span class="blog-badge">Marin Elektrik</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 5 dk okuma</span>
+      <span>•</span>
+      <span>Teknik Rehber</span>
+    </div>
+    <h3><a href="rehber-tekne-aku-ve-sarj-sistemi.html">Tekne Akü ve Şarj Sistemi Seçim Rehberi (AGM, Jel, Lityum)</a></h3>
+    <p>Teknelerde servis ve marş aküleri, redresör ayarları ve akü ömrünü uzatan profesyonel bakım tüyoları.</p>
+    <a class="blog-read-link" href="rehber-tekne-aku-ve-sarj-sistemi.html">Rehberi Oku →</a>
+  </div>
+</article>
+
+<article class="blog-card" data-category="Kışlama & Koruma">
+  <div class="blog-card-img">
+    <img src="assets/motor-mekanik-bakim.webp" alt="Kışlık Tekne Motoru Bakımı ve Antifriz Kışlama Kılavuzu" loading="lazy">
+    <span class="blog-badge">Kışlama & Koruma</span>
+  </div>
+  <div class="blog-card-body">
+    <div class="blog-meta">
+      <span>⏱ 6 dk okuma</span>
+      <span>•</span>
+      <span>Teknik Rehber</span>
+    </div>
+    <h3><a href="rehber-kislik-tekne-motoru-bakimi.html">Kışlık Tekne Motoru Bakımı ve Antifriz Kışlama Kılavuzu</a></h3>
+    <p>Teknenizi kışa hazırlarken motor blok çatlamasını önleme, deniz suyu devresi kışlaması ve yakıt koruması.</p>
+    <a class="blog-read-link" href="rehber-kislik-tekne-motoru-bakimi.html">Rehberi Oku →</a>
+  </div>
+</article>
+
+    </div>
+  </div>
+</section>
+
+<section class="contact">
+  <div class="container contact-in">
+    <h2>Tekneniz için acil mobil servis veya periyodik bakım randevusu alın.</h2>
+    <a class="btn" href="index.html#randevu">Servis talebi oluştur →</a>
+  </div>
+</section>
+</main>
+<footer class="footer">
+  <div class="container footer-in">
+    <span>© 2026 DM MARİN</span>
+    <span>Bağımsız çok markalı özel marin servis. Tüm Türkiye geneli mobil teknik destek.</span>
+  </div>
+</footer>
+<div class="mobile-bar">
+  <a class="mobile-call" href="tel:+905437240992">☎ Hemen Ara</a>
+  <a class="mobile-wa" href="https://wa.me/905437240992?text=Merhaba%20DM%20MAR%C4%B0N%2C%20blogunuzu%20inceledim%20ve%20teknik%20servis%20almak%20istiyorum." target="_blank" rel="noopener">WhatsApp</a>
+</div>
+
+<script>
+function filterBlog(category, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const cards = document.querySelectorAll('.blog-card');
+  cards.forEach(card => {
+    if (category === 'all' || card.dataset.category === category) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+</body>
+</html>
