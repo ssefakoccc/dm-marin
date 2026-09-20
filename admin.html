@@ -1096,16 +1096,16 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
         </div>
       </div>
 
-      <!-- CUSTOMER & VESSEL GRID (2 BALANCED COLUMNS) -->
+      <!-- CUSTOMER & VESSEL GRID (2 BALANCED COLUMNS - FULLY EDITABLE) -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;font-size:12.5px" class="report-section">
         <div style="border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fbfdfe">
           <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:5px;margin-bottom:8px">
             <b style="color:var(--navy);font-size:12px;letter-spacing:.03em;text-transform:uppercase">👤 Müşteri Bilgileri</b>
           </div>
-          <div style="display:grid;grid-template-columns:95px 1fr;gap:5px;line-height:1.4">
-            <span style="color:var(--muted)">Adı Soyadı:</span> <strong id="rep-cust-name" style="color:#0f172a">-</strong>
-            <span style="color:var(--muted)">Telefon:</span> <span id="rep-cust-phone" style="font-weight:700;color:var(--cyan2)">-</span>
-            <span style="color:var(--muted)">E-Posta:</span> <span id="rep-cust-email">-</span>
+          <div style="display:grid;grid-template-columns:95px 1fr;gap:6px;align-items:center;line-height:1.4">
+            <span style="color:var(--muted)">Adı Soyadı:</span> <input type="text" class="rep-input" id="rep-cust-name-input" style="font-weight:700;color:#0f172a" placeholder="Müşteri Ad Soyad">
+            <span style="color:var(--muted)">Telefon:</span> <input type="text" class="rep-input" id="rep-cust-phone-input" style="font-weight:700;color:var(--cyan2)" placeholder="05xx xxx xx xx">
+            <span style="color:var(--muted)">E-Posta:</span> <input type="text" class="rep-input" id="rep-cust-email-input" placeholder="ornek@alanadi.com">
           </div>
         </div>
 
@@ -1113,10 +1113,10 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
           <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:5px;margin-bottom:8px">
             <b style="color:var(--navy);font-size:12px;letter-spacing:.03em;text-transform:uppercase">🚤 Tekne & Konum Bilgileri</b>
           </div>
-          <div style="display:grid;grid-template-columns:95px 1fr;gap:5px;line-height:1.4">
-            <span style="color:var(--muted)">Tekne / Model:</span> <strong id="rep-boat-name" style="color:#0f172a">-</strong>
-            <span style="color:var(--muted)">Marina / Konum:</span> <span id="rep-location" style="font-weight:600">-</span>
-            <span style="color:var(--muted)">Hizmet Türü:</span> <span id="rep-service-type" style="font-weight:700;color:#087f93">-</span>
+          <div style="display:grid;grid-template-columns:95px 1fr;gap:6px;align-items:center;line-height:1.4">
+            <span style="color:var(--muted)">Tekne / Model:</span> <input type="text" class="rep-input" id="rep-boat-name-input" style="font-weight:700;color:#0f172a" placeholder="Marka / Model">
+            <span style="color:var(--muted)">Marina / Konum:</span> <input type="text" class="rep-input" id="rep-location-input" style="font-weight:700;color:#0369a1" placeholder="Örn: Kalamış Marina / F-Pontonu">
+            <span style="color:var(--muted)">Hizmet Türü:</span> <input type="text" class="rep-input" id="rep-service-type-input" style="font-weight:700;color:#087f93" placeholder="Motor & Jeneratör Bakımı">
           </div>
         </div>
       </div>
@@ -1155,15 +1155,15 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
       <!-- COMPLETED PROCEDURES CHECKLIST (2 COLUMNS) -->
       <div style="margin-bottom:14px" class="report-section">
         <b style="color:var(--navy);font-size:12px;display:block;margin-bottom:6px;letter-spacing:.03em;text-transform:uppercase">🔧 Yapılan Teknik İşlemler & Kontroller</b>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:11.5px;background:#fbfdfe;border:1px solid var(--line);border-radius:10px;padding:10px 14px">
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="rep-chk-1" checked> <span>Motor & Mekanik Periyodik Bakımı</span></label>
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="rep-chk-2" checked> <span>Motor Yağı ve Orijinal Filtre Değişimi</span></label>
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="rep-chk-3" checked> <span>Deniz Suyu Pompası & İmpeller Değişimi</span></label>
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="rep-chk-4" checked> <span>Cihazlı ECU / Arıza Kodu Taraması & Kalibrasyon</span></label>
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="rep-chk-5" checked> <span>Yakıt Separatör & Filtre Değişimi</span></label>
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="rep-chk-6" checked> <span>Şanzıman / Kuyruk Yağ Seviyesi & Tutya Kontrolü</span></label>
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="rep-chk-7" checked> <span>Jeneratör Yük, Frekans & Voltaj Testi</span></label>
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="rep-chk-8" checked> <span>Deniz Seyir Testi & Hararet / Basınç Kontrolü</span></label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;font-size:11.5px;background:#fbfdfe;border:1px solid var(--line);border-radius:10px;padding:12px 14px">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="rep-chk-1" style="width:16px;height:16px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Motor & Mekanik Periyodik Bakımı</span></label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="rep-chk-2" style="width:16px;height:16px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Motor Yağı ve Orijinal Filtre Değişimi</span></label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="rep-chk-3" style="width:16px;height:16px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Deniz Suyu Pompası & İmpeller Değişimi</span></label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="rep-chk-4" style="width:16px;height:16px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Cihazlı ECU / Arıza Kodu Taraması & Kalibrasyon</span></label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="rep-chk-5" style="width:16px;height:16px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Yakıt Separatör & Filtre Değişimi</span></label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="rep-chk-6" style="width:16px;height:16px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Şanzıman / Kuyruk Yağ Seviyesi & Tutya Kontrolü</span></label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="rep-chk-7" style="width:16px;height:16px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Jeneratör Yük, Frekans & Voltaj Testi</span></label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="rep-chk-8" style="width:16px;height:16px;margin:0;accent-color:#087f93;flex-shrink:0" checked> <span>Deniz Seyir Testi & Hararet / Basınç Kontrolü</span></label>
         </div>
       </div>
 
@@ -1931,16 +1931,43 @@ function openServiceReportModal(req) {
   document.getElementById('rep-no').textContent = reportNo;
   document.getElementById('rep-date').textContent = dateStr;
   document.getElementById('rep-sign-date').textContent = dateStr;
-  document.getElementById('rep-cust-name').textContent = req.name || '-';
-  document.getElementById('rep-cust-phone').textContent = req.phone || '-';
-  document.getElementById('rep-cust-email').textContent = req.email || '-';
-  document.getElementById('rep-boat-name').textContent = req.boat_name || req.boat || 'Motoryat / Yelkenli';
-  document.getElementById('rep-location').textContent = req.marina_location || req.location || 'İstanbul & Marmara Marinaları';
-  document.getElementById('rep-service-type').textContent = req.service_type || req.service || 'Motor & Jeneratör Bakımı';
-  document.getElementById('rep-sign-cust-name').textContent = req.name || '-';
+
+  const custNameInput = document.getElementById('rep-cust-name-input');
+  const custPhoneInput = document.getElementById('rep-cust-phone-input');
+  const custEmailInput = document.getElementById('rep-cust-email-input');
+  const boatNameInput = document.getElementById('rep-boat-name-input');
+  const locationInput = document.getElementById('rep-location-input');
+  const serviceTypeInput = document.getElementById('rep-service-type-input');
+
+  if (custNameInput) custNameInput.value = req.name || '';
+  if (custPhoneInput) custPhoneInput.value = req.phone || '';
+  if (custEmailInput) custEmailInput.value = req.email || '';
+  if (boatNameInput) boatNameInput.value = req.boat_name || req.boat || 'Motoryat / Yelkenli';
+  if (locationInput) locationInput.value = req.marina_location || req.location || 'İstanbul & Marmara Marinaları';
+  if (serviceTypeInput) serviceTypeInput.value = req.service_type || req.service || 'Motor & Jeneratör Bakımı';
+
+  const signCustName = document.getElementById('rep-sign-cust-name');
+  if (signCustName) signCustName.textContent = req.name || '-';
+
+  if (custNameInput && signCustName) {
+    custNameInput.addEventListener('input', (e) => {
+      signCustName.textContent = e.target.value || '-';
+    });
+  }
 
   if (req.boat_name || req.boat) {
     document.getElementById('rep-engine-model').value = req.boat_name || req.boat;
+  }
+
+  // Auto-expand technician notes textarea
+  const techNotesArea = document.getElementById('rep-tech-notes');
+  if (techNotesArea) {
+    techNotesArea.style.height = 'auto';
+    techNotesArea.style.height = (techNotesArea.scrollHeight + 4) + 'px';
+    techNotesArea.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight + 4) + 'px';
+    });
   }
 
   // Parçaları klonla ve tabloyu çiz
@@ -1963,26 +1990,122 @@ if (repCancelBtn) repCancelBtn.addEventListener('click', closeServiceReportModal
 
 function downloadServiceReportPdf(onComplete) {
   const repNo = (document.getElementById('rep-no')?.textContent || 'DM-20265717').trim();
-  const element = document.getElementById('print-service-report');
-  if (!element || typeof html2pdf === 'undefined') {
+  const source = document.getElementById('print-service-report');
+  if (!source || typeof html2pdf === 'undefined') {
     window.print();
     if (typeof onComplete === 'function') onComplete();
     return Promise.resolve();
   }
 
+  // 1. Deep clone the report element for 100% clean A4 PDF rendering
+  const clone = source.cloneNode(true);
+  clone.style.width = '780px';
+  clone.style.padding = '12px 16px';
+  clone.style.background = '#ffffff';
+  clone.style.color = '#071b2b';
+  clone.style.boxSizing = 'border-box';
+
+  // 2. Remove all interactive buttons & columns (Parça Ekle, Sil butonları)
+  clone.querySelectorAll('.report-hide-print').forEach(el => el.remove());
+
+  // 3. Map all input/select/textarea and checkbox values from live DOM into clean static elements
+  source.querySelectorAll('input, select, textarea').forEach(origEl => {
+    let cloneEl = null;
+    if (origEl.id) {
+      cloneEl = clone.querySelector('#' + origEl.id);
+    } else if (origEl.classList.contains('part-name-input')) {
+      const idx = Array.from(source.querySelectorAll('.part-name-input')).indexOf(origEl);
+      cloneEl = clone.querySelectorAll('.part-name-input')[idx];
+    } else if (origEl.classList.contains('part-code-input')) {
+      const idx = Array.from(source.querySelectorAll('.part-code-input')).indexOf(origEl);
+      cloneEl = clone.querySelectorAll('.part-code-input')[idx];
+    } else if (origEl.classList.contains('part-qty-input')) {
+      const idx = Array.from(source.querySelectorAll('.part-qty-input')).indexOf(origEl);
+      cloneEl = clone.querySelectorAll('.part-qty-input')[idx];
+    } else if (origEl.classList.contains('part-status-select')) {
+      const idx = Array.from(source.querySelectorAll('.part-status-select')).indexOf(origEl);
+      cloneEl = clone.querySelectorAll('.part-status-select')[idx];
+    }
+
+    if (!cloneEl || !cloneEl.parentNode) return;
+
+    if (origEl.type === 'checkbox') {
+      const isChecked = origEl.checked;
+      const checkSpan = document.createElement('span');
+      checkSpan.style.display = 'inline-flex';
+      checkSpan.style.alignItems = 'center';
+      checkSpan.style.justifyContent = 'center';
+      checkSpan.style.width = '14px';
+      checkSpan.style.height = '14px';
+      checkSpan.style.marginRight = '7px';
+      checkSpan.style.borderRadius = '3px';
+      checkSpan.style.fontSize = '11px';
+      checkSpan.style.fontWeight = 'bold';
+      checkSpan.style.flexShrink = '0';
+      checkSpan.style.verticalAlign = 'middle';
+      if (isChecked) {
+        checkSpan.style.border = '1.5px solid #087f93';
+        checkSpan.style.background = '#e8fafd';
+        checkSpan.style.color = '#087f93';
+        checkSpan.textContent = '✓';
+      } else {
+        checkSpan.style.border = '1.5px solid #cbd5e1';
+        checkSpan.style.background = '#f8fafc';
+        checkSpan.textContent = '';
+      }
+      cloneEl.parentNode.replaceChild(checkSpan, cloneEl);
+    } else if (origEl.tagName === 'TEXTAREA') {
+      const textDiv = document.createElement('div');
+      textDiv.style.whiteSpace = 'pre-wrap';
+      textDiv.style.wordBreak = 'break-word';
+      textDiv.style.lineHeight = '1.55';
+      textDiv.style.fontSize = '11.5px';
+      textDiv.style.color = '#0f172a';
+      textDiv.style.minHeight = '32px';
+      textDiv.style.padding = '4px 0';
+      textDiv.textContent = origEl.value || '-';
+      cloneEl.parentNode.replaceChild(textDiv, cloneEl);
+    } else if (origEl.tagName === 'SELECT') {
+      const textSpan = document.createElement('span');
+      textSpan.style.fontSize = '11.5px';
+      textSpan.style.fontWeight = '600';
+      textSpan.style.color = '#0f172a';
+      textSpan.textContent = origEl.value || '-';
+      cloneEl.parentNode.replaceChild(textSpan, cloneEl);
+    } else {
+      const textSpan = document.createElement('span');
+      textSpan.style.fontSize = origEl.style.fontSize || '11.5px';
+      textSpan.style.fontWeight = origEl.style.fontWeight || '600';
+      textSpan.style.color = origEl.style.color || '#0f172a';
+      textSpan.textContent = origEl.value || '-';
+      cloneEl.parentNode.replaceChild(textSpan, cloneEl);
+    }
+  });
+
+  // 4. Temporarily mount clone off-screen for html2pdf to measure and capture
+  const wrapper = document.createElement('div');
+  wrapper.style.position = 'fixed';
+  wrapper.style.left = '-9999px';
+  wrapper.style.top = '0';
+  wrapper.style.width = '780px';
+  wrapper.appendChild(clone);
+  document.body.appendChild(wrapper);
+
   const opt = {
     margin:       [6, 6, 6, 6],
     filename:     `DM-MARIN-Servis-Raporu-${repNo}.pdf`,
     image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2, useCORS: true, logging: false },
+    html2canvas:  { scale: 2, useCORS: true, logging: false, width: 780 },
     jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
-  return html2pdf().set(opt).from(element).save().then(() => {
+  return html2pdf().set(opt).from(clone).save().then(() => {
+    if (document.body.contains(wrapper)) document.body.removeChild(wrapper);
     flash('✓ ' + opt.filename + ' başarıyla indirildi.');
     if (typeof onComplete === 'function') onComplete();
   }).catch(err => {
     console.error('PDF error:', err);
+    if (document.body.contains(wrapper)) document.body.removeChild(wrapper);
     window.print();
     if (typeof onComplete === 'function') onComplete();
   });
@@ -2013,12 +2136,15 @@ const repWaBtn = document.getElementById('report-wa-send-btn');
 if (repWaBtn) {
   repWaBtn.addEventListener('click', () => {
     if (!activeReportReq) return;
-    const phoneClean = (activeReportReq.phone || '').replace(/[^0-9]/g, '');
+    const custPhone = document.getElementById('rep-cust-phone-input')?.value || activeReportReq.phone || '';
+    const phoneClean = custPhone.replace(/[^0-9]/g, '');
     const repNo = document.getElementById('rep-no')?.textContent || 'DM-20265717';
     const repDate = document.getElementById('rep-date')?.textContent || '';
-    const boat = document.getElementById('rep-boat-name')?.textContent || '-';
-    const loc = document.getElementById('rep-location')?.textContent || '-';
-    const serv = document.getElementById('rep-service-type')?.textContent || '-';
+    const custName = document.getElementById('rep-cust-name-input')?.value || activeReportReq.name || 'Müşteri';
+    const custEmail = document.getElementById('rep-cust-email-input')?.value || activeReportReq.email || '';
+    const boat = document.getElementById('rep-boat-name-input')?.value || '-';
+    const loc = document.getElementById('rep-location-input')?.value || '-';
+    const serv = document.getElementById('rep-service-type-input')?.value || '-';
     const engine = document.getElementById('rep-engine-model')?.value || boat;
     const serial = document.getElementById('rep-serial-no')?.value || '';
     const hours = document.getElementById('rep-hours')?.value || '';
@@ -2038,9 +2164,9 @@ if (repWaBtn) {
       id: String(activeReportReq.id || ''),
       rep: repNo,
       date: repDate,
-      name: activeReportReq.name || '',
-      phone: activeReportReq.phone || '',
-      email: activeReportReq.email || '',
+      name: custName,
+      phone: custPhone,
+      email: custEmail,
       boat: boat,
       loc: loc,
       serv: serv,
@@ -2052,10 +2178,11 @@ if (repWaBtn) {
 
     const reportUrl = 'https://dmmarin.com/servis-raporu.html?' + params.toString();
 
-    let waMsg = `Merhaba Sn. ${activeReportReq.name},\n\n` +
+    let waMsg = `Merhaba Sn. ${custName},\n\n` +
       `DM MARİN tarafından tekneniz (${boat}) için gerçekleştirilen teknik servis ve bakım işlemleri başarıyla tamamlanmıştır.\n\n` +
       `📋 *Rapor No:* ${repNo}\n` +
       `🚤 *Tekne / Model:* ${boat}\n` +
+      `📍 *Konum:* ${loc}\n` +
       `🛠 *Hizmet:* ${serv}\n` +
       (engine ? `⚙️ *Motor:* ${engine}\n` : '') +
       (hours ? `⏱ *Moto-Saat:* ${hours}\n` : '') +
