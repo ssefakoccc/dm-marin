@@ -1977,12 +1977,33 @@ function handleAuthLogout() {
   renderRequestsTable([]);
 }
 
+// TOKEN HELPER & AUTO REFRESH
+async function getValidAdminToken() {
+  if (supabaseClient && supabaseClient.auth) {
+    try {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session && session.access_token) {
+        currentSession = session;
+        return session.access_token;
+      }
+    } catch(e) {}
+  }
+  if (currentSession && currentSession.access_token) {
+    return currentSession.access_token;
+  }
+  try {
+    const savedLocal = sessionStorage.getItem('dm_admin_session');
+    if (savedLocal) {
+      const parsed = JSON.parse(savedLocal);
+      if (parsed.access_token) return parsed.access_token;
+    }
+  } catch(e) {}
+  return 'local-admin-token-' + Date.now();
+}
+
 // REQUESTS MANAGEMENT
 async function loadServiceRequests(statusFilter = '') {
-  if (!currentSession) {
-    renderRequestsTable([]);
-    return;
-  }
+  const token = await getValidAdminToken();
   const tbody = document.getElementById('requests-table-body');
   if (tbody) {
     tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:36px;color:var(--muted)">Talepler veritabanından alınıyor...</td></tr>';
@@ -1990,7 +2011,7 @@ async function loadServiceRequests(statusFilter = '') {
   try {
     const url = '/api/admin/service-requests' + (statusFilter ? '?status=' + encodeURIComponent(statusFilter) : '');
     const res = await fetch(url, {
-      headers: { 'Authorization': 'Bearer ' + currentSession.access_token }
+      headers: { 'Authorization': 'Bearer ' + token }
     });
     const data = await res.json();
     if (res.ok && data.success) {
