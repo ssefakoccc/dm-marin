@@ -1765,7 +1765,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
       <!-- Interactive Part Lookup inside Admin -->
       <div style="margin-bottom:12px">
         <div style="display:flex;gap:6px">
-          <input type="text" id="admin-agent-oem-input" placeholder="OEM Kodu veya Parça (Örn: 21951356 veya Yanmar)..." style="font-size:12.5px;padding:6px 10px">
+          <input type="text" id="admin-agent-oem-input" placeholder="OEM Kodu veya Parça (Örn: 21951356 veya Yanmar)..." style="font-size:12.5px;padding:6px 10px" onkeydown="if(event.key==='Enter'){event.preventDefault();lookupQuartermasterFromAdmin();}">
           <button type="button" class="btn primary" style="font-size:12px;padding:0 12px;min-height:34px;white-space:nowrap" onclick="lookupQuartermasterFromAdmin()">Sorgula</button>
         </div>
         <div id="admin-agent-oem-result" style="display:none;margin-top:8px;padding:8px 10px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;font-size:11.5px;color:#1e3a8a"></div>
@@ -5779,37 +5779,84 @@ function pruneAndRefreshBlogs() {
   }, 1000);
 }
 
-// 🧠 QUARTERMASTER DEEP RESEARCH & HEURISTIC ENGINE
+// 🧠 QUARTERMASTER DEEP RESEARCH & HEURISTIC MULTI-SEARCH ENGINE
 function researchQuartermasterCatalog(rawQuery) {
   const q = rawQuery.trim().toLowerCase();
   const cleanCode = q.replace(/[^a-z0-9]/gi, '');
+  const words = q.split(/\s+/).filter(w => w.length > 1);
 
-  // 1. Direct exact or partial match in catalog
+  const directMatches = [];
+
+  // 1. Search in AGENT_OEM_CATALOG with scoring
   for (const [oem, data] of Object.entries(AGENT_OEM_CATALOG)) {
     const oemClean = oem.toLowerCase().replace(/[^a-z0-9]/gi, '');
-    if (oem.toLowerCase() === q || oemClean === cleanCode || 
-        oem.toLowerCase().includes(q) || 
-        data.name.toLowerCase().includes(q) || 
-        data.cross.toLowerCase().includes(q) || 
-        data.brand.toLowerCase().includes(q) ||
-        (data.models && data.models.toLowerCase().includes(q))) {
-      return {
-        foundType: 'EXACT',
+    const nameLower = (data.name || '').toLowerCase();
+    const crossLower = (data.cross || '').toLowerCase();
+    const brandLower = (data.brand || '').toLowerCase();
+    const modelsLower = (data.models || '').toLowerCase();
+    const catLower = (data.category || '').toLowerCase();
+    const specsLower = (data.specs || '').toLowerCase();
+
+    let score = 0;
+
+    // Exact OEM match
+    if (oem.toLowerCase() === q || oemClean === cleanCode) score += 100;
+    else if (oemClean.includes(cleanCode) && cleanCode.length >= 3) score += 60;
+    else if (oem.toLowerCase().includes(q)) score += 50;
+
+    // Cross reference match
+    if (crossLower.includes(q)) score += 80;
+
+    // Word tokens match
+    if (words.length > 0) {
+      let allWordsMatch = true;
+      let matchedWordCount = 0;
+      for (const w of words) {
+        const inItem = oem.toLowerCase().includes(w) || 
+                       nameLower.includes(w) || 
+                       crossLower.includes(w) || 
+                       brandLower.includes(w) || 
+                       modelsLower.includes(w) || 
+                       catLower.includes(w) ||
+                       specsLower.includes(w);
+        if (inItem) matchedWordCount++;
+        else allWordsMatch = false;
+      }
+      if (allWordsMatch) score += 70;
+      else if (matchedWordCount > 0) score += (matchedWordCount * 15);
+    }
+
+    if (score > 0) {
+      directMatches.push({
+        score,
+        foundType: score >= 80 ? 'EXACT' : 'MATCH',
         oem,
         ...data
-      };
+      });
     }
   }
 
-  // 2. Intelligent pattern recognition & heuristic breakdown
+  // Sort by relevance score
+  directMatches.sort((a, b) => b.score - a.score);
+
+  if (directMatches.length > 0) {
+    return {
+      type: 'CATALOG_MATCHES',
+      count: directMatches.length,
+      items: directMatches.slice(0, 8), // Top 8 matches
+      query: rawQuery
+    };
+  }
+
+  // 2. Intelligent Heuristic Pattern Recognition if not in catalog
   let brand = "Genel Marin";
-  let category = "Yedek Parça";
-  let crossSuggestions = "Mann Filter, Donaldson, Baldwin, Fleetguard, Jabsco, Sierra";
-  let interval = "200 Saat / 1 Sezon";
-  let models = "Tüm Uyumlu Marin Motor ve Jeneratörler";
+  let category = "Yedek Parça & Filtre";
+  let crossSuggestions = "Mann Filter, Donaldson, Baldwin, Fleetguard, Jabsco, Sierra, Mahle";
+  let interval = "200 Saat / 1 Sezon Başı";
+  let models = "Tüm Uyumlu Marin Dizel ve Jeneratör Sistemleri";
   let specs = "OEM Standart Marin Spesifikasyonu";
 
-  if (/^(21|22|23|38|358|87|86|385)/.test(cleanCode) || q.includes('volvo') || q.includes('penta') || q.includes('d4') || q.includes('d6')) {
+  if (/^(21|22|23|38|358|87|86|385)/.test(cleanCode) || q.includes('volvo') || q.includes('penta') || q.includes('d4') || q.includes('d6') || q.includes('d13') || q.includes('ips')) {
     brand = "Volvo Penta";
     models = "Volvo Penta D3 / D4 / D6 / D9 / D11 / D13 / IPS";
     crossSuggestions = "Mann WK820/W940, Donaldson P550881, Baldwin BF7949, Jabsco 1210-0001, Orbitrade";
@@ -5824,21 +5871,21 @@ function researchQuartermasterCatalog(rawQuery) {
       category = "Motor Yağlama & Filtre";
       crossSuggestions = "Mann W 940/25, Baldwin B7030, Fleetguard LF16015";
     }
-  } else if (/^(129|119|120|128|124)/.test(cleanCode) || q.includes('yanmar') || q.includes('4jh') || q.includes('6ly')) {
+  } else if (/^(129|119|120|128|124)/.test(cleanCode) || q.includes('yanmar') || q.includes('4jh') || q.includes('6ly') || q.includes('3ym')) {
     brand = "Yanmar Marine";
-    models = "Yanmar 3JH / 4JH / 6LP / 6LY Serisi";
-    crossSuggestions = "Mann W67/1, Baldwin B1400, Fleetguard LF3925, Jabsco 1210-0001";
+    models = "Yanmar 3JH / 4JH / 6LP / 6LY / 8LV Serisi";
+    crossSuggestions = "Mann W67/1, Baldwin B1400, Fleetguard LF3925, Jabsco 1210-0001, Sierra 18-3080";
     category = "Yanmar Orijinal Komponent";
     interval = "150-200 Saat";
   } else if (/^(51|52)/.test(cleanCode) || q.includes('man') || q.includes('d2842') || q.includes('v8') || q.includes('v12')) {
     brand = "MAN Marine Diesel";
     models = "MAN D2866, D2842, V8-900..1200, V12-1400..2000";
-    crossSuggestions = "Mann HU 13 125 x / WK 940/20, Baldwin P7230 / BF7895, Hengst E154H";
+    crossSuggestions = "Mann HU 13 125 x / WK 940/20, Baldwin P7230 / BF7895, Hengst E154H, Donaldson";
     category = "Ağır Hizmet Filtrasyon & Soğutma";
     interval = "250-400 Saat";
   } else if (/^(1r|2w|4p|7e|1w)/.test(q) || q.includes('cat') || q.includes('caterpillar') || q.includes('c12') || q.includes('c18') || q.includes('c32')) {
     brand = "Caterpillar Marine";
-    models = "CAT C7, C9, C12, C18, C32 ACERT";
+    models = "CAT C7, C9, C12, C18, C32 ACERT Megayat";
     crossSuggestions = "Donaldson P554005, Baldwin B7299 / BF7587, Fleetguard LF691A / FF5319";
     category = "Caterpillar Ağır Hizmet Filtrasyon";
     interval = "250 Saat (S•O•S Analizli)";
@@ -5870,17 +5917,40 @@ function researchQuartermasterCatalog(rawQuery) {
     specs = "Orijinal Neopren Kauçuk / Pirinç veya Kompozit Göbek";
   }
 
+  // Grab 2 top brand suggestions from catalog if available
+  const brandSuggestions = Object.entries(AGENT_OEM_CATALOG)
+    .filter(([k, v]) => v.brand.toLowerCase().includes(brand.toLowerCase().split(' ')[0]))
+    .slice(0, 3)
+    .map(([k, v]) => ({ oem: k, ...v }));
+
   return {
-    foundType: 'HEURISTIC',
-    oem: rawQuery.toUpperCase(),
-    brand: brand,
-    name: `${brand} OEM Eşdeğer Komponent / Parça Referansı`,
-    models: models,
-    cross: crossSuggestions,
-    interval: interval,
-    category: category,
-    specs: specs
+    type: 'HEURISTIC',
+    query: rawQuery,
+    heuristicItem: {
+      foundType: 'HEURISTIC',
+      oem: rawQuery.toUpperCase(),
+      brand: brand,
+      name: `${brand} OEM Eşdeğer Komponent / Parça Referansı`,
+      models: models,
+      cross: crossSuggestions,
+      interval: interval,
+      category: category,
+      specs: specs
+    },
+    suggestions: brandSuggestions
   };
+}
+
+function copyTextToClipboard(txt, btn) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(txt).then(() => {
+      const prev = btn.textContent;
+      btn.textContent = '✓ Kopyalandı';
+      setTimeout(() => btn.textContent = prev, 1500);
+    });
+  } else {
+    prompt('OEM Kodu:', txt);
+  }
 }
 
 function lookupQuartermasterFromAdmin() {
@@ -5889,7 +5959,7 @@ function lookupQuartermasterFromAdmin() {
   const query = (input?.value || "").trim();
 
   if (!query) {
-    alert("Lütfen aramak istediğiniz OEM parça kodunu, muadil numarasını veya motor modelini giriniz.");
+    alert("Lütfen aramak istediğiniz OEM parça kodunu, muadil numarasını veya motor modelini giriniz (Örn: 21951356, WK820, Yanmar, Racor)...");
     if (input) input.focus();
     return;
   }
@@ -5897,55 +5967,118 @@ function lookupQuartermasterFromAdmin() {
   setAgentWorking('quartermaster', true, 'Küresel Veritabanı Taranıyor...');
   resultBox.style.display = "block";
   resultBox.innerHTML = `
-    <div style="display:flex;align-items:center;gap:8px;color:#0284c7;font-size:12px;padding:4px 0">
+    <div style="display:flex;align-items:center;gap:8px;color:#0284c7;font-size:12px;padding:8px">
       <span class="agent-icon-working">⚙️</span>
-      <b>Quartermaster araştırıyor...</b> Küresel OEM katalogları (Volvo, Yanmar, MAN, CAT, Onan, Racor) taranıyor.
+      <b>Quartermaster araştırıyor...</b> "${escapeHtml(query)}" için küresel OEM katalogları taranıyor.
     </div>
   `;
 
   logToAgentConsole('Quartermaster', `🔍 Parça Sorgulama Başlatıldı: "${query}" - Küresel Marin OEM Veritabanları taranıyor...`, 'info');
 
-  // Multi-step progressive research under 2 seconds (Maximum 30 seconds limit compliant)
   setTimeout(() => {
     logToAgentConsole('Quartermaster', `⚙️ Çapraz muadil üreticileri taranıyor (Mann, Donaldson, Baldwin, Fleetguard, Jabsco, Racor)...`, 'info');
-  }, 600);
+  }, 500);
 
   setTimeout(() => {
     const res = researchQuartermasterCatalog(query);
     
-    logToAgentConsole('Quartermaster', `🎯 Eşleşme Teyit Edildi: [${res.oem}] -> ${res.brand} - ${res.name}`, 'ok');
-    logToAgentConsole('Quartermaster', `📋 Muadiller: ${res.cross} | Bakım: ${res.interval}`, 'ok');
+    if (res.type === 'CATALOG_MATCHES') {
+      logToAgentConsole('Quartermaster', `🎯 ${res.count} Adet Doğrulanmış OEM Eşleşmesi Bulundu.`, 'ok');
+      
+      let html = `
+        <div style="margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+          <b style="font-size:12px;color:#0369a1">🎯 "${escapeHtml(query)}" İçin ${res.items.length} Sonuç Bulundu:</b>
+          <span style="font-size:10px;background:#e0f2fe;color:#0369a1;padding:2px 6px;border-radius:4px;font-weight:700">%100 Doğrulanmış Marin Kataloğu</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;max-height:360px;overflow-y:auto;padding-right:4px">
+      `;
 
-    resultBox.innerHTML = `
-      <div style="background:#fff;border:1px solid #bfdbfe;border-radius:8px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,0.04)">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;border-bottom:1px solid #e2e8f0;padding-bottom:6px">
-          <div>
-            <span style="font-size:10px;background:#0284c7;color:#fff;padding:2px 6px;border-radius:4px;font-weight:700">${escapeHtml(res.brand)}</span>
-            <span style="font-size:10px;background:#e0f2fe;color:#0369a1;padding:2px 6px;border-radius:4px;font-weight:600;margin-left:4px">${escapeHtml(res.category || 'Marin Parça')}</span>
+      res.items.forEach((item, idx) => {
+        html += `
+          <div style="background:#fff;border:1px solid #bfdbfe;border-radius:8px;padding:10px;box-shadow:0 1px 4px rgba(0,0,0,0.03)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+              <div>
+                <span style="font-size:10px;background:#0284c7;color:#fff;padding:2px 6px;border-radius:4px;font-weight:700">${escapeHtml(item.brand)}</span>
+                <span style="font-size:10px;background:#f1f5f9;color:#475569;padding:2px 6px;border-radius:4px;font-weight:600;margin-left:4px">${escapeHtml(item.category || 'Marin Parça')}</span>
+              </div>
+              <button type="button" class="btn" style="font-size:10px;padding:1px 6px;min-height:22px" onclick="copyTextToClipboard('${escapeHtml(item.oem)}', this)">📋 Kodu Kopyala</button>
+            </div>
+
+            <h4 style="margin:0 0 4px;font-size:12.5px;color:#0f172a;font-weight:800">${escapeHtml(item.name)}</h4>
+            
+            <div style="font-size:11px;color:#334155;line-height:1.4">
+              <div><b>⭐ OEM No:</b> <code style="background:#eff6ff;color:#1e40af;padding:1px 5px;border-radius:3px;font-weight:700">${escapeHtml(item.oem)}</code></div>
+              ${item.models ? `<div><b>🚤 Uyumlu Motorlar:</b> ${escapeHtml(item.models)}</div>` : ''}
+              <div><b>🔄 Muadiller:</b> <span style="color:#0284c7;font-weight:600">${escapeHtml(item.cross)}</span></div>
+              <div><b>⏱️ Değişim Aralığı:</b> <span style="color:#b45309;font-weight:600">${escapeHtml(item.interval || '200 Saat / Sezonluk')}</span></div>
+              ${item.specs ? `<div style="color:#64748b"><b>📐 Özellik:</b> ${escapeHtml(item.specs)}</div>` : ''}
+            </div>
           </div>
-          <span style="font-size:11px;color:#15803d;font-weight:700">✓ ${res.foundType === 'EXACT' ? 'Doğrulanmış Katalog Kaydı' : 'Akıllı Heuristic Eşleşme'}</span>
-        </div>
+        `;
+      });
 
-        <h4 style="margin:0 0 6px;font-size:13px;color:#0f172a">${escapeHtml(res.name)}</h4>
-        
-        <div style="font-size:11.5px;color:#334155;line-height:1.5">
-          <div style="margin-bottom:3px"><b>⭐ Orijinal OEM Kodu:</b> <code style="background:#f1f5f9;color:#0f172a;padding:2px 6px;border-radius:4px;font-weight:700">${escapeHtml(res.oem)}</code></div>
-          ${res.models ? `<div style="margin-bottom:3px"><b>🚤 Uyumlu Makineler:</b> ${escapeHtml(res.models)}</div>` : ''}
-          <div style="margin-bottom:3px"><b>🔄 Çapraz Muadiller:</b> <span style="color:#0284c7;font-weight:600">${escapeHtml(res.cross)}</span></div>
-          <div style="margin-bottom:3px"><b>⏱️ Değişim & Bakım Aralığı:</b> <span style="color:#b45309;font-weight:600">${escapeHtml(res.interval || '200 Saat / Sezonluk')}</span></div>
-          ${res.specs ? `<div style="font-size:11px;color:#64748b;margin-top:4px"><b>📐 Teknik Özellik:</b> ${escapeHtml(res.specs)}</div>` : ''}
+      html += `
         </div>
+        <div style="margin-top:8px;padding-top:6px;border-top:1px dashed #cbd5e1;display:flex;justify-content:space-between;align-items:center">
+          <small style="color:#16a34a;font-weight:700">✓ Stok programından aratabilir veya stoğa ekleyebilirsiniz</small>
+          <a href="stok.html" target="_blank" class="btn primary" style="font-size:11px;padding:3px 10px;min-height:26px">Depo Stoğuna Git ↗</a>
+        </div>
+      `;
 
-        <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #cbd5e1;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
-          <small style="color:#16a34a;font-weight:600">✓ DM Marin Yetkili Servis & Yedek Parça Stoğunda Aranabilir</small>
-          <a href="stok.html" target="_blank" class="btn primary" style="font-size:11px;padding:2px 8px;min-height:26px">Depo Stoğuna Ekle / Sorgula ↗</a>
+      resultBox.innerHTML = html;
+    } else {
+      // Heuristic Output
+      const h = res.heuristicItem;
+      logToAgentConsole('Quartermaster', `🎯 Heuristic Örüntü Eşleşmesi: [${h.oem}] -> ${h.brand} (${h.category})`, 'ok');
+
+      let html = `
+        <div style="background:#fff;border:1px solid #bfdbfe;border-radius:8px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,0.04)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <span style="font-size:10px;background:#f59e0b;color:#fff;padding:2px 6px;border-radius:4px;font-weight:700">Akıllı Heuristic Analiz</span>
+            <span style="font-size:10px;background:#f1f5f9;color:#475569;padding:2px 6px;border-radius:4px;font-weight:600">${escapeHtml(h.brand)}</span>
+          </div>
+
+          <h4 style="margin:0 0 6px;font-size:13px;color:#0f172a">${escapeHtml(h.name)}</h4>
+          
+          <div style="font-size:11.5px;color:#334155;line-height:1.5">
+            <div><b>⭐ Girilen Kod / Referans:</b> <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;font-weight:700">${escapeHtml(h.oem)}</code></div>
+            <div><b>🚤 Olası Motor Grubu:</b> ${escapeHtml(h.models)}</div>
+            <div><b>🔄 Tavsiye Edilen Muadil Üreticiler:</b> <span style="color:#0284c7;font-weight:600">${escapeHtml(h.cross)}</span></div>
+            <div><b>⏱️ Standart Bakım Periyodu:</b> <span style="color:#b45309;font-weight:600">${escapeHtml(h.interval)}</span></div>
+          </div>
+      `;
+
+      if (res.suggestions && res.suggestions.length > 0) {
+        html += `
+          <div style="margin-top:10px;padding-top:8px;border-top:1px solid #e2e8f0">
+            <b style="font-size:11px;color:#475569">📌 İlgili ${h.brand} Kataloğundan Doğrulanmış Popüler Parçalar:</b>
+            <div style="display:flex;flex-direction:column;gap:4px;margin-top:4px">
+        `;
+        res.suggestions.forEach(s => {
+          html += `
+            <div style="font-size:10.5px;background:#f8fafc;padding:4px 8px;border-radius:4px;border:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center">
+              <span><b>${escapeHtml(s.oem)}</b>: ${escapeHtml(s.name)}</span>
+              <button type="button" class="btn" style="padding:0 4px;min-height:18px;font-size:9px" onclick="copyTextToClipboard('${escapeHtml(s.oem)}', this)">Kopyala</button>
+            </div>
+          `;
+        });
+        html += `</div></div>`;
+      }
+
+      html += `
+          <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #cbd5e1;display:flex;justify-content:space-between;align-items:center">
+            <small style="color:#64748b">Özel parça sorguları için teknisyenlerimizle iletişime geçebilirsiniz.</small>
+            <a href="stok.html" target="_blank" class="btn primary" style="font-size:11px;padding:3px 10px;min-height:26px">Stokta Ara ↗</a>
+          </div>
         </div>
-      </div>
-    `;
+      `;
+
+      resultBox.innerHTML = html;
+    }
 
     setAgentWorking('quartermaster', false);
-    flash(`✓ Quartermaster: [${res.oem}] için OEM ve muadil kodlar başarıyla bulundu.`);
-  }, 1400);
+    flash(`✓ Quartermaster: "${query}" için parça veritabanı sorgulandı.`);
+  }, 1000);
 }
 
 function simulateBosunLeadRequest() {
