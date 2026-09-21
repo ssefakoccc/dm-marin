@@ -8310,6 +8310,9 @@ async function initSupabaseRealtime() {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'erp_purchases' }, payload => {
         handleRealtimePurchaseChange(payload);
       })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'staff' }, payload => {
+        handleRealtimeStaffChange(payload);
+      })
       .subscribe((status) => {
         const badge = document.getElementById('realtime-status-pill');
         const text = document.getElementById('realtime-status-text');
@@ -8485,6 +8488,45 @@ function handleRealtimePurchaseChange(payload) {
   }
   saveLocalCache();
   refreshCurrentView();
+}
+
+function handleRealtimeStaffChange(payload) {
+  const { eventType, new: newRecord, old: oldRecord } = payload;
+  if (eventType === 'INSERT') {
+    const exists = staffState.some(s => s.id === newRecord.id || (s.username && s.username === newRecord.username));
+    if (!exists) {
+      staffState.push({
+        id: newRecord.id,
+        name: newRecord.name,
+        username: (newRecord.username || '').toLowerCase(),
+        role: newRecord.role || '',
+        phone: newRecord.phone || '',
+        birthDate: newRecord.birth_date || '',
+        pin: newRecord.pin || '',
+        active: newRecord.active !== false,
+        permissions: Array.isArray(newRecord.permissions) ? newRecord.permissions : []
+      });
+    }
+  } else if (eventType === 'UPDATE') {
+    const idx = staffState.findIndex(s => s.id === newRecord.id);
+    if (idx !== -1) {
+      staffState[idx] = {
+        id: newRecord.id,
+        name: newRecord.name,
+        username: (newRecord.username || '').toLowerCase(),
+        role: newRecord.role || '',
+        phone: newRecord.phone || '',
+        birthDate: newRecord.birth_date || '',
+        pin: newRecord.pin || '',
+        active: newRecord.active !== false,
+        permissions: Array.isArray(newRecord.permissions) ? newRecord.permissions : []
+      };
+    }
+  } else if (eventType === 'DELETE') {
+    staffState = staffState.filter(s => s.id !== oldRecord.id);
+  }
+  saveLocalCache();
+  renderStaff();
 }
 
 // ─── localStorage cache (offline fallback) ────────────────────────────────
