@@ -86,6 +86,34 @@
     {
       "source": "/api/admin/service-requests/:id",
       "destination": "/api/admin/service-requests?id=:id"
+    },
+    {
+      "source": "/api/admin/erp/suppliers",
+      "destination": "/api/admin/erp/customers?type=suppliers"
+    },
+    {
+      "source": "/api/admin/erp/purchases",
+      "destination": "/api/admin/erp/sales?type=purchases"
+    },
+    {
+      "source": "/api/admin/erp/expenses",
+      "destination": "/api/admin/erp/products?type=expenses"
+    },
+    {
+      "source": "/api/admin/erp/erpsettings",
+      "destination": "/api/admin/settings?type=erp"
+    },
+    {
+      "source": "/api/admin/seo",
+      "destination": "/api/admin/settings?type=seo"
+    },
+    {
+      "source": "/api/admin/inventory",
+      "destination": "/api/admin/settings?type=inventory"
+    },
+    {
+      "source": "/api/admin/brands",
+      "destination": "/api/settings?type=brands"
     }
   ]
 }
