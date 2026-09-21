@@ -1412,6 +1412,75 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
   </div>
 </div>
 
+<!-- BOSUN SEZONLUK BAKIM CRM MODAL -->
+<div class="modal-backdrop" id="bosun-maintenance-modal">
+  <div class="modal-box" style="width:min(920px, 100%);max-height:92vh;padding:24px">
+    <div class="modal-head">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:24px">⛵</span>
+        <div>
+          <h3 style="margin:0;font-size:18px">Bosun: Sezonluk Bakım Bekleyen Tekneler &amp; CRM Hatırlatıcısı</h3>
+          <small style="color:var(--muted)">Son 6 aydan uzun süredir servis görmeyen veya periyodik bakım vakti gelen kayıtlı tekneler</small>
+        </div>
+      </div>
+      <button class="modal-close" type="button" onclick="closeBosunMaintenanceModal()">&times;</button>
+    </div>
+    <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div style="font-size:13px;color:#166534">
+        <b>🤖 Bosun Otonom CRM Taraması:</b> Sistemdeki müşteri ve tekne kayıtları taranarak bakım vadesi gelen tekneler listelenmiştir. Tek tıkla müşteriye nazik bir WhatsApp hatırlatması gönderebilirsiniz.
+      </div>
+      <button type="button" class="btn sm" style="background:#25d366;color:#fff;border:none;font-weight:700" onclick="sendAllDueMaintenanceWhatsAppList()">📋 Toplu WhatsApp Listesi Kopyala</button>
+    </div>
+    <div style="margin-bottom:12px;display:flex;gap:8px">
+      <input type="text" id="bosun-search-input" placeholder="Müşteri, tekne veya marina ara..." oninput="renderBosunMaintenanceTable()" style="flex:1;padding:8px 12px;font-size:13px">
+      <select id="bosun-filter-months" onchange="renderBosunMaintenanceTable()" style="padding:0 12px;font-size:13px;font-weight:700">
+        <option value="6">Son 6+ Aydır Servis Almayanlar</option>
+        <option value="12" selected>Son 1+ Yıldır Servis Almayanlar (Acil)</option>
+        <option value="0">Tüm Kayıtlı Tekne Portföyü</option>
+      </select>
+    </div>
+    <div style="overflow-x:auto;max-height:460px">
+      <table class="report-table" style="font-size:12.5px;width:100%">
+        <thead>
+          <tr style="background:#f8fafc">
+            <th>Tekne &amp; Model</th>
+            <th>Müşteri / Cari</th>
+            <th>Marina / Konum</th>
+            <th>Son Servis Tarihi</th>
+            <th>Geçen Süre</th>
+            <th style="text-align:right">İşlem</th>
+          </tr>
+        </thead>
+        <tbody id="bosun-maintenance-tbody"></tbody>
+      </table>
+    </div>
+    <div style="margin-top:16px;display:flex;justify-content:flex-end">
+      <button class="btn ghost" type="button" onclick="closeBosunMaintenanceModal()">Kapat</button>
+    </div>
+  </div>
+</div>
+
+<!-- WATCHDOG SENTINEL AUDIT MODAL -->
+<div class="modal-backdrop" id="watchdog-audit-modal">
+  <div class="modal-box" style="width:min(880px, 100%);max-height:92vh;padding:24px">
+    <div class="modal-head">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:24px">🛡️</span>
+        <div>
+          <h3 style="margin:0;font-size:18px">Watchdog Sentinel: Stok &amp; Finansal Anomali Raporu</h3>
+          <small style="color:var(--muted)">Negatif stoklar, kritik eşik altındaki parçalar ve vadesi geçmiş yüksek cariler</small>
+        </div>
+      </div>
+      <button class="modal-close" type="button" onclick="closeWatchdogAuditModal()">&times;</button>
+    </div>
+    <div id="watchdog-audit-summary-cards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:16px"></div>
+    <div id="watchdog-audit-content" style="max-height:480px;overflow-y:auto"></div>
+    <div style="margin-top:16px;display:flex;justify-content:flex-end">
+      <button class="btn ghost" type="button" onclick="closeWatchdogAuditModal()">Kapat</button>
+    </div>
+  </div>
+</div>
+
 <!-- SETTINGS VIEW -->
 <section class="view" id="settings">
 <div class="head"><div><h2>Ayarlar ve Altyapı</h2><p>Alan adı, hosting, veritabanı ve güvenlik altyapısı durum paneli.</p></div></div>
@@ -1740,6 +1809,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button type="button" class="btn" style="font-size:12px;padding:0 12px;min-height:34px" onclick="showView('inbox')">✉ Servis Taleplerini Aç</button>
+        <button type="button" class="btn primary" style="font-size:12px;padding:0 12px;min-height:34px;background:#059669;border-color:#047857;color:#fff;font-weight:700" onclick="openBosunMaintenanceModal()">⛵ Sezonluk Bakım Bekleyen Tekneler (CRM)</button>
         <button type="button" class="btn" style="font-size:12px;padding:0 12px;min-height:34px;background:#f0fdf4;border-color:#bbf7d0;color:#166534" onclick="simulateBosunLeadRequest()">⚡ Örnek Talep Simüle Et</button>
       </div>
     </div>
@@ -1752,14 +1822,14 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
         <span id="agent-icon-quartermaster" style="font-size:22px">⚙️</span>
         <div>
           <h3 style="margin:0;font-size:15px">Quartermaster</h3>
-          <small style="color:var(--muted)">Otonom OEM Parça &amp; Muadil Araştırma Ajanı (Sürekli Gelişen)</small>
+          <small style="color:var(--muted)">Otonom OEM Parça &amp; AI Motor Arıza Teşhis Ajanı (Sürekli Gelişen)</small>
         </div>
       </div>
       <span class="pill ok" id="agent-pill-quartermaster">● Sürekli Öğrenme Aktif</span>
     </div>
     <div class="panel-body">
       <p style="margin:0 0 12px;font-size:13px;color:var(--ink)">
-        Volvo Penta (8692305 dahil), Yanmar, MAN, MTU, CAT, Cummins, Onan, Kohler, Yamaha, Mercury, Suzuki ve Racor marin OEM parça kodlarını muadil filtre, impeller, kayış ve tutyalarla anında eşleştirir. Kendi kendine öğrenir ve denetler.
+        Volvo Penta (8692305 dahil), Yanmar, MAN, MTU, CAT, Cummins, Onan, Kohler, Yamaha, Mercury, Suzuki ve Racor marin OEM parça kodlarını muadil filtre, impeller, kayış ve tutyalarla anında eşleştirir. Hararet, duman ve marş arızalarını teşhis eder.
       </p>
 
       <!-- Live Self-Learning Metrics -->
@@ -1778,13 +1848,23 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
         </div>
       </div>
       
-      <!-- Interactive Part Lookup inside Admin -->
+      <!-- Interactive Part Lookup & AI Diagnostics inside Admin -->
       <div style="margin-bottom:12px">
         <div style="display:flex;gap:6px">
-          <input type="text" id="admin-agent-oem-input" placeholder="OEM Kodu veya Parça (Örn: 8692305, 119773-42570 veya Yanmar)..." style="font-size:12.5px;padding:6px 10px" onkeydown="if(event.key==='Enter'){event.preventDefault();lookupQuartermasterFromAdmin();}">
+          <input type="text" id="admin-agent-oem-input" placeholder="OEM Kodu veya Arıza Tanımı (Örn: 8692305, Yanmar hararet, beyaz duman, mazot hava)..." style="font-size:12.5px;padding:6px 10px" onkeydown="if(event.key==='Enter'){event.preventDefault();lookupQuartermasterFromAdmin();}">
           <button type="button" class="btn primary" style="font-size:12px;padding:0 12px;min-height:34px;white-space:nowrap" onclick="lookupQuartermasterFromAdmin()">Sorgula</button>
         </div>
-        <div id="admin-agent-oem-result" style="display:none;margin-top:8px;padding:8px 10px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;font-size:11.5px;color:#1e3a8a"></div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px">
+          <span style="font-size:11px;color:#64748b;font-weight:700">🩺 AI Arıza Teşhis:</span>
+          <button type="button" class="btn outline sm" style="font-size:10.5px;padding:2px 7px" onclick="setQmDiagnosisQuery('hararet')">🔥 Hararet</button>
+          <button type="button" class="btn outline sm" style="font-size:10.5px;padding:2px 7px" onclick="setQmDiagnosisQuery('siyah duman')">💨 Siyah Duman</button>
+          <button type="button" class="btn outline sm" style="font-size:10.5px;padding:2px 7px" onclick="setQmDiagnosisQuery('beyaz duman')">⚪ Beyaz Duman</button>
+          <button type="button" class="btn outline sm" style="font-size:10.5px;padding:2px 7px" onclick="setQmDiagnosisQuery('mavi duman')">🔵 Mavi Duman</button>
+          <button type="button" class="btn outline sm" style="font-size:10.5px;padding:2px 7px" onclick="setQmDiagnosisQuery('mars basiyor calismiyor')">⚡ Marş / Yakıt</button>
+          <button type="button" class="btn outline sm" style="font-size:10.5px;padding:2px 7px" onclick="setQmDiagnosisQuery('sarj etmiyor alternator')">🔋 Şarj / Kayış</button>
+          <button type="button" class="btn outline sm" style="font-size:10.5px;padding:2px 7px" onclick="setQmDiagnosisQuery('yag basinci dusuk')">⚠️ Yağ Basıncı</button>
+        </div>
+        <div id="admin-agent-oem-result" style="display:none;margin-top:8px;padding:10px 12px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;font-size:11.5px;color:#1e3a8a"></div>
       </div>
 
       <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -1943,6 +2023,7 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button type="button" class="btn primary" style="font-size:12px;padding:0 12px;min-height:34px" onclick="exportAdminDatabaseJSON()">💾 Anlık JSON Yedeği İndir</button>
+        <button type="button" class="btn warning" style="font-size:12px;padding:0 12px;min-height:34px;background:#fef3c7;border-color:#fde68a;color:#92400e;font-weight:700" onclick="runWatchdogStockAudit()">⚠️ Stok &amp; Borç Anomali Taraması</button>
         <button type="button" class="btn" style="font-size:12px;padding:0 12px;min-height:34px" onclick="runWatchdogHealthCheck()">🛡️ Bütünlük Testi Yap</button>
       </div>
     </div>
@@ -14211,33 +14292,272 @@ function initQuartermasterBackgroundWorker() {
 }
 
 
+// =========================================================================
+// 🩺 QUARTERMASTER ARİZA TEŞHİS & OEM DESTEK VERİTABANI
+// =========================================================================
+const ENGINE_DIAGNOSTICS_DB = [
+  {
+    id: 'hararet',
+    symptom: 'Hararet / Aşırı Isınma (High Temp Alarm)',
+    keywords: ['hararet', 'isinma', 'overheat', 'sicaklik', 'alarm', 'termostat'],
+    causes: [
+      'Deniz suyu emiş filtresinde (sea strainer) yosun/deniz anası veya plastik tıkanıklığı',
+      'Ham su pompası lastik impeller kanatçıklarının kopması veya aşınması',
+      'Termostatın kapalı konumda sıkışması / kireç bağlaması',
+      'Isı eşanjörü (heat exchanger) borularında tuz ve kireç tıkanması',
+      'Tatlı su soğutma devresinde antifriz seviyesinin düşmesi veya hava yapması'
+    ],
+    checks: [
+      'Egzozdan deniz suyu çıkışı debisini ve ritmini gözlemleyin',
+      'Sea strainer kapağını açıp sepeti deniz canlılarından temizleyin',
+      'Tuzlu su pompası kapağını söküp impeller durumunu inceleyin'
+    ],
+    recommendedParts: [
+      { name: 'Ham Su Pompası Impeller Kiti', oem: '21951356', cross: 'Jabsco 1210-0001 / Johnson 09-1027B' },
+      { name: 'Marin Termostat & Conta', oem: '3831424', cross: 'Volvo Penta / Yanmar OEM' },
+      { name: 'Isı Eşanjörü Çinko Tutyası', oem: '838929', cross: 'Tecnoseal / Performance Metals' }
+    ]
+  },
+  {
+    id: 'siyah_duman',
+    symptom: 'Egzozdan Yoğun Siyah Duman (Black Smoke)',
+    keywords: ['siyah duman', 'kara duman', 'black smoke', 'bogulma', 'enjektor', 'turbo'],
+    causes: [
+      'Motora aşırı yük binmesi (pervaneye halat dolanması, kekamoz/kirli gövde)',
+      'Hava filtresinin tıkalı olması veya turboşarj hava besleme hortumunda kaçak/yırtık',
+      'Enjektörlerin işemesi veya püskürtme basıncının bozulması',
+      'Turboşarj pallerinde kurum birikmesi veya wastegate valfinin sıkışması'
+    ],
+    checks: [
+      'Hava filtre elemanını söküp kirlilik ve tıkanıklığı denetleyin',
+      'Pervane ve şaft kontrolü için tekne altını dalışla veya kamerayla denetleyin',
+      'Turbo basınç hortumlarındaki kelepçeleri ve çatlakları kontrol edin'
+    ],
+    recommendedParts: [
+      { name: 'Marin Karter/Hava Filtresi', oem: '21702999', cross: 'Mann C23440 / Fleetguard AF26164' },
+      { name: 'Enjektör Bakım & Pul Kiti', oem: '3803637', cross: 'Bosch Common Rail Marin' },
+      { name: 'Turbo Intercooler Hortum Kiti', oem: '3830206', cross: 'Silikon Yüksek Basınçlı Marin Hortum' }
+    ]
+  },
+  {
+    id: 'beyaz_duman',
+    symptom: 'Egzozdan Kesif Beyaz Duman / Buhar (White Smoke)',
+    keywords: ['beyaz duman', 'white smoke', 'buhar', 'su karişma', 'silindir kapak'],
+    causes: [
+      'Soğutma suyunun yanma odasına karışması (Silindir kapak contası yanığı veya çatlak egzoz manifoldu)',
+      'Dizel yakıtta su bulunması (Racor separatör haznesinde su birikmesi)',
+      'Düşük sıkıştırma / kompresyon veya geç püskürtme avansı',
+      'Egzoz dirseğinde (exhaust elbow) soğutma suyunun yetersiz enjekte edilmesi sonucu aşırı sıcak buhar oluşması'
+    ],
+    checks: [
+      'Racor yakıt filtresinin şeffaf cam haznesinde su/tortu seviyesini kontrol edin',
+      'Tatlı su genleşme tankında kabarcık, köpürme veya yağ tabakası var mı kontrol edin',
+      'Egzoz manifoldunu ve egzoz dirseğini (elbow) korozyon/delinme açısından inceleyin'
+    ],
+    recommendedParts: [
+      { name: 'Racor 30 Mikron Su Ayırıcı Separatör Filtre', oem: '2010TM-OR', cross: 'Racor 500FG / Donaldson P552010' },
+      { name: 'Marin Egzoz Manifoldu / Dirsek (Elbow)', oem: '21424345', cross: 'HGE Marine 4345 / Stainless Elbow' },
+      { name: 'Silindir Kapak Conta Seti', oem: '3583787', cross: 'Volvo Penta / Yanmar OEM Marine' }
+    ]
+  },
+  {
+    id: 'mavi_duman',
+    symptom: 'Egzozdan Mavi Duman & Yağ Eksiltme (Blue Smoke)',
+    keywords: ['mavi duman', 'blue smoke', 'yag yakma', 'yag eksiltme', 'segman'],
+    causes: [
+      'Motorun yağ yakması (aşınmış segmanlar veya aşınmış silindir gömlekleri)',
+      'Subap gaydları ve subap lastiklerinin sertleşip yağı emme subaplarından çekmesi',
+      'Karter havalandırma (CCV) filtresinin tıkanarak karter içi basıncı yükseltmesi',
+      'Kartere fazla yağ konulması (maksimum seviyenin üstünde motor yağı)'
+    ],
+    checks: [
+      'Yağ çubuğunu çekerek seviyeyi ve yağ vizkozitesini kontrol edin',
+      'Karter havalandırma (breather) filtresinin temizliğini denetleyin',
+      'Silindir kompresyon testi uygulayın'
+    ],
+    recommendedParts: [
+      { name: 'Marin Karter Havalandırma (CCV) Filtresi', oem: '21624740', cross: 'Racor CCV55222-08' },
+      { name: 'Subap Gayd Lastik Seti (Valve Stem Seals)', oem: '859171', cross: 'Volvo Penta D4/D6 OEM' },
+      { name: '15W-40 VDS-4.5 Sentetik Marin Motor Yağı (20L)', oem: '22479642', cross: 'Volvo Penta VDS-4.5 / Mobil Delvac' }
+    ]
+  },
+  {
+    id: 'mars_yakit',
+    symptom: 'Marş Basıyor ama Motor Çalışmıyor (Cranks but No Start)',
+    keywords: ['mars basiyor', 'calismiyor', 'crank', 'yakit gelmiyor', 'hava yapti', 'stop'],
+    causes: [
+      'Yakıt sisteminin hava yapması (filtre değişiminden sonra veya çatlak rekorlardan)',
+      'Yakıt kesme selenoitinin (stop solenoid) veya yakıt pompa rölesinin arızalanması',
+      'Mazot filtresinin parafin, mikrobik tortu (asfaltit) nedeniyle tamamen tıkanması',
+      'Yakıt tankı dip vanasının veya acil yangın kesme telinin çekili kalması'
+    ],
+    checks: [
+      'El pompası (primer pump) ile yakıt devresinin havasını purjör vidasından alın',
+      'Kontak açıldığında stop selenoitinden "tık" sesi geliyor mu kontrol edin',
+      'Yakıt tankı dip vanasının ve geri dönüş vanasının açık olduğunu doğrulayın'
+    ],
+    recommendedParts: [
+      { name: 'Dizel İnce Mazot Filtresi', oem: '21718912', cross: 'Mann WK820/1 / Baldwin BF7922' },
+      { name: 'Yakıt Stop Selenoidi (12V/24V)', oem: '872825', cross: 'Bosch / Yanmar Stop Solenoid' },
+      { name: 'Manuel Yakıt Hava Alma El Pompası', oem: '21139810', cross: 'Delphi / Bosch Marin Primer' }
+    ]
+  },
+  {
+    id: 'sarj_alternator',
+    symptom: 'Akü Şarj Etmiyor / V Kayışı Sesi (Battery / Alternator)',
+    keywords: ['sarj etmiyor', 'alternator', 'aku', 'v kayisi', 'otme', 'kayis'],
+    causes: [
+      'V-Kayışının gevşemesi, kaydırması veya kopması',
+      'Alternatör diyot köprüsünün veya marin konjonktörünün arızalanması',
+      'Akü izolatörünün (battery isolator) veya şarj dağıtım rölesinin yanması',
+      'Şasi (negatif/toprak) kablosunda gevşeklik veya korozyon'
+    ],
+    checks: [
+      'Kayış gerginliğini parmağınızla kontrol edin (yaklaşık 1 cm esneme olmalı)',
+      'Motor rölantideyken akü kutup başlarındaki voltajı ölçün (13.8V - 14.4V arası olmalı)',
+      'Ana akü şalteri ve otomatik şarj rölesi (ACR/VSR) bağlantılarını kontrol edin'
+    ],
+    recommendedParts: [
+      { name: 'Marin Alternatör V-Kanal Kayışı', oem: '21408775', cross: 'Gates Marin 7PK1855 / Dayco' },
+      { name: 'Ağır Hizmet Marin Alternatör 115A (12V)', oem: '3840181', cross: 'Valeo / Prestolite Marine 115A' },
+      { name: 'Akü İzolatörü & Dağıtım Rölesi', oem: '21194380', cross: 'Victron Energy Cyrix-ct 120A' }
+    ]
+  },
+  {
+    id: 'yag_basinci',
+    symptom: 'Düşük Yağ Basıncı Uyarısı (Low Oil Pressure Alarm)',
+    keywords: ['yag basinci', 'low oil', 'yag uyarisi', 'yag pompasi', 'yag musuru'],
+    causes: [
+      'Karterdeki motor yağı seviyesinin kritik eşiğin altına inmesi',
+      'Yağ filtresinin bypass moduna geçmesi veya aşırı tıkalı olması',
+      'Yağ müşürü (oil pressure sender) veya gösterge kablo tesisatının arızalanması',
+      'Motor yağına mazot karışması (yağın incelmesi ve vizkozite kaybı)',
+      'Yağ pompası emiş süzgecinin tıkanması veya mekanik pompa aşınması'
+    ],
+    checks: [
+      'Motoru HEMEN STOP EDİN ve yağ seviyesini yağ çubuğundan kontrol edin',
+      'Yağ çubuğunu koklayarak yağa mazot karışıp karışmadığını tespit edin',
+      'Müşür soketinin oksitlenip şase yapmadığını kontrol edin'
+    ],
+    recommendedParts: [
+      { name: 'Orijinal Marin Yağ Filtresi', oem: '477556', cross: 'Mann W940/25 / Baldwin B1428' },
+      { name: 'Marin Yağ Basınç Müşürü (Dual Station 0-10 Bar)', oem: '3857532', cross: 'VDO Marine 10 Bar / Faria' },
+      { name: 'Tam Sentetik Marin Motor Yağı 15W-40', oem: '22479642', cross: 'Volvo Penta VDS-4.5 / Castrol Marin' }
+    ]
+  }
+];
+
+function setQmDiagnosisQuery(qText) {
+  const input = document.getElementById("admin-agent-oem-input");
+  if (input) {
+    input.value = qText;
+    lookupQuartermasterFromAdmin();
+  }
+}
+
+function shareDiagnosisWhatsApp(diagId) {
+  const diag = ENGINE_DIAGNOSTICS_DB.find(d => d.id === diagId);
+  if (!diag) return;
+
+  let msg = `*DM MARİN - MOTOR ARIZA TEŞHİS & PARÇA RAPORU*\\n`;
+  msg += `━━━━━━━━━━━━━━━━━━━━━━\\n`;
+  msg += `🩺 *Belirti:* ${diag.symptom}\\n\\n`;
+  msg += `⚠️ *Olası Sebepler:*\\n`;
+  diag.causes.forEach((c, i) => { msg += `${i+1}. ${c}\\n`; });
+  msg += `\\n🔍 *Saha Kontrol Adımları:*\\n`;
+  diag.checks.forEach((ch, i) => { msg += `• ${ch}\\n`; });
+  msg += `\\n🛠️ *Tavsiye Edilen Orijinal/Muadil Parçalar:*\\n`;
+  diag.recommendedParts.forEach(p => {
+    msg += `• *${p.name}* (OEM: ${p.oem} | Muadil: ${p.cross})\\n`;
+  });
+  msg += `━━━━━━━━━━━━━━━━━━━━━━\\n`;
+  msg += `📍 DM Marin Mobil Servis & Yedek Parça Hattı: +90 543 724 09 92`;
+
+  const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
 function lookupQuartermasterFromAdmin() {
   const input = document.getElementById("admin-agent-oem-input");
   const resultBox = document.getElementById("admin-agent-oem-result");
   const query = (input?.value || "").trim();
 
   if (!query) {
-    alert("Lütfen aramak istediğiniz OEM parça kodunu, muadil numarasını veya motor modelini giriniz (Örn: 21951356, WK820, Yanmar, Racor)...");
+    alert("Lütfen aramak istediğiniz OEM parça kodunu veya arıza tanımını giriniz (Örn: hararet, siyah duman, 21951356, Yanmar, Racor)...");
     if (input) input.focus();
     return;
   }
 
-  setAgentWorking('quartermaster', true, 'Küresel Veritabanı Taranıyor...');
+  setAgentWorking('quartermaster', true, 'Arıza & Parça Analiz Ediliyor...');
   resultBox.style.display = "block";
   resultBox.innerHTML = `
     <div style="display:flex;align-items:center;gap:8px;color:#0284c7;font-size:12px;padding:8px">
       <span class="agent-icon-working">⚙️</span>
-      <b>Quartermaster araştırıyor...</b> "${escapeHtml(query)}" için küresel OEM katalogları taranıyor.
+      <b>Quartermaster analiz ediyor...</b> "${escapeHtml(query)}" için arıza teşhisi ve OEM katalogları taranıyor.
     </div>
   `;
 
-  logToAgentConsole('Quartermaster', `🔍 Parça Sorgulama Başlatıldı: "${query}" - Küresel Marin OEM Veritabanları taranıyor...`, 'info');
+  logToAgentConsole('Quartermaster', `🔍 Analiz Başlatıldı: "${query}" - Heuristic motor arıza & parça motoru taranıyor...`, 'info');
 
   setTimeout(() => {
-    logToAgentConsole('Quartermaster', `⚙️ Çapraz muadil üreticileri taranıyor (Mann, Donaldson, Baldwin, Fleetguard, Jabsco, Racor)...`, 'info');
-  }, 500);
+    // 1. Önce Arıza Teşhis Veritabanında (ENGINE_DIAGNOSTICS_DB) arama yap
+    const qLower = query.toLowerCase();
+    const matchedDiag = ENGINE_DIAGNOSTICS_DB.find(d => 
+      d.keywords.some(k => qLower.includes(k)) || 
+      d.symptom.toLowerCase().includes(qLower) || 
+      d.id.toLowerCase().includes(qLower)
+    );
 
-  setTimeout(() => {
+    if (matchedDiag) {
+      logToAgentConsole('Quartermaster', `🩺 Arıza Teşhisi Eşleşti: ${matchedDiag.symptom}`, 'ok');
+      
+      let html = `
+        <div style="background:#fff;border:1.5px solid #f59e0b;border-radius:10px;padding:14px;box-shadow:0 3px 10px rgba(0,0,0,0.05)">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px">
+            <span style="font-size:11px;background:#fef3c7;color:#92400e;border:1px solid #fde68a;padding:2px 8px;border-radius:4px;font-weight:700">🩺 AI Marin Arıza Teşhisi</span>
+            <button type="button" class="btn sm" style="background:#25d366;color:#fff;border:none;font-weight:700;font-size:11px" onclick="shareDiagnosisWhatsApp('${matchedDiag.id}')">📲 Raporu WhatsApp'tan Paylaş</button>
+          </div>
+
+          <h4 style="margin:0 0 8px;font-size:14px;color:#b45309;font-weight:800">${escapeHtml(matchedDiag.symptom)}</h4>
+
+          <div style="background:#f8fafc;border-left:3px solid #3b82f6;padding:8px 12px;margin-bottom:10px;border-radius:0 6px 6px 0">
+            <b style="font-size:11.5px;color:#1e40af">⚠️ Olası Kök Nedenler:</b>
+            <ul style="margin:4px 0 0 16px;padding:0;font-size:11.5px;color:#334155;line-height:1.5">
+              ${matchedDiag.causes.map(c => `<li>${escapeHtml(c)}</li>`).join('')}
+            </ul>
+          </div>
+
+          <div style="background:#f0fdf4;border-left:3px solid #10b981;padding:8px 12px;margin-bottom:12px;border-radius:0 6px 6px 0">
+            <b style="font-size:11.5px;color:#065f46">🔍 Saha Teknisyeni Kontrol Adımları:</b>
+            <ul style="margin:4px 0 0 16px;padding:0;font-size:11.5px;color:#166534;line-height:1.5">
+              ${matchedDiag.checks.map(ch => `<li>${escapeHtml(ch)}</li>`).join('')}
+            </ul>
+          </div>
+
+          <b style="font-size:12px;color:#0f172a;display:block;margin-bottom:6px">🛠️ Değişimi veya Kontrolü Gereken Parçalar:</b>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px">
+            ${matchedDiag.recommendedParts.map(p => `
+              <div style="background:#fff;border:1px solid #cbd5e1;border-radius:6px;padding:8px;font-size:11.5px">
+                <div style="font-weight:700;color:#0f172a;margin-bottom:2px">${escapeHtml(p.name)}</div>
+                <div style="color:#2563eb">OEM: <b>${escapeHtml(p.oem)}</b> <button type="button" class="btn" style="padding:0 5px;font-size:9.5px;min-height:20px" onclick="copyTextToClipboard('${p.oem}', this)">Kopyala</button></div>
+                <div style="color:#64748b;font-size:10.5px">Muadil: ${escapeHtml(p.cross)}</div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div style="margin-top:12px;padding-top:8px;border-top:1px dashed #cbd5e1;display:flex;justify-content:space-between;align-items:center">
+            <small style="color:#64748b">Parçaları doğrudan ERP stoğundan aratabilirsiniz.</small>
+            <a href="stok.html" target="_blank" class="btn primary" style="font-size:11px;padding:3px 10px;min-height:26px">Depo Stoğuna Git ↗</a>
+          </div>
+        </div>
+      `;
+      resultBox.innerHTML = html;
+      setAgentWorking('quartermaster', false);
+      flash(`✓ Quartermaster: "${matchedDiag.symptom}" arıza teşhis raporu üretildi.`);
+      return;
+    }
+
+    // 2. Arıza teşhisi eşleşmediyse mevcut parça kataloğunda ara
     const res = researchQuartermasterCatalog(query);
     
     if (res.type === 'CATALOG_MATCHES') {
@@ -14251,7 +14571,7 @@ function lookupQuartermasterFromAdmin() {
         <div style="display:flex;flex-direction:column;gap:8px;max-height:360px;overflow-y:auto;padding-right:4px">
       `;
 
-      res.items.forEach((item, idx) => {
+      res.items.forEach((item) => {
         html += `
           <div style="background:#fff;border:1px solid #bfdbfe;border-radius:8px;padding:10px;box-shadow:0 1px 4px rgba(0,0,0,0.03)">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
@@ -14335,8 +14655,338 @@ function lookupQuartermasterFromAdmin() {
     }
 
     setAgentWorking('quartermaster', false);
-    flash(`✓ Quartermaster: "${query}" için parça veritabanı sorgulandı.`);
-  }, 1000);
+    flash(`✓ Quartermaster: "${query}" için arama tamamlandı.`);
+  }, 600);
+}
+
+// =========================================================================
+// ⛵ BOSUN: OTONOM MÜŞTERİ CRM & SEZONLUK BAKIM HATIRLATICISI
+// =========================================================================
+let cachedDueBoats = [];
+
+function openBosunMaintenanceModal() {
+  const modal = document.getElementById("bosun-maintenance-modal");
+  if (!modal) return;
+  modal.classList.add("active");
+  renderBosunMaintenanceTable();
+}
+
+function closeBosunMaintenanceModal() {
+  const modal = document.getElementById("bosun-maintenance-modal");
+  if (modal) modal.classList.remove("active");
+}
+
+function getDueBoatsData() {
+  let customers = [];
+  try {
+    const raw = localStorage.getItem('dm_erp_customers');
+    if (raw) customers = JSON.parse(raw);
+  } catch(e) {}
+
+  if ((!customers || customers.length === 0) && Array.isArray(window.customersState)) {
+    customers = window.customersState;
+  }
+
+  let sales = [];
+  try {
+    const rawSales = localStorage.getItem('dm_erp_sales');
+    if (rawSales) sales = JSON.parse(rawSales);
+  } catch(e) {}
+  if ((!sales || sales.length === 0) && Array.isArray(window.salesState)) {
+    sales = window.salesState;
+  }
+
+  const now = new Date();
+  const list = [];
+
+  (customers || []).forEach(c => {
+    const custSales = (sales || []).filter(s => s.customerId === c.id || s.customerName === c.name);
+    let lastDateStr = c.lastServiceDate || c.updatedAt || c.createdAt || '';
+    
+    if (custSales.length > 0) {
+      custSales.sort((a,b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt));
+      lastDateStr = custSales[0].date || custSales[0].createdAt || lastDateStr;
+    }
+
+    let diffMonths = 99;
+    if (lastDateStr) {
+      const d = new Date(lastDateStr);
+      if (!isNaN(d.getTime())) {
+        diffMonths = Math.floor((now - d) / (1000 * 60 * 60 * 24 * 30.4));
+      }
+    }
+
+    const boatName = c.boatName || c.boatModel || 'Belirtilmemiş Tekne';
+    const marina = c.marina || c.location || 'Marmara / İstanbul';
+    const phone = c.phone || '';
+
+    list.push({
+      id: c.id,
+      name: c.name || 'İsimsiz Müşteri',
+      boat: boatName,
+      engine: c.engineModel || c.engine || 'Marin Dizel Motor',
+      marina: marina,
+      phone: phone,
+      lastDate: lastDateStr ? lastDateStr.substring(0, 10) : 'Kayıt Yok',
+      monthsAgo: diffMonths
+    });
+  });
+
+  list.sort((a, b) => b.monthsAgo - a.monthsAgo);
+  return list;
+}
+
+function renderBosunMaintenanceTable() {
+  const tbody = document.getElementById("bosun-maintenance-tbody");
+  const countEl = document.getElementById("bosun-due-count");
+  const search = (document.getElementById("bosun-search-input")?.value || "").toLowerCase();
+  const filterMonths = parseInt(document.getElementById("bosun-filter-months")?.value || "6", 10);
+
+  const allBoats = getDueBoatsData();
+  cachedDueBoats = allBoats.filter(b => {
+    const matchFilter = filterMonths === 0 || b.monthsAgo >= filterMonths;
+    const matchSearch = !search || 
+      b.name.toLowerCase().includes(search) || 
+      b.boat.toLowerCase().includes(search) || 
+      b.marina.toLowerCase().includes(search) || 
+      b.engine.toLowerCase().includes(search);
+    return matchFilter && matchSearch;
+  });
+
+  if (countEl) countEl.innerText = cachedDueBoats.length;
+
+  if (!tbody) return;
+
+  if (cachedDueBoats.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;color:#64748b">Kriterlere uyan bakım bekleyen tekne bulunamadı.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = cachedDueBoats.map(b => {
+    let statusBadge = '';
+    if (b.monthsAgo >= 12) {
+      statusBadge = `<span style="background:#fee2e2;color:#b91c1c;padding:2px 8px;border-radius:12px;font-weight:700;font-size:11px">⚠️ ${b.monthsAgo === 99 ? '1+ Yıl / Kayıtsız' : b.monthsAgo + ' Ay (Acil)'}</span>`;
+    } else if (b.monthsAgo >= 6) {
+      statusBadge = `<span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:12px;font-weight:700;font-size:11px">⏱️ ${b.monthsAgo} Ay (Vakti Geldi)</span>`;
+    } else {
+      statusBadge = `<span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:12px;font-weight:700;font-size:11px">🟢 Güncel (${b.monthsAgo} Ay)</span>`;
+    }
+
+    const encodedCust = encodeURIComponent(JSON.stringify(b));
+
+    return `
+      <tr style="border-bottom:1px solid #f1f5f9">
+        <td><b>${escapeHtml(b.boat)}</b></td>
+        <td>${escapeHtml(b.name)}</td>
+        <td><code style="background:#f1f5f9;padding:2px 6px;border-radius:4px">${escapeHtml(b.engine)}</code></td>
+        <td>📍 ${escapeHtml(b.marina)}</td>
+        <td style="color:#64748b">${escapeHtml(b.lastDate)}</td>
+        <td>${statusBadge}</td>
+        <td>
+          <button type="button" class="btn sm" style="background:#25d366;color:#fff;border:none;font-weight:700;padding:3px 8px" onclick="sendSingleBoatMaintenanceWhatsApp('${encodedCust}')">
+            📲 WhatsApp Hatırlat
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function sendSingleBoatMaintenanceWhatsApp(encodedJson) {
+  try {
+    const b = JSON.parse(decodeURIComponent(encodedJson));
+    let phone = (b.phone || '').replace(/\\D/g, '');
+    if (phone.startsWith('0')) phone = '90' + phone.substring(1);
+    else if (phone.length === 10) phone = '90' + phone;
+
+    let msg = `Sayın *${b.name}*, merhaba.\\n\\n`;
+    msg += `DM Marin servis kayıtlarımıza göre *${b.boat}* isimli teknenizin (${b.engine}) en son periyodik kontrolünden bu yana yaklaşık *${b.monthsAgo === 99 ? '1 yıldan uzun süre' : b.monthsAgo + ' ay'}* geçmiştir.\\n\\n`;
+    msg += `Deniz sezonuna sorunsuz, güvenle devam edebilmeniz için impeller, yağ & yakıt filtreleri ve tutya kontrollerinizi marina yerinizde (${b.marina}) gerçekleştirebiliriz.\\n\\n`;
+    msg += `Uygun olduğunuz bir güne bakım randevusu oluşturmak ister misiniz?\\n\\n`;
+    msg += `*DM Marin Mobil Servis & Mühendislik*\\n`;
+    msg += `📞 +90 543 724 09 92`;
+
+    const url = phone 
+      ? `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`
+      : `https://wa.me/?text=${encodeURIComponent(msg)}`;
+    
+    window.open(url, '_blank');
+    logToAgentConsole('Bosun-Lead', `📲 WhatsApp bakım hatırlatması hazırlandı: ${b.name} (${b.boat})`, 'ok');
+  } catch(e) {
+    alert("WhatsApp mesajı oluşturulurken hata oluştu.");
+  }
+}
+
+function sendAllDueMaintenanceWhatsAppList() {
+  if (!cachedDueBoats || cachedDueBoats.length === 0) {
+    alert("Listede bakım bekleyen tekne bulunmuyor.");
+    return;
+  }
+
+  let text = `📋 *DM MARİN - SEZONLUK BAKIM BEKLEYEN TEKNELER LİSTESİ*\\n`;
+  text += `Tarih: ${new Date().toLocaleDateString('tr-TR')} | Toplam: ${cachedDueBoats.length} Tekne\\n`;
+  text += `━━━━━━━━━━━━━━━━━━━━━━\\n`;
+  
+  cachedDueBoats.forEach((b, i) => {
+    text += `${i+1}. *${b.boat}* - ${b.name}\\n`;
+    text += `   Motor: ${b.engine} | Konum: ${b.marina}\\n`;
+    text += `   Tel: ${b.phone || 'Yok'} | Süre: ${b.monthsAgo === 99 ? '1+ Yıl' : b.monthsAgo + ' Ay'}\\n\\n`;
+  });
+
+  text += `━━━━━━━━━━━━━━━━━━━━━━\\n`;
+  text += `Rapor Otonom Bosun CRM tarafından üretilmiştir.`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    alert("✓ Bakım bekleyen " + cachedDueBoats.length + " teknelik CRM listesi panoya kopyalandı! WhatsApp grubuna veya notlarınıza yapıştırabilirsiniz.");
+  }).catch(() => {
+    prompt("Listeyi kopyalayın:", text);
+  });
+}
+
+// =========================================================================
+// 🛡️ WATCHDOG SENTINEL: STOK & BORÇ ANOMALİ BEKÇİSİ
+// =========================================================================
+function openWatchdogAuditModal() {
+  const modal = document.getElementById("watchdog-audit-modal");
+  if (!modal) return;
+  modal.classList.add("active");
+}
+
+function closeWatchdogAuditModal() {
+  const modal = document.getElementById("watchdog-audit-modal");
+  if (modal) modal.classList.remove("active");
+}
+
+function runWatchdogStockAudit() {
+  openWatchdogAuditModal();
+  setAgentWorking('watchdog', true, 'Anomali Taraması...');
+  logToAgentConsole('Watchdog', '🛡️ Kapsamlı Stok & Borç Anomali Taraması Başlatıldı...', 'warn');
+
+  let products = [];
+  try {
+    const raw = localStorage.getItem('dm_erp_products');
+    if (raw) products = JSON.parse(raw);
+  } catch(e) {}
+  if ((!products || products.length === 0) && Array.isArray(window.productsState)) {
+    products = window.productsState;
+  }
+
+  let customers = [];
+  try {
+    const rawC = localStorage.getItem('dm_erp_customers');
+    if (rawC) customers = JSON.parse(rawC);
+  } catch(e) {}
+  if ((!customers || customers.length === 0) && Array.isArray(window.customersState)) {
+    customers = window.customersState;
+  }
+
+  const negativeStock = [];
+  const lowStock = [];
+  const highDebt = [];
+  const zeroPrice = [];
+
+  (products || []).forEach(p => {
+    const stock = Number(p.stock ?? p.quantity ?? 0);
+    const min = Number(p.minStock ?? p.minQuantity ?? 3);
+    const price = Number(p.salePrice ?? p.price ?? 0);
+
+    if (stock < 0) {
+      negativeStock.push({ name: p.name || p.title, code: p.code || p.oem || 'KODSUZ', stock });
+    } else if (stock <= min) {
+      lowStock.push({ name: p.name || p.title, code: p.code || p.oem || 'KODSUZ', stock, min });
+    }
+
+    if (price <= 0) {
+      zeroPrice.push({ name: p.name || p.title, code: p.code || p.oem || 'KODSUZ' });
+    }
+  });
+
+  (customers || []).forEach(c => {
+    const balance = Number(c.balance || c.debt || 0);
+    if (balance > 10000) {
+      highDebt.push({ name: c.name, phone: c.phone, balance, marina: c.marina || 'Belirtilmemiş' });
+    }
+  });
+
+  const statNeg = document.getElementById("watchdog-stat-negative");
+  const statLow = document.getElementById("watchdog-stat-low");
+  const statDebt = document.getElementById("watchdog-stat-debt");
+  const statZero = document.getElementById("watchdog-stat-zeroprice");
+  const resultsDiv = document.getElementById("watchdog-audit-results");
+
+  if (statNeg) statNeg.innerText = negativeStock.length;
+  if (statLow) statLow.innerText = lowStock.length;
+  if (statDebt) statDebt.innerText = highDebt.length;
+  if (statZero) statZero.innerText = zeroPrice.length;
+
+  let html = '';
+
+  if (negativeStock.length > 0) {
+    html += `
+      <div style="background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:12px">
+        <b style="color:#be123c;font-size:13px">🔴 Negatif Stok Uyarısı (${negativeStock.length} Ürün):</b>
+        <p style="margin:4px 0 8px;font-size:11.5px;color:#881337">Fiili stok olmadan çıkış yapılmış ürünler. Sayım veya giriş faturası gerektirir:</p>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          ${negativeStock.slice(0, 10).map(p => `
+            <div style="font-size:11px;background:#fff;padding:4px 8px;border-radius:4px;display:flex;justify-content:space-between">
+              <span><b>${escapeHtml(p.code)}</b>: ${escapeHtml(p.name)}</span>
+              <span style="color:#e11d48;font-weight:700">Miktar: ${p.stock}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  if (lowStock.length > 0) {
+    html += `
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px">
+        <b style="color:#b45309;font-size:13px">⚠️ Kritik Asgari Stok Eşiği Altındaki Parçalar (${lowStock.length} Ürün):</b>
+        <p style="margin:4px 0 8px;font-size:11.5px;color:#78350f">Tedarikçi sipariş listesine eklenmesi önerilen marin sarf malzemeleri:</p>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          ${lowStock.slice(0, 8).map(p => `
+            <div style="font-size:11px;background:#fff;padding:4px 8px;border-radius:4px;display:flex;justify-content:space-between">
+              <span><b>${escapeHtml(p.code)}</b>: ${escapeHtml(p.name)}</span>
+              <span style="color:#d97706;font-weight:700">Mevcut: ${p.stock} (Kritik Eşik: ${p.min})</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  if (highDebt.length > 0) {
+    html += `
+      <div style="background:#f5f3ff;border:1px solid #ddd6fe;border-radius:8px;padding:12px">
+        <b style="color:#6d28d9;font-size:13px">💳 Yüksek Bakiyeli / Riskli Cariler (${highDebt.length} Müşteri):</b>
+        <p style="margin:4px 0 8px;font-size:11.5px;color:#4c1d95">10.000 TL üzeri açık cari hesabı bulunan müşteriler:</p>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          ${highDebt.slice(0, 8).map(c => `
+            <div style="font-size:11px;background:#fff;padding:4px 8px;border-radius:4px;display:flex;justify-content:space-between">
+              <span><b>${escapeHtml(c.name)}</b> (${escapeHtml(c.marina)})</span>
+              <span style="color:#7c3aed;font-weight:700">${Number(c.balance).toLocaleString('tr-TR')} ₺</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  if (negativeStock.length === 0 && lowStock.length === 0 && highDebt.length === 0) {
+    html = `
+      <div style="text-align:center;padding:32px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;color:#166534">
+        <div style="font-size:36px;margin-bottom:8px">🛡️✨</div>
+        <b style="font-size:15px">Harika! Sistemde Kritik Anomali Tespit Edilmedi.</b>
+        <p style="margin:6px 0 0;font-size:12.5px">Negatif stok, aşırı yüksek riskli cari veya fiyat tanımlanmamış ürün bulunmuyor.</p>
+      </div>
+    `;
+  }
+
+  if (resultsDiv) resultsDiv.innerHTML = html;
+
+  setAgentWorking('watchdog', false);
+  logToAgentConsole('Watchdog', `✓ Anomali Taraması Bitti: ${negativeStock.length} negatif, ${lowStock.length} kritik stok, ${highDebt.length} riskli cari.`, 'ok');
+  flash('✓ Watchdog: Stok ve borç anomali denetimi tamamlandı.');
 }
 
 function simulateBosunLeadRequest() {
