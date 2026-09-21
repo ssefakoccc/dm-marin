@@ -8223,11 +8223,23 @@ async function loadAllFromDB() {
     if (expRes.ok) {
       const d = await expRes.json();
       if (d.success && d.data.length > 0) {
-        expensesState = d.data.map(e => ({
-          id: e.id, description: e.description || '', amount: Number(e.amount) || 0,
-          category: e.category || '', date: e.date || '',
-          payMethod: e.pay_method || 'cash', operator: e.operator || '', notes: e.notes || ''
-        }));
+        expensesState = d.data.map(e => {
+          let status = 'paid';
+          if (e.notes && e.notes.toLowerCase().includes('pending')) status = 'pending';
+          else if (e.pay_method && e.pay_method.toLowerCase().includes('bekliyor')) status = 'pending';
+          return {
+            id: e.id,
+            description: e.description || e.desc || '',
+            desc: e.description || e.desc || '',
+            amount: Number(e.amount) || 0,
+            category: e.category || 'Genel',
+            date: e.date || '',
+            payMethod: e.pay_method || 'cash',
+            status: status,
+            operator: e.operator || '',
+            notes: e.notes || ''
+          };
+        });
       }
     }
 
@@ -8253,9 +8265,10 @@ async function loadAllFromDB() {
     }
 
     saveLocalCache();
+    refreshCurrentView();
     console.log('✅ Supabase ERP verileri yüklendi:', {
       ürünler: productsState.length, satışlar: salesState.length,
-      müşteriler: customersState.length, personel: staffState.length
+      müşteriler: customersState.length, masraflar: expensesState.length, personel: staffState.length
     });
     return true;
   } catch(e) {
@@ -8264,13 +8277,26 @@ async function loadAllFromDB() {
   }
 }
 
+function refreshCurrentView() {
+  if (typeof renderDashboard === 'function') renderDashboard();
+  if (currentNav === 'products' && typeof renderProducts === 'function') renderProducts();
+  if (currentNav === 'count' && typeof renderCountTable === 'function') renderCountTable();
+  if (currentNav === 'customers' && typeof renderCustomers === 'function') renderCustomers();
+  if (currentNav === 'suppliers' && typeof renderSuppliers === 'function') renderSuppliers();
+  if (currentNav === 'sales' && typeof renderSales === 'function') renderSales();
+  if (currentNav === 'purchases' && typeof renderPurchases === 'function') renderPurchases();
+  if (currentNav === 'expenses' && typeof renderExpenses === 'function') renderExpenses();
+  if (currentNav === 'reports' && typeof renderReports === 'function') renderReports();
+  if (currentNav === 'pos' && typeof renderPos === 'function') renderPos();
+}
+
 // ─── syncCloud: manuel senkronizasyon butonu ──────────────────────────────
 async function syncCloud() {
-  flash('🔄 Supabase'den veriler güncelleniyor...');
+  flash('🔄 Supabase\'den veriler güncelleniyor...');
   const ok = await loadAllFromDB();
   if (ok) {
-    renderDashboard();
-    flash('✅ Tüm veriler Supabase'den güncellendi!');
+    refreshCurrentView();
+    flash('✅ Tüm veriler Supabase\'den güncellendi!');
   } else {
     flash('⚠️ Bağlantı hatası — localStorage cache gösteriliyor.');
   }
@@ -8811,10 +8837,16 @@ function completePosSale(payMethod) {
   salesState.unshift(newSale);
   if (payMethod === 'credit' && customer) {
     customer.balance = (Number(customer.balance) || 0) + grandTotal;
+    dbSaveCustomer(customer, true); // 🌐 Supabase müşteri bakiyesi güncelle
   }
 
   saveAll();
   dbSaveSale(newSale); // 🌐 Supabase'e kaydet
+  // 🌐 Satılan ürünlerin güncel stok adetlerini de Supabase'e senkronize et
+  posCart.forEach(it => {
+    const prod = productsState.find(p => p.id === it.prodId);
+    if (prod) dbSaveProduct(prod, true);
+  });
   posCart = [];
   const discInput = document.getElementById("pos-discount");
   if (discInput) discInput.value = "0";
@@ -9147,14 +9179,20 @@ function saveProduct(e) {
   const qty = parseInt(document.getElementById("prod-qty").value, 10) || 0;
   const minQty = parseInt(document.getElementById("prod-min-qty").value, 10) || 2;
 
+  let isUpdate = false;
+  let targetProduct = null;
+
   if (id) {
     const idx = productsState.findIndex(x => x.id === id);
     if (idx !== -1) {
+      isUpdate = true;
       productsState[idx] = { ...productsState[idx], name, oemRef, crossRef, code, barcode, brand, category, location, buyPrice, sellPrice, qty, minQty };
+      targetProduct = productsState[idx];
       flash("✓ Ürün kartı (Orijinal OEM & Muadiller) güncellendi.");
     }
   } else {
-    productsState.unshift({ id: "p-" + Date.now(), name, oemRef, crossRef, code, barcode, brand, category, location, buyPrice, sellPrice, qty, minQty });
+    targetProduct = { id: "p-" + Date.now(), name, oemRef, crossRef, code, barcode, brand, category, location, buyPrice, sellPrice, qty, minQty };
+    productsState.unshift(targetProduct);
     flash("✓ Yeni ürün ve referans kodları kaydedildi.");
   }
 
@@ -9180,7 +9218,7 @@ function saveProduct(e) {
   renderProducts();
   closeModal("modal-product");
   // 🌐 Supabase'e kaydet
-  dbSaveProduct(isUpdate ? productsState[existingIdx] : productsState[0], isUpdate);
+  if (targetProduct) dbSaveProduct(targetProduct, isUpdate);
 }
 
 function renderCustomers() {
@@ -9245,6 +9283,7 @@ function collectReceivable(custId) {
   c.balance = Math.max(0, c.balance - parseFloat(amount));
   saveAll();
   renderDashboard();
+  dbSaveCustomer(c, true);
   flash(`✓ ₺${amount} tahsilat kaydedildi.`);
 }
 
@@ -9435,10 +9474,12 @@ function saveSupplier(e) {
   const phone = document.getElementById("supp-phone").value.trim();
   const city = document.getElementById("supp-city").value.trim();
 
-  suppliersState.unshift({ id: "s-" + Date.now(), name, category, contact, phone, city, balance: 0 });
+  const newSupp = { id: "s-" + Date.now(), name, category, contact, phone, city, balance: 0 };
+  suppliersState.unshift(newSupp);
   saveAll();
   renderSuppliers();
   closeModal("modal-supplier");
+  dbSaveSupplier(newSupp, false);
   flash("✓ Tedarikçi kaydedildi.");
 }
 
@@ -9579,11 +9620,17 @@ async function dbDeleteSupplier(supplierId) {
 }
 
 // DB'ye gider kaydet
-async function dbSaveExpense(expense) {
+async function dbSaveExpense(expense, isUpdate) {
   try {
-    const res = await erpFetch('/api/admin/erp/expenses', { method: 'POST', body: JSON.stringify(expense) });
+    const path = isUpdate ? `/api/admin/erp/expenses?id=${encodeURIComponent(expense.id)}` : '/api/admin/erp/expenses';
+    const method = isUpdate ? 'PUT' : 'POST';
+    const res = await erpFetch(path, { method, body: JSON.stringify(expense) });
     const data = await res.json();
     if (!res.ok || !data.success) throw new Error(data.error || 'DB hatası');
+    if (!isUpdate && data.data && data.data.id) {
+      const idx = expensesState.findIndex(e => e.id === expense.id);
+      if (idx !== -1) expensesState[idx].id = data.data.id;
+    }
     saveLocalCache();
     return true;
   } catch(err) { saveLocalCache(); return false; }
@@ -9603,6 +9650,10 @@ async function dbSavePurchase(purchase) {
     const res = await erpFetch('/api/admin/erp/purchases', { method: 'POST', body: JSON.stringify(purchase) });
     const data = await res.json();
     if (!res.ok || !data.success) throw new Error(data.error || 'DB hatası');
+    if (data.data && data.data.id) {
+      const idx = purchasesState.findIndex(p => p.id === purchase.id);
+      if (idx !== -1) purchasesState[idx].id = data.data.id;
+    }
     saveLocalCache();
     return true;
   } catch(err) { saveLocalCache(); return false; }
@@ -9664,13 +9715,19 @@ function saveSale(e) {
   salesState.unshift(newSale);
   if (status === 'pending' && customer) {
     customer.balance += total;
+    dbSaveCustomer(customer, true);
   }
 
   saveAll();
   renderSales();
   closeModal("modal-sale");
   // 🌐 Supabase'e kaydet
-  dbSaveSale(isEditSale ? salesState.find(s => s.id === editSaleId) : salesState[0]);
+  dbSaveSale(newSale);
+  // 🌐 Satılan parçaların düşen stoklarını Supabase'e senkronize et
+  items.forEach(it => {
+    const prod = productsState.find(p => p.id === it.prodId);
+    if (prod) dbSaveProduct(prod, true);
+  });
   flash("✓ Satış & Servis faturası kaydedildi.");
   viewPrintableInvoice(newSale.id);
 }
@@ -9870,7 +9927,7 @@ function savePurchase(e) {
   }
 
   const totalTL = unitPrice * qty;
-  purchasesState.unshift({
+  const newPurchase = {
     id: "pur-" + Date.now(),
     date,
     supplierId: suppId,
@@ -9881,16 +9938,19 @@ function savePurchase(e) {
     unitPrice,
     totalTL,
     status
-  });
+  };
+  purchasesState.unshift(newPurchase);
 
   if (status === 'pending' && supplier) {
     supplier.balance += totalTL;
+    dbSaveSupplier(supplier, true);
   }
 
   saveAll();
   renderPurchases();
   closeModal("modal-purchase");
-  dbSavePurchase(purchasesState[0]); // 🌐 Supabase
+  dbSavePurchase(newPurchase); // 🌐 Supabase
+  if (prod) dbSaveProduct(prod, true); // 🌐 Supabase stok miktarını da güncelle
   flash("✓ Mal alışı kaydedildi ve stok arttırıldı.");
 }
 
@@ -9924,19 +9984,22 @@ function saveExpense(e) {
   const status = document.getElementById("exp-status").value;
   const desc = document.getElementById("exp-desc").value.trim();
 
-  expensesState.unshift({
+  const newExpense = {
     id: "e-" + Date.now(),
     date,
     category,
     desc,
+    description: desc,
     amount,
     status
-  });
+  };
+  expensesState.unshift(newExpense);
 
   saveAll();
   renderExpenses();
   renderDashboard();
   closeModal("modal-expense");
+  dbSaveExpense(newExpense, false);
   flash("✓ Masraf kaydedildi.");
 }
 
@@ -9947,6 +10010,7 @@ function payExpense(id) {
     saveAll();
     renderExpenses();
     renderDashboard();
+    dbSaveExpense(e, true);
     flash("✓ Masraf ödendi olarak işaretlendi.");
   }
 }
@@ -10637,17 +10701,19 @@ function logoutERP() {
 
 window.addEventListener("DOMContentLoaded", () => {
   loadAll();
-  // 🌐 Supabase'den güncel verileri çek (1 sn sonra — auth hazır olsun)
-  setTimeout(async () => {
-    const ok = await loadAllFromDB();
-    if (ok) {
-      renderDashboard();
-      console.log('✅ ERP Supabase sync tamamlandı');
-    }
-  }, 1000);
   checkAuth();
   renderStaff();
   renderDashboard();
+
+  // 🌐 Supabase'den güncel verileri hemen ve periyodik olarak çek (2. PC ile canlı senkronizasyon)
+  loadAllFromDB().then(() => {
+    refreshCurrentView();
+  });
+
+  // Her 30 saniyede bir arka planda sessizce Supabase ile senkronize et
+  setInterval(() => {
+    loadAllFromDB();
+  }, 30000);
 });
 </script>
 </body>

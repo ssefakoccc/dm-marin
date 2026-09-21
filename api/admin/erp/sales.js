@@ -27,20 +27,20 @@ module.exports = async (req, res) => {
     try {
       const body = req.body || {};
       const { data, error } = await supabase.from('erp_sales').insert({
-        id: body.id || undefined,
-        invoice_no: body.invoiceNo || '',
-        customer_id: body.customerId || null,
+        id: (body.id && !body.id.startsWith('POS-') && !body.id.startsWith('SRV-')) ? body.id : undefined,
+        invoice_no: body.invoiceNo || body.id || '',
+        customer_id: (body.customerId && !body.customerId.startsWith('c-')) ? body.customerId : null,
         customer_name: body.customerName || '',
         boat_name: body.boatName || '',
         items: body.items || [],
         total: Number(body.total) || 0,
-        paid: Number(body.paid) || 0,
+        paid: Number(body.paid) || (body.status === 'paid' ? Number(body.total) || 0 : 0),
         discount: Number(body.discount) || 0,
-        pay_method: body.payMethod || 'cash',
+        pay_method: body.payType || body.payMethod || 'cash',
         status: body.status || 'paid',
         date: body.date || new Date().toISOString().split('T')[0],
         operator: body.operator || '',
-        notes: body.notes || ''
+        notes: body.notes || (body.laborCost ? `İşçilik: ₺${body.laborCost}` : '')
       }).select().single();
       if (error) return res.status(500).json({ error: error.message });
       return res.status(201).json({ success: true, data });
