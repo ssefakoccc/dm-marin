@@ -955,8 +955,71 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
   .widget-grid-2 { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
-  .sidebar { width: 68px; }
-  .sidebar-title, .sidebar-foot, .nav-item span:not(.icon), .nav-category-title, .nav-badge { display: none; }
+  .sidebar { display: none !important; }
+  .mobile-bottom-bar { display: grid !important; }
+  .content-area { padding-bottom: 68px !important; }
+  .top-bar { padding: 8px 12px; }
+  .quick-stats-top { display: none !important; }
+  .company-name-tag span { font-size: 11px; }
+}
+
+/* 📱 MOBILE BOTTOM BAR */
+.mobile-bottom-bar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 62px;
+  background: #0b1523;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  z-index: 100;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 4px;
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.3);
+}
+.mob-nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.15s;
+}
+.mob-nav-btn .icon { font-size: 18px; line-height: 1; }
+.mob-nav-btn.active { color: #0284c7; background: rgba(2,132,199,0.12); }
+
+/* ⚡ REALTIME LIVE BADGE */
+.realtime-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+.realtime-pulse {
+  width: 7px;
+  height: 7px;
+  background: #10b981;
+  border-radius: 50%;
+  animation: pulseLive 1.5s infinite;
+}
+@keyframes pulseLive {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16,185,129,0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16,185,129,0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16,185,129,0); }
 }
 
 /* PIN LOCK OVERLAY */
@@ -1382,6 +1445,11 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
             <b id="topbar-user-badge" style="font-size:12px;color:var(--navy)">Ahmet Usta (Baş Teknisyen)</b>
           </div>
         </div>
+        <div id="realtime-status-pill" class="realtime-badge" title="Supabase Canlı WebSocket Bağlantısı">
+          <span class="realtime-pulse"></span>
+          <span id="realtime-status-text">Canlı Senkron</span>
+        </div>
+        <button type="button" class="btn warning sm" onclick="openCriticalStockModal()" title="Kritik Stok Uyarısı ve Sipariş Sihirbazı">⚠️ Kritik Parçalar</button>
         <button type="button" class="btn success sm" onclick="switchNav('pos')">⚡ Hızlı Satış (POS)</button>
         <button type="button" class="btn primary sm" onclick="openNewSaleModal()">➕ Servis Faturası</button>
         <button type="button" class="btn outline sm" onclick="syncCloud()">🔄 Eşitle</button>
@@ -1534,6 +1602,8 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
                 <div id="pos-suggestions" class="pos-suggestions-dropdown"></div>
               </div>
               <button class="btn primary lg" onclick="handleBarcodeAdd()">➕ Ekle</button>
+              <button type="button" class="btn outline lg" onclick="openCameraBarcodeScanner()" title="Telefon / Cihaz Kamerasıyla Barkod Tara" style="white-space:nowrap">📷 Kamera Tara</button>
+              <button type="button" class="btn warning lg" onclick="openQuartermasterAssistantModal()" title="Marin Motor Periyodik Bakım Sihirbazı" style="white-space:nowrap">⚓ Motor Bakım Asistanı</button>
             </div>
 
             <div class="pos-top-actions">
@@ -2595,9 +2665,131 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
     <div class="modal-body" id="invoice-printable-area" style="padding:24px;font-family:Arial,sans-serif"></div>
     <div class="modal-foot">
       <button class="btn outline" onclick="closeModal('modal-print-invoice')">Kapat</button>
+      <button class="btn success" onclick="shareInvoiceWhatsApp()" style="background:#25D366;border-color:#25D366;color:#fff">💬 WhatsApp ile Gönder</button>
       <button class="btn primary" onclick="printInvoice()">🖨️ PDF / Yazdır</button>
     </div>
   </div>
+</div>
+
+<!-- 9. KRİTİK STOK & TEDARİKÇİ SİPARİŞ SİHİRBAZI MODAL -->
+<div class="modal-overlay" id="modal-critical-stock">
+  <div class="modal-box" style="max-width:850px">
+    <div class="modal-head">
+      <h3>⚠️ Kritik Asgari Stok Uyarısı & Tedarikçi Sipariş Listesi</h3>
+      <button class="modal-close" onclick="closeModal('modal-critical-stock')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#92400e;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+        <div>
+          <b>Depolarda Asgari Stok Sınırının Altına Düşen Parçalar:</b>
+          <p style="margin:2px 0 0;font-size:12px">Bu liste anlık olarak sistemde minimum adedin altına inen parçaları tespit eder ve toptancıya hazır sipariş metnine çevirir.</p>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn success sm" onclick="copySupplierOrderWhatsApp()" style="background:#25D366;border-color:#25D366;color:#fff">💬 WhatsApp Sipariş Metni Oluştur</button>
+          <button class="btn outline sm" onclick="exportCriticalStockCsv()">📥 Excel İndir</button>
+        </div>
+      </div>
+      <div class="table-card" style="box-shadow:none;border:1px solid var(--line)">
+        <table class="erp-table">
+          <thead>
+            <tr>
+              <th>Parça Adı & OEM Referans</th>
+              <th>Kategori / Marka</th>
+              <th>Mevcut Stok</th>
+              <th>Kritik Eşik</th>
+              <th>Önerilen Sipariş</th>
+              <th>Tahmini Maliyet</th>
+            </tr>
+          </thead>
+          <tbody id="critical-stock-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn outline" onclick="closeModal('modal-critical-stock')">Kapat</button>
+      <button class="btn primary" onclick="switchNav('purchases');closeModal('modal-critical-stock')">📥 Mal Alışı Sayfasına Git</button>
+    </div>
+  </div>
+</div>
+
+<!-- 10. QUARTERMASTER MOTOR BAKIM ASİSTANI MODAL -->
+<div class="modal-overlay" id="modal-qm-assistant">
+  <div class="modal-box" style="max-width:760px">
+    <div class="modal-head" style="background:#071b2b">
+      <h3>⚓ Quartermaster Marin Motor Bakım Asistanı</h3>
+      <button class="modal-close" onclick="closeModal('modal-qm-assistant')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:14px;margin-bottom:16px">
+        <label style="font-size:12px;font-weight:800;color:#0369a1;display:block;margin-bottom:6px">BAKIM YAPILACAK MARİN MOTOR VEYA JENERATÖRÜ SEÇİNİZ:</label>
+        <select id="qm-engine-select" onchange="renderQmEngineParts()" style="width:100%;height:44px;font-size:14.5px;font-weight:700;border:1.5px solid #0284c7;border-radius:8px;padding:0 12px;color:#071b2b">
+          <option value="volvo-d4-d6">⭐ Volvo Penta D4 / D6 Serisi (Twin & Single)</option>
+          <option value="yanmar-4jh">⭐ Yanmar 4JH Serisi (Yelkenli & Motoryat)</option>
+          <option value="man-v8-v12">⭐ MAN Marine V8 / V12 Serisi (Büyük Motoryat)</option>
+          <option value="kohler-generator">⭐ Kohler & Cummins Onan Marin Jeneratör Grubu</option>
+          <option value="caterpillar-c">⭐ Caterpillar C9 / C12 / C18 Serisi</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom:12px">
+        <b style="font-size:13.5px;color:#071b2b">📋 Bu Motor İçin Standart Sezonluk Bakım Parçaları:</b>
+        <p style="font-size:12px;color:#64748b;margin:3px 0 10px">Seçilen parçalar tek tıkla POS sepetine veya servis faturasına aktarılır.</p>
+      </div>
+
+      <div id="qm-engine-parts-list" style="display:grid;gap:8px"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn outline" onclick="closeModal('modal-qm-assistant')">Kapat</button>
+      <button class="btn success" onclick="addSelectedQmPartsToCart()">🛒 Seçili Parçaları Sepete Aktar</button>
+    </div>
+  </div>
+</div>
+
+<!-- 11. KAMERA İLE BARKOD TARAMA MODAL (HTML5 BARCODE) -->
+<div class="modal-overlay" id="modal-camera-scanner">
+  <div class="modal-box" style="max-width:500px">
+    <div class="modal-head">
+      <h3>📷 Kamera ile Barkod / QR Tara</h3>
+      <button class="modal-close" onclick="closeCameraScanner()">✕</button>
+    </div>
+    <div class="modal-body" style="text-align:center;padding:16px">
+      <div style="position:relative;width:100%;max-width:440px;height:320px;margin:0 auto;background:#000;border-radius:12px;overflow:hidden;border:2px solid #0284c7">
+        <video id="camera-scanner-video" playsinline style="width:100%;height:100%;object-fit:cover"></video>
+        <div style="position:absolute;inset:20% 15%;border:2px dashed #10b981;border-radius:8px;pointer-events:none;box-shadow:0 0 0 9999px rgba(0,0,0,0.5)">
+          <div style="position:absolute;top:50%;left:0;right:0;height:2px;background:#ef4444;box-shadow:0 0 8px #ef4444"></div>
+        </div>
+      </div>
+      <p style="font-size:12.5px;color:#64748b;margin:12px 0 4px">Kamerayı ürün barkoduna veya karekoduna odaklayınız.</p>
+      <div id="camera-scan-result" style="font-size:14px;font-weight:800;color:#0284c7;min-height:22px"></div>
+    </div>
+    <div class="modal-foot" style="justify-content:center">
+      <button class="btn danger" onclick="closeCameraScanner()">⏹️ Taramayı Kapat</button>
+    </div>
+  </div>
+</div>
+
+<!-- 📱 MOBİL ERGONOMİK SABİT ALT MENÜ (MOBILE BOTTOM BAR) -->
+<div class="mobile-bottom-bar">
+  <button type="button" class="mob-nav-btn active" id="mob-nav-dashboard" onclick="switchNav('dashboard')">
+    <span class="icon">🏠</span>
+    <span>Özet</span>
+  </button>
+  <button type="button" class="mob-nav-btn" id="mob-nav-pos" onclick="switchNav('pos')">
+    <span class="icon">⚡</span>
+    <span>Hızlı POS</span>
+  </button>
+  <button type="button" class="mob-nav-btn" id="mob-nav-products" onclick="switchNav('products')">
+    <span class="icon">📦</span>
+    <span>Stok</span>
+  </button>
+  <button type="button" class="mob-nav-btn" id="mob-nav-sales" onclick="switchNav('sales')">
+    <span class="icon">🛒</span>
+    <span>Satışlar</span>
+  </button>
+  <button type="button" class="mob-nav-btn" id="mob-nav-expenses" onclick="switchNav('expenses')">
+    <span class="icon">💸</span>
+    <span>Masraflar</span>
+  </button>
 </div>
 
 <!-- FLASH MESSAGE -->
@@ -8085,6 +8277,216 @@ async function erpFetch(path, options = {}) {
   return res;
 }
 
+// ─── SUPABASE REALTIME CANLI WEBSOCKET İSTEMCİSİ ─────────────────────────
+let supabaseRealtimeClient = null;
+let realtimeChannel = null;
+
+async function initSupabaseRealtime() {
+  try {
+    const res = await fetch('/api/config');
+    if (!res.ok) return;
+    const cfg = await res.json();
+    if (!cfg.supabaseUrl || !cfg.supabaseAnonKey || !window.supabase) return;
+
+    supabaseRealtimeClient = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+
+    // Tüm ERP tabloları için canlı broadcast/postgres_changes dinle
+    realtimeChannel = supabaseRealtimeClient.channel('dm-erp-realtime-sync')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'erp_products' }, payload => {
+        handleRealtimeProductChange(payload);
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'erp_sales' }, payload => {
+        handleRealtimeSaleChange(payload);
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'erp_expenses' }, payload => {
+        handleRealtimeExpenseChange(payload);
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'erp_customers' }, payload => {
+        handleRealtimeCustomerChange(payload);
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'erp_suppliers' }, payload => {
+        handleRealtimeSupplierChange(payload);
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'erp_purchases' }, payload => {
+        handleRealtimePurchaseChange(payload);
+      })
+      .subscribe((status) => {
+        const badge = document.getElementById('realtime-status-pill');
+        const text = document.getElementById('realtime-status-text');
+        if (status === 'SUBSCRIBED') {
+          if (badge) { badge.style.background = '#ecfdf5'; badge.style.color = '#059669'; }
+          if (text) text.textContent = 'Canlı Senkron';
+          console.log('⚡ Supabase Realtime WebSocket bağlı ve aktif');
+        } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR') {
+          if (badge) { badge.style.background = '#fffbeb'; badge.style.color = '#d97706'; }
+          if (text) text.textContent = 'Canlı (Yenileniyor)';
+        }
+      });
+  } catch(err) {
+    console.warn('Realtime init fallback:', err);
+  }
+}
+
+function handleRealtimeProductChange(payload) {
+  const { eventType, new: newRecord, old: oldRecord } = payload;
+  if (eventType === 'INSERT') {
+    const exists = productsState.some(p => p.id === newRecord.id || (p.code && p.code === newRecord.code));
+    if (!exists) {
+      productsState.unshift({
+        id: newRecord.id, name: newRecord.name, oemRef: newRecord.oem_ref || '', crossRef: newRecord.cross_ref || '',
+        code: newRecord.code || '', barcode: newRecord.barcode || '', brand: newRecord.brand || '',
+        category: newRecord.category || '', location: newRecord.location || '',
+        buyPrice: Number(newRecord.buy_price) || 0, sellPrice: Number(newRecord.sell_price) || 0,
+        qty: Number(newRecord.qty) || 0, minQty: Number(newRecord.min_qty) || 0, notes: newRecord.notes || ''
+      });
+    }
+  } else if (eventType === 'UPDATE') {
+    const idx = productsState.findIndex(p => p.id === newRecord.id);
+    if (idx !== -1) {
+      productsState[idx] = {
+        ...productsState[idx],
+        name: newRecord.name, oemRef: newRecord.oem_ref || '', crossRef: newRecord.cross_ref || '',
+        code: newRecord.code || '', barcode: newRecord.barcode || '', brand: newRecord.brand || '',
+        category: newRecord.category || '', location: newRecord.location || '',
+        buyPrice: Number(newRecord.buy_price) || 0, sellPrice: Number(newRecord.sell_price) || 0,
+        qty: Number(newRecord.qty) || 0, minQty: Number(newRecord.min_qty) || 0, notes: newRecord.notes || ''
+      };
+    }
+  } else if (eventType === 'DELETE') {
+    productsState = productsState.filter(p => p.id !== oldRecord.id);
+  }
+  saveLocalCache();
+  refreshCurrentView();
+}
+
+function handleRealtimeSaleChange(payload) {
+  const { eventType, new: newRecord, old: oldRecord } = payload;
+  if (eventType === 'INSERT') {
+    const exists = salesState.some(s => s.id === newRecord.id || (s.invoiceNo && s.invoiceNo === newRecord.invoice_no));
+    if (!exists) {
+      salesState.unshift({
+        id: newRecord.id, invoiceNo: newRecord.invoice_no || '', customerId: newRecord.customer_id || '',
+        customerName: newRecord.customer_name || '', boatName: newRecord.boat_name || '',
+        items: newRecord.items || [], total: Number(newRecord.total) || 0,
+        paid: Number(newRecord.paid) || 0, discount: Number(newRecord.discount) || 0,
+        payMethod: newRecord.pay_method || 'cash', status: newRecord.status || 'paid',
+        date: newRecord.date || '', operator: newRecord.operator || '', notes: newRecord.notes || ''
+      });
+    }
+  } else if (eventType === 'UPDATE') {
+    const idx = salesState.findIndex(s => s.id === newRecord.id);
+    if (idx !== -1) {
+      salesState[idx] = { ...salesState[idx], status: newRecord.status, paid: Number(newRecord.paid) || 0, notes: newRecord.notes || '' };
+    }
+  } else if (eventType === 'DELETE') {
+    salesState = salesState.filter(s => s.id !== oldRecord.id);
+  }
+  saveLocalCache();
+  refreshCurrentView();
+}
+
+function handleRealtimeExpenseChange(payload) {
+  const { eventType, new: newRecord, old: oldRecord } = payload;
+  if (eventType === 'INSERT') {
+    const exists = expensesState.some(e => e.id === newRecord.id);
+    if (!exists) {
+      let status = 'paid';
+      if (newRecord.notes && newRecord.notes.toLowerCase().includes('pending')) status = 'pending';
+      else if (newRecord.pay_method && newRecord.pay_method.toLowerCase().includes('bekliyor')) status = 'pending';
+      expensesState.unshift({
+        id: newRecord.id, description: newRecord.description || '', desc: newRecord.description || '',
+        amount: Number(newRecord.amount) || 0, category: newRecord.category || 'Genel',
+        date: newRecord.date || '', payMethod: newRecord.pay_method || 'cash', status,
+        operator: newRecord.operator || '', notes: newRecord.notes || ''
+      });
+    }
+  } else if (eventType === 'UPDATE') {
+    const idx = expensesState.findIndex(e => e.id === newRecord.id);
+    if (idx !== -1) {
+      let status = 'paid';
+      if (newRecord.notes && newRecord.notes.toLowerCase().includes('pending')) status = 'pending';
+      else if (newRecord.pay_method && newRecord.pay_method.toLowerCase().includes('bekliyor')) status = 'pending';
+      expensesState[idx] = {
+        ...expensesState[idx],
+        description: newRecord.description || expensesState[idx].description,
+        desc: newRecord.description || expensesState[idx].desc,
+        amount: Number(newRecord.amount) || expensesState[idx].amount,
+        status: status,
+        notes: newRecord.notes || expensesState[idx].notes
+      };
+    }
+  } else if (eventType === 'DELETE') {
+    expensesState = expensesState.filter(e => e.id !== oldRecord.id);
+  }
+  saveLocalCache();
+  refreshCurrentView();
+}
+
+function handleRealtimeCustomerChange(payload) {
+  const { eventType, new: newRecord, old: oldRecord } = payload;
+  if (eventType === 'INSERT') {
+    const exists = customersState.some(c => c.id === newRecord.id);
+    if (!exists) {
+      customersState.unshift({
+        id: newRecord.id, name: newRecord.name, phone: newRecord.phone || '', email: newRecord.email || '',
+        boatName: newRecord.boat_name || '', boatType: newRecord.boat_type || '',
+        engineBrand: newRecord.engine_brand || '', engineModel: newRecord.engine_model || '',
+        engineSerial: newRecord.engine_serial || '', marina: newRecord.marina || '',
+        notes: newRecord.notes || '', balance: Number(newRecord.balance) || 0
+      });
+    }
+  } else if (eventType === 'UPDATE') {
+    const idx = customersState.findIndex(c => c.id === newRecord.id);
+    if (idx !== -1) {
+      customersState[idx] = {
+        ...customersState[idx],
+        name: newRecord.name, phone: newRecord.phone || '', email: newRecord.email || '',
+        boatName: newRecord.boat_name || '', marina: newRecord.marina || '',
+        balance: Number(newRecord.balance) || 0, notes: newRecord.notes || ''
+      };
+    }
+  }
+  saveLocalCache();
+  refreshCurrentView();
+}
+
+function handleRealtimeSupplierChange(payload) {
+  const { eventType, new: newRecord, old: oldRecord } = payload;
+  if (eventType === 'INSERT') {
+    const exists = suppliersState.some(s => s.id === newRecord.id);
+    if (!exists) {
+      suppliersState.unshift({
+        id: newRecord.id, name: newRecord.name, contact: newRecord.contact || '', phone: newRecord.phone || '',
+        email: newRecord.email || '', address: newRecord.address || '', notes: newRecord.notes || '',
+        balance: Number(newRecord.balance) || 0
+      });
+    }
+  } else if (eventType === 'UPDATE') {
+    const idx = suppliersState.findIndex(s => s.id === newRecord.id);
+    if (idx !== -1) {
+      suppliersState[idx] = { ...suppliersState[idx], balance: Number(newRecord.balance) || 0 };
+    }
+  }
+  saveLocalCache();
+  refreshCurrentView();
+}
+
+function handleRealtimePurchaseChange(payload) {
+  const { eventType, new: newRecord } = payload;
+  if (eventType === 'INSERT') {
+    const exists = purchasesState.some(p => p.id === newRecord.id);
+    if (!exists) {
+      purchasesState.unshift({
+        id: newRecord.id, supplierId: newRecord.supplier_id || '', supplierName: newRecord.supplier_name || '',
+        items: newRecord.items || [], total: Number(newRecord.total) || 0, paid: Number(newRecord.paid) || 0,
+        date: newRecord.date || '', invoiceNo: newRecord.invoice_no || '', operator: newRecord.operator || '', notes: newRecord.notes || ''
+      });
+    }
+  }
+  saveLocalCache();
+  refreshCurrentView();
+}
+
 // ─── localStorage cache (offline fallback) ────────────────────────────────
 function saveLocalCache() {
   try {
@@ -8306,6 +8708,9 @@ function switchNav(navId) {
   currentNav = navId;
   document.querySelectorAll(".sidebar-nav .nav-item").forEach(item => {
     item.classList.toggle("active", item.getAttribute("onclick")?.includes(navId));
+  });
+  document.querySelectorAll(".mob-nav-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.id === `mob-nav-${navId}`);
   });
 
   const views = ['dashboard', 'pos', 'products', 'count', 'customers', 'suppliers', 'sales', 'purchases', 'expenses', 'reports', 'settings'];
@@ -9732,9 +10137,13 @@ function saveSale(e) {
   viewPrintableInvoice(newSale.id);
 }
 
+let activePrintContext = null;
+
 function viewPrintableInvoice(saleId) {
   const sale = salesState.find(x => x.id === saleId);
   if (!sale) return;
+
+  activePrintContext = { type: 'sale', saleId: saleId, sale: sale };
 
   const cust = customersState.find(x => x.id === sale.customerId);
 
@@ -9818,6 +10227,8 @@ function openDailyZReport() {
   const eft = todaySales.filter(s => s.payType === 'Havale / EFT').reduce((s, i) => s + (Number(i.total) || 0), 0);
   const credit = todaySales.filter(s => s.status === 'pending').reduce((s, i) => s + (Number(i.total) || 0), 0);
 
+  activePrintContext = { type: 'zreport', todaySales, todayStr, total, cash, card, eft, credit };
+
   document.getElementById("invoice-printable-area").innerHTML = `
     <div style="text-align:center;border-bottom:2px solid #071b2b;padding-bottom:14px;margin-bottom:16px">
       <h2 style="margin:0">DM MARİN · GÜN SONU KASA RAPORU (Z RAPORU)</h2>
@@ -9862,6 +10273,484 @@ function openDailyZReport() {
 
 function printInvoice() {
   window.print();
+}
+
+// ─── 1. WHATSAPP ENTEGRASYONU ──────────────────────────────────────────────
+function shareInvoiceWhatsApp() {
+  if (!activePrintContext) {
+    flash("Paylaşılacak fiş veya rapor bulunamadı.");
+    return;
+  }
+  if (activePrintContext.type === 'sale') {
+    const sale = activePrintContext.sale;
+    if (!sale) return;
+    const cust = customersState.find(x => x.id === sale.customerId);
+    let rawPhone = cust ? (cust.phone || '') : '';
+    let cleanPhone = rawPhone.replace(/\D/g, '');
+    if (cleanPhone.startsWith('0')) cleanPhone = '9' + cleanPhone;
+    else if (cleanPhone.length === 10) cleanPhone = '90' + cleanPhone;
+
+    let itemsText = (sale.items || []).map(it => `• ${it.qty}x ${it.name} - ₺${(Number(it.qty) * Number(it.price)).toLocaleString('tr-TR', {minimumFractionDigits:2})}`).join('\n');
+    if (sale.laborCost && Number(sale.laborCost) > 0) {
+      itemsText += `\n• 1x Mobil Servis, Teşhis & Montaj İşçiliği - ₺${Number(sale.laborCost).toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+    }
+
+    const payStatusStr = sale.status === 'paid' ? '✅ Tahsil Edildi' : '⚠️ Açık Hesap (Borç)';
+    const boatStr = sale.boatName ? ` (Tekne: ${sale.boatName})` : '';
+
+    const text = 
+`⚓ *DM MARİN MOTOR & TEKNİK SERVİS*
+📄 *Servis & Satış Fişi:* #${sale.id}
+📅 *Tarih:* ${sale.date}
+👤 *Müşteri:* ${sale.customerName}${boatStr}
+
+📋 *Parça & Hizmet Kalemleri:*
+${itemsText}
+
+💰 *TOPLAM TUTAR:* ₺ ${Number(sale.total).toLocaleString('tr-TR', {minimumFractionDigits:2})}
+💳 *Ödeme:* ${sale.payType || 'Nakit'} (${payStatusStr})
+
+Marin motor revizyonu, periyodik bakım ve yedek parça siparişlerinizde bizi tercih ettiğiniz için teşekkür ederiz.
+📞 Tel: 0543 724 09 92
+🌐 www.dmmarin.com`;
+
+    const url = cleanPhone ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}` : `https://wa.me/?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+    flash("💬 WhatsApp faturası hazırlandı.");
+  } else if (activePrintContext.type === 'zreport') {
+    shareDailyZReportWhatsApp();
+  }
+}
+
+function shareDailyZReportWhatsApp() {
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const todaySales = salesState.filter(s => s.date === todayStr);
+  const total = todaySales.reduce((s, i) => s + (Number(i.total) || 0), 0);
+  const cash = todaySales.filter(s => s.payType === 'Nakit').reduce((s, i) => s + (Number(i.total) || 0), 0);
+  const card = todaySales.filter(s => s.payType === 'Kredi Kartı').reduce((s, i) => s + (Number(i.total) || 0), 0);
+  const eft = todaySales.filter(s => s.payType === 'Havale / EFT').reduce((s, i) => s + (Number(i.total) || 0), 0);
+  const credit = todaySales.filter(s => s.status === 'pending').reduce((s, i) => s + (Number(i.total) || 0), 0);
+
+  const text =
+`📊 *DM MARİN - GÜN SONU KASA & Z RAPORU*
+📅 *Tarih:* ${todayStr} - ${new Date().toLocaleTimeString('tr-TR')}
+
+🧾 *Toplam Fiş:* ${todaySales.length} Adet İşlem
+💵 *Nakit Tahsilat:* ₺ ${cash.toLocaleString('tr-TR', {minimumFractionDigits:2})}
+💳 *Kredi Kartı:* ₺ ${card.toLocaleString('tr-TR', {minimumFractionDigits:2})}
+🏦 *Havale / EFT:* ₺ ${eft.toLocaleString('tr-TR', {minimumFractionDigits:2})}
+⚠️ *Açık Hesap (Veresiye):* ₺ ${credit.toLocaleString('tr-TR', {minimumFractionDigits:2})}
+
+🏆 *GÜNLÜK NET CİRO: ₺ ${total.toLocaleString('tr-TR', {minimumFractionDigits:2})}*
+
+DM Marin Realtime ERP Bulut Sistemi`;
+
+  const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+  window.open(url, '_blank');
+  flash("💬 Gün Sonu Z Raporu WhatsApp için hazırlandı.");
+}
+
+// ─── 2. KRİTİK STOK & TEDARİKÇİ SİPARİŞ SİHİRBAZI ──────────────────────────
+function openCriticalStockModal() {
+  const tbody = document.getElementById("critical-stock-tbody");
+  if (!tbody) return;
+
+  const criticalProducts = productsState.filter(p => {
+    const qty = Number(p.qty) || 0;
+    const minQty = Number(p.minQty) || 0;
+    return minQty > 0 ? qty <= minQty : qty <= 1;
+  });
+
+  if (criticalProducts.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:#10b981;font-weight:700">✅ Harika! Tüm parçalarınızın stoğu asgari sınırın üzerindedir. Kritik parça bulunmuyor.</td></tr>`;
+  } else {
+    tbody.innerHTML = criticalProducts.map(p => {
+      const qty = Number(p.qty) || 0;
+      const minQty = Number(p.minQty) || 2;
+      const orderQty = Math.max(2, (minQty * 2) - qty);
+      const buyPrice = Number(p.buyPrice) || 0;
+      const estTotal = orderQty * buyPrice;
+
+      return `
+        <tr>
+          <td>
+            <b>${escapeHtml(p.name)}</b>
+            <div style="font-size:11px;color:#64748b">OEM / Kod: <code>${escapeHtml(p.oemRef || p.code || p.barcode || '-')}</code></div>
+          </td>
+          <td><span class="badge-pill blue">${escapeHtml(p.category || 'Genel')}</span> <small>${escapeHtml(p.brand || '')}</small></td>
+          <td><b style="color:#ef4444;font-size:14px">${qty} Adet</b></td>
+          <td><span style="color:#64748b">${minQty} Adet</span></td>
+          <td><b style="color:#0284c7;font-size:14px">+${orderQty} Adet</b></td>
+          <td style="font-weight:700">₺ ${estTotal.toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  openModal("modal-critical-stock");
+}
+
+function copySupplierOrderWhatsApp() {
+  const criticalProducts = productsState.filter(p => {
+    const qty = Number(p.qty) || 0;
+    const minQty = Number(p.minQty) || 0;
+    return minQty > 0 ? qty <= minQty : qty <= 1;
+  });
+
+  if (criticalProducts.length === 0) {
+    alert("Kritik eşiğin altına inmiş parça bulunmuyor.");
+    return;
+  }
+
+  let listText = criticalProducts.map((p, idx) => {
+    const qty = Number(p.qty) || 0;
+    const minQty = Number(p.minQty) || 2;
+    const orderQty = Math.max(2, (minQty * 2) - qty);
+    const code = p.oemRef || p.code || '';
+    return `${idx + 1}. ${p.name} ${code ? `(OEM: ${code})` : ''} ➔ *${orderQty} Adet* (Depoda Kalan: ${qty})`;
+  }).join("\n");
+
+  const msg = 
+`📦 *DM MARİN MOTOR & TEKNİK - KRİTİK YEDEK PARÇA SİPARİŞİ*
+📅 *Tarih:* ${new Date().toLocaleDateString('tr-TR')}
+
+Sayın Yetkili / Toptancı Firmamız,
+Atölyemiz ve marin servis teknelerimiz için kritik eşiğe düşen ve acil talep ettiğimiz yedek parçalar aşağıdadır:
+
+${listText}
+
+📍 *Teslimat:* DM Marin Servis Atölyesi
+📞 *İletişim & Onay:* 0543 724 09 92
+Teşekkür eder, iyi çalışmalar dileriz.`;
+
+  navigator.clipboard.writeText(msg).catch(() => {});
+  const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+  flash("📋 WhatsApp sipariş metni panoya kopyalandı ve WhatsApp açıldı!");
+}
+
+function exportCriticalStockCsv() {
+  const criticalProducts = productsState.filter(p => {
+    const qty = Number(p.qty) || 0;
+    const minQty = Number(p.minQty) || 0;
+    return minQty > 0 ? qty <= minQty : qty <= 1;
+  });
+
+  if (criticalProducts.length === 0) {
+    alert("Dışa aktarılacak kritik stok parçası yok.");
+    return;
+  }
+
+  let csv = "\uFEFFParça Adı;OEM / Kod;Marka;Kategori;Mevcut Stok;Kritik Sınır;Önerilen Sipariş;Birim Alış (TL);Tahmini Tutar (TL)\r\n";
+  criticalProducts.forEach(p => {
+    const qty = Number(p.qty) || 0;
+    const minQty = Number(p.minQty) || 2;
+    const orderQty = Math.max(2, (minQty * 2) - qty);
+    const buyPrice = Number(p.buyPrice) || 0;
+    const estTotal = orderQty * buyPrice;
+    csv += `"${(p.name||'').replace(/"/g, '""')}";"${(p.oemRef||p.code||'').replace(/"/g, '""')}";"${(p.brand||'').replace(/"/g, '""')}";"${(p.category||'').replace(/"/g, '""')}";${qty};${minQty};${orderQty};${buyPrice.toFixed(2)};${estTotal.toFixed(2)}\r\n`;
+  });
+
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `dm_marin_kritik_stok_siparis_${new Date().toISOString().slice(0, 10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  flash("📥 Kritik stok Excel / CSV dosyası indirildi.");
+}
+
+// ─── 3. QUARTERMASTER MARİN MOTOR BAKIM ASİSTANI ──────────────────────────
+const QM_ENGINE_PRESETS = {
+  "volvo-d4-d6": {
+    name: "Volvo Penta D4 / D6 Serisi (Twin & Single)",
+    parts: [
+      { name: "Volvo Penta Yağ Filtresi", oem: "22030848", price: 1450, qty: 1, category: "Filtre", brand: "Volvo Penta" },
+      { name: "Volvo Penta Yakıt / Mazot Filtresi", oem: "21718912", price: 1850, qty: 1, category: "Filtre", brand: "Volvo Penta" },
+      { name: "Racor 500FG Su Ayırıcı Seperatör Kartuş (30 Micron)", oem: "2010PM-OR", price: 850, qty: 1, category: "Filtre", brand: "Parker Racor" },
+      { name: "Volvo Penta Deniz Suyu Impeller Kiti", oem: "21951356", price: 2950, qty: 1, category: "Soğutma", brand: "Volvo Penta" },
+      { name: "Volvo Penta VDS-4.5 15W-40 Marin Motor Yağı (20L)", oem: "VDS-4.5-20L", price: 4800, qty: 1, category: "Yağ & Sıvı", brand: "Volvo Penta" },
+      { name: "Volvo Penta Karter & Kuyruk Tutya Seti (Çinko)", oem: "3858399", price: 2200, qty: 1, category: "Tutya & Anot", brand: "Tecnoseal" },
+      { name: "Volvo Penta Krank Havalandırma Filtresi", oem: "21374544", price: 1650, qty: 1, category: "Filtre", brand: "Volvo Penta" }
+    ]
+  },
+  "yanmar-4jh": {
+    name: "Yanmar 4JH Serisi (Yelkenli & Motoryat)",
+    parts: [
+      { name: "Yanmar Orijinal Motor Yağ Filtresi", oem: "129150-35153", price: 1150, qty: 1, category: "Filtre", brand: "Yanmar" },
+      { name: "Yanmar Yakıt Filtresi Kartuşu", oem: "129470-55810", price: 1350, qty: 1, category: "Filtre", brand: "Yanmar" },
+      { name: "Racor 2010PM Mazot Seperatör Filtre", oem: "2010PM", price: 750, qty: 1, category: "Filtre", brand: "Parker Racor" },
+      { name: "Yanmar Deniz Suyu Impeller & Conta Kiti", oem: "129670-42531", price: 2400, qty: 1, category: "Soğutma", brand: "Yanmar" },
+      { name: "Yanmar 15W-40 CI-4 Dizel Marin Motor Yağı (10L)", oem: "YAN-OIL-15W40", price: 2100, qty: 1, category: "Yağ & Sıvı", brand: "Yanmar" },
+      { name: "Yanmar Alternatör & Devridaim V-Kayışı", oem: "25132-003700", price: 850, qty: 1, category: "Kayış", brand: "Gates Marine" },
+      { name: "Yanmar Motor Bloğu Çinko Tutya Barı", oem: "120650-42350", price: 1100, qty: 2, category: "Tutya & Anot", brand: "Tecnoseal" }
+    ]
+  },
+  "man-v8-v12": {
+    name: "MAN Marine V8 / V12 Serisi (Büyük Motoryat)",
+    parts: [
+      { name: "MAN Marine Çiftli Yağ Filtre Kartuş Takımı", oem: "51.05504-0107", price: 3600, qty: 1, category: "Filtre", brand: "MAN Marine" },
+      { name: "MAN Ön ve Ana Yakıt Filtre Kiti", oem: "51.12503-0052", price: 4200, qty: 1, category: "Filtre", brand: "MAN Marine" },
+      { name: "Racor 1000FH Çiftli Seperatör Kartuşu (30 Micron)", oem: "2020PM", price: 2200, qty: 2, category: "Filtre", brand: "Parker Racor" },
+      { name: "MAN Yüksek Debili Jabsco Deniz Suyu Impeller", oem: "51.06804-0001", price: 5400, qty: 1, category: "Soğutma", brand: "Jabsco" },
+      { name: "MAN M3275-1 Ağır Hizmet Marin Yağı 15W-40 (60L)", oem: "MAN-3275-60L", price: 14500, qty: 1, category: "Yağ & Sıvı", brand: "Shell Rimula" },
+      { name: "Isı Eşanjörü Çinko Tutya Anot Takımı", oem: "51.99610-0012", price: 2800, qty: 4, category: "Tutya & Anot", brand: "Tecnoseal" },
+      { name: "MAN Silindirik Ağır Hizmet Hava Filtresi", oem: "51.08301-0016", price: 3900, qty: 2, category: "Filtre", brand: "MAN Marine" }
+    ]
+  },
+  "kohler-generator": {
+    name: "Kohler & Cummins Onan Marin Jeneratör Grubu",
+    parts: [
+      { name: "Kohler / Onan Jeneratör Yağ Filtresi", oem: "GM32499", price: 950, qty: 1, category: "Filtre", brand: "Kohler" },
+      { name: "Kohler Yakıt Filtresi & Su Tutucu", oem: "GM47434", price: 1150, qty: 1, category: "Filtre", brand: "Kohler" },
+      { name: "Marin Jeneratör Neopren Impeller Kiti", oem: "229826", price: 1850, qty: 1, category: "Soğutma", brand: "Sherwood" },
+      { name: "Jeneratör 15W-40 Sentetik Marin Yağ (4L)", oem: "GEN-OIL-4L", price: 1250, qty: 1, category: "Yağ & Sıvı", brand: "Mobil Delvac" },
+      { name: "Jeneratör Eşanjör Kalem Çinko Tutya", oem: "260085", price: 650, qty: 1, category: "Tutya & Anot", brand: "Tecnoseal" },
+      { name: "Jeneratör Devridaim Tahrik Kayışı", oem: "GM28487", price: 750, qty: 1, category: "Kayış", brand: "Gates Marine" }
+    ]
+  },
+  "caterpillar-c": {
+    name: "Caterpillar C9 / C12 / C18 Serisi",
+    parts: [
+      { name: "CAT 1R-1808 Yüksek Verimli Motor Yağ Filtresi", oem: "1R-1808", price: 2200, qty: 1, category: "Filtre", brand: "Caterpillar" },
+      { name: "CAT 1R-0762 İkincil Yakıt Filtresi", oem: "1R-0762", price: 1950, qty: 1, category: "Filtre", brand: "Caterpillar" },
+      { name: "Racor 2040PM Turbin Serisi Seperatör Filtre", oem: "2040PM", price: 950, qty: 1, category: "Filtre", brand: "Parker Racor" },
+      { name: "CAT C Serisi Deniz Suyu Pompası Impeller Kiti", oem: "282-3404", price: 4600, qty: 1, category: "Soğutma", brand: "Caterpillar" },
+      { name: "CAT DEO 15W-40 Dizel Marin Motor Yağı (40L)", oem: "CAT-DEO-40L", price: 9800, qty: 1, category: "Yağ & Sıvı", brand: "Caterpillar" },
+      { name: "CAT Eşanjör & Kondenser Tutya Anot Seti", oem: "6L-2288", price: 3200, qty: 4, category: "Tutya & Anot", brand: "Tecnoseal" }
+    ]
+  }
+};
+
+function openQuartermasterAssistantModal() {
+  openModal('modal-qm-assistant');
+  renderQmEngineParts();
+}
+
+function renderQmEngineParts() {
+  const selKey = document.getElementById("qm-engine-select")?.value || "volvo-d4-d6";
+  const preset = QM_ENGINE_PRESETS[selKey];
+  const listEl = document.getElementById("qm-engine-parts-list");
+  if (!preset || !listEl) return;
+
+  listEl.innerHTML = preset.parts.map((item, idx) => {
+    const matched = productsState.find(p => 
+      (p.oemRef && item.oem && p.oemRef.toLowerCase().includes(item.oem.toLowerCase())) ||
+      (p.name && item.name && p.name.toLowerCase().includes(item.name.toLowerCase().slice(0, 15)))
+    );
+
+    const stockText = matched ? `<span style="color:#059669;font-weight:700">✓ Stokta Var (${matched.qty} Adet)</span>` : `<span style="color:#64748b">Depo kaydı otomatik açılacak</span>`;
+
+    return `
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;flex:1">
+          <input type="checkbox" id="qm-part-check-${idx}" checked style="width:18px;height:18px;accent-color:#0284c7">
+          <div>
+            <div style="font-weight:700;font-size:13.5px;color:#071b2b">${escapeHtml(item.name)}</div>
+            <div style="font-size:11.5px;color:#64748b">
+              OEM: <code>${escapeHtml(item.oem)}</code> · Marka: <b>${escapeHtml(item.brand)}</b> · ${stockText}
+            </div>
+          </div>
+        </label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:12px;color:#64748b">Adet:</span>
+          <input type="number" id="qm-part-qty-${idx}" value="${item.qty}" min="1" max="50" style="width:52px;height:32px;text-align:center;border:1px solid #cbd5e1;border-radius:6px;font-weight:700">
+          <span style="font-size:12px;color:#64748b;margin-left:4px">Birim:</span>
+          <input type="number" id="qm-part-price-${idx}" value="${item.price}" step="10" style="width:80px;height:32px;text-align:right;border:1px solid #cbd5e1;border-radius:6px;font-weight:700">
+          <span style="font-size:12px;font-weight:700">₺</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function addSelectedQmPartsToCart() {
+  const selKey = document.getElementById("qm-engine-select")?.value || "volvo-d4-d6";
+  const preset = QM_ENGINE_PRESETS[selKey];
+  if (!preset) return;
+
+  let addedCount = 0;
+  preset.parts.forEach((item, idx) => {
+    const chk = document.getElementById(`qm-part-check-${idx}`);
+    if (!chk || !chk.checked) return;
+
+    const qty = parseInt(document.getElementById(`qm-part-qty-${idx}`)?.value) || 1;
+    const price = parseFloat(document.getElementById(`qm-part-price-${idx}`)?.value) || item.price;
+
+    let p = productsState.find(prod => 
+      (prod.oemRef && item.oem && prod.oemRef.toLowerCase().includes(item.oem.toLowerCase())) ||
+      (prod.name && item.name && prod.name.toLowerCase().includes(item.name.toLowerCase().slice(0, 15)))
+    );
+
+    if (!p) {
+      p = {
+        id: 'qm_' + Date.now() + '_' + idx,
+        name: item.name,
+        oemRef: item.oem,
+        code: item.oem,
+        brand: item.brand,
+        category: item.category,
+        buyPrice: Math.round(price * 0.7),
+        sellPrice: price,
+        qty: 10,
+        minQty: 2,
+        location: 'Atölye Raf'
+      };
+      productsState.unshift(p);
+      saveLocalCache();
+      fetch('/api/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(p)
+      }).catch(err => console.warn('QM auto-product save:', err));
+    }
+
+    const exist = posCart.find(x => x.prodId === p.id);
+    if (exist) {
+      exist.qty += qty;
+      exist.price = price;
+    } else {
+      posCart.push({
+        prodId: p.id,
+        name: p.name,
+        code: p.code || p.oemRef,
+        price: price,
+        origPrice: price,
+        discountPct: 0,
+        qty: qty
+      });
+    }
+    addedCount++;
+  });
+
+  if (addedCount > 0) {
+    closeModal('modal-qm-assistant');
+    switchNav('pos');
+    renderPosCart();
+    playPosBeep('success');
+    flash(`⚓ ${addedCount} adet ${preset.name} periyodik bakım parçası POS sepetine eklendi!`);
+  } else {
+    alert("Lütfen en az bir parça seçiniz.");
+  }
+}
+
+// ─── 4. KAMERA İLE BARKOD / QR TARAMA ─────────────────────────────────────
+let cameraStream = null;
+let cameraScannerTimer = null;
+let barcodeDetectorInstance = null;
+
+async function openCameraBarcodeScanner() {
+  openModal('modal-camera-scanner');
+  const resEl = document.getElementById('camera-scan-result');
+  if (resEl) resEl.textContent = 'Kamera başlatılıyor...';
+
+  const video = document.getElementById('camera-scanner-video');
+  if (!video) return;
+
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      throw new Error("Tarayıcınız kamera erişimini desteklemiyor veya HTTPS/localhost gereklidir.");
+    }
+
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } },
+      audio: false
+    });
+
+    video.srcObject = cameraStream;
+    await video.play();
+
+    if (resEl) resEl.textContent = 'Barkodu kırmızı çizgiye hizalayınız...';
+
+    if ('BarcodeDetector' in window) {
+      try {
+        const supported = await BarcodeDetector.getSupportedFormats();
+        barcodeDetectorInstance = new BarcodeDetector({
+          formats: supported.length > 0 ? supported : ['ean_13', 'ean_8', 'code_128', 'code_39', 'qr_code', 'upc_a', 'upc_e']
+        });
+      } catch(e) {
+        barcodeDetectorInstance = null;
+      }
+    }
+
+    startBarcodeScanLoop(video);
+
+  } catch(err) {
+    console.error('Kamera hatası:', err);
+    if (resEl) resEl.innerHTML = `<span style="color:#ef4444">Kamera açılamadı: ${err.message || 'Erişim izni verilmedi.'}</span>`;
+  }
+}
+
+function startBarcodeScanLoop(video) {
+  if (cameraScannerTimer) clearInterval(cameraScannerTimer);
+
+  cameraScannerTimer = setInterval(async () => {
+    if (!video || video.readyState < 2) return;
+
+    if (barcodeDetectorInstance) {
+      try {
+        const barcodes = await barcodeDetectorInstance.detect(video);
+        if (barcodes && barcodes.length > 0) {
+          const rawVal = barcodes[0].rawValue.trim();
+          handleScannedBarcode(rawVal);
+          return;
+        }
+      } catch(err) {}
+    }
+  }, 250);
+}
+
+function handleScannedBarcode(barcodeVal) {
+  if (!barcodeVal) return;
+  playPosBeep('success');
+  const resEl = document.getElementById('camera-scan-result');
+  if (resEl) resEl.innerHTML = `✓ Okundu: <b>${escapeHtml(barcodeVal)}</b>`;
+
+  closeCameraScanner();
+
+  const posSearchInput = document.getElementById('pos-search');
+  const prodSearchInput = document.getElementById('prod-search');
+
+  const match = productsState.find(p => 
+    (p.barcode && p.barcode.trim() === barcodeVal) ||
+    (p.code && p.code.trim().toLowerCase() === barcodeVal.toLowerCase()) ||
+    (p.oemRef && p.oemRef.trim().toLowerCase() === barcodeVal.toLowerCase())
+  );
+
+  if (match) {
+    addToPosCart(match.id);
+    switchNav('pos');
+    flash(`🎯 Barkod okundu ve sepete eklendi: ${match.name}`);
+  } else {
+    if (posSearchInput) {
+      posSearchInput.value = barcodeVal;
+      switchNav('pos');
+      filterPos();
+    } else if (prodSearchInput) {
+      prodSearchInput.value = barcodeVal;
+      switchNav('products');
+      filterProducts();
+    }
+    flash(`📷 Barkod okundu: ${barcodeVal}`);
+  }
+}
+
+function closeCameraScanner() {
+  if (cameraScannerTimer) {
+    clearInterval(cameraScannerTimer);
+    cameraScannerTimer = null;
+  }
+  if (cameraStream) {
+    try {
+      cameraStream.getTracks().forEach(track => track.stop());
+    } catch(e) {}
+    cameraStream = null;
+  }
+  const video = document.getElementById('camera-scanner-video');
+  if (video) video.srcObject = null;
+  closeModal('modal-camera-scanner');
 }
 
 function renderPurchases() {
@@ -10709,6 +11598,9 @@ window.addEventListener("DOMContentLoaded", () => {
   loadAllFromDB().then(() => {
     refreshCurrentView();
   });
+
+  // ⚡ Supabase Realtime WebSocket canlı dinleyiciyi başlat
+  initSupabaseRealtime();
 
   // Her 30 saniyede bir arka planda sessizce Supabase ile senkronize et
   setInterval(() => {
