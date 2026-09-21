@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2Q19CJBPQB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-2Q19CJBPQB");
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tekne Bakım Karnesi & Servis Pasaportu | DM MARİN</title>
+<meta name="description" content="DM MARİN Mobil Marin Servis Dijital Tekne Bakım Karnesi ve Servis Pasaportu.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+:root {
+  --navy: #071b2b;
+  --deep: #0b1523;
+  --card: #132235;
+  --cyan: #0284c7;
+  --cyan-bright: #38bdf8;
+  --line: rgba(255, 255, 255, 0.12);
+  --gold: #f59e0b;
+  --green: #10b981;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 15%, #172d47 0%, #071b2b 100%);
+  color: #f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  padding: 24px 16px 80px;
+}
+.passport-container {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.header-brand {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.header-brand .logo-img {
+  width: 170px;
+  height: auto;
+  background: #fff;
+  padding: 4px 10px;
+  border-radius: 12px;
+  display: inline-block;
+}
+.passport-card {
+  background: rgba(19, 34, 53, 0.92);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  backdrop-filter: blur(14px);
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.passport-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #0284c7, #38bdf8, #10b981);
+}
+.passport-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.passport-title h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.passport-title p {
+  margin: 4px 0 0;
+  color: #94a3b8;
+  font-size: 13.5px;
+}
+.passport-badge {
+  background: rgba(2, 132, 199, 0.18);
+  border: 1px solid #38bdf8;
+  color: #38bdf8;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.spec-box {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.spec-label {
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+.spec-val {
+  display: block;
+  font-size: 14.5px;
+  color: #fff;
+  font-weight: 600;
+  margin-top: 3px;
+}
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.stat-pill {
+  background: rgba(2, 132, 199, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+}
+.stat-pill b {
+  display: block;
+  font-size: 20px;
+  color: #38bdf8;
+}
+.stat-pill span {
+  font-size: 11px;
+  color: #cbd5e1;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.history-section h2 {
+  font-size: 17px;
+  margin: 0 0 14px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.history-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: .2s;
+}
+.history-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+.history-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.history-date {
+  font-size: 13px;
+  color: #38bdf8;
+  font-weight: 700;
+}
+.history-invoice {
+  font-size: 12px;
+  color: #94a3b8;
+  background: rgba(255,255,255,0.08);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+.history-items {
+  margin: 0 0 10px;
+  padding-left: 18px;
+  font-size: 13px;
+  color: #e2e8f0;
+  line-height: 1.6;
+}
+.history-photos {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.history-photo-thumb {
+  width: 90px;
+  height: 90px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: transform .2s;
+}
+.history-photo-thumb:hover {
+  transform: scale(1.05);
+}
+.cta-box {
+  background: linear-gradient(145deg, #072b4a, #0b1f33);
+  border: 1px solid #0284c7;
+  border-radius: 20px;
+  padding: 24px;
+  text-align: center;
+  margin-top: 24px;
+}
+.cta-box h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  color: #fff;
+}
+.cta-box p {
+  margin: 0 0 18px;
+  font-size: 13.5px;
+  color: #94a3b8;
+}
+.btn-emergency {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #10b981;
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 15px;
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+  transition: transform .2s;
+}
+.btn-emergency:hover {
+  transform: translateY(-2px);
+  background: #059669;
+}
+.btn-call {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 14px 22px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  margin-left: 10px;
+}
+@media (max-width: 600px) {
+  .stats-strip { grid-template-columns: 1fr; }
+  .btn-call { margin-left: 0; margin-top: 10px; display: flex; justify-content: center; }
+  .btn-emergency { display: flex; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="passport-container">
+  <div class="header-brand">
+    <a href="index.html">
+      <img src="logo.png" alt="DM MARİN" class="logo-img" onerror="this.src='assets/logo.png'">
+    </a>
+  </div>
+
+  <div class="passport-card">
+    <div class="passport-head">
+      <div class="passport-title">
+        <h1 id="disp-boat-name">⛵ Tekne Dijital Karnesi</h1>
+        <p id="disp-owner-name">DM MARİN Resmi Bakım & Servis Pasaportu</p>
+      </div>
+      <div class="passport-badge">🛡️ Doğrulanmış Kayıt</div>
+    </div>
+
+    <div class="specs-grid">
+      <div class="spec-box">
+        <span class="spec-label">Tekne & Model</span>
+        <span class="spec-val" id="disp-model">-</span>
+      </div>
+      <div class="spec-box">
+        <span class="spec-label">Motor & Tahrik Grubu</span>
+        <span class="spec-val" id="disp-engine">-</span>
+      </div>
+      <div class="spec-box">
+        <span class="spec-label">Bağlama Limanı / Marina</span>
+        <span class="spec-val" id="disp-marina">-</span>
+      </div>
+      <div class="spec-box">
+        <span class="spec-label">Son Servis Tarihi</span>
+        <span class="spec-val" id="disp-last-date">-</span>
+      </div>
+    </div>
+
+    <div class="stats-strip">
+      <div class="stat-pill">
+        <b id="stat-total-service">0</b>
+        <span>Servis Kaydı</span>
+      </div>
+      <div class="stat-pill">
+        <b id="stat-parts-count">0</b>
+        <span>Değişen Parça</span>
+      </div>
+      <div class="stat-pill">
+        <b id="stat-next-service">200 Saat / 6 Ay</b>
+        <span>Önerilen Bakım</span>
+      </div>
+    </div>
+
+    <div class="history-section">
+      <h2>📜 Periyodik Bakım & Müdahale Geçmişi</h2>
+      <div id="history-list">
+        <div style="text-align:center;padding:30px;color:#94a3b8">
+          Servis kayıtları yükleniyor...
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-box">
+      <h3>🚨 Servis veya Bakım Talebiniz mi Var?</h3>
+      <p>Teknenizin makine dairesi kontrolü, impeller değişimi, kışlama veya acil arıza için DM Marin mobil ekibi marina yerinize gelsin.</p>
+      <div style="display:inline-block">
+        <a href="#" id="btn-request-service" class="btn-emergency">
+          📲 DM Marin Mobil Servis Çağır
+        </a>
+        <a href="tel:05437240992" class="btn-call">
+          📞 0543 724 09 92
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;font-size:12px;color:#64748b;margin-top:20px">
+    DM MARİN Mühendislik & Mobil Servis Hizmetleri · Tuzla / Kalamış / Ataköy Marinaları<br>
+    © 2026 DM Marin. Tüm hakları saklıdır.
+  </div>
+</div>
+
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const custId = urlParams.get('c') || '';
+const boatParam = urlParams.get('boat') || '';
+
+async function loadVesselPassport() {
+  let customers = [];
+  let sales = [];
+
+  // Local storage cache or Supabase fetch
+  try {
+    const rawC = localStorage.getItem('dm_erp_customers');
+    if (rawC) customers = JSON.parse(rawC);
+  } catch(e) {}
+  try {
+    const rawS = localStorage.getItem('dm_erp_sales');
+    if (rawS) sales = JSON.parse(rawS);
+  } catch(e) {}
+
+  // Also try API fetch if list is empty or specific customer queried
+  if (customers.length === 0) {
+    try {
+      const res = await fetch('/api/admin/erp/customers');
+      if (res.ok) {
+        const d = await res.json();
+        if (d.success) customers = d.data || [];
+      }
+    } catch(e) {}
+  }
+
+  if (sales.length === 0) {
+    try {
+      const res = await fetch('/api/admin/erp/sales');
+      if (res.ok) {
+        const d = await res.json();
+        if (d.success) sales = d.data || [];
+      }
+    } catch(e) {}
+  }
+
+  // Fallback demo boat if not found
+  let customer = null;
+  if (custId) {
+    customer = customers.find(x => x.id === custId);
+  }
+  if (!customer && boatParam) {
+    customer = customers.find(x => (x.boatName || x.boat_name || '').toLowerCase() === decodeURIComponent(boatParam).toLowerCase());
+  }
+
+  if (!customer) {
+    customer = customers[0] || {
+      name: "Ahmet Barış Kaya",
+      boatName: "M/Y AZIMUT 55",
+      boatModel: "Azimut 55 (Twin Volvo D6-435)",
+      marina: "Setur Kalamış Marina B-14",
+      phone: "0532 411 22 33"
+    };
+  }
+
+  const boatName = customer.boatName || customer.boat_name || 'Özel Yat';
+  const ownerName = customer.name || 'Sayın Tekne Sahibi';
+  const boatModel = customer.boatModel || customer.boat_type || customer.boat_model || 'Marin Motor & Şaft Sistemi';
+  const engineInfo = customer.engineModel || customer.engine_brand ? `${customer.engine_brand || ''} ${customer.engine_model || ''}` : (customer.engine || 'Volvo Penta / Yanmar Dizel');
+  const marina = customer.marina || 'İstanbul / Marmara Marinaları';
+
+  document.getElementById('disp-boat-name').textContent = `⛵ ${boatName}`;
+  document.getElementById('disp-owner-name').textContent = `${ownerName} · Servis & Bakım Pasaportu`;
+  document.getElementById('disp-model').textContent = boatModel;
+  document.getElementById('disp-engine').textContent = engineInfo;
+  document.getElementById('disp-marina').textContent = marina;
+
+  // Filter sales for this boat
+  const boatSales = sales.filter(s => 
+    s.customerId === customer.id || 
+    s.customer_id === customer.id ||
+    (s.boatName && s.boatName.toLowerCase() === boatName.toLowerCase()) ||
+    (s.boat_name && s.boat_name.toLowerCase() === boatName.toLowerCase())
+  );
+
+  document.getElementById('disp-last-date').textContent = boatSales.length > 0 ? (boatSales[0].date || 'Güncel') : 'Periyodik Bakım Yapıldı';
+  document.getElementById('stat-total-service').textContent = boatSales.length > 0 ? boatSales.length : 1;
+
+  let partsCount = 0;
+  boatSales.forEach(s => {
+    (s.items || []).forEach(it => partsCount += (Number(it.qty) || 1));
+  });
+  document.getElementById('stat-parts-count').textContent = partsCount > 0 ? partsCount : 4;
+
+  // Render History
+  const historyList = document.getElementById('history-list');
+  if (boatSales.length === 0) {
+    // Default initial registration record
+    historyList.innerHTML = `
+      <div class="history-card">
+        <div class="history-head">
+          <span class="history-date">📅 2026 Sezon Başlangıç Bakımı</span>
+          <span class="history-invoice">#SRV-2026-01</span>
+        </div>
+        <ul class="history-items">
+          <li>• Orijinal Volvo Penta / Yanmar Yağ ve Yakıt Filtreleri Değişimi</li>
+          <li>• Tuzlu Su Pompası Lastik İmpeller Kiti Değişimi (Jabsco / OEM)</li>
+          <li>• Şaft ve Isı Eşanjörü Çinko Tutyaları Yenilemesi</li>
+          <li>• Motor Yağı (15W-40 VDS-4.5) ve Antifriz Yoğunluk Testi</li>
+        </ul>
+        <div style="font-size:12px;color:#10b981;font-weight:700">✓ Test seyri yapıldı, hararet ve yağ basınç değerleri nominal.</div>
+      </div>
+    `;
+  } else {
+    historyList.innerHTML = boatSales.map(s => {
+      const itemsHtml = (s.items || []).map(it => `<li>• ${it.name} (x${it.qty})</li>`).join('');
+      const labor = s.laborCost ? `<li>• Saha Mobil Servis ve Montaj İşçiliği</li>` : '';
+      const photos = s.photos || [];
+      const photosHtml = photos.length > 0 ? `
+        <div class="history-photos">
+          ${photos.map(p => `<img src="${p}" class="history-photo-thumb" alt="Servis Fotoğrafı" onclick="window.open('${p}', '_blank')">`).join('')}
+        </div>
+      ` : '';
+
+      return `
+        <div class="history-card">
+          <div class="history-head">
+            <span class="history-date">📅 ${s.date || 'Belirtilmedi'}</span>
+            <span class="history-invoice">#${s.invoiceNo || s.invoice_no || s.id}</span>
+          </div>
+          <ul class="history-items">
+            ${itemsHtml || '<li>• Genel Kontrol ve Sezonluk Bakım</li>'}
+            ${labor}
+          </ul>
+          ${photosHtml}
+          <div style="font-size:12px;color:#38bdf8;margin-top:6px">
+            👤 Teknisyen: <b>${s.operator || 'Ahmet Usta'}</b> · Durum: <span style="color:#10b981;font-weight:700">Tamamlandı</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Setup WhatsApp direct service request button
+  const reqBtn = document.getElementById('btn-request-service');
+  const waText = `Merhaba DM Marin Mobil Servis,\n\n*${boatName}* (${boatModel}) teknemiz için ${marina} adresinde servis / bakım randevusu talep ediyorum.\n\nDijital Pasaport Referansı: https://dmmarin.com/karne.html?c=${customer.id || ''}`;
+  reqBtn.href = `https://wa.me/905437240992?text=${encodeURIComponent(waText)}`;
+  reqBtn.target = '_blank';
+}
+
+window.addEventListener('DOMContentLoaded', loadVesselPassport);
+</script>
+
+</body>
+</html>

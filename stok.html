@@ -15,6 +15,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
 :root {
   --navy-dark: #0f172a;
@@ -1786,8 +1787,34 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
 
       <!-- 5. CUSTOMERS VIEW -->
       <div id="view-customers" style="display:none">
-        <div class="toolbar-card">
-          <input type="text" id="cust-search" class="search-input" placeholder="Müşteri adı, tekne veya marina ara..." oninput="renderCustomers()">
+        <!-- CARI YASLANDIRMA OZET BAR -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;margin-bottom:14px">
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:12px 16px;box-shadow:var(--shadow-sm);border-left:4px solid #10b981">
+            <span style="font-size:11px;font-weight:750;color:#64748b;text-transform:uppercase">0 - 30 Gün (Güncel Vade)</span>
+            <b id="ageing-0-30" style="font-size:17px;color:#10b981;display:block;margin-top:2px">₺ 0,00</b>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:12px 16px;box-shadow:var(--shadow-sm);border-left:4px solid #f59e0b">
+            <span style="font-size:11px;font-weight:750;color:#64748b;text-transform:uppercase">31 - 60 Gün (Vade Yaklaşan)</span>
+            <b id="ageing-31-60" style="font-size:17px;color:#f59e0b;display:block;margin-top:2px">₺ 0,00</b>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:12px 16px;box-shadow:var(--shadow-sm);border-left:4px solid #ef4444">
+            <span style="font-size:11px;font-weight:750;color:#64748b;text-transform:uppercase">60+ Gün (Vadesi Geçmiş / Kritik)</span>
+            <b id="ageing-60-plus" style="font-size:17px;color:#ef4444;display:block;margin-top:2px">₺ 0,00</b>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:12px 16px;box-shadow:var(--shadow-sm);border-left:4px solid #2563eb">
+            <span style="font-size:11px;font-weight:750;color:#64748b;text-transform:uppercase">Toplam Açık Cari Alacak</span>
+            <b id="ageing-total" style="font-size:17px;color:#2563eb;display:block;margin-top:2px">₺ 0,00</b>
+          </div>
+        </div>
+
+        <div class="toolbar-card" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <input type="text" id="cust-search" class="search-input" placeholder="Müşteri adı, tekne veya marina ara..." oninput="renderCustomers()" style="flex:1;min-width:200px">
+          <select id="cust-ageing-filter" onchange="renderCustomers()" style="padding:8px 12px;border:1px solid var(--line);border-radius:8px;font-size:13px;font-weight:600">
+            <option value="all">Tüm Müşteri & Tekneler</option>
+            <option value="has_balance">Sadece Borçlu / Açık Cariler</option>
+            <option value="overdue">Vadesi 30+ Gün Geçenler (Acil Tahsilat)</option>
+            <option value="critical">Vadesi 60+ Gün Geçenler (Kritik)</option>
+          </select>
           <button class="btn primary" onclick="openCustomerModal()">➕ Yeni Müşteri & Tekne Ekle</button>
         </div>
 
@@ -2115,12 +2142,57 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
     </div>
     <div class="modal-foot" style="justify-content:space-between">
       <button class="btn outline" onclick="closeModal('modal-boat-logbook')">Kapat</button>
-      <div style="display:flex;gap:10px;align-items:center">
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn" style="background:#0284c7;color:#fff;border:none;font-weight:700" onclick="openBoatQRCodeModal()">
+          📱 QR Kodlu Tekne Etiketi Üret
+        </button>
         <button class="btn" style="background:#25d366;border-color:#25d366;color:#071b2b;font-weight:800" onclick="sendWhatsAppLogbookReview()">
           💬 WhatsApp Servis Bildirimi & Puanlama İste
         </button>
         <button class="btn primary" onclick="printBoatLogbook()">
           🖨️ Resmi Tekne Karnesi Yazdır / PDF
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 10. QR KODLU TEKNE BAKIM KARNESİ ETİKET MODALI -->
+<div class="modal-overlay" id="modal-boat-qr">
+  <div class="modal-box" style="max-width:480px;text-align:center">
+    <div class="modal-head" style="justify-content:space-between">
+      <h3 style="font-size:16px;margin:0">📱 Makine Dairesi QR Servis Etiketi</h3>
+      <button class="modal-close" onclick="closeModal('modal-boat-qr')">✕</button>
+    </div>
+    <div class="modal-body" style="padding:20px 16px">
+      <div id="boat-qr-sticker" style="background:#fff;border:2px solid #071b2b;border-radius:14px;padding:18px;color:#071b2b;margin:0 auto;box-shadow:0 4px 15px rgba(0,0,0,0.06)">
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px">
+          <span style="font-size:20px">⚓</span>
+          <b style="font-size:15px;letter-spacing:.02em">DM MARİN MOBİL SERVİS</b>
+        </div>
+        <div style="font-size:11px;color:#64748b;margin-bottom:12px">DİJİTAL TEKNE BAKIM PASAPORTU & SERVİS ÇAĞIRMA</div>
+        
+        <div id="boat-qr-code-canvas" style="display:flex;justify-content:center;margin:12px 0"></div>
+        
+        <b id="boat-qr-name" style="font-size:16px;color:#0284c7;display:block;margin-top:8px">⛵ Tekne Adı</b>
+        <span id="boat-qr-engine" style="font-size:12px;color:#334155;display:block">Volvo Penta D6-435</span>
+        <div style="background:#f1f5f9;border-radius:6px;padding:6px;margin-top:10px;font-size:10.5px;color:#475569">
+          📷 Kaptan / Tekne Sahibi: Akıllı telefon kamerası ile QR kodu okutarak servis geçmişini görüntüleyebilir veya tek tuşla acil servis çağırabilirsiniz.
+        </div>
+        <div style="margin-top:8px;font-size:11px;font-weight:700;color:#071b2b">
+          📞 7/24 Servis Hattı: 0543 724 09 92 · dmmarin.com
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot" style="justify-content:space-between">
+      <button class="btn outline" onclick="closeModal('modal-boat-qr')">Kapat</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn" style="background:#25d366;color:#fff;border:none;font-weight:700" onclick="shareBoatQRWhatsApp()">
+          📲 WhatsApp'tan Gönder
+        </button>
+        <button class="btn primary" onclick="printBoatQRSticker()">
+          🖨️ Etiketi Yazdır (Çıkartma)
         </button>
       </div>
     </div>
@@ -2538,6 +2610,15 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
               <option value="paid">🟢 Ödendi (Nakit / Havale)</option>
               <option value="pending">🟠 Açık Hesap (Tahsilat Bekliyor)</option>
             </select>
+          </div>
+
+          <div class="field-wrap full" style="background:#f8fafc;padding:12px;border-radius:8px;border:1px dashed #cbd5e1">
+            <label style="font-weight:700;color:var(--navy);display:flex;justify-content:space-between;align-items:center">
+              <span>📸 Saha Servis & Parça Fotoğrafları (Teknisyen Öncesi/Sonrası)</span>
+              <small style="color:#64748b;font-weight:normal">Kamera ile çekin veya galeriden seçin</small>
+            </label>
+            <input type="file" id="sale-photos-input" accept="image/*" capture="environment" multiple onchange="handleSalePhotoUpload(event)" style="margin-top:6px;font-size:12px">
+            <div id="sale-photos-preview" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div>
           </div>
 
           <div class="field-wrap full" style="background:#f8fafc;padding:12px;border-radius:8px;border:1px solid var(--line);display:flex;justify-content:space-between;align-items:center">
@@ -9668,31 +9749,163 @@ function saveProduct(e) {
   if (targetProduct) dbSaveProduct(targetProduct, isUpdate);
 }
 
+// =========================================================================
+// 📊 CARİ HESAP YAŞLANDIRMA & VADE TAKİP HESAPLAYICISI
+// =========================================================================
+function calculateCustomerAgeing(customer) {
+  const custSales = (salesState || []).filter(s => 
+    (s.customerId === customer.id || s.customer_id === customer.id || s.customerName === customer.name) &&
+    s.status === 'pending'
+  );
+
+  const now = new Date();
+  let days0_30 = 0;
+  let days31_60 = 0;
+  let days60Plus = 0;
+  let oldestDate = null;
+  let maxDays = 0;
+
+  custSales.forEach(s => {
+    const saleDateStr = s.date || s.createdAt || '';
+    const saleAmt = (Number(s.total) || 0) - (Number(s.paid) || 0);
+    if (saleAmt <= 0) return;
+
+    if (saleDateStr) {
+      const d = new Date(saleDateStr);
+      if (!isNaN(d.getTime())) {
+        const diffDays = Math.floor((now - d) / (1000 * 60 * 60 * 24));
+        if (diffDays > maxDays) {
+          maxDays = diffDays;
+          oldestDate = saleDateStr;
+        }
+        if (diffDays <= 30) days0_30 += saleAmt;
+        else if (diffDays <= 60) days31_60 += saleAmt;
+        else days60Plus += saleAmt;
+      } else {
+        days0_30 += saleAmt;
+      }
+    } else {
+      days0_30 += saleAmt;
+    }
+  });
+
+  // Eğer satış kalemlerinde borç dağılımı bulunamadıysa ama bakiyesi varsa
+  const balance = Number(customer.balance) || 0;
+  if (balance > 0 && (days0_30 + days31_60 + days60Plus) === 0) {
+    days0_30 = balance;
+  }
+
+  return { days0_30, days31_60, days60Plus, total: balance, maxDays, oldestDate };
+}
+
 function renderCustomers() {
   const q = (document.getElementById("cust-search")?.value || "").toLowerCase();
+  const filterAge = document.getElementById("cust-ageing-filter")?.value || "all";
   const tbody = document.getElementById("customers-tbody");
+
+  // Toplam Yaşlandırma İstatistiklerini Hesapla
+  let total0_30 = 0;
+  let total31_60 = 0;
+  let total60Plus = 0;
+  let totalReceivable = 0;
+
+  customersState.forEach(c => {
+    const ageing = calculateCustomerAgeing(c);
+    total0_30 += ageing.days0_30;
+    total31_60 += ageing.days31_60;
+    total60Plus += ageing.days60Plus;
+    totalReceivable += (Number(c.balance) || 0);
+  });
+
+  const el0_30 = document.getElementById("ageing-0-30");
+  const el31_60 = document.getElementById("ageing-31-60");
+  const el60Plus = document.getElementById("ageing-60-plus");
+  const elTotal = document.getElementById("ageing-total");
+
+  if (el0_30) el0_30.textContent = `₺ ${total0_30.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+  if (el31_60) el31_60.textContent = `₺ ${total31_60.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+  if (el60Plus) el60Plus.textContent = `₺ ${total60Plus.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+  if (elTotal) elTotal.textContent = `₺ ${totalReceivable.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
 
   const filtered = customersState.filter(c => {
     if (q && !c.name.toLowerCase().includes(q) && !c.boatName.toLowerCase().includes(q) && !c.marina.toLowerCase().includes(q)) return false;
+    
+    const bal = Number(c.balance) || 0;
+    if (filterAge === 'has_balance' && bal <= 0) return false;
+
+    const ageing = calculateCustomerAgeing(c);
+    if (filterAge === 'overdue' && ageing.maxDays <= 30) return false;
+    if (filterAge === 'critical' && ageing.maxDays <= 60) return false;
+
     return true;
   });
 
-  tbody.innerHTML = filtered.map(c => `
-    <tr>
-      <td>
-        <b>${escapeHtml(c.name)}</b><br>
-        <small style="color:var(--text-muted)">${escapeHtml(c.taxInfo || c.email || '')}</small>
-      </td>
-      <td><b>⛵ ${escapeHtml(c.boatName)}</b><br><small style="color:var(--text-muted)">${escapeHtml(c.boatModel || '')}</small></td>
-      <td>📍 ${escapeHtml(c.marina)}</td>
-      <td>📞 ${escapeHtml(c.phone)}</td>
-      <td style="font-weight:800;color:${c.balance>0?'#ef4444':'#10b981'}">₺ ${Number(c.balance).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
-      <td style="text-align:right;white-space:nowrap">
-        <button class="btn success sm" onclick="openBoatLogbook('${c.id}')" title="Tekne Dijital Servis & Bakım Karnesi">📋 Bakım Karnesi</button>
-        <button class="btn primary sm" onclick="openSaleForCustomer('${c.id}')">🛒 Servis</button>
-      </td>
-    </tr>
-  `).join("");
+  if (!tbody) return;
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:24px;color:#94a3b8">Kriterlere uyan müşteri / cari bulunamadı.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(c => {
+    const ageing = calculateCustomerAgeing(c);
+    let badgeHtml = '';
+    if (c.balance > 0) {
+      if (ageing.maxDays > 60) {
+        badgeHtml = `<span style="background:#fee2e2;color:#b91c1c;padding:2px 7px;border-radius:10px;font-size:10.5px;font-weight:750;display:inline-block;margin-top:2px">⚠️ 60+ Gün Vade</span>`;
+      } else if (ageing.maxDays > 30) {
+        badgeHtml = `<span style="background:#fef3c7;color:#92400e;padding:2px 7px;border-radius:10px;font-size:10.5px;font-weight:750;display:inline-block;margin-top:2px">⏱️ 30+ Gün Vade</span>`;
+      } else {
+        badgeHtml = `<span style="background:#dbeafe;color:#1e40af;padding:2px 7px;border-radius:10px;font-size:10.5px;font-weight:750;display:inline-block;margin-top:2px">Güncel Vade</span>`;
+      }
+    }
+
+    return `
+      <tr>
+        <td>
+          <b>${escapeHtml(c.name)}</b><br>
+          <small style="color:var(--text-muted)">${escapeHtml(c.taxInfo || c.email || '')}</small>
+        </td>
+        <td><b>⛵ ${escapeHtml(c.boatName)}</b><br><small style="color:var(--text-muted)">${escapeHtml(c.boatModel || '')}</small></td>
+        <td>📍 ${escapeHtml(c.marina)}</td>
+        <td>📞 ${escapeHtml(c.phone)}</td>
+        <td>
+          <div style="font-weight:800;color:${c.balance>0?'#ef4444':'#10b981'}">
+            ₺ ${Number(c.balance).toLocaleString('tr-TR', {minimumFractionDigits:2})}
+          </div>
+          ${badgeHtml}
+        </td>
+        <td style="text-align:right;white-space:nowrap">
+          <button class="btn sm" style="background:#0284c7;color:#fff;border:none;padding:3px 8px;font-size:11px" onclick="openBoatLogbook('${c.id}')" title="Tekne Dijital Servis & Bakım Karnesi">📋 Karne & QR</button>
+          ${c.balance > 0 ? `<button class="btn sm" style="background:#25d366;color:#fff;border:none;padding:3px 8px;font-size:11px" onclick="sendCustomerDebtReminderWhatsApp('${c.id}')" title="WhatsApp Vade Hatırlatması">💬 Vade Hatırlat</button>` : ''}
+          <button class="btn primary sm" style="padding:3px 8px;font-size:11px" onclick="openSaleForCustomer('${c.id}')">🛒 Servis</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function sendCustomerDebtReminderWhatsApp(custId) {
+  const c = customersState.find(x => x.id === custId);
+  if (!c) return;
+
+  const ageing = calculateCustomerAgeing(c);
+  let cleanPhone = (c.phone || '').replace(/\D/g, '');
+  if (cleanPhone.startsWith('0')) cleanPhone = '9' + cleanPhone;
+  else if (cleanPhone.length === 10) cleanPhone = '90' + cleanPhone;
+
+  let msg = `Sayın *${c.name}*, merhaba.\n\n`;
+  msg += `DM Marin Motor ve Teknik Hizmetleri nezdindeki cari hesabınızda *${c.boatName}* tekneniz için *₺${Number(c.balance).toLocaleString('tr-TR', {minimumFractionDigits:2})}* tutarında açık bakiye bulunmaktadır.\n\n`;
+  if (ageing.maxDays > 30) {
+    msg += `En eski işlem tarihinizden bu yana yaklaşık *${ageing.maxDays} gün* geçmiştir.\n\n`;
+  }
+  msg += `Hesap mutabakatı ve ödeme detayları için bize bu hattan ulaşabilir veya havale/EFT dekontunu paylaşabilirsiniz.\n\n`;
+  msg += `*DM Marin Motor & Teknik Hizmetleri*\n`;
+  msg += `📞 0543 724 09 92 · www.dmmarin.com`;
+
+  const url = cleanPhone ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+  flash(`✓ ${c.name} için WhatsApp bakiye hatırlatması oluşturuldu.`);
 }
 
 function openCustomerModal() {
@@ -9837,6 +10050,11 @@ function openBoatLogbook(custId) {
                   </div>
                 `).join('')}
                 ${s.laborCost ? `<span style="color:#0284c7;font-size:11.5px;font-weight:700">⚙️ Mobil Teknik Servis İşçiliği Dahil</span>` : ''}
+                ${(s.photos && s.photos.length > 0) ? `
+                  <div style="display:flex;gap:4px;margin-top:6px">
+                    ${s.photos.map(p => `<img src="${p}" style="width:40px;height:40px;border-radius:4px;object-fit:cover;border:1px solid #cbd5e1;cursor:pointer" onclick="window.open('${p}','_blank')">`).join('')}
+                  </div>
+                ` : ''}
               </td>
               <td>
                 <span style="background:#e0f2fe;color:#0369a1;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:750">
@@ -9947,6 +10165,9 @@ function renderSales() {
 }
 
 function openNewSaleModal() {
+  currentSalePhotos = [];
+  const preview = document.getElementById("sale-photos-preview");
+  if (preview) preview.innerHTML = "";
   document.getElementById("form-sale").reset();
   document.getElementById("sale-date").value = new Date().toISOString().slice(0, 10);
 
@@ -10156,7 +10377,8 @@ function saveSale(e) {
     laborCost,
     total,
     payType: status === 'paid' ? 'Nakit / Havale' : 'Açık Hesap',
-    status
+    status,
+    photos: [...currentSalePhotos]
   };
 
   salesState.unshift(newSale);
@@ -10245,6 +10467,14 @@ function viewPrintableInvoice(saleId) {
       </tbody>
     </table>
 
+    ${(sale.photos && sale.photos.length > 0) ? `
+      <div style="margin: 12px 0; padding: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+        <b style="font-size:11px; color:#475569; text-transform:uppercase; display:block; margin-bottom:6px">📸 Saha Servis & Değişen Parça Fotoğrafları:</b>
+        <div style="display:flex; gap:8px; flex-wrap:wrap">
+          ${sale.photos.map(p => `<img src="${p}" style="width:75px; height:75px; object-fit:cover; border-radius:6px; border:1px solid #cbd5e1">`).join('')}
+        </div>
+      </div>
+    ` : ''}
     <div style="display:flex;justify-content:space-between;align-items:center;border-top:2px solid #071b2b;padding-top:12px">
       <div style="font-size:12px;color:#64748b">
         Ödeme Türü: <b>${sale.payType || 'Nakit'}</b><br>
@@ -10313,6 +10543,156 @@ function openDailyZReport() {
   openModal("modal-print-invoice");
 }
 
+
+// =========================================================================
+// 📸 TEKNİSYEN SAHA FOTOĞRAFLARI & DİJİTAL İŞ EMRİ
+// =========================================================================
+let currentSalePhotos = [];
+
+function handleSalePhotoUpload(event) {
+  const files = event.target.files;
+  if (!files || files.length === 0) return;
+
+  const preview = document.getElementById("sale-photos-preview");
+  if (!preview) return;
+
+  Array.from(files).forEach(file => {
+    // Compress or read image as dataURL
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 800;
+        const MAX_HEIGHT = 800;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+
+        currentSalePhotos.push(dataUrl);
+        renderSalePhotoThumbnails();
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderSalePhotoThumbnails() {
+  const preview = document.getElementById("sale-photos-preview");
+  if (!preview) return;
+
+  preview.innerHTML = currentSalePhotos.map((p, idx) => `
+    <div style="position:relative;display:inline-block">
+      <img src="${p}" style="width:65px;height:65px;border-radius:8px;object-fit:cover;border:1px solid #cbd5e1">
+      <button type="button" onclick="removeSalePhoto(${idx})" style="position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:10px;line-height:1;cursor:pointer">&times;</button>
+    </div>
+  `).join('');
+}
+
+function removeSalePhoto(idx) {
+  currentSalePhotos.splice(idx, 1);
+  renderSalePhotoThumbnails();
+}
+
+// =========================================================================
+// 📱 QR KODLU TEKNE ETİKETİ (MAKİNE DAİRESİ PASAPORTU)
+// =========================================================================
+let currentQRCodeObj = null;
+
+function openBoatQRCodeModal() {
+  if (!currentLogbookCust) return;
+  const c = currentLogbookCust;
+
+  document.getElementById("boat-qr-name").textContent = `⛵ ${c.boatName}`;
+  document.getElementById("boat-qr-engine").textContent = `${c.boatModel || 'Marin Motor'} · ${c.marina || 'İstanbul'}`;
+
+  const qrCanvas = document.getElementById("boat-qr-code-canvas");
+  qrCanvas.innerHTML = "";
+
+  const passportUrl = `https://dmmarin.com/karne.html?c=${c.id}`;
+
+  if (typeof QRCode !== 'undefined') {
+    currentQRCodeObj = new QRCode(qrCanvas, {
+      text: passportUrl,
+      width: 160,
+      height: 160,
+      colorDark: "#071b2b",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  } else {
+    // Fallback QR API
+    qrCanvas.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(passportUrl)}" style="width:160px;height:160px" alt="QR Kod">`;
+  }
+
+  openModal("modal-boat-qr");
+}
+
+function shareBoatQRWhatsApp() {
+  if (!currentLogbookCust) return;
+  const c = currentLogbookCust;
+  const passportUrl = `https://dmmarin.com/karne.html?c=${c.id}`;
+  let cleanPhone = (c.phone || '').replace(/\D/g, '');
+  if (cleanPhone.startsWith('0')) cleanPhone = '9' + cleanPhone;
+  else if (cleanPhone.length === 10) cleanPhone = '90' + cleanPhone;
+
+  let msg = `Sayın *${c.name}*, merhaba.\n\n`;
+  msg += `*${c.boatName}* teknenize ait DM Marin Dijital Bakım Karnesi ve Servis Pasaportu oluşturulmuştur ⚓\n\n`;
+  msg += `Aşağıdaki bağlantıdan tüm servis geçmişini, değişen impeller & filtre kodlarını inceleyebilir ve tek tuşla servis çağırabilirsiniz:\n`;
+  msg += `${passportUrl}\n\n`;
+  msg += `İyi seyirler dileriz!\nDM Marin Mobil Servis | 0543 724 09 92`;
+
+  const url = cleanPhone ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+  flash("✓ Tekne QR karnesi WhatsApp üzerinden paylaşıldı.");
+}
+
+function printBoatQRSticker() {
+  const sticker = document.getElementById("boat-qr-sticker");
+  if (!sticker) return;
+
+  const printWin = window.open('', '', 'width=450,height=550');
+  printWin.document.write(`
+    <html>
+      <head>
+        <title>DM Marin Tekne QR Etiketi</title>
+        <style>
+          body { font-family: -apple-system, sans-serif; text-align: center; padding: 20px; }
+          .sticker-box { border: 2px solid #071b2b; padding: 20px; border-radius: 12px; width: 340px; margin: 0 auto; }
+        </style>
+      </head>
+      <body>
+        <div class="sticker-box">
+          ${sticker.innerHTML}
+        </div>
+        <script>
+          window.onload = function() { window.print(); window.close(); }
+        <\/script>
+      </body>
+    </html>
+  `);
+  printWin.document.close();
+}
+
+
 function printInvoice() {
   window.print();
 }
@@ -10351,6 +10731,9 @@ ${itemsText}
 
 💰 *TOPLAM TUTAR:* ₺ ${Number(sale.total).toLocaleString('tr-TR', {minimumFractionDigits:2})}
 💳 *Ödeme:* ${sale.payType || 'Nakit'} (${payStatusStr})
+
+${(sale.photos && sale.photos.length > 0) ? `📷 *Saha Fotoğrafları:* ${sale.photos.length} Adet Servis Görseli Makbuza Eklenmiştir.
+` : ''}📋 *Dijital Tekne Karnesi:* https://dmmarin.com/karne.html?c=${sale.customerId || ''}
 
 Marin motor revizyonu, periyodik bakım ve yedek parça siparişlerinizde bizi tercih ettiğiniz için teşekkür ederiz.
 📞 Tel: 0543 724 09 92
