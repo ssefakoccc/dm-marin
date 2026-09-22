@@ -1405,6 +1405,9 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
       <div class="nav-item" onclick="switchNav('reports')">
         <span class="icon">📊</span> <span>Raporlar & Analiz</span>
       </div>
+      <div class="nav-item" onclick="openAccountsModal()">
+        <span class="icon">🏦</span> <span>Kasa & Banka Hesapları</span>
+      </div>
       <div class="nav-item" onclick="switchNav('settings')">
         <span class="icon">⚙️</span> <span>Tanımlar (Kategori/Depo)</span>
       </div>
@@ -1425,6 +1428,22 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
       <div class="top-bar-left">
         <div class="company-name-tag">
           🏢 <span>DM MARİN MOTOR VE TEKNİK HİZMETLERİ</span>
+        </div>
+        <!-- CANLI DÖVİZ KURLARI (TCMB / SERBEST PİYASA) -->
+        <div class="fx-rates-bar" id="fx-rates-bar" style="display:flex;align-items:center;gap:10px;background:#f8fafc;padding:4px 10px;border-radius:8px;border:1px solid var(--line);font-size:12px;margin-left:12px">
+          <span style="font-weight:800;color:#0284c7;display:flex;align-items:center;gap:4px">
+            <span style="font-size:13px">💱</span> KURLAR:
+          </span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="display:inline-flex;align-items:center;gap:3px">
+              <b>💶 EUR:</b> <span id="fx-eur-rate" style="font-weight:700;color:#1e293b">₺38.45</span>
+            </span>
+            <span style="color:#cbd5e1">|</span>
+            <span style="display:inline-flex;align-items:center;gap:3px">
+              <b>💵 USD:</b> <span id="fx-usd-rate" style="font-weight:700;color:#1e293b">₺34.80</span>
+            </span>
+          </div>
+          <button type="button" class="btn sm" onclick="openFxModal()" title="Kurları Düzenle veya Güncelle" style="padding:2px 7px;font-size:11px;min-height:22px;border:1px solid #cbd5e1;background:#fff;font-weight:700;cursor:pointer">⚙️ Kur Ayarı</button>
         </div>
       </div>
 
@@ -1504,10 +1523,10 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
               <span id="dash-total-assets">₺ 0,00</span>
             </div>
             
-            <div class="bar-row">
+            <div class="bar-row" style="cursor:pointer" onclick="openAccountsModal()" title="Kasa ve Banka Hesaplarını Yönet">
               <div class="bar-labels">
-                <span>Kasa & Banka</span>
-                <span id="dash-bank-val">₺ 0,00</span>
+                <span>Kasa & Banka (Detay İçin Tıkla ↗)</span>
+                <span id="dash-bank-val" style="color:#0284c7;font-weight:800">₺ 0,00</span>
               </div>
               <div class="bar-track"><div class="bar-fill green" style="width: 65%"></div></div>
             </div>
@@ -2398,6 +2417,22 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
             <select id="prod-location" required></select>
           </div>
           <div class="field-wrap">
+            <label style="color:#0284c7;font-weight:800">💱 Para Birimi (Döviz Cinsi)</label>
+            <select id="prod-currency" onchange="onProductCurrencyChange()">
+              <option value="TRY">₺ Türk Lirası (TRY)</option>
+              <option value="EUR">€ Euro (EUR)</option>
+              <option value="USD">$ Amerikan Doları (USD)</option>
+            </select>
+          </div>
+          <div class="field-wrap" id="fx-buy-field" style="display:none">
+            <label id="lbl-fx-buy" style="font-weight:800;color:#0284c7">Döviz Alış Fiyatı</label>
+            <input type="number" step="0.01" id="prod-fx-buy" placeholder="0.00" oninput="recalcProdFxToTL()">
+          </div>
+          <div class="field-wrap" id="fx-sell-field" style="display:none">
+            <label id="lbl-fx-sell" style="font-weight:800;color:#059669">Döviz Satış Fiyatı</label>
+            <input type="number" step="0.01" id="prod-fx-sell" placeholder="0.00" oninput="recalcProdFxToTL()">
+          </div>
+          <div class="field-wrap">
             <label>Alış Fiyatı (₺ TL) *</label>
             <input type="number" step="0.01" id="prod-buy-price" placeholder="0.00" required>
           </div>
@@ -2760,16 +2795,28 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
       <button class="modal-close" onclick="closeModal('modal-critical-stock')">✕</button>
     </div>
     <div class="modal-body">
-      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#92400e;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 16px;margin-bottom:14px;font-size:13px;color:#92400e;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
         <div>
           <b>Depolarda Asgari Stok Sınırının Altına Düşen Parçalar:</b>
           <p style="margin:2px 0 0;font-size:12px">Bu liste anlık olarak sistemde minimum adedin altına inen parçaları tespit eder ve toptancıya hazır sipariş metnine çevirir.</p>
         </div>
         <div style="display:flex;gap:8px">
-          <button class="btn success sm" onclick="copySupplierOrderWhatsApp()" style="background:#25D366;border-color:#25D366;color:#fff">💬 WhatsApp Sipariş Metni Oluştur</button>
           <button class="btn outline sm" onclick="exportCriticalStockCsv()">📥 Excel İndir</button>
         </div>
       </div>
+
+      <!-- Tedarikçi Seçim & Hızlı WhatsApp Gönderim Çubuğu -->
+      <div style="display:flex;align-items:center;gap:10px;background:#f1f5f9;padding:10px 14px;border-radius:10px;margin-bottom:14px;flex-wrap:wrap;border:1px solid var(--line)">
+        <span style="font-weight:800;font-size:12px;color:var(--navy)">🏢 Sipariş İletilecek Toptancı:</span>
+        <select id="critical-supplier-select" onchange="onCriticalSupplierChange()" style="flex:1;min-width:180px;background:#fff;font-size:12px">
+          <option value="custom">Özel Numara / Genel WhatsApp</option>
+        </select>
+        <input type="text" id="critical-supplier-phone" placeholder="WhatsApp Tel: 05..." style="width:160px;background:#fff;font-size:12px">
+        <button type="button" class="btn success sm" onclick="copySupplierOrderWhatsApp()" style="background:#25D366;border-color:#25D366;color:#fff;font-weight:800;gap:6px">
+          📲 Tedarikçiye WhatsApp'tan Gönder
+        </button>
+      </div>
+
       <div class="table-card" style="box-shadow:none;border:1px solid var(--line)">
         <table class="erp-table">
           <thead>
@@ -2790,6 +2837,201 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
       <button class="btn outline" onclick="closeModal('modal-critical-stock')">Kapat</button>
       <button class="btn primary" onclick="switchNav('purchases');closeModal('modal-critical-stock')">📥 Mal Alışı Sayfasına Git</button>
     </div>
+  </div>
+</div>
+
+<!-- DÖVİZ KURU AYARLARI MODAL -->
+<div class="modal-overlay" id="modal-fx-rates">
+  <div class="modal-box" style="max-width:550px">
+    <div class="modal-head">
+      <h3>💱 Canlı Döviz Kuru & Fiyat Koruma Motoru</h3>
+      <button class="modal-close" onclick="closeModal('modal-fx-rates')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:12.5px;color:#0369a1">
+        <b>💡 Kur Koruma Sistemi:</b> Euro (€) veya Dolar ($) ile tedarik ettiğiniz marin parçaların fiyatlarını TCMB veya serbest piyasa kuruyla anında güncelleyin.
+      </div>
+      
+      <div class="form-grid-2">
+        <div class="field-wrap">
+          <label style="font-weight:800;color:var(--navy)">💶 Euro (EUR) Kuru (₺ TL) *</label>
+          <input type="number" step="0.0001" id="input-fx-eur" style="font-size:16px;font-weight:800;color:#0284c7" value="38.45">
+        </div>
+        <div class="field-wrap">
+          <label style="font-weight:800;color:var(--navy)">💵 Dolar (USD) Kuru (₺ TL) *</label>
+          <input type="number" step="0.0001" id="input-fx-usd" style="font-size:16px;font-weight:800;color:#059669" value="34.80">
+        </div>
+      </div>
+      
+      <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+        <button type="button" class="btn sm" onclick="syncLiveFxFromApi()" id="btn-sync-fx" style="background:#fff;border-color:#0284c7;color:#0284c7;font-weight:700">
+          🌐 TCMB / Canlı Kurları Otomatik Çek
+        </button>
+        <button type="button" class="btn primary sm" onclick="saveFxRates()">
+          💾 Kurları Kaydet
+        </button>
+      </div>
+
+      <div style="margin-top:18px;padding-top:16px;border-top:1px dashed #cbd5e1">
+        <b style="font-size:13px;color:var(--navy);display:block;margin-bottom:6px">⚡ Tek Tuşla Parça Fiyatlarını Güncelle</b>
+        <p style="margin:0 0 10px;font-size:12px;color:var(--text-muted)">
+          Sistemde döviz cinsi Euro (€) veya Dolar ($) olarak kayıtlı olan tüm marin parçaların TL satış fiyatlarını bu yeni kur ile anında yeniden hesaplar.
+        </p>
+        <button type="button" class="btn warning sm" onclick="updateAllProductsByFx()" style="background:#f59e0b;color:#fff;border-color:#d97706;font-weight:800">
+          🔄 Dövizli Ürünleri Yeni Kurla Güncelle
+        </button>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn outline" onclick="closeModal('modal-fx-rates')">Kapat</button>
+    </div>
+  </div>
+</div>
+
+<!-- KASA VE BANKA HESAPLARI YÖNETİM MODAL -->
+<div class="modal-overlay" id="modal-accounts">
+  <div class="modal-box" style="max-width:850px">
+    <div class="modal-head">
+      <h3>🏦 Kasa & Banka Hesapları Yönetimi</h3>
+      <button class="modal-close" onclick="closeModal('modal-accounts')">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- Varlık Özeti Kartları -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:18px">
+        <div style="padding:14px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc">
+          <small style="color:var(--text-muted);font-weight:700;display:block">TOPLAM LİKİT KASA & BANKA</small>
+          <b id="acc-total-sum" style="font-size:18px;color:#0284c7;display:block;margin-top:4px">₺ 0,00</b>
+        </div>
+        <div style="padding:14px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc">
+          <small style="color:var(--text-muted);font-weight:700;display:block">NAKİT KASA (ATÖLYE & SAHA)</small>
+          <b id="acc-cash-sum" style="font-size:18px;color:#059669;display:block;margin-top:4px">₺ 0,00</b>
+        </div>
+        <div style="padding:14px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc">
+          <small style="color:var(--text-muted);font-weight:700;display:block">TİCARİ BANKALAR TOPLAMI</small>
+          <b id="acc-bank-sum" style="font-size:18px;color:#071b2b;display:block;margin-top:4px">₺ 0,00</b>
+        </div>
+      </div>
+
+      <!-- Aksiyon Barı -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+        <b style="font-size:14px;color:var(--navy)">Aktif Kasa & Banka Hesap Listesi</b>
+        <div style="display:flex;gap:8px">
+          <button type="button" class="btn success sm" onclick="openTransferModal()">
+            ↔️ Hesaplar Arası Virman (Para Transferi)
+          </button>
+          <button type="button" class="btn primary sm" onclick="openAddAccountModal()">
+            ➕ Yeni Hesap Ekle
+          </button>
+        </div>
+      </div>
+
+      <!-- Hesaplar Tablosu -->
+      <div class="table-card" style="box-shadow:none;border:1px solid var(--line)">
+        <table class="erp-table">
+          <thead>
+            <tr>
+              <th>Hesap Adı</th>
+              <th>Tür</th>
+              <th>IBAN / Detay</th>
+              <th>Para Birimi</th>
+              <th>Güncel Bakiye</th>
+              <th style="text-align:right">İşlemler</th>
+            </tr>
+          </thead>
+          <tbody id="accounts-tbody"></tbody>
+        </table>
+      </div>
+
+    </div>
+    <div class="modal-foot">
+      <button class="btn outline" onclick="closeModal('modal-accounts')">Kapat</button>
+    </div>
+  </div>
+</div>
+
+<!-- HESAP EKLE / DÜZENLE MODAL -->
+<div class="modal-overlay" id="modal-account-form">
+  <div class="modal-box" style="max-width:500px">
+    <div class="modal-head">
+      <h3 id="modal-acc-form-title">➕ Yeni Kasa / Banka Hesabı</h3>
+      <button class="modal-close" onclick="closeModal('modal-account-form')">✕</button>
+    </div>
+    <form id="form-account" onsubmit="saveAccountForm(event)">
+      <input type="hidden" id="acc-form-id">
+      <div class="modal-body">
+        <div class="form-grid-2">
+          <div class="field-wrap full">
+            <label>Hesap Adı *</label>
+            <input type="text" id="acc-form-name" placeholder="Örn: Garanti BBVA Şirket Hesabı" required>
+          </div>
+          <div class="field-wrap">
+            <label>Hesap Türü *</label>
+            <select id="acc-form-type" required>
+              <option value="bank">🏦 Ticari Banka Hesabı</option>
+              <option value="cash">💵 Nakit Kasa (Atölye/Saha)</option>
+              <option value="card">💳 Şirket Kredi Kartı</option>
+              <option value="pos">⚡ POS Bloke / Tahsilat Hesabı</option>
+            </select>
+          </div>
+          <div class="field-wrap">
+            <label>Para Birimi</label>
+            <select id="acc-form-currency">
+              <option value="TRY">₺ TRY</option>
+              <option value="EUR">€ EUR</option>
+              <option value="USD">$ USD</option>
+            </select>
+          </div>
+          <div class="field-wrap full">
+            <label>IBAN / Kart No / Şube Bilgisi</label>
+            <input type="text" id="acc-form-iban" placeholder="Örn: TR42 0006 4000 0011 2233 4455 66">
+          </div>
+          <div class="field-wrap full">
+            <label>Güncel Bakiye (₺ TL) *</label>
+            <input type="number" step="0.01" id="acc-form-balance" placeholder="0.00" required>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn outline" onclick="closeModal('modal-account-form')">İptal</button>
+        <button type="submit" class="btn primary">💾 Hesabı Kaydet</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- HESAPLAR ARASI VİRMAN / TRANSFER MODAL -->
+<div class="modal-overlay" id="modal-transfer">
+  <div class="modal-box" style="max-width:500px">
+    <div class="modal-head">
+      <h3>↔️ Hesaplar Arası Para Transferi (Virman)</h3>
+      <button class="modal-close" onclick="closeModal('modal-transfer')">✕</button>
+    </div>
+    <form id="form-transfer" onsubmit="executeAccountTransfer(event)">
+      <div class="modal-body">
+        <div class="form-grid-2">
+          <div class="field-wrap full">
+            <label>Kaynak Hesap (Para Çıkışı) *</label>
+            <select id="transfer-from" required></select>
+          </div>
+          <div class="field-wrap full">
+            <label>Hedef Hesap (Para Girişi) *</label>
+            <select id="transfer-to" required></select>
+          </div>
+          <div class="field-wrap full">
+            <label>Transfer Tutarı (₺ TL) *</label>
+            <input type="number" step="0.01" id="transfer-amount" placeholder="0.00" required>
+          </div>
+          <div class="field-wrap full">
+            <label>Açıklama</label>
+            <input type="text" id="transfer-desc" placeholder="Örn: Bankadan nakit çekim / Kasa devri">
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn outline" onclick="closeModal('modal-transfer')">İptal</button>
+        <button type="submit" class="btn primary">↔️ Transferi Gerçekleştir</button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -2927,6 +3169,24 @@ let expensesState = [
   { id: "e-3", date: "2026-09-17", category: "Personel & Ulaşım", desc: "Kalamış & Fenerbahçe Marina Saha Harcırah", amount: 1030.40, status: "paid" }
 ];
 
+// ----------------------------------------------------
+// DÖVİZ KURLARI & ÇOKLU PARA BİRİMİ YÖNETİMİ
+// ----------------------------------------------------
+let fxRatesState = {
+  EUR: 38.45,
+  USD: 34.80,
+  updatedAt: new Date().toISOString()
+};
+
+// ----------------------------------------------------
+// DİNAMİK KASA & BANKA HESAPLARI YÖNETİMİ
+// ----------------------------------------------------
+let accountsState = [
+  { id: "acc-1", name: "Nakit Kasa (Atölye & Mobil)", type: "cash", iban: "-", balance: 45250.00, currency: "TRY" },
+  { id: "acc-2", name: "İş Bankası Ticari TL", type: "bank", iban: "TR42 0006 4000 0011 2233 4455 66", balance: 840500.00, currency: "TRY" },
+  { id: "acc-3", name: "Garanti BBVA Ticari TL", type: "bank", iban: "TR18 0006 2000 0099 8877 6655 44", balance: 650635.59, currency: "TRY" },
+  { id: "acc-4", name: "Şirket Kredi Kartı", type: "card", iban: "Mastercard •••• 4912", balance: -15400.00, currency: "TRY" }
+];
 
 // ----------------------------------------------------
 // MULTI-USER PERSONNEL & STAFF MANAGEMENT
@@ -8623,6 +8883,8 @@ function saveLocalCache() {
     localStorage.setItem("dm_erp_purchases", JSON.stringify(purchasesState));
     localStorage.setItem("dm_erp_expenses", JSON.stringify(expensesState));
     localStorage.setItem("dm_erp_staff", JSON.stringify(staffState));
+    localStorage.setItem("dm_erp_fx_rates", JSON.stringify(fxRatesState));
+    localStorage.setItem("dm_erp_accounts", JSON.stringify(accountsState));
   } catch(e) {}
 }
 
@@ -8648,6 +8910,10 @@ function loadAll() {
     if (pu) purchasesState = JSON.parse(pu);
     const ex = localStorage.getItem("dm_erp_expenses");
     if (ex) expensesState = JSON.parse(ex);
+    const fx = localStorage.getItem("dm_erp_fx_rates");
+    if (fx) fxRatesState = JSON.parse(fx);
+    const acc = localStorage.getItem("dm_erp_accounts");
+    if (acc) accountsState = JSON.parse(acc);
     const st = localStorage.getItem("dm_erp_staff") || localStorage.getItem("dm_staff_users");
     if (st) {
       const parsed = JSON.parse(st);
@@ -8872,11 +9138,13 @@ function renderDashboard() {
   document.getElementById("dash-month-expenses").textContent = `₺ ${totalExp.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
   document.getElementById("dash-stock-val").textContent = `₺ ${stockValTL.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
 
-  const totalAssets = 1536385.59 + stockValTL + totalReceivables;
+  const bankTotal = accountsState.reduce((sum, a) => sum + (Number(a.balance) || 0), 0);
+  const totalAssets = bankTotal + stockValTL + totalReceivables;
   document.getElementById("dash-total-assets").textContent = `₺ ${totalAssets.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
-  document.getElementById("dash-bank-val").textContent = `₺ 1.536.385,59`;
+  document.getElementById("dash-bank-val").textContent = `₺ ${bankTotal.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
   document.getElementById("dash-stock-bar-val").textContent = `₺ ${stockValTL.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
   document.getElementById("dash-receivables-val").textContent = `₺ ${totalReceivables.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
+  renderFxBar();
 
   document.getElementById("dash-total-debts").textContent = `₺ ${(totalDebts + pendingExp).toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
   document.getElementById("dash-supplier-debts").textContent = `₺ ${totalDebts.toLocaleString('tr-TR', {minimumFractionDigits: 2})}`;
@@ -9366,6 +9634,15 @@ function completePosSale(payMethod) {
   if (payMethod === 'credit' && customer) {
     customer.balance = (Number(customer.balance) || 0) + grandTotal;
     dbSaveCustomer(customer, true); // 🌐 Supabase müşteri bakiyesi güncelle
+  } else if (payMethod === 'cash') {
+    const acc = accountsState.find(a => a.type === 'cash') || accountsState[0];
+    if (acc) acc.balance = (Number(acc.balance) || 0) + grandTotal;
+  } else if (payMethod === 'card') {
+    const acc = accountsState.find(a => a.type === 'pos' || a.type === 'bank' || a.type === 'card') || accountsState[0];
+    if (acc) acc.balance = (Number(acc.balance) || 0) + grandTotal;
+  } else if (payMethod === 'eft') {
+    const acc = accountsState.find(a => a.type === 'bank') || accountsState[0];
+    if (acc) acc.balance = (Number(acc.balance) || 0) + grandTotal;
   }
 
   saveAll();
@@ -9562,8 +9839,14 @@ function renderProducts() {
       </td>
       <td><b>${escapeHtml(p.brand)}</b><br><small style="color:var(--text-muted)">${escapeHtml(p.category)}</small></td>
       <td>📍 ${escapeHtml(p.location)}</td>
-      <td style="font-weight:700">₺ ${Number(p.buyPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
-      <td style="font-weight:800;color:#059669">₺ ${Number(p.sellPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
+      <td style="font-weight:700">
+        ₺ ${Number(p.buyPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})}
+        ${p.currency && p.currency !== 'TRY' && p.fxBuyPrice ? `<br><small style="color:#0284c7;font-weight:800;background:#e0f2fe;padding:1px 5px;border-radius:4px">${p.currency === 'EUR' ? '€' : '$'} ${Number(p.fxBuyPrice).toFixed(2)}</small>` : ''}
+      </td>
+      <td style="font-weight:800;color:#059669">
+        ₺ ${Number(p.sellPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})}
+        ${p.currency && p.currency !== 'TRY' && p.fxSellPrice ? `<br><small style="color:#059669;font-weight:800;background:#ecfdf5;padding:1px 5px;border-radius:4px">${p.currency === 'EUR' ? '€' : '$'} ${Number(p.fxSellPrice).toFixed(2)}</small>` : ''}
+      </td>
       <td><span class="badge-pill ${p.qty<=p.minQty?'red':'green'}">${p.qty} Adet</span></td>
       <td style="text-align:right">
         <button class="btn success sm" onclick="openSingleBarcodePrint('${p.id}')" title="Sadece Barkod Çıktısı Al (Ürünün üzerine yapıştırmak için)">🏷️ Barkod Bas</button>
@@ -9619,6 +9902,12 @@ function openProductModal() {
   document.getElementById("prod-id").value = "";
   document.getElementById("prod-oem-ref").value = "";
   document.getElementById("prod-cross-ref").value = "";
+  if (document.getElementById("prod-currency")) {
+    document.getElementById("prod-currency").value = "TRY";
+    onProductCurrencyChange();
+  }
+  if (document.getElementById("prod-fx-buy")) document.getElementById("prod-fx-buy").value = "";
+  if (document.getElementById("prod-fx-sell")) document.getElementById("prod-fx-sell").value = "";
   populateProductFormDropdowns();
   document.getElementById("modal-prod-title").textContent = "📦 Yeni Ürün Tanımla";
   openModal("modal-product");
@@ -9637,6 +9926,12 @@ function openEditProductModal(id) {
   document.getElementById("prod-brand").value = p.brand;
   document.getElementById("prod-category").value = p.category;
   document.getElementById("prod-location").value = p.location;
+  if (document.getElementById("prod-currency")) {
+    document.getElementById("prod-currency").value = p.currency || "TRY";
+    onProductCurrencyChange();
+  }
+  if (document.getElementById("prod-fx-buy")) document.getElementById("prod-fx-buy").value = p.fxBuyPrice || "";
+  if (document.getElementById("prod-fx-sell")) document.getElementById("prod-fx-sell").value = p.fxSellPrice || "";
   document.getElementById("prod-buy-price").value = p.buyPrice;
   document.getElementById("prod-sell-price").value = p.sellPrice;
   document.getElementById("prod-qty").value = p.qty;
@@ -9702,6 +9997,9 @@ function saveProduct(e) {
   const brand = document.getElementById("prod-brand").value;
   const category = document.getElementById("prod-category").value;
   const location = document.getElementById("prod-location").value;
+  const currency = document.getElementById("prod-currency")?.value || "TRY";
+  const fxBuyPrice = parseFloat(document.getElementById("prod-fx-buy")?.value) || 0;
+  const fxSellPrice = parseFloat(document.getElementById("prod-fx-sell")?.value) || 0;
   const buyPrice = parseFloat(document.getElementById("prod-buy-price").value) || 0;
   const sellPrice = parseFloat(document.getElementById("prod-sell-price").value) || 0;
   const qty = parseInt(document.getElementById("prod-qty").value, 10) || 0;
@@ -9714,12 +10012,12 @@ function saveProduct(e) {
     const idx = productsState.findIndex(x => x.id === id);
     if (idx !== -1) {
       isUpdate = true;
-      productsState[idx] = { ...productsState[idx], name, oemRef, crossRef, code, barcode, brand, category, location, buyPrice, sellPrice, qty, minQty };
+      productsState[idx] = { ...productsState[idx], name, oemRef, crossRef, code, barcode, brand, category, location, currency, fxBuyPrice, fxSellPrice, buyPrice, sellPrice, qty, minQty };
       targetProduct = productsState[idx];
       flash("✓ Ürün kartı (Orijinal OEM & Muadiller) güncellendi.");
     }
   } else {
-    targetProduct = { id: "p-" + Date.now(), name, oemRef, crossRef, code, barcode, brand, category, location, buyPrice, sellPrice, qty, minQty };
+    targetProduct = { id: "p-" + Date.now(), name, oemRef, crossRef, code, barcode, brand, category, location, currency, fxBuyPrice, fxSellPrice, buyPrice, sellPrice, qty, minQty };
     productsState.unshift(targetProduct);
     flash("✓ Yeni ürün ve referans kodları kaydedildi.");
   }
@@ -10780,6 +11078,16 @@ function openCriticalStockModal() {
   const tbody = document.getElementById("critical-stock-tbody");
   if (!tbody) return;
 
+  // Populate supplier select dropdown
+  const suppSel = document.getElementById("critical-supplier-select");
+  if (suppSel) {
+    const opts = `<option value="custom">Özel Numara / Genel WhatsApp</option>` +
+      suppliersState.map(s => `<option value="${s.id}" data-phone="${s.phone || ''}">${escapeHtml(s.name)} (${s.phone || 'Tel yok'})</option>`).join("");
+    suppSel.innerHTML = opts;
+  }
+  const phoneInput = document.getElementById("critical-supplier-phone");
+  if (phoneInput) phoneInput.value = "";
+
   const criticalProducts = productsState.filter(p => {
     const qty = Number(p.qty) || 0;
     const minQty = Number(p.minQty) || 0;
@@ -10815,6 +11123,18 @@ function openCriticalStockModal() {
   openModal("modal-critical-stock");
 }
 
+function onCriticalSupplierChange() {
+  const sel = document.getElementById("critical-supplier-select");
+  const phoneInput = document.getElementById("critical-supplier-phone");
+  if (!sel || !phoneInput) return;
+  const opt = sel.options[sel.selectedIndex];
+  if (sel.value === 'custom') {
+    phoneInput.value = "";
+  } else {
+    phoneInput.value = opt.getAttribute("data-phone") || "";
+  }
+}
+
 function copySupplierOrderWhatsApp() {
   const criticalProducts = productsState.filter(p => {
     const qty = Number(p.qty) || 0;
@@ -10826,6 +11146,11 @@ function copySupplierOrderWhatsApp() {
     alert("Kritik eşiğin altına inmiş parça bulunmuyor.");
     return;
   }
+
+  const phoneInput = document.getElementById("critical-supplier-phone");
+  let targetPhone = phoneInput ? phoneInput.value.replace(/[^0-9]/g, "") : "";
+  if (targetPhone.startsWith("0")) targetPhone = "9" + targetPhone;
+  else if (targetPhone.length === 10) targetPhone = "90" + targetPhone;
 
   let listText = criticalProducts.map((p, idx) => {
     const qty = Number(p.qty) || 0;
@@ -10849,9 +11174,297 @@ ${listText}
 Teşekkür eder, iyi çalışmalar dileriz.`;
 
   navigator.clipboard.writeText(msg).catch(() => {});
-  const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+  const url = targetPhone ? `https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');
   flash("📋 WhatsApp sipariş metni panoya kopyalandı ve WhatsApp açıldı!");
+}
+
+// ─── CANLI DÖVİZ KURU & FİYAT KORUMA MOTORU ─────────────────────────────────
+function renderFxBar() {
+  const eurEl = document.getElementById("fx-eur-rate");
+  const usdEl = document.getElementById("fx-usd-rate");
+  if (eurEl) eurEl.textContent = `₺${Number(fxRatesState.EUR).toFixed(2)}`;
+  if (usdEl) usdEl.textContent = `₺${Number(fxRatesState.USD).toFixed(2)}`;
+}
+
+function openFxModal() {
+  const eurInput = document.getElementById("input-fx-eur");
+  const usdInput = document.getElementById("input-fx-usd");
+  if (eurInput) eurInput.value = Number(fxRatesState.EUR).toFixed(2);
+  if (usdInput) usdInput.value = Number(fxRatesState.USD).toFixed(2);
+  openModal("modal-fx-rates");
+}
+
+function saveFxRates() {
+  const eurInput = document.getElementById("input-fx-eur");
+  const usdInput = document.getElementById("input-fx-usd");
+  const eur = parseFloat(eurInput.value) || fxRatesState.EUR;
+  const usd = parseFloat(usdInput.value) || fxRatesState.USD;
+  
+  fxRatesState = {
+    EUR: eur,
+    USD: usd,
+    updatedAt: new Date().toISOString()
+  };
+  saveAll();
+  renderFxBar();
+  flash(`✓ Döviz kurları kaydedildi: 1 EUR = ₺${eur.toFixed(2)}, 1 USD = ₺${usd.toFixed(2)}`);
+  closeModal("modal-fx-rates");
+}
+
+async function syncLiveFxFromApi() {
+  const btn = document.getElementById("btn-sync-fx");
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "⏳ Canlı Kur Sorgulanıyor...";
+  }
+
+  try {
+    const res = await fetch("https://open.er-api.com/v6/latest/EUR");
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.rates && data.rates.TRY) {
+        const eurTry = parseFloat(data.rates.TRY);
+        const usdTry = eurTry / (data.rates.USD || 1.08);
+        
+        fxRatesState = {
+          EUR: Math.round(eurTry * 100) / 100,
+          USD: Math.round(usdTry * 100) / 100,
+          updatedAt: new Date().toISOString()
+        };
+        const eurInput = document.getElementById("input-fx-eur");
+        const usdInput = document.getElementById("input-fx-usd");
+        if (eurInput) eurInput.value = fxRatesState.EUR.toFixed(2);
+        if (usdInput) usdInput.value = fxRatesState.USD.toFixed(2);
+        saveAll();
+        renderFxBar();
+        flash(`✓ Canlı piyasa kurları çekildi: 1 EUR = ₺${fxRatesState.EUR.toFixed(2)}, 1 USD = ₺${fxRatesState.USD.toFixed(2)}`);
+      } else {
+        throw new Error("Kur verisi okunamadı");
+      }
+    } else {
+      throw new Error("API yanıt vermedi");
+    }
+  } catch (err) {
+    console.warn("Canlı kur API hatası:", err);
+    flash("⚠️ Canlı kur API'sine ulaşılamadı. Manuel olarak kur değerlerini girebilirsiniz.");
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "🌐 TCMB / Canlı Kurları Otomatik Çek";
+    }
+  }
+}
+
+function updateAllProductsByFx() {
+  let updatedCount = 0;
+  const eurRate = Number(fxRatesState.EUR) || 38.45;
+  const usdRate = Number(fxRatesState.USD) || 34.80;
+
+  productsState.forEach(p => {
+    if (p.currency === 'EUR') {
+      if (p.fxBuyPrice) p.buyPrice = Math.round(p.fxBuyPrice * eurRate * 100) / 100;
+      if (p.fxSellPrice) p.sellPrice = Math.round(p.fxSellPrice * eurRate * 100) / 100;
+      updatedCount++;
+    } else if (p.currency === 'USD') {
+      if (p.fxBuyPrice) p.buyPrice = Math.round(p.fxBuyPrice * usdRate * 100) / 100;
+      if (p.fxSellPrice) p.sellPrice = Math.round(p.fxSellPrice * usdRate * 100) / 100;
+      updatedCount++;
+    }
+  });
+
+  saveAll();
+  renderProducts();
+  renderDashboard();
+  closeModal("modal-fx-rates");
+  flash(`✓ ${updatedCount} adet dövizli marin parçasının TL fiyatları güncel kurla yeniden hesaplandı!`);
+}
+
+function onProductCurrencyChange() {
+  const curr = document.getElementById("prod-currency")?.value || "TRY";
+  const buyField = document.getElementById("fx-buy-field");
+  const sellField = document.getElementById("fx-sell-field");
+  const lblBuy = document.getElementById("lbl-fx-buy");
+  const lblSell = document.getElementById("lbl-fx-sell");
+  
+  if (curr === 'TRY') {
+    if (buyField) buyField.style.display = 'none';
+    if (sellField) sellField.style.display = 'none';
+  } else {
+    if (buyField) buyField.style.display = 'flex';
+    if (sellField) sellField.style.display = 'flex';
+    const sym = curr === 'EUR' ? '€ Euro' : '$ Dolar';
+    if (lblBuy) lblBuy.textContent = `Döviz Alış Fiyatı (${sym}) *`;
+    if (lblSell) lblSell.textContent = `Döviz Satış Fiyatı (${sym}) *`;
+  }
+}
+
+function recalcProdFxToTL() {
+  const curr = document.getElementById("prod-currency")?.value || "TRY";
+  if (curr === 'TRY') return;
+  const fxBuy = parseFloat(document.getElementById("prod-fx-buy")?.value) || 0;
+  const fxSell = parseFloat(document.getElementById("prod-fx-sell")?.value) || 0;
+  const rate = curr === 'EUR' ? (Number(fxRatesState.EUR) || 38.45) : (Number(fxRatesState.USD) || 34.80);
+
+  if (fxBuy > 0) {
+    document.getElementById("prod-buy-price").value = (fxBuy * rate).toFixed(2);
+  }
+  if (fxSell > 0) {
+    document.getElementById("prod-sell-price").value = (fxSell * rate).toFixed(2);
+  }
+}
+
+// ─── DİNAMİK KASA & BANKA HESAPLARI YÖNETİMİ ──────────────────────────────
+function renderAccounts() {
+  const tbody = document.getElementById("accounts-tbody");
+  if (!tbody) return;
+
+  let totalSum = 0;
+  let cashSum = 0;
+  let bankSum = 0;
+
+  accountsState.forEach(a => {
+    const bal = Number(a.balance) || 0;
+    totalSum += bal;
+    if (a.type === 'cash') cashSum += bal;
+    else bankSum += bal;
+  });
+
+  const totEl = document.getElementById("acc-total-sum");
+  const cashEl = document.getElementById("acc-cash-sum");
+  const bankEl = document.getElementById("acc-bank-sum");
+  if (totEl) totEl.textContent = `₺ ${totalSum.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+  if (cashEl) cashEl.textContent = `₺ ${cashSum.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+  if (bankEl) bankEl.textContent = `₺ ${bankSum.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+
+  const typeNames = { bank: "🏦 Ticari Banka", cash: "💵 Nakit Kasa", card: "💳 Şirket Kartı", pos: "⚡ POS Bloke" };
+  const typeColors = { bank: "blue", cash: "green", card: "orange", pos: "purple" };
+
+  tbody.innerHTML = accountsState.map(a => `
+    <tr>
+      <td><b style="font-size:13.5px;color:var(--navy)">${escapeHtml(a.name)}</b></td>
+      <td><span class="badge-pill ${typeColors[a.type]||'blue'}">${typeNames[a.type]||'Hesap'}</span></td>
+      <td><span style="font-family:monospace;font-size:12px;color:var(--text-muted)">${escapeHtml(a.iban || '-')}</span></td>
+      <td><b>${a.currency || 'TRY'}</b></td>
+      <td style="font-weight:800;font-size:14px;color:${Number(a.balance)>=0?'#059669':'#ef4444'}">
+        ₺ ${Number(a.balance).toLocaleString('tr-TR', {minimumFractionDigits:2})}
+      </td>
+      <td style="text-align:right">
+        <button class="btn outline sm" onclick="openEditAccountModal('${a.id}')">✏️ Düzenle</button>
+        <button class="btn danger sm" onclick="deleteAccount('${a.id}')">🗑️</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function openAccountsModal() {
+  renderAccounts();
+  openModal("modal-accounts");
+}
+
+function openAddAccountModal() {
+  document.getElementById("form-account").reset();
+  document.getElementById("acc-form-id").value = "";
+  document.getElementById("modal-acc-form-title").textContent = "➕ Yeni Kasa / Banka Hesabı";
+  openModal("modal-account-form");
+}
+
+function openEditAccountModal(id) {
+  const acc = accountsState.find(x => x.id === id);
+  if (!acc) return;
+  document.getElementById("acc-form-id").value = acc.id;
+  document.getElementById("acc-form-name").value = acc.name;
+  document.getElementById("acc-form-type").value = acc.type;
+  document.getElementById("acc-form-currency").value = acc.currency || "TRY";
+  document.getElementById("acc-form-iban").value = acc.iban || "";
+  document.getElementById("acc-form-balance").value = acc.balance;
+  document.getElementById("modal-acc-form-title").textContent = "✏️ Hesabı Düzenle";
+  openModal("modal-account-form");
+}
+
+function saveAccountForm(e) {
+  e.preventDefault();
+  const id = document.getElementById("acc-form-id").value;
+  const name = document.getElementById("acc-form-name").value.trim();
+  const type = document.getElementById("acc-form-type").value;
+  const currency = document.getElementById("acc-form-currency").value;
+  const iban = document.getElementById("acc-form-iban").value.trim();
+  const balance = parseFloat(document.getElementById("acc-form-balance").value) || 0;
+
+  if (id) {
+    const idx = accountsState.findIndex(x => x.id === id);
+    if (idx !== -1) {
+      accountsState[idx] = { ...accountsState[idx], name, type, currency, iban, balance };
+      flash(`✓ ${name} hesabı güncellendi.`);
+    }
+  } else {
+    accountsState.push({ id: "acc-" + Date.now(), name, type, currency, iban, balance });
+    flash(`✓ Yeni ${name} hesabı eklendi.`);
+  }
+
+  saveAll();
+  renderAccounts();
+  renderDashboard();
+  closeModal("modal-account-form");
+}
+
+function deleteAccount(id) {
+  if (accountsState.length <= 1) {
+    alert("En az 1 adet aktif kasa veya banka hesabı bulunmalıdır.");
+    return;
+  }
+  const acc = accountsState.find(x => x.id === id);
+  if (!confirm(`'${acc ? acc.name : 'Bu hesabı'}' silmek istediğinize emin misiniz?`)) return;
+  accountsState = accountsState.filter(x => x.id !== id);
+  saveAll();
+  renderAccounts();
+  renderDashboard();
+  flash("🗑️ Hesap silindi.");
+}
+
+function openTransferModal() {
+  const fromSel = document.getElementById("transfer-from");
+  const toSel = document.getElementById("transfer-to");
+  if (!fromSel || !toSel) return;
+
+  const opts = accountsState.map(a => `<option value="${a.id}">${escapeHtml(a.name)} (Bakiye: ₺ ${Number(a.balance).toLocaleString('tr-TR', {minimumFractionDigits:2})})</option>`).join("");
+  fromSel.innerHTML = opts;
+  toSel.innerHTML = opts;
+  if (accountsState.length > 1) toSel.selectedIndex = 1;
+
+  document.getElementById("transfer-amount").value = "";
+  document.getElementById("transfer-desc").value = "";
+  openModal("modal-transfer");
+}
+
+function executeAccountTransfer(e) {
+  e.preventDefault();
+  const fromId = document.getElementById("transfer-from").value;
+  const toId = document.getElementById("transfer-to").value;
+  const amount = parseFloat(document.getElementById("transfer-amount").value) || 0;
+  const desc = document.getElementById("transfer-desc").value.trim() || "Hesaplar arası virman";
+
+  if (fromId === toId) {
+    alert("Kaynak ve hedef hesap aynı olamaz.");
+    return;
+  }
+  if (amount <= 0) {
+    alert("Lütfen geçerli bir transfer tutarı giriniz.");
+    return;
+  }
+
+  const fromAcc = accountsState.find(a => a.id === fromId);
+  const toAcc = accountsState.find(a => a.id === toId);
+  if (!fromAcc || !toAcc) return;
+
+  fromAcc.balance = (Number(fromAcc.balance) || 0) - amount;
+  toAcc.balance = (Number(toAcc.balance) || 0) + amount;
+
+  saveAll();
+  renderAccounts();
+  renderDashboard();
+  closeModal("modal-transfer");
+  flash(`↔️ ${amount.toLocaleString('tr-TR')} ₺ virman işlemi tamamlandı: ${fromAcc.name} ➔ ${toAcc.name}`);
 }
 
 function exportCriticalStockCsv() {
