@@ -114,6 +114,10 @@
     {
       "source": "/api/admin/brands",
       "destination": "/api/settings?type=brands"
+    },
+    {
+      "source": "/api/admin/indexnow",
+      "destination": "/api/admin/settings?type=indexnow"
     }
   ]
 }
