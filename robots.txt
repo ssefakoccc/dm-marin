@@ -1,21 +1,66 @@
+# robots.txt for DM MARIN (https://dmmarin.com)
+# Optimized for Web Crawlers, Search Engines, and Generative AI (LLMs)
+
+# Standard Search Crawlers
 User-agent: *
 Allow: /
 Disallow: /admin.html
 Disallow: /stok.html
+Disallow: /api/
 
+# OpenAI / ChatGPT / SearchGPT Crawlers
 User-agent: GPTBot
 Allow: /
 
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+# Anthropic Claude Crawlers
 User-agent: ClaudeBot
 Allow: /
 
+User-agent: anthropic-ai
+Allow: /
+
+# Perplexity AI Crawler
 User-agent: PerplexityBot
 Allow: /
 
-User-agent: Applebot-Extended
+# Google Search & Gemini AI Crawlers
+User-agent: Googlebot
 Allow: /
 
 User-agent: Google-Extended
 Allow: /
 
+User-agent: GoogleOther
+Allow: /
+
+# Apple Intelligence & Siri
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Microsoft Bing & Copilot
+User-agent: Bingbot
+Allow: /
+
+# Cohere, Meta & Other AI Agents
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Diffbot
+Allow: /
+
+# Sitemaps and LLM Documentation (GEO Standard)
 Sitemap: https://dmmarin.com/sitemap.xml
+# LLM Context: https://dmmarin.com/llms.txt
+# LLM Full Context: https://dmmarin.com/llms-full.txt

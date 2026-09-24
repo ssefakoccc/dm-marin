@@ -1086,6 +1086,26 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
         </button>
       </div>
 
+      <!-- 4. Yapay Zekalar & IndexNow (GEO) -->
+      <div style="padding:16px;border:1px solid #c7d2fe;border-radius:12px;background:#f5f7ff;display:flex;flex-direction:column;justify-content:space-between">
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <b style="font-size:13.5px;color:#3730a3">🤖 Yapay Zeka (GEO) & IndexNow</b>
+            <span class="pill ok" style="background:#4338ca;color:#fff">llms.txt & llms-full Aktif</span>
+          </div>
+          <p style="margin:0;font-size:12px;color:#4338ca;line-height:1.4">ChatGPT, Perplexity, Copilot ve Bing'e 152 sayfayı tek tıkla anında iletin ve öğretin.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:12px">
+          <button type="button" class="btn" onclick="submitIndexNowFromAdmin()" id="btn-indexnow-submit" style="width:100%;font-size:12px;background:#4f46e5;color:#fff;border-color:#4338ca;font-weight:800;gap:6px">
+            🚀 IndexNow ile Yapay Zekalara Bildir
+          </button>
+          <div style="display:flex;gap:6px">
+            <a href="llms.txt" target="_blank" class="btn ghost" style="flex:1;padding:4px 6px;min-height:26px;font-size:11px;color:#4338ca;border-color:#c7d2fe;text-align:center">📄 llms.txt</a>
+            <a href="llms-full.txt" target="_blank" class="btn ghost" style="flex:1;padding:4px 6px;min-height:26px;font-size:11px;color:#4338ca;border-color:#c7d2fe;text-align:center">📚 llms-full.txt</a>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- Hedef Anahtar Kelime Sıralama Radarı (Canlı Test Butonları) -->
@@ -4970,6 +4990,48 @@ function renderSeoSummaryTable() {
     });
     seoSummaryBody.appendChild(tr);
   });
+}
+
+async function submitIndexNowFromAdmin() {
+  const btn = document.getElementById('btn-indexnow-submit');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '⏳ Yapay Zekalara İletiliyor...';
+  }
+  try {
+    const token = localStorage.getItem('dm_admin_token') || localStorage.getItem('admin_token') || '';
+    const res = await fetch('/api/admin/indexnow', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    });
+    const json = await res.json();
+    if (res.ok && json.success) {
+      if (btn) {
+        btn.textContent = ;
+        btn.style.background = '#10b981';
+        btn.style.borderColor = '#059669';
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.textContent = '🚀 IndexNow ile Yapay Zekalara Bildir';
+          btn.style.background = '#4f46e5';
+          btn.style.borderColor = '#4338ca';
+        }, 5000);
+      }
+      flash();
+    } else {
+      throw new Error(json.error || 'İstek başarısız oldu.');
+    }
+  } catch (err) {
+    console.error('IndexNow error:', err);
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = '⚡ Tekrar Dene';
+    }
+    flash(, 'error');
+  }
 }
 
 function pingSearchEngines() {
