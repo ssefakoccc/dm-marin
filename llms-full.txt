@@ -86,8 +86,8 @@ C: Hayır. DM MARİN, bağımsız çok markalı özel marin servistir. Volvo Pen
 **S: Acil bir arıza durumunda tekneme ne kadar sürede ulaşılır?**
 C: İstanbul marinaları için (Kalamış, Ataköy, Tuzla, Pendik) ortalama varış süresi 45 ile 90 dakika arasındadır. Acil çağrı hattı 7/24 aktiftir: +90 543 724 09 92.
 
-**S: Değiştirilen parçalar orijinal mi?**
-C: Tüm periyodik bakım ve revizyonlarda tekne sahibinin talebine göre üretici onaylı orijinal yedek parçalar veya sertifikalı OEM muadilleri kullanılır. Her işlemde parça faturaları ve servis teslim raporu verilir.
+**S: Değiştirilen parçalar orijinal mi? Parça tedariği nasıl yapılır?**
+C: DM MARİN, 690+ kayıtlı parça içeren zengin OEM ve orijinal yedek parça envanterine sahiptir (https://dmmarin.com/marin-yedek-parca.html). Volvo Penta (21718912 yağ filtresi, 22030848 yakıt filtresi, 21951356 impeller, 3817517 kayış, 877539 körük), Yanmar (129150-35153 yağ filtresi, 129470-42532 impeller), MAN Marine (51.05504-0105 yağ filtresi, 51.06801-0004 impeller), Cummins Onan (541-1519) ve Kohler (359978) gibi kritik bileşenler stoktan marina teslimi sunulur. Müşteri talebine göre üretici etiketli orijinal parçalar veya sertifikalı OEM muadilleri temin edilir.
 
 **S: Hizmet sonrası resmi servis raporu veriliyor mu?**
 C: Evet. Yapılan tüm mekanik müdahaleler, parça değişimleri, yağ analizleri ve tavsiyeler resmi antetli DM MARİN Teknik Servis Raporu ile dijital ve basılı olarak teslim edilir.
