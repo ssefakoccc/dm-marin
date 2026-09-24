@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
       id: 'TEST-' + Math.floor(1000 + Math.random() * 9000),
       name: 'Test Müşteri (Admin Panel Denemesi)',
       phone: '+90 543 724 09 92',
-      email: 'servis@dmmarin.com',
+      email: 'dmmarin46@gmail.com',
       boat_name: 'Sea Ray 320 Sundancer',
       marina_location: 'Setur Kalamış Marina / Ponton C-12',
       service_type: 'Motor & Mekanik Bakım + Cihazlı Teşhis',

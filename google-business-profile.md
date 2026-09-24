@@ -15,7 +15,7 @@ Bu doküman, DM MARİN için Google Haritalar ve Yerel Arama sonuçlarında maks
   - Jeneratör Servisi (Electric generator shop / service)
 - **Web Sitesi:** https://dmmarin.com/
 - **Telefon Numarası:** +90 543 724 09 92
-- **E-posta:** servis@dmmarin.com
+- **E-posta:** dmmarin46@gmail.com
 - **Çalışma Saatleri:**
   - Pazartesi - Cumartesi: 08:00 – 18:00
   - Pazar: Kapalı (veya Acil Mobil Servis İçin 7/24 Çağrı Kabulü)
