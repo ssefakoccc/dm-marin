@@ -1426,54 +1426,35 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
     <!-- TOP BAR -->
     <header class="top-bar">
       <div class="top-bar-left">
-        <div class="company-name-tag">
-          🏢 <span>DM MARİN MOTOR VE TEKNİK HİZMETLERİ</span>
-        </div>
         <!-- CANLI DÖVİZ KURLARI (TCMB / SERBEST PİYASA) -->
-        <div class="fx-rates-bar" id="fx-rates-bar" style="display:flex;align-items:center;gap:10px;background:#f8fafc;padding:4px 10px;border-radius:8px;border:1px solid var(--line);font-size:12px;margin-left:12px">
-          <span style="font-weight:800;color:#0284c7;display:flex;align-items:center;gap:4px">
-            <span style="font-size:13px">💱</span> KURLAR:
-          </span>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span style="display:inline-flex;align-items:center;gap:3px">
-              <b>💶 EUR:</b> <span id="fx-eur-rate" style="font-weight:700;color:#1e293b">₺38.45</span>
-            </span>
-            <span style="color:#cbd5e1">|</span>
-            <span style="display:inline-flex;align-items:center;gap:3px">
-              <b>💵 USD:</b> <span id="fx-usd-rate" style="font-weight:700;color:#1e293b">₺34.80</span>
-            </span>
-          </div>
-          <button type="button" class="btn sm" onclick="openFxModal()" title="Kurları Düzenle veya Güncelle" style="padding:2px 7px;font-size:11px;min-height:22px;border:1px solid #cbd5e1;background:#fff;font-weight:700;cursor:pointer">⚙️ Kur Ayarı</button>
+        <div class="fx-rates-bar" id="fx-rates-bar" onclick="openFxModal()" title="TCMB Kurları - Düzenlemek için tıklayınız" style="display:flex;align-items:center;gap:8px;background:#f8fafc;padding:5px 12px;border-radius:20px;border:1px solid var(--line);font-size:12px;cursor:pointer">
+          <span style="font-weight:800;color:#0284c7">💱 Kurlar:</span>
+          <span>💶 <b>EUR:</b> <span id="fx-eur-rate" style="font-weight:700;color:#1e293b">₺38.45</span></span>
+          <span style="color:#cbd5e1">|</span>
+          <span>💵 <b>USD:</b> <span id="fx-usd-rate" style="font-weight:700;color:#1e293b">₺34.80</span></span>
+          <span style="color:#94a3b8;font-size:11px" title="Kur Ayarı">⚙️</span>
+        </div>
+
+        <div id="realtime-status-pill" class="realtime-badge" onclick="syncCloud()" style="cursor:pointer" title="Supabase Canlı Senkronizasyon (Manuel eşitlemek için tıkla)">
+          <span class="realtime-pulse"></span>
+          <span id="realtime-status-text">Canlı Senkron</span>
         </div>
       </div>
 
       <div class="top-bar-right">
-        <div class="quick-stats-top">
-          <div class="stat-box-top">
-            BUGÜNKÜ SATIŞ
-            <b id="top-today-sales">₺ 0,00</b>
-          </div>
-          <div class="stat-box-top">
-            BUGÜNKÜ TAHSİLAT
-            <b id="top-today-paid">₺ 0,00</b>
-          </div>
+        <!-- Hidden holders for today's sales & collections to maintain JS compatibility -->
+        <span id="top-today-sales" style="display:none">₺ 0,00</span>
+        <span id="top-today-paid" style="display:none">₺ 0,00</span>
+
+        <button type="button" class="btn warning sm" onclick="openCriticalStockModal()" style="border-radius:20px;padding:5px 12px;font-weight:600" title="Kritik Stok Uyarısı ve Sipariş Sihirbazı">⚠️ Kritik Stok</button>
+        <button type="button" class="btn primary sm" onclick="openNewSaleModal()" style="border-radius:20px;padding:6px 14px;font-weight:700">➕ Yeni Satış / Servis</button>
+
+        <div class="user-profile-pill" style="display:flex;align-items:center;gap:7px;background:#f8fafc;padding:4px 11px;border-radius:20px;border:1px solid var(--line)" title="Oturum Açan Personel">
+          <span style="width:24px;height:24px;border-radius:50%;background:#0284c7;color:#fff;display:grid;place-items:center;font-size:11px;font-weight:800">👤</span>
+          <span id="topbar-user-badge" style="font-size:12px;font-weight:700;color:var(--navy)">Ahmet Usta</span>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;background:#f8fafc;padding:5px 14px;border-radius:10px;border:1px solid var(--line)" title="Oturum Açan Personel">
-          <span style="width:26px;height:26px;border-radius:50%;background:#0284c7;color:#fff;display:grid;place-items:center;font-size:12px;font-weight:800">👤</span>
-          <div>
-            <span style="font-size:9.5px;font-weight:800;color:#64748b;display:block;letter-spacing:0.04em">OTURUM AÇAN</span>
-            <b id="topbar-user-badge" style="font-size:12px;color:var(--navy)">Ahmet Usta (Baş Teknisyen)</b>
-          </div>
-        </div>
-        <div id="realtime-status-pill" class="realtime-badge" title="Supabase Canlı WebSocket Bağlantısı">
-          <span class="realtime-pulse"></span>
-          <span id="realtime-status-text">Canlı Senkron</span>
-        </div>
-        <button type="button" class="btn warning sm" onclick="openCriticalStockModal()" title="Kritik Stok Uyarısı ve Sipariş Sihirbazı">⚠️ Kritik Parçalar</button>
-        <button type="button" class="btn success sm" onclick="switchNav('pos')">⚡ Hızlı Satış (POS)</button>
-        <button type="button" class="btn primary sm" onclick="openNewSaleModal()">➕ Servis Faturası</button>
-        <button type="button" class="btn outline sm" onclick="syncCloud()">🔄 Eşitle</button>
-        <button type="button" class="btn danger sm" onclick="logoutERP()" title="Oturumu Kapat">🚪 Çıkış</button>
+
+        <button type="button" class="btn outline sm" onclick="logoutERP()" title="Oturumu Kapat (Çıkış)" style="border-radius:20px;padding:5px 9px;color:#ef4444;border-color:#fca5a5"><span style="font-size:13px">🚪</span></button>
       </div>
     </header>
 
@@ -1740,7 +1721,7 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
 
         <div class="toolbar-card">
           <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-            <input type="text" id="prod-search" class="search-input" placeholder="Ürün adı, OEM kodu veya marka ara..." oninput="renderProducts()">
+            <input type="text" id="prod-search" class="search-input" placeholder="Ürün adı, parça kodu veya marka ara..." oninput="renderProducts()">
             <select id="prod-cat-filter" onchange="renderProducts()" style="height:38px;padding:0 10px;border-radius:8px;border:1px solid var(--line)">
               <option value="all">Tüm Kategoriler</option>
             </select>
@@ -1754,11 +1735,29 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
           </div>
         </div>
 
+        <!-- TOPLU İŞLEM BARI (BULK ACTION BAR) -->
+        <div id="bulk-product-bar" style="display:none;background:linear-gradient(135deg, #0f172a 0%, #1e293b 100%);color:#fff;padding:10px 18px;border-radius:10px;margin-bottom:14px;box-shadow:0 8px 20px -4px rgba(15,23,42,0.25);align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="background:#0284c7;color:#fff;font-weight:750;font-size:12.5px;padding:4px 12px;border-radius:20px;letter-spacing:0.02em" id="bulk-selected-count">0 Ürün Seçildi</span>
+            <button type="button" class="btn outline sm" onclick="clearSelectedProducts()" style="color:#94a3b8;border-color:#334155;font-size:11.5px;padding:3px 10px">✕ Seçimi Temizle</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <button type="button" class="btn warning sm" onclick="openBulkEditModal('price')" style="font-weight:700;font-size:12px">💹 Toplu Fiyat Güncelle</button>
+            <button type="button" class="btn outline sm" onclick="openBulkEditModal('category')" style="color:#fff;border-color:#475569;font-size:12px">🏷️ Toplu Kategori Değiştir</button>
+            <button type="button" class="btn outline sm" onclick="openBulkEditModal('location')" style="color:#fff;border-color:#475569;font-size:12px">📍 Toplu Depo Değiştir</button>
+            <button type="button" class="btn outline sm" onclick="bulkPrintBarcodes()" style="color:#38bdf8;border-color:#0284c7;font-size:12px">🖨️ Barkod Bas</button>
+            <button type="button" class="btn danger sm" onclick="bulkDeleteSelectedProducts()" style="font-weight:700;font-size:12px">🗑️ Seçilenleri Sil</button>
+          </div>
+        </div>
+
         <div class="table-card">
           <table class="erp-table">
             <thead>
               <tr>
-                <th>Ürün / OEM & Barkod</th>
+                <th style="width:38px;text-align:center">
+                  <input type="checkbox" id="check-all-products" onchange="toggleSelectAllProducts(this.checked)" title="Görünen Tüm Ürünleri Seç / Kaldır" style="cursor:pointer;width:16px;height:16px;accent-color:#0284c7">
+                </th>
+                <th>Ürün / Parça Kodu & Barkod</th>
                 <th>Kategori & Marka</th>
                 <th>Depo & Lokasyon</th>
                 <th>Alış Fiyatı</th>
@@ -2367,6 +2366,59 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
     <div class="modal-foot">
       <button class="btn outline" onclick="closeModal('modal-product-history')">Kapat</button>
     </div>
+  </div>
+</div>
+
+<!-- TOPLU ÜRÜN GÜNCELLEME MODALI -->
+<div class="modal-overlay" id="modal-bulk-edit">
+  <div class="modal-box" style="max-width:540px">
+    <div class="modal-head">
+      <h3 id="modal-bulk-title">⚡ Toplu Ürün Güncelleme</h3>
+      <button class="modal-close" onclick="closeModal('modal-bulk-edit')">✕</button>
+    </div>
+    <form id="form-bulk-edit" onsubmit="applyBulkEdit(event)">
+      <div class="modal-body">
+        <div style="background:#e0f2fe;border:1px solid #bae6fd;padding:10px 14px;border-radius:8px;font-size:13px;color:#0369a1;margin-bottom:14px">
+          Seçilen <b><span id="bulk-modal-count">0</span> adet ürün</b> üzerinde toplu işlem yapılacak. Değiştirmek istemediğiniz alanları boş bırakınız.
+        </div>
+
+        <div class="field-wrap" style="margin-bottom:12px">
+          <label style="font-weight:700">Fiyat Güncelleme Tipi</label>
+          <select id="bulk-price-type" onchange="onBulkPriceTypeChange()" style="width:100%;height:40px;border-radius:8px;border:1px solid var(--line);padding:0 10px">
+            <option value="none">-- Fiyatları Değiştirme --</option>
+            <option value="percent_increase">Satış Fiyatına Yüzde (%) Artış Yap</option>
+            <option value="percent_decrease">Satış Fiyatına Yüzde (%) İndirim Yap</option>
+            <option value="fixed_increase">Satış Fiyatına Sabit Tutar (₺) Ekle</option>
+            <option value="fixed_decrease">Satış Fiyatına Sabit Tutar (₺) İndir</option>
+            <option value="set_sell_price">Tümünün Satış Fiyatını Sabit Bir Tutara Ayarla</option>
+            <option value="fx_recalc">Dövizli Ürünlerin TL Satış Fiyatını Güncel Kurla Yeniden Hesapla</option>
+          </select>
+        </div>
+
+        <div class="field-wrap" id="bulk-price-val-wrap" style="display:none;margin-bottom:12px">
+          <label id="bulk-price-val-label" style="font-weight:700">Değer / Oran</label>
+          <input type="number" step="0.01" id="bulk-price-val" placeholder="Örn: 15 (yüzde için) veya 500 (TL için)" style="width:100%;height:40px;border-radius:8px;border:1px solid var(--line);padding:0 10px">
+        </div>
+
+        <div class="field-wrap" style="margin-bottom:12px">
+          <label style="font-weight:700">Toplu Kategori Değiştir (İsteğe Bağlı)</label>
+          <select id="bulk-category-select" style="width:100%;height:40px;border-radius:8px;border:1px solid var(--line);padding:0 10px">
+            <option value="">-- Kategoriyi Değiştirme --</option>
+          </select>
+        </div>
+
+        <div class="field-wrap" style="margin-bottom:12px">
+          <label style="font-weight:700">Toplu Depo / Lokasyon Değiştir (İsteğe Bağlı)</label>
+          <select id="bulk-location-select" style="width:100%;height:40px;border-radius:8px;border:1px solid var(--line);padding:0 10px">
+            <option value="">-- Depoyu Değiştirme --</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn outline" onclick="closeModal('modal-bulk-edit')">İptal</button>
+        <button type="submit" class="btn primary">💾 Değişiklikleri Uygula</button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -4613,6 +4665,248 @@ function printCountSheet() {
   window.print();
 }
 
+let selectedProductIds = new Set();
+
+function toggleSelectAllProducts(checked) {
+  const checkboxes = document.querySelectorAll(".product-row-check");
+  checkboxes.forEach(cb => {
+    cb.checked = checked;
+    if (checked) {
+      selectedProductIds.add(cb.value);
+    } else {
+      selectedProductIds.delete(cb.value);
+    }
+  });
+  updateBulkActionBar();
+}
+
+function onProductCheckChange(cb) {
+  if (cb.checked) {
+    selectedProductIds.add(cb.value);
+  } else {
+    selectedProductIds.delete(cb.value);
+  }
+  const checkAll = document.getElementById("check-all-products");
+  const visibleCbs = document.querySelectorAll(".product-row-check");
+  if (checkAll && visibleCbs.length > 0) {
+    checkAll.checked = Array.from(visibleCbs).every(c => c.checked);
+  }
+  updateBulkActionBar();
+}
+
+function clearSelectedProducts() {
+  selectedProductIds.clear();
+  const checkboxes = document.querySelectorAll(".product-row-check");
+  checkboxes.forEach(cb => cb.checked = false);
+  const checkAll = document.getElementById("check-all-products");
+  if (checkAll) checkAll.checked = false;
+  updateBulkActionBar();
+}
+
+function updateBulkActionBar() {
+  const bar = document.getElementById("bulk-product-bar");
+  const countEl = document.getElementById("bulk-selected-count");
+  const count = selectedProductIds.size;
+  if (!bar) return;
+  if (count > 0) {
+    bar.style.display = "flex";
+    if (countEl) countEl.textContent = `${count} Ürün Seçildi`;
+  } else {
+    bar.style.display = "none";
+  }
+}
+
+async function bulkDeleteSelectedProducts() {
+  const count = selectedProductIds.size;
+  if (count === 0) return;
+  if (!confirm(`Seçili ${count} adet ürünü kalıcı olarak silmek istediğinize emin misiniz?\nBu işlem geri alınamaz.`)) return;
+
+  const ids = Array.from(selectedProductIds);
+  // Remove from productsState
+  productsState = productsState.filter(p => !selectedProductIds.has(p.id));
+  saveAll();
+  selectedProductIds.clear();
+  updateBulkActionBar();
+  renderProducts();
+  if (typeof updateStats === "function") updateStats();
+  flash(`✓ ${count} adet ürün başarıyla silindi.`);
+
+  // Sync delete to Supabase DB in bulk
+  try {
+    const res = await erpFetch(`/api/admin/erp/products?ids=${encodeURIComponent(ids.join(','))}`, { method: 'DELETE' });
+    const data = await res.json();
+    if (!res.ok) console.warn("Toplu silme DB uyarısı:", data.error);
+  } catch(err) {
+    console.warn("Toplu silme DB hatası (çevrimdışı):", err);
+  }
+}
+
+async function deleteSingleProduct(id) {
+  const p = productsState.find(x => x.id === id);
+  const name = p ? p.name : "Bu ürünü";
+  if (!confirm(`"${name}" adlı ürünü silmek istediğinize emin misiniz?`)) return;
+
+  productsState = productsState.filter(x => x.id !== id);
+  selectedProductIds.delete(id);
+  saveAll();
+  updateBulkActionBar();
+  renderProducts();
+  if (typeof updateStats === "function") updateStats();
+  flash(`✓ Ürün silindi: ${name}`);
+
+  // DB'den sil
+  if (typeof dbDeleteProduct === "function") {
+    dbDeleteProduct(id);
+  }
+}
+
+function openBulkEditModal(initialFocus) {
+  const count = selectedProductIds.size;
+  if (count === 0) {
+    alert("Lütfen önce listeden en az bir ürün seçiniz.");
+    return;
+  }
+  const modalCount = document.getElementById("bulk-modal-count");
+  if (modalCount) modalCount.textContent = count;
+
+  // Populate categories
+  const catSel = document.getElementById("bulk-category-select");
+  if (catSel) {
+    catSel.innerHTML = '<option value="">-- Kategoriyi Değiştirme --</option>' + 
+      categoriesState.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+  }
+  // Populate locations
+  const locSel = document.getElementById("bulk-location-select");
+  if (locSel) {
+    locSel.innerHTML = '<option value="">-- Depoyu Değiştirme --</option>' + 
+      locationsState.map(l => `<option value="${escapeHtml(l.name)}">${escapeHtml(l.name)}</option>`).join('');
+  }
+
+  // Reset form
+  const priceType = document.getElementById("bulk-price-type");
+  if (priceType) {
+    if (initialFocus === 'price') priceType.value = 'percent_increase';
+    else priceType.value = 'none';
+    onBulkPriceTypeChange();
+  }
+  const priceVal = document.getElementById("bulk-price-val");
+  if (priceVal) priceVal.value = "";
+
+  openModal("modal-bulk-edit");
+}
+
+function onBulkPriceTypeChange() {
+  const type = document.getElementById("bulk-price-type")?.value || "none";
+  const wrap = document.getElementById("bulk-price-val-wrap");
+  const label = document.getElementById("bulk-price-val-label");
+  const input = document.getElementById("bulk-price-val");
+  if (!wrap || !label || !input) return;
+
+  if (type === "none" || type === "fx_recalc") {
+    wrap.style.display = "none";
+  } else {
+    wrap.style.display = "block";
+    if (type.startsWith("percent")) {
+      label.textContent = "Yüzde Değeri (%)";
+      input.placeholder = "Örn: 15 (yüzde 15 için)";
+    } else {
+      label.textContent = "Tutar (₺ TL)";
+      input.placeholder = "Örn: 500";
+    }
+  }
+}
+
+async function applyBulkEdit(e) {
+  e.preventDefault();
+  const count = selectedProductIds.size;
+  if (count === 0) return;
+
+  const priceType = document.getElementById("bulk-price-type")?.value || "none";
+  const priceVal = parseFloat(document.getElementById("bulk-price-val")?.value) || 0;
+  const newCat = document.getElementById("bulk-category-select")?.value || "";
+  const newLoc = document.getElementById("bulk-location-select")?.value || "";
+
+  // Get current exchange rates
+  const eurRate = parseFloat(localStorage.getItem("dm_erp_fx_eur")) || 55.68;
+  const usdRate = parseFloat(localStorage.getItem("dm_erp_fx_usd")) || 48.85;
+
+  let updatedCount = 0;
+  const updatedProducts = [];
+
+  productsState.forEach(p => {
+    if (selectedProductIds.has(p.id)) {
+      let changed = false;
+
+      // Price update
+      if (priceType === "percent_increase" && priceVal > 0) {
+        p.sellPrice = Math.round((Number(p.sellPrice) || 0) * (1 + priceVal / 100) * 100) / 100;
+        changed = true;
+      } else if (priceType === "percent_decrease" && priceVal > 0) {
+        p.sellPrice = Math.round((Number(p.sellPrice) || 0) * (1 - priceVal / 100) * 100) / 100;
+        changed = true;
+      } else if (priceType === "fixed_increase" && priceVal > 0) {
+        p.sellPrice = Math.round(((Number(p.sellPrice) || 0) + priceVal) * 100) / 100;
+        changed = true;
+      } else if (priceType === "fixed_decrease" && priceVal > 0) {
+        p.sellPrice = Math.max(0, Math.round(((Number(p.sellPrice) || 0) - priceVal) * 100) / 100);
+        changed = true;
+      } else if (priceType === "set_sell_price" && priceVal > 0) {
+        p.sellPrice = priceVal;
+        changed = true;
+      } else if (priceType === "fx_recalc") {
+        if (p.currency === "EUR" && p.fxSellPrice) {
+          p.sellPrice = Math.round(Number(p.fxSellPrice) * eurRate * 100) / 100;
+          if (p.fxBuyPrice) p.buyPrice = Math.round(Number(p.fxBuyPrice) * eurRate * 100) / 100;
+          changed = true;
+        } else if (p.currency === "USD" && p.fxSellPrice) {
+          p.sellPrice = Math.round(Number(p.fxSellPrice) * usdRate * 100) / 100;
+          if (p.fxBuyPrice) p.buyPrice = Math.round(Number(p.fxBuyPrice) * usdRate * 100) / 100;
+          changed = true;
+        }
+      }
+
+      // Category update
+      if (newCat) {
+        p.category = newCat;
+        changed = true;
+      }
+
+      // Location update
+      if (newLoc) {
+        p.location = newLoc;
+        changed = true;
+      }
+
+      if (changed) {
+        updatedCount++;
+        updatedProducts.push(p);
+      }
+    }
+  });
+
+  saveAll();
+  closeModal("modal-bulk-edit");
+  clearSelectedProducts();
+  renderProducts();
+  if (typeof updateStats === "function") updateStats();
+  flash(`✓ ${updatedCount} adet ürün başarıyla güncellendi.`);
+
+  // Save to DB
+  for (const p of updatedProducts) {
+    if (typeof dbSaveProduct === "function") {
+      dbSaveProduct(p, true);
+    }
+  }
+}
+
+function bulkPrintBarcodes() {
+  if (selectedProductIds.size === 0) return;
+  barcodeQueue = Array.from(selectedProductIds).map(id => ({ prodId: id, qty: 1 }));
+  if (typeof openBarcodePrintModal === "function") {
+    openBarcodePrintModal();
+  }
+}
+
 function renderProducts() {
   const q = (document.getElementById("prod-search")?.value || "").toLowerCase().trim();
   const cat = document.getElementById("prod-cat-filter")?.value || "all";
@@ -4682,9 +4976,13 @@ function renderProducts() {
   });
 
   tbody.innerHTML = filtered.map(p => {
-    const oem = p.oemRef || p.code || '-';
+    const oem = p.code || p.oemRef || '-';
+    const isChecked = selectedProductIds.has(p.id);
     return `
     <tr>
+      <td style="text-align:center">
+        <input type="checkbox" class="product-row-check" value="${p.id}" ${isChecked ? 'checked' : ''} onchange="onProductCheckChange(this)" style="cursor:pointer;width:16px;height:16px;accent-color:#0284c7">
+      </td>
       <td>
         <b style="color:var(--navy);font-size:14px">${escapeHtml(p.name)}</b><br>
         <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:3px">
@@ -4704,14 +5002,22 @@ function renderProducts() {
         ${p.currency && p.currency !== 'TRY' && p.fxSellPrice ? `<br><small style="color:#059669;font-weight:800;background:#ecfdf5;padding:1px 5px;border-radius:4px">${p.currency === 'EUR' ? '€' : '$'} ${Number(p.fxSellPrice).toFixed(2)}</small>` : ''}
       </td>
       <td><span class="badge-pill ${p.qty<=p.minQty?'red':'green'}">${p.qty} Adet</span></td>
-      <td style="text-align:right">
-        <button class="btn success sm" onclick="openSingleBarcodePrint('${p.id}')" title="Sadece Barkod Çıktısı Al (Ürünün üzerine yapıştırmak için)">🏷️ Barkod Bas</button>
-        <button class="btn outline sm" onclick="openProductHistory('${p.id}')" title="Alış/Satış Geçmişi">🔍 Geçmiş</button>
-        <button class="btn outline sm" onclick="openEditProductModal('${p.id}')">✏️</button>
+      <td style="text-align:right;white-space:nowrap">
+        <button class="btn success sm" onclick="openSingleBarcodePrint('${p.id}')" title="Sadece Barkod Çıktısı Al">🏷️</button>
+        <button class="btn outline sm" onclick="openProductHistory('${p.id}')" title="Alış/Satış Geçmişi">🔍</button>
+        <button class="btn outline sm" onclick="openEditProductModal('${p.id}')" title="Düzenle">✏️</button>
+        <button class="btn danger sm" onclick="deleteSingleProduct('${p.id}')" title="Ürünü Sil">🗑️</button>
       </td>
     </tr>
     `;
   }).join("");
+
+  // Update check all state
+  const checkAll = document.getElementById("check-all-products");
+  if (checkAll) {
+    const visibleCbs = document.querySelectorAll(".product-row-check");
+    checkAll.checked = visibleCbs.length > 0 && Array.from(visibleCbs).every(c => c.checked);
+  }
 }
 
 function openProductHistory(prodId) {

@@ -72,8 +72,12 @@ module.exports = async (req, res) => {
   }
 
   if (method === 'PUT') {
-    if (!id) return res.status(400).json({ error: 'id gerekli' });
+    const rawIds = req.query.ids || req.query.id || (req.body && req.body.ids);
+    if (!rawIds) return res.status(400).json({ error: 'id gerekli' });
     try {
+      const idList = Array.isArray(rawIds)
+        ? rawIds
+        : (String(rawIds).includes(',') ? String(rawIds).split(',').map(s => s.trim()).filter(Boolean) : [String(rawIds).trim()]);
       const body = req.body || {};
       const fields = { updated_at: new Date().toISOString() };
 
@@ -104,18 +108,32 @@ module.exports = async (req, res) => {
         if (body.notes !== undefined) fields.notes = body.notes;
       }
 
-      const { data, error } = await supabase.from(tableName).update(fields).eq('id', id).select().single();
+      let query = supabase.from(tableName).update(fields);
+      if (idList.length === 1) {
+        query = query.eq('id', idList[0]);
+      } else {
+        query = query.in('id', idList);
+      }
+      const { data, error } = await query.select();
       if (error) return res.status(500).json({ error: error.message });
-      return res.status(200).json({ success: true, data });
+      return res.status(200).json({ success: true, count: idList.length, data: idList.length === 1 ? data?.[0] : data });
     } catch (err) { return res.status(500).json({ error: err.message }); }
   }
 
   if (method === 'DELETE') {
-    if (!id) return res.status(400).json({ error: 'id gerekli' });
+    const rawIds = req.query.ids || req.query.id;
+    if (!rawIds) return res.status(400).json({ error: 'id gerekli' });
     try {
-      const { error } = await supabase.from(tableName).delete().eq('id', id);
+      const idList = rawIds.includes(',') ? rawIds.split(',').map(s => s.trim()).filter(Boolean) : [rawIds.trim()];
+      let query = supabase.from(tableName).delete();
+      if (idList.length === 1) {
+        query = query.eq('id', idList[0]);
+      } else {
+        query = query.in('id', idList);
+      }
+      const { error } = await query;
       if (error) return res.status(500).json({ error: error.message });
-      return res.status(200).json({ success: true });
+      return res.status(200).json({ success: true, count: idList.length });
     } catch (err) { return res.status(500).json({ error: err.message }); }
   }
 
