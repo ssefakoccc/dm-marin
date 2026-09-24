@@ -15,6 +15,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
 :root {
@@ -1377,6 +1379,9 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
       <div class="nav-item" onclick="switchNav('sales')">
         <span class="icon">🛒</span> <span>Satışlar & Servisler</span>
       </div>
+      <div class="nav-item" onclick="switchNav('proposals')">
+        <span class="icon">📄</span> <span>Teklifler & Proforma</span> <span class="nav-badge" id="nav-count-proposals">0</span>
+      </div>
       <div class="nav-item" onclick="switchNav('customers')">
         <span class="icon">🛥️</span> <span>Müşteriler & Tekneler</span> <span class="nav-badge" id="nav-count-customers">0</span>
       </div>
@@ -1901,6 +1906,76 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
         </div>
       </div>
 
+      
+      <!-- 7.5 PROPOSALS & PROFORMA VIEW -->
+      <div id="view-proposals" style="display:none">
+        <!-- PROPOSAL STATS STRIP -->
+        <div class="stock-stats-strip" style="grid-template-columns:repeat(auto-fit, minmax(200px, 1fr))">
+          <div class="stock-stat-card">
+            <div class="stock-stat-icon blue">📄</div>
+            <div>
+              <div class="stock-stat-val" id="prop-kpi-total">0 Adet</div>
+              <div class="stock-stat-lbl">Toplam Hazırlanan Teklif</div>
+            </div>
+          </div>
+          <div class="stock-stat-card">
+            <div class="stock-stat-icon orange">⏳</div>
+            <div>
+              <div class="stock-stat-val" id="prop-kpi-pending" style="color:#f59e0b">0 Adet</div>
+              <div class="stock-stat-lbl">Onay Bekleyen Teklifler</div>
+            </div>
+          </div>
+          <div class="stock-stat-card">
+            <div class="stock-stat-icon green">✅</div>
+            <div>
+              <div class="stock-stat-val" id="prop-kpi-approved" style="color:#10b981">0 Adet</div>
+              <div class="stock-stat-lbl">Onaylanan / Satışa Dönen</div>
+            </div>
+          </div>
+          <div class="stock-stat-card">
+            <div class="stock-stat-icon purple">💰</div>
+            <div>
+              <div class="stock-stat-val" id="prop-kpi-volume">₺ 0,00</div>
+              <div class="stock-stat-lbl">Toplam Teklif Hacmi</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="toolbar-card">
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <input type="text" id="prop-search" class="search-input" placeholder="Teklif no, tekne veya müşteri ara..." oninput="renderProposals()">
+            <select id="prop-status-filter" onchange="renderProposals()" style="height:38px;padding:0 10px;border-radius:8px;border:1px solid var(--line)">
+              <option value="all">Tüm Durumlar</option>
+              <option value="draft">📝 Taslak</option>
+              <option value="sent">⏳ Gönderildi (Cevap Bekliyor)</option>
+              <option value="approved">✅ Onaylandı</option>
+              <option value="converted">🛒 Satışa Dönüştürüldü</option>
+              <option value="rejected">❌ Reddedildi</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn primary" onclick="openNewProposalModal()">➕ Yeni Teklif / Proforma Hazırla</button>
+            <button class="btn outline" onclick="exportProposalsCsv()">📥 Excel / CSV</button>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <table class="erp-table">
+            <thead>
+              <tr>
+                <th>Teklif No & Tarih</th>
+                <th>Müşteri & Tekne</th>
+                <th>Kalem Sayısı</th>
+                <th>Tutar</th>
+                <th>Durum</th>
+                <th style="text-align:right">İşlemler (PDF / WhatsApp / Satış)</th>
+              </tr>
+            </thead>
+            <tbody id="proposals-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- 8. PURCHASES VIEW -->
       <div id="view-purchases" style="display:none">
         <div class="toolbar-card">
@@ -2419,6 +2494,145 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
         <button type="submit" class="btn primary">💾 Değişiklikleri Uygula</button>
       </div>
     </form>
+  </div>
+</div>
+
+
+<!-- 📄 PROPOSAL / PROFORMA MODAL -->
+<div class="modal-overlay" id="modal-proposal">
+  <div class="modal-box" style="max-width:860px">
+    <div class="modal-head">
+      <h3 id="modal-prop-title">📄 Yeni Teklif & Proforma Hazırla</h3>
+      <button class="modal-close" onclick="closeModal('modal-proposal')">✕</button>
+    </div>
+    <form id="form-proposal" onsubmit="saveProposal(event)">
+      <input type="hidden" id="prop-id">
+      <div class="modal-body">
+        <div class="form-grid-2">
+          <div class="field-wrap">
+            <label>Teklif No *</label>
+            <input type="text" id="prop-no" placeholder="Örn: DM-TEK-2026-001" required>
+          </div>
+          <div class="field-wrap">
+            <label>Teklif Tarihi *</label>
+            <input type="date" id="prop-date" required>
+          </div>
+          <div class="field-wrap">
+            <label>Geçerlilik Süresi (Bitiş Tarihi)</label>
+            <input type="date" id="prop-valid-until">
+          </div>
+          <div class="field-wrap">
+            <label>Para Birimi *</label>
+            <select id="prop-currency" onchange="onProposalCurrencyChange()">
+              <option value="TRY">₺ Türk Lirası (TRY)</option>
+              <option value="EUR">€ Euro (EUR)</option>
+              <option value="USD">$ Amerikan Doları (USD)</option>
+            </select>
+          </div>
+          <div class="field-wrap full">
+            <label>Müşteri & Tekne Seç veya Yaz *</label>
+            <select id="prop-customer-select" onchange="onProposalCustomerSelect(this.value)" style="margin-bottom:6px">
+              <option value="">-- Kayıtlı Müşterilerden Seç --</option>
+            </select>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+              <input type="text" id="prop-cust-name" placeholder="Müşteri / Kaptan Adı *" required>
+              <input type="text" id="prop-cust-phone" placeholder="Telefon (05XX...)">
+              <input type="text" id="prop-boat-name" placeholder="Tekne Adı & Modeli">
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;border-top:1px solid var(--line);padding-top:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <b style="color:var(--navy);font-size:14px">📋 Teklif / Servis Kalemleri</b>
+            <div style="display:flex;gap:6px">
+              <button type="button" class="btn outline sm" onclick="addProposalProductFromStock()">📦 Stoktan Parça Ekle</button>
+              <button type="button" class="btn outline sm" onclick="addProposalCustomRow('labor')">🛠️ İşçilik / Hizmet Ekle</button>
+              <button type="button" class="btn outline sm" onclick="addProposalCustomRow('custom')">➕ Özel Kalem Ekle</button>
+            </div>
+          </div>
+
+          <table class="erp-table" style="font-size:12.5px" id="prop-items-table">
+            <thead>
+              <tr style="background:#f8fafc">
+                <th style="width:20%">Kalem Türü</th>
+                <th style="width:40%">Açıklama / Parça</th>
+                <th style="width:12%">Miktar</th>
+                <th style="width:16%">Birim Fiyat (<span class="prop-curr-sym">₺</span>)</th>
+                <th style="width:12%">Toplam</th>
+                <th style="width:30px"></th>
+              </tr>
+            </thead>
+            <tbody id="prop-items-tbody"></tbody>
+          </table>
+        </div>
+
+        <!-- TOTALS & TERMS -->
+        <div style="display:grid;grid-template-columns:1fr 300px;gap:20px;margin-top:16px;align-items:start">
+          <div>
+            <label style="font-weight:700;display:block;margin-bottom:4px">Teklif Şartları & Servis Notları</label>
+            <textarea id="prop-notes" rows="4" style="width:100%;border:1px solid var(--line);border-radius:8px;padding:8px;font-size:12px" placeholder="Örn: Teklif 15 gün geçerlidir. Parçalar orijinal üretici garantilidir. Montaj Göcek / Bodrum marinada mobil servis aracımızla yapılacaktır."></textarea>
+          </div>
+          <div style="background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:14px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+              <span>Ara Toplam:</span>
+              <b id="prop-calc-subtotal">0,00</b>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <span>İskonto (%):</span>
+              <input type="number" id="prop-discount-pct" value="0" min="0" max="100" style="width:60px;height:26px;text-align:right;border:1px solid var(--line);border-radius:4px" oninput="recalcProposalTotals()">
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <span>KDV:</span>
+              <select id="prop-tax-pct" style="height:26px;border:1px solid var(--line);border-radius:4px" onchange="recalcProposalTotals()">
+                <option value="0">%0 (KDV Muaf / Hariç)</option>
+                <option value="20" selected>%20 Standart KDV</option>
+              </select>
+            </div>
+            <div style="border-top:2px solid #cbd5e1;padding-top:8px;margin-top:8px;display:flex;justify-content:space-between;font-size:15px;color:var(--navy)">
+              <b>GENEL TOPLAM:</b>
+              <b style="color:#059669" id="prop-calc-grandtotal">0,00</b>
+            </div>
+            <div id="prop-tl-equiv-box" style="font-size:11px;color:#64748b;text-align:right;margin-top:4px;display:none">
+              TL Karşılığı: <b id="prop-calc-tl-equiv">₺ 0,00</b>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot" style="justify-content:space-between">
+        <div style="display:flex;gap:8px">
+          <button type="button" class="btn outline" onclick="closeModal('modal-proposal')">İptal</button>
+          <button type="button" class="btn danger outline" id="btn-delete-proposal" style="display:none" onclick="deleteCurrentProposal()">🗑️ Teklifi Sil</button>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button type="button" class="btn success" id="btn-prop-whatsapp" style="display:none" onclick="shareCurrentProposalWhatsApp()">💬 WhatsApp</button>
+          <button type="button" class="btn primary outline" id="btn-prop-pdf" style="display:none" onclick="downloadCurrentProposalPDF()">📄 PDF İndir</button>
+          <button type="submit" class="btn primary">💾 Teklifi Kaydet</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 📷 CAMERA BARCODE / QR SCANNER MODAL -->
+<div class="modal-overlay" id="modal-camera-scanner">
+  <div class="modal-box" style="max-width:480px;text-align:center">
+    <div class="modal-head">
+      <h3 id="modal-scanner-title">📷 Canlı Kamera Barkod / QR Okuyucu</h3>
+      <button class="modal-close" onclick="closeCameraScanner()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:16px">
+      <div id="camera-reader-viewport" style="width:100%;min-height:280px;background:#0f172a;border-radius:12px;overflow:hidden;position:relative">
+        <div id="camera-qr-reader" style="width:100%"></div>
+      </div>
+      <div style="margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px">
+        <span class="realtime-pulse"></span>
+        <span id="camera-scan-status" style="font-size:12.5px;font-weight:600;color:#0284c7">Kamera aktif, parça barkodunu veya QR kodu odaklayınız...</span>
+      </div>
+    </div>
+    <div class="modal-foot" style="justify-content:center">
+      <button type="button" class="btn outline" onclick="closeCameraScanner()">✕ Kapat</button>
+    </div>
   </div>
 </div>
 
@@ -3801,6 +4015,7 @@ function saveLocalCache() {
 
 // ─── loadAll: önce localStorage cache göster, sonra DB'den taze veri çek ──
 function loadAll() {
+  loadProposalsState();
   // Anlık localStorage cache'den yükle (hızlı başlangıç)
   try {
     const cat = localStorage.getItem("dm_erp_categories");
@@ -3842,6 +4057,7 @@ function loadAll() {
 
 // ─── saveAll: eski localStorage tabanlı save (sadece cache için) ───────────
 function saveAll() {
+  saveProposalsState();
   saveLocalCache();
 }
 
@@ -4013,7 +4229,7 @@ function switchNav(navId) {
     btn.classList.toggle("active", btn.id === `mob-nav-${navId}`);
   });
 
-  const views = ['dashboard', 'pos', 'products', 'count', 'customers', 'suppliers', 'sales', 'purchases', 'expenses', 'reports', 'settings'];
+  const views = ['dashboard', 'pos', 'products', 'count', 'customers', 'suppliers', 'sales', 'proposals', 'purchases', 'expenses', 'reports', 'settings'];
   views.forEach(v => {
     const el = document.getElementById(`view-${v}`);
     if (el) el.style.display = v === navId ? 'block' : 'none';
@@ -4026,6 +4242,7 @@ function switchNav(navId) {
   if (navId === 'customers') renderCustomers();
   if (navId === 'suppliers') renderSuppliers();
   if (navId === 'sales') renderSales();
+  if (navId === 'proposals') renderProposals();
   if (navId === 'purchases') renderPurchases();
   if (navId === 'expenses') renderExpenses();
   if (navId === 'reports') renderReports();
@@ -5605,11 +5822,50 @@ function renderSales() {
       <td>${s.items.map(i => `${i.name} (x${i.qty})`).join(", ")} ${s.laborCost ? '+ İşçilik' : ''}</td>
       <td style="font-weight:800;color:#059669">₺ ${Number(s.total).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
       <td><span class="badge-pill ${s.status==='paid'?'green':'yellow'}">${s.payType || (s.status==='paid'?'Ödendi':'Açık Hesap')}</span></td>
-      <td style="text-align:right">
+      <td style="text-align:right;white-space:nowrap">
+        <button class="btn sm" onclick="shareSaleDirectWhatsApp('${s.id}')" style="background:#10b981;color:#fff;padding:3px 8px;font-size:11px" title="Kaptana WhatsApp Fişi Gönder">💬 WA</button>
         <button class="btn outline sm" onclick="viewPrintableInvoice('${s.id}')">🖨️ Fiş / PDF</button>
       </td>
     </tr>
   `).join("");
+}
+
+function shareSaleDirectWhatsApp(saleId) {
+  const sale = salesState.find(x => x.id === saleId);
+  if (!sale) return;
+  const cust = customersState.find(x => x.id === sale.customerId);
+  let rawPhone = cust ? (cust.phone || '') : '';
+  let cleanPhone = rawPhone.replace(/\D/g, '');
+  if (cleanPhone.startsWith('0')) cleanPhone = '9' + cleanPhone;
+  else if (cleanPhone.length === 10) cleanPhone = '90' + cleanPhone;
+
+  let itemsText = (sale.items || []).map(it => `• ${it.qty}x ${it.name} - ₺${(Number(it.qty) * Number(it.price)).toLocaleString('tr-TR', {minimumFractionDigits:2})}`).join('\n');
+  if (sale.laborCost && Number(sale.laborCost) > 0) {
+    itemsText += `\n• 1x Mobil Servis, Teşhis & Montaj İşçiliği - ₺${Number(sale.laborCost).toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+  }
+
+  const payStatusStr = sale.status === 'paid' ? '✅ Tahsil Edildi' : '⚠️ Açık Hesap (Borç)';
+  const boatStr = sale.boatName ? ` (Tekne: ${sale.boatName})` : '';
+
+  const text = 
+`⚓ *DM MARİN MOTOR & TEKNİK SERVİS*
+📄 *Servis & Satış Fişi:* #${sale.id}
+📅 *Tarih:* ${sale.date}
+👤 *Müşteri:* ${sale.customerName}${boatStr}
+
+📋 *Parça & Hizmet Kalemleri:*
+${itemsText}
+
+💰 *TOPLAM TUTAR:* ₺ ${Number(sale.total).toLocaleString('tr-TR', {minimumFractionDigits:2})}
+💳 *Ödeme Durumu:* ${sale.payType || 'Nakit'} (${payStatusStr})
+
+Marin motor servis ve yedek parça siparişlerinizde DM MARİN'i tercih ettiğiniz için teşekkür ederiz.
+📞 Tel: 0543 724 09 92
+🌐 www.dmmarin.com`;
+
+  const url = cleanPhone ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}` : `https://wa.me/?text=${encodeURIComponent(text)}`;
+  window.open(url, '_blank');
+  flash("💬 WhatsApp fişi hazırlandı.");
 }
 
 function openNewSaleModal() {
@@ -7795,6 +8051,766 @@ window.addEventListener("DOMContentLoaded", () => {
     loadAllFromDB();
   }, 30000);
 });
+
+// =========================================================================
+// 📄 PROPOSALS & PROFORMA INVOICES MODULE
+// =========================================================================
+let proposalsState = [];
+let activeProposalId = null;
+
+function loadProposalsState() {
+  try {
+    const raw = localStorage.getItem("dm_erp_proposals");
+    if (raw) proposalsState = JSON.parse(raw);
+  } catch(e) { proposalsState = []; }
+}
+
+function saveProposalsState() {
+  try {
+    localStorage.setItem("dm_erp_proposals", JSON.stringify(proposalsState));
+  } catch(e) {}
+}
+
+function renderProposals() {
+  const tbody = document.getElementById("proposals-tbody");
+  if (!tbody) return;
+
+  const q = (document.getElementById("prop-search")?.value || "").toLowerCase().trim();
+  const statusFilter = document.getElementById("prop-status-filter")?.value || "all";
+
+  // Calculate KPIs
+  const totalCount = proposalsState.length;
+  const pendingCount = proposalsState.filter(p => p.status === 'draft' || p.status === 'sent').length;
+  const approvedCount = proposalsState.filter(p => p.status === 'approved' || p.status === 'converted').length;
+  const totalVolumeTL = proposalsState.reduce((sum, p) => sum + (Number(p.grandTotalTL || p.grandTotal) || 0), 0);
+
+  const kpiTotal = document.getElementById("prop-kpi-total");
+  if (kpiTotal) kpiTotal.textContent = `${totalCount} Adet`;
+  const kpiPending = document.getElementById("prop-kpi-pending");
+  if (kpiPending) kpiPending.textContent = `${pendingCount} Adet`;
+  const kpiApproved = document.getElementById("prop-kpi-approved");
+  if (kpiApproved) kpiApproved.textContent = `${approvedCount} Adet`;
+  const kpiVol = document.getElementById("prop-kpi-volume");
+  if (kpiVol) kpiVol.textContent = `₺ ${totalVolumeTL.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+  const navBadge = document.getElementById("nav-count-proposals");
+  if (navBadge) navBadge.textContent = totalCount;
+
+  const filtered = proposalsState.filter(p => {
+    if (statusFilter !== 'all' && p.status !== statusFilter) return false;
+    if (q) {
+      const match = (p.propNo || '').toLowerCase().includes(q) ||
+                    (p.customerName || '').toLowerCase().includes(q) ||
+                    (p.boatName || '').toLowerCase().includes(q);
+      if (!match) return false;
+    }
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted)">Kayıtlı teklif veya proforma bulunamadı.</td></tr>`;
+    return;
+  }
+
+  const statusBadges = {
+    draft: `<span class="badge-pill" style="background:#f1f5f9;color:#475569">📝 Taslak</span>`,
+    sent: `<span class="badge-pill yellow">⏳ Gönderildi</span>`,
+    approved: `<span class="badge-pill green">✅ Onaylandı</span>`,
+    converted: `<span class="badge-pill blue">🛒 Satışa Döndü</span>`,
+    rejected: `<span class="badge-pill red">❌ Reddedildi</span>`
+  };
+
+  const currSymbols = { TRY: '₺', EUR: '€', USD: '$' };
+
+  tbody.innerHTML = filtered.map(p => {
+    const currSym = currSymbols[p.currency] || '₺';
+    const itemsCount = (p.items || []).length;
+    const itemsSummary = (p.items || []).slice(0, 2).map(it => `${it.qty}x ${escapeHtml(it.name)}`).join(", ") + (itemsCount > 2 ? ` (+${itemsCount-2} kalem)` : '');
+
+    return `
+      <tr>
+        <td>
+          <b style="color:var(--navy);font-size:13.5px">${escapeHtml(p.propNo)}</b><br>
+          <small style="color:var(--text-muted)">📅 ${p.date} ${p.validUntil ? `· Son: ${p.validUntil}` : ''}</small>
+        </td>
+        <td>
+          <b>${escapeHtml(p.customerName)}</b><br>
+          <small style="color:#0284c7">⛵ ${escapeHtml(p.boatName || 'Belirtilmedi')}</small>
+        </td>
+        <td>
+          <span style="font-weight:700">${itemsCount} Kalem</span><br>
+          <small style="color:var(--text-muted);display:block;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${itemsSummary}">${itemsSummary || '-'}</small>
+        </td>
+        <td>
+          <b style="font-size:14px;color:#071b2b">${currSym} ${Number(p.grandTotal).toLocaleString('tr-TR', {minimumFractionDigits:2})}</b>
+          ${p.currency !== 'TRY' && p.grandTotalTL ? `<br><small style="color:#64748b">₺ ${Number(p.grandTotalTL).toLocaleString('tr-TR', {minimumFractionDigits:2})}</small>` : ''}
+        </td>
+        <td>${statusBadges[p.status] || p.status}</td>
+        <td style="text-align:right;white-space:nowrap">
+          <button class="btn sm" onclick="downloadProposalPDFById('${p.id}')" style="background:#0284c7;color:#fff;padding:3px 8px;font-size:11px" title="Antetli PDF İndir">📄 PDF</button>
+          <button class="btn sm" onclick="shareProposalWhatsAppById('${p.id}')" style="background:#10b981;color:#fff;padding:3px 8px;font-size:11px" title="WhatsApp ile Paylaş">💬 WA</button>
+          ${p.status !== 'converted' ? `<button class="btn sm" onclick="convertProposalToSale('${p.id}')" style="background:#8b5cf6;color:#fff;padding:3px 8px;font-size:11px" title="Satış / Servis Faturasına Dönüştür">🛒 Satışa Çevir</button>` : ''}
+          <button class="btn outline sm" onclick="openEditProposalModal('${p.id}')" title="Düzenle">✏️</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function openNewProposalModal() {
+  activeProposalId = null;
+  document.getElementById("form-proposal").reset();
+  document.getElementById("prop-id").value = "";
+  
+  const nextNo = "DM-TEK-" + new Date().getFullYear() + "-" + String(proposalsState.length + 1).padStart(3, "0");
+  document.getElementById("prop-no").value = nextNo;
+  document.getElementById("prop-date").value = new Date().toISOString().slice(0, 10);
+  
+  const next15Days = new Date(Date.now() + 15*86400000).toISOString().slice(0, 10);
+  document.getElementById("prop-valid-until").value = next15Days;
+
+  // Populate customer select
+  populateProposalCustomerSelect();
+
+  document.getElementById("prop-items-tbody").innerHTML = "";
+  // Add first default labor row
+  addProposalCustomRow('labor');
+
+  recalcProposalTotals();
+  document.getElementById("modal-prop-title").textContent = "📄 Yeni Teklif & Proforma Hazırla";
+  document.getElementById("btn-prop-whatsapp").style.display = "none";
+  document.getElementById("btn-prop-pdf").style.display = "none";
+  document.getElementById("btn-delete-proposal").style.display = "none";
+  openModal("modal-proposal");
+}
+
+function openEditProposalModal(id) {
+  const prop = proposalsState.find(p => p.id === id);
+  if (!prop) return;
+  activeProposalId = id;
+
+  populateProposalCustomerSelect();
+  document.getElementById("prop-id").value = prop.id;
+  document.getElementById("prop-no").value = prop.propNo;
+  document.getElementById("prop-date").value = prop.date;
+  document.getElementById("prop-valid-until").value = prop.validUntil || "";
+  document.getElementById("prop-currency").value = prop.currency || "TRY";
+  document.getElementById("prop-customer-select").value = prop.customerId || "";
+  document.getElementById("prop-cust-name").value = prop.customerName || "";
+  document.getElementById("prop-cust-phone").value = prop.phone || "";
+  document.getElementById("prop-boat-name").value = prop.boatName || "";
+  document.getElementById("prop-notes").value = prop.notes || "";
+  document.getElementById("prop-discount-pct").value = prop.discountPct || 0;
+  document.getElementById("prop-tax-pct").value = prop.taxRate !== undefined ? prop.taxRate : 20;
+
+  onProposalCurrencyChange();
+
+  // Render items
+  const tbody = document.getElementById("prop-items-tbody");
+  tbody.innerHTML = "";
+  (prop.items || []).forEach(it => {
+    addProposalRowHTML(it.type, it.code, it.name, it.qty, it.unitPrice);
+  });
+
+  recalcProposalTotals();
+  document.getElementById("modal-prop-title").textContent = `✏️ Teklifi Düzenle (${prop.propNo})`;
+  document.getElementById("btn-prop-whatsapp").style.display = "inline-flex";
+  document.getElementById("btn-prop-pdf").style.display = "inline-flex";
+  document.getElementById("btn-delete-proposal").style.display = "inline-flex";
+  openModal("modal-proposal");
+}
+
+function populateProposalCustomerSelect() {
+  const sel = document.getElementById("prop-customer-select");
+  if (!sel) return;
+  sel.innerHTML = `<option value="">-- Kayıtlı Müşterilerden Seç --</option>` +
+    customersState.map(c => `<option value="${c.id}">${escapeHtml(c.name)} — ⛵ ${escapeHtml(c.boatName)} (${c.phone || 'Tel yok'})</option>`).join("");
+}
+
+function onProposalCustomerSelect(custId) {
+  if (!custId) return;
+  const c = customersState.find(x => x.id === custId);
+  if (!c) return;
+  document.getElementById("prop-cust-name").value = c.name || "";
+  document.getElementById("prop-cust-phone").value = c.phone || "";
+  document.getElementById("prop-boat-name").value = `${c.boatName || ''} ${c.boatModel ? '('+c.boatModel+')' : ''}`.trim();
+}
+
+function onProposalCurrencyChange() {
+  const curr = document.getElementById("prop-currency")?.value || "TRY";
+  const syms = { TRY: '₺', EUR: '€', USD: '$' };
+  document.querySelectorAll(".prop-curr-sym").forEach(el => el.textContent = syms[curr] || '₺');
+  recalcProposalTotals();
+}
+
+function addProposalProductFromStock() {
+  if (productsState.length === 0) {
+    alert("Stokta kayıtlı ürün bulunmuyor.");
+    return;
+  }
+  const prod = productsState[0];
+  addProposalRowHTML('part', prod.code || prod.oemRef || '', prod.name, 1, prod.sellPrice);
+  recalcProposalTotals();
+}
+
+function addProposalCustomRow(type) {
+  if (type === 'labor') {
+    addProposalRowHTML('labor', 'SRV-LAB', 'Mobil Marin Servis, Teşhis & İşçilik Hizmeti', 1, 3500);
+  } else {
+    addProposalRowHTML('custom', 'OZEL', 'Özel Malzeme / Yedek Parça', 1, 1000);
+  }
+  recalcProposalTotals();
+}
+
+function addProposalRowHTML(type, code, name, qty, price) {
+  const tbody = document.getElementById("prop-items-tbody");
+  const rowId = "prop-row-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,5);
+  const typeLabels = { part: '📦 Stok Parça', labor: '🛠️ Servis & İşçilik', custom: '➕ Özel Kalem' };
+
+  const tr = document.createElement("tr");
+  tr.id = rowId;
+  tr.innerHTML = `
+    <td>
+      <select class="prop-item-type" style="width:100%;height:32px;border:1px solid var(--line);border-radius:4px" onchange="recalcProposalTotals()">
+        <option value="part" ${type==='part'?'selected':''}>📦 Stok Parça</option>
+        <option value="labor" ${type==='labor'?'selected':''}>🛠️ Servis & İşçilik</option>
+        <option value="custom" ${type==='custom'?'selected':''}>➕ Özel Kalem</option>
+      </select>
+    </td>
+    <td>
+      <input type="text" class="prop-item-name" value="${escapeHtml(name)}" placeholder="Kalem açıklaması veya parça adı" style="width:100%;height:32px;border:1px solid var(--line);border-radius:4px;padding:0 6px" required>
+      <input type="hidden" class="prop-item-code" value="${escapeHtml(code)}">
+    </td>
+    <td>
+      <input type="number" class="prop-item-qty" value="${qty || 1}" min="1" step="1" style="width:100%;height:32px;border:1px solid var(--line);border-radius:4px;text-align:center" oninput="recalcProposalTotals()">
+    </td>
+    <td>
+      <input type="number" class="prop-item-price" value="${price || 0}" step="0.01" style="width:100%;height:32px;border:1px solid var(--line);border-radius:4px;text-align:right;padding:0 6px" oninput="recalcProposalTotals()">
+    </td>
+    <td style="font-weight:700;text-align:right" class="prop-item-total">0,00</td>
+    <td style="text-align:center">
+      <button type="button" onclick="document.getElementById('${rowId}').remove(); recalcProposalTotals();" style="border:none;background:transparent;color:#ef4444;font-size:16px;cursor:pointer">✕</button>
+    </td>
+  `;
+  tbody.appendChild(tr);
+}
+
+function recalcProposalTotals() {
+  const rows = document.querySelectorAll("#prop-items-tbody tr");
+  let subtotal = 0;
+
+  rows.forEach(r => {
+    const qty = parseFloat(r.querySelector(".prop-item-qty")?.value) || 0;
+    const price = parseFloat(r.querySelector(".prop-item-price")?.value) || 0;
+    const rowTotal = qty * price;
+    subtotal += rowTotal;
+    const totalEl = r.querySelector(".prop-item-total");
+    if (totalEl) totalEl.textContent = rowTotal.toLocaleString('tr-TR', {minimumFractionDigits:2});
+  });
+
+  const discPct = parseFloat(document.getElementById("prop-discount-pct")?.value) || 0;
+  const taxPct = parseFloat(document.getElementById("prop-tax-pct")?.value) || 0;
+
+  const discountAmount = (subtotal * discPct) / 100;
+  const taxable = subtotal - discountAmount;
+  const taxAmount = (taxable * taxPct) / 100;
+  const grandTotal = taxable + taxAmount;
+
+  const curr = document.getElementById("prop-currency")?.value || "TRY";
+  const eurRate = parseFloat(localStorage.getItem("dm_erp_fx_eur")) || 55.68;
+  const usdRate = parseFloat(localStorage.getItem("dm_erp_fx_usd")) || 48.85;
+
+  let grandTotalTL = grandTotal;
+  if (curr === 'EUR') grandTotalTL = grandTotal * eurRate;
+  else if (curr === 'USD') grandTotalTL = grandTotal * usdRate;
+
+  const syms = { TRY: '₺', EUR: '€', USD: '$' };
+  const sym = syms[curr] || '₺';
+
+  document.getElementById("prop-calc-subtotal").textContent = `${sym} ${subtotal.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+  document.getElementById("prop-calc-grandtotal").textContent = `${sym} ${grandTotal.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+
+  const tlBox = document.getElementById("prop-tl-equiv-box");
+  const tlVal = document.getElementById("prop-calc-tl-equiv");
+  if (curr !== 'TRY') {
+    if (tlBox) tlBox.style.display = "block";
+    if (tlVal) tlVal.textContent = `₺ ${grandTotalTL.toLocaleString('tr-TR', {minimumFractionDigits:2})}`;
+  } else {
+    if (tlBox) tlBox.style.display = "none";
+  }
+
+  return { subtotal, discPct, discountAmount, taxPct, taxAmount, grandTotal, grandTotalTL };
+}
+
+function saveProposal(e) {
+  e.preventDefault();
+  const id = document.getElementById("prop-id").value || ("prop-" + Date.now());
+  const propNo = document.getElementById("prop-no").value.trim();
+  const date = document.getElementById("prop-date").value;
+  const validUntil = document.getElementById("prop-valid-until").value;
+  const currency = document.getElementById("prop-currency").value;
+  const customerId = document.getElementById("prop-customer-select").value;
+  const customerName = document.getElementById("prop-cust-name").value.trim();
+  const phone = document.getElementById("prop-cust-phone").value.trim();
+  const boatName = document.getElementById("prop-boat-name").value.trim();
+  const notes = document.getElementById("prop-notes").value.trim();
+
+  const totals = recalcProposalTotals();
+
+  const items = [];
+  document.querySelectorAll("#prop-items-tbody tr").forEach(r => {
+    const type = r.querySelector(".prop-item-type")?.value || "custom";
+    const name = r.querySelector(".prop-item-name")?.value.trim() || "";
+    const code = r.querySelector(".prop-item-code")?.value.trim() || "";
+    const qty = parseFloat(r.querySelector(".prop-item-qty")?.value) || 1;
+    const unitPrice = parseFloat(r.querySelector(".prop-item-price")?.value) || 0;
+    if (name) {
+      items.push({ type, code, name, qty, unitPrice, total: qty * unitPrice });
+    }
+  });
+
+  if (items.length === 0) {
+    alert("Lütfen en az bir kalem ekleyiniz.");
+    return;
+  }
+
+  const propObj = {
+    id,
+    propNo,
+    date,
+    validUntil,
+    currency,
+    customerId,
+    customerName,
+    phone,
+    boatName,
+    notes,
+    items,
+    subtotal: totals.subtotal,
+    discountPct: totals.discPct,
+    discountAmount: totals.discountAmount,
+    taxRate: totals.taxPct,
+    taxAmount: totals.taxAmount,
+    grandTotal: totals.grandTotal,
+    grandTotalTL: totals.grandTotalTL,
+    status: activeProposalId ? (proposalsState.find(p => p.id === id)?.status || 'draft') : 'sent',
+    updatedAt: new Date().toISOString()
+  };
+
+  const idx = proposalsState.findIndex(p => p.id === id);
+  if (idx !== -1) {
+    proposalsState[idx] = propObj;
+  } else {
+    proposalsState.unshift(propObj);
+  }
+
+  saveProposalsState();
+  renderProposals();
+  closeModal("modal-proposal");
+  flash(`✓ Teklif kaydedildi: ${propNo}`);
+}
+
+function deleteCurrentProposal() {
+  if (!activeProposalId) return;
+  if (!confirm("Bu teklifi silmek istediğinize emin misiniz?")) return;
+  proposalsState = proposalsState.filter(p => p.id !== activeProposalId);
+  saveProposalsState();
+  renderProposals();
+  closeModal("modal-proposal");
+  flash("✓ Teklif silindi.");
+}
+
+function convertProposalToSale(propId) {
+  const prop = proposalsState.find(p => p.id === propId);
+  if (!prop) return;
+  if (!confirm(`"${prop.propNo}" numaralı teklifi doğrudan onaylanmış SATIŞ/SERVİS faturasına dönüştürmek istiyor musunuz?\n(Stoklar düşecek ve cari hesaba işlenecektir)`)) return;
+
+  const newSale = {
+    id: "SRV-" + Date.now().toString(36).toUpperCase(),
+    date: new Date().toISOString().slice(0, 10),
+    customerId: prop.customerId || '',
+    customerName: prop.customerName,
+    boatName: prop.boatName,
+    items: (prop.items || []).map(it => ({
+      id: "p-custom",
+      name: it.name,
+      code: it.code,
+      qty: it.qty,
+      price: it.unitPrice,
+      total: it.qty * it.unitPrice
+    })),
+    laborCost: 0,
+    total: prop.grandTotalTL || prop.grandTotal,
+    paidAmount: 0,
+    status: 'pending',
+    payType: 'Açık Hesap (Borç)',
+    currency: prop.currency || 'TRY',
+    notes: `Tekliften dönüştürüldü: ${prop.propNo}. ${prop.notes || ''}`
+  };
+
+  salesState.unshift(newSale);
+  prop.status = 'converted';
+  saveProposalsState();
+  saveAll();
+  renderProposals();
+  renderSales();
+  flash(`✓ Teklif satışa dönüştürüldü! Fiş No: ${newSale.id}`);
+  switchNav('sales');
+}
+
+function shareProposalWhatsAppById(propId) {
+  const prop = proposalsState.find(p => p.id === propId);
+  if (!prop) return;
+  let rawPhone = prop.phone || '';
+  let cleanPhone = rawPhone.replace(/\D/g, '');
+  if (cleanPhone.startsWith('0')) cleanPhone = '9' + cleanPhone;
+  else if (cleanPhone.length === 10) cleanPhone = '90' + cleanPhone;
+
+  const syms = { TRY: '₺', EUR: '€', USD: '$' };
+  const sym = syms[prop.currency] || '₺';
+
+  const itemsText = (prop.items || []).map(it => `• ${it.qty}x ${it.name} - ${sym} ${(Number(it.qty)*Number(it.unitPrice)).toLocaleString('tr-TR', {minimumFractionDigits:2})}`).join('\n');
+
+  const text = 
+`⚓ *DM MARİN MOTOR & TEKNİK SERVİS*
+📄 *Fiyat Teklifi & Proforma:* ${prop.propNo}
+📅 *Tarih:* ${prop.date} ${prop.validUntil ? `(Geçerlilik: ${prop.validUntil})` : ''}
+👤 *Sayın:* ${prop.customerName} ${prop.boatName ? `(Tekne: ${prop.boatName})` : ''}
+
+📋 *Teklif / Hizmet Kalemleri:*
+${itemsText}
+
+💰 *GENEL TOPLAM:* ${sym} ${Number(prop.grandTotal).toLocaleString('tr-TR', {minimumFractionDigits:2})}
+${prop.currency !== 'TRY' && prop.grandTotalTL ? `(TL Karşılığı: ₺ ${Number(prop.grandTotalTL).toLocaleString('tr-TR', {minimumFractionDigits:2})})\n` : ''}
+${prop.notes ? `📝 *Notlar & Şartlar:*\n${prop.notes}\n` : ''}
+Teklifi onaylamak veya detaylar için bu mesajı yanıtlayabilir ya da bizi arayabilirsiniz.
+📞 DM Marin Teknik Servis: +90 543 724 09 92
+🌐 www.dmmarin.com`;
+
+  const url = cleanPhone ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}` : `https://wa.me/?text=${encodeURIComponent(text)}`;
+  window.open(url, '_blank');
+  flash("💬 Teklif WhatsApp mesajı hazırlandı.");
+}
+
+function shareCurrentProposalWhatsApp() {
+  if (activeProposalId) shareProposalWhatsAppById(activeProposalId);
+}
+
+function downloadProposalPDFById(propId) {
+  const prop = proposalsState.find(p => p.id === propId);
+  if (!prop) return;
+
+  const syms = { TRY: '₺', EUR: '€', USD: '$' };
+  const sym = syms[prop.currency] || '₺';
+
+  const printDiv = document.createElement("div");
+  printDiv.id = "proposal-pdf-print-area";
+  printDiv.style.cssText = "width:760px;padding:36px;background:#fff;color:#0f172a;font-family:Inter,system-ui,sans-serif;box-sizing:border-box";
+
+  const itemsHtml = (prop.items || []).map((it, idx) => `
+    <tr style="border-bottom:1px solid #e2e8f0;font-size:12px">
+      <td style="padding:10px 8px;text-align:center;color:#64748b">${idx+1}</td>
+      <td style="padding:10px 8px"><b>${escapeHtml(it.name)}</b></td>
+      <td style="padding:10px 8px;text-align:center">${it.qty} Adet</td>
+      <td style="padding:10px 8px;text-align:right">${sym} ${Number(it.unitPrice).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
+      <td style="padding:10px 8px;text-align:right;font-weight:700">${sym} ${(Number(it.qty)*Number(it.unitPrice)).toLocaleString('tr-TR', {minimumFractionDigits:2})}</td>
+    </tr>
+  `).join("");
+
+  printDiv.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #0284c7;padding-bottom:18px;margin-bottom:20px">
+      <div>
+        <h1 style="margin:0;font-size:24px;color:#071b2b;letter-spacing:-0.02em">DM MARİN</h1>
+        <div style="font-size:12px;color:#0284c7;font-weight:750">MOTOR & TEKNİK HİZMETLERİ</div>
+        <div style="font-size:11px;color:#64748b;margin-top:4px">Göcek / Marmaris / Bodrum Mobil Marin Servis</div>
+      </div>
+      <div style="text-align:right">
+        <h2 style="margin:0;font-size:18px;color:#0284c7">FİYAT TEKLİFİ & PROFORMA</h2>
+        <div style="font-size:13px;font-weight:800;color:#071b2b">No: ${escapeHtml(prop.propNo)}</div>
+        <div style="font-size:11px;color:#64748b">Tarih: ${prop.date} ${prop.validUntil ? `· Geçerlilik: ${prop.validUntil}` : ''}</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;margin-bottom:20px;font-size:12.5px">
+      <div>
+        <span style="font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase">MÜŞTERİ / TEKNE BİLGİLERİ</span>
+        <div style="font-size:14px;font-weight:800;color:#071b2b;margin-top:3px">${escapeHtml(prop.customerName)}</div>
+        <div style="color:#0284c7;font-weight:700">⛵ ${escapeHtml(prop.boatName || 'Belirtilmedi')}</div>
+        <div style="color:#64748b">📞 ${escapeHtml(prop.phone || '-')}</div>
+      </div>
+      <div style="text-align:right">
+        <span style="font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase">HİZMET SAĞLAYICI</span>
+        <div style="font-size:13px;font-weight:800;color:#071b2b;margin-top:3px">DM Marin Teknik Servis</div>
+        <div style="color:#64748b">Tel: +90 543 724 09 92</div>
+        <div style="color:#64748b">Web: www.dmmarin.com</div>
+      </div>
+    </div>
+
+    <table style="width:100%;border-collapse:collapse;margin-bottom:20px">
+      <thead>
+        <tr style="background:#0f172a;color:#fff;font-size:11.5px">
+          <th style="padding:8px;width:30px;text-align:center">#</th>
+          <th style="padding:8px;text-align:left">Hizmet / Parça Açıklaması</th>
+          <th style="padding:8px;width:80px;text-align:center">Miktar</th>
+          <th style="padding:8px;width:120px;text-align:right">Birim Fiyat</th>
+          <th style="padding:8px;width:120px;text-align:right">Toplam</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${itemsHtml}
+      </tbody>
+    </table>
+
+    <div style="display:flex;justify-content:space-between;gap:30px;align-items:start">
+      <div style="flex:1;font-size:11.5px;color:#475569;background:#f8fafc;padding:12px;border-radius:6px;border:1px solid #e2e8f0">
+        <b>Şartlar & Servis Notları:</b>
+        <div style="margin-top:4px">${escapeHtml(prop.notes || 'Teklif belirtilen tarihe kadar geçerlidir. Orijinal parça ve garantili işçilik sunulmaktadır.')}</div>
+      </div>
+      <div style="width:260px;font-size:13px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span style="color:#64748b">Ara Toplam:</span>
+          <b>${sym} ${Number(prop.subtotal).toLocaleString('tr-TR', {minimumFractionDigits:2})}</b>
+        </div>
+        ${prop.discountAmount > 0 ? `
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;color:#ef4444">
+          <span>İskonto (%${prop.discountPct}):</span>
+          <b>-${sym} ${Number(prop.discountAmount).toLocaleString('tr-TR', {minimumFractionDigits:2})}</b>
+        </div>` : ''}
+        ${prop.taxRate > 0 ? `
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;color:#64748b">
+          <span>KDV (%${prop.taxRate}):</span>
+          <b>+${sym} ${Number(prop.taxAmount).toLocaleString('tr-TR', {minimumFractionDigits:2})}</b>
+        </div>` : ''}
+        <div style="display:flex;justify-content:space-between;border-top:2px solid #0f172a;padding-top:8px;margin-top:6px;font-size:16px;color:#071b2b">
+          <b>GENEL TOPLAM:</b>
+          <b style="color:#0284c7">${sym} ${Number(prop.grandTotal).toLocaleString('tr-TR', {minimumFractionDigits:2})}</b>
+        </div>
+        ${prop.currency !== 'TRY' && prop.grandTotalTL ? `
+        <div style="font-size:11px;color:#64748b;text-align:right;margin-top:4px">
+          TL Karşılığı: <b>₺ ${Number(prop.grandTotalTL).toLocaleString('tr-TR', {minimumFractionDigits:2})}</b>
+        </div>` : ''}
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;margin-top:40px;padding-top:20px;border-top:1px dashed #cbd5e1;font-size:11.5px;color:#64748b">
+      <div style="text-align:center;width:200px">
+        <div>Müşteri / Tekne Yetkilisi</div>
+        <div style="height:45px"></div>
+        <div style="border-top:1px solid #cbd5e1;padding-top:4px">İmza / Onay</div>
+      </div>
+      <div style="text-align:center;width:200px">
+        <div>DM MARİN Yetkilisi</div>
+        <div style="height:45px"></div>
+        <div style="border-top:1px solid #cbd5e1;padding-top:4px">Kaşe / İmza</div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(printDiv);
+  if (typeof html2pdf !== 'undefined') {
+    const opt = {
+      margin: 8,
+      filename: `${prop.propNo}-${(prop.boatName || prop.customerName || 'Teklif').replace(/[^a-zA-Z0-9]/g, '_')}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(printDiv).save().then(() => {
+      printDiv.remove();
+      flash("✓ PDF Teklif başarıyla oluşturuldu ve indirildi.");
+    });
+  } else {
+    window.print();
+    printDiv.remove();
+  }
+}
+
+function downloadCurrentProposalPDF() {
+  if (activeProposalId) downloadProposalPDFById(activeProposalId);
+}
+
+function exportProposalsCsv() {
+  let csv = "﻿Teklif No;Tarih;Geçerlilik;Müşteri;Tekne;Telefon;Para Birimi;Tutar;Durum\n";
+  proposalsState.forEach(p => {
+    csv += `"${p.propNo}";"${p.date}";"${p.validUntil||''}";"${p.customerName||''}";"${p.boatName||''}";"${p.phone||''}";"${p.currency||'TRY'}";"${p.grandTotal||0}";"${p.status||''}"\n`;
+  });
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `DM-MARIN-Teklifler-Listesi.csv`;
+  a.click();
+}
+
+// =========================================================================
+// 📷 LIVE CAMERA BARCODE & QR SCANNER (HTML5-QRCODE)
+// =========================================================================
+let html5QrScannerInstance = null;
+let cameraScannerContext = 'pos'; // 'pos', 'count', 'product_search'
+
+function startCameraScanner(context) {
+  cameraScannerContext = context || 'pos';
+  openModal("modal-camera-scanner");
+
+  const statusEl = document.getElementById("camera-scan-status");
+  if (statusEl) statusEl.textContent = "Kamera başlatılıyor, lütfen izin veriniz...";
+
+  setTimeout(() => {
+    try {
+      if (typeof Html5Qrcode === "undefined") {
+        if (statusEl) statusEl.textContent = "Kamera kütüphanesi yüklenemedi. Lütfen internet bağlantınızı kontrol ediniz.";
+        return;
+      }
+
+      if (html5QrScannerInstance) {
+        try { html5QrScannerInstance.stop(); } catch(e){}
+      }
+
+      html5QrScannerInstance = new Html5Qrcode("camera-qr-reader");
+      const config = { fps: 10, qrbox: { width: 250, height: 200 } };
+
+      html5QrScannerInstance.start(
+        { facingMode: "environment" },
+        config,
+        (decodedText) => {
+          onCameraBarcodeScanned(decodedText);
+        },
+        (errorMessage) => {
+          // ignore transient scan frame errors
+        }
+      ).then(() => {
+        if (statusEl) statusEl.textContent = "🟢 Kamera aktif. Barkodu veya QR kodu ortalayınız...";
+      }).catch(err => {
+        console.warn("Kamera başlatılamadı:", err);
+        if (statusEl) statusEl.textContent = "⚠️ Kamera açılamadı: " + (err.message || err);
+      });
+    } catch(err) {
+      if (statusEl) statusEl.textContent = "Hata: " + err.message;
+    }
+  }, 300);
+}
+
+function closeCameraScanner() {
+  if (html5QrScannerInstance) {
+    try {
+      html5QrScannerInstance.stop().then(() => {
+        html5QrScannerInstance.clear();
+        html5QrScannerInstance = null;
+      }).catch(() => { html5QrScannerInstance = null; });
+    } catch(e) { html5QrScannerInstance = null; }
+  }
+  closeModal("modal-camera-scanner");
+}
+
+function onCameraBarcodeScanned(code) {
+  const cleanCode = (code || '').trim();
+  if (!cleanCode) return;
+
+  // Beep sound
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+    osc.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.15);
+  } catch(e){}
+
+  closeCameraScanner();
+
+  if (cameraScannerContext === 'pos') {
+    const input = document.getElementById("pos-barcode-input");
+    if (input) {
+      input.value = cleanCode;
+      handleBarcodeAdd();
+    }
+  } else if (cameraScannerContext === 'count') {
+    const input = document.getElementById("count-search");
+    if (input) {
+      input.value = cleanCode;
+      renderCountTable();
+    }
+  } else if (cameraScannerContext === 'product_search') {
+    const input = document.getElementById("prod-search");
+    if (input) {
+      input.value = cleanCode;
+      renderProducts();
+    }
+  }
+  flash(`📷 Barkod Okundu: [${cleanCode}]`);
+}
+
+// =========================================================================
+// 💾 ONE-CLICK FULL BACKUP & RESTORE MODULE
+// =========================================================================
+function exportFullSystemBackup() {
+  const fullData = {
+    backupName: "DM_MARIN_ERP_FULL_BACKUP",
+    version: "2.5",
+    timestamp: new Date().toISOString(),
+    exportDate: new Date().toLocaleString('tr-TR'),
+    products: productsState,
+    sales: salesState,
+    proposals: proposalsState,
+    customers: customersState,
+    suppliers: suppliersState,
+    expenses: expensesState,
+    purchases: purchasesState,
+    accounts: accountsState,
+    locations: locationsState,
+    staff: staffState,
+    settings: {
+      eurRate: localStorage.getItem("dm_erp_fx_eur") || "55.68",
+      usdRate: localStorage.getItem("dm_erp_fx_usd") || "48.85"
+    }
+  };
+
+  const jsonStr = JSON.stringify(fullData, null, 2);
+  const blob = new Blob([jsonStr], { type: "application/json" });
+  const a = document.createElement("a");
+  const dateTag = new Date().toISOString().slice(0, 10);
+  a.href = URL.createObjectURL(blob);
+  a.download = `DM-MARIN-ERP-TAM-YEDEK-${dateTag}.json`;
+  a.click();
+  flash("✓ Tam Sistem Yedeği başarıyla indirildi.");
+}
+
+function importFullSystemBackup(fileInput) {
+  const file = fileInput.files?.[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.products && !data.sales && !data.customers) {
+        alert("Geçersiz yedek dosyası formatı.");
+        return;
+      }
+
+      if (!confirm(`Yedek Tarihi: ${data.exportDate || data.timestamp}\n\nBu yedeği içeri aktarmak istediğinize emin misiniz?\nMevcut veritabanınız yedeğin içeriği ile güncellenecektir.`)) return;
+
+      if (Array.isArray(data.products)) productsState = data.products;
+      if (Array.isArray(data.sales)) salesState = data.sales;
+      if (Array.isArray(data.proposals)) proposalsState = data.proposals;
+      if (Array.isArray(data.customers)) customersState = data.customers;
+      if (Array.isArray(data.suppliers)) suppliersState = data.suppliers;
+      if (Array.isArray(data.expenses)) expensesState = data.expenses;
+      if (Array.isArray(data.purchases)) purchasesState = data.purchases;
+      if (Array.isArray(data.accounts)) accountsState = data.accounts;
+      if (Array.isArray(data.locations)) locationsState = data.locations;
+      if (Array.isArray(data.staff)) staffState = data.staff;
+
+      saveAll();
+      saveProposalsState();
+      alert("✓ Sistem yedeği başarıyla geri yüklendi!");
+      window.location.reload();
+    } catch(err) {
+      alert("Yedek dosyası okunamadı: " + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
 </script>
 </body>
 </html>
