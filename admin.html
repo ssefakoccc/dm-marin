@@ -5000,7 +5000,7 @@ async function submitIndexNowFromAdmin() {
   }
   try {
     const token = localStorage.getItem('dm_admin_token') || localStorage.getItem('admin_token') || '';
-    const res = await fetch('/api/admin/indexnow', {
+    const res = await fetch('/api/admin/settings?type=indexnow', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -5010,7 +5010,7 @@ async function submitIndexNowFromAdmin() {
     const json = await res.json();
     if (res.ok && json.success) {
       if (btn) {
-        btn.textContent = ;
+        btn.textContent = '✓ ' + (json.urlCount || 152) + ' Sayfa Bildirildi!';
         btn.style.background = '#10b981';
         btn.style.borderColor = '#059669';
         setTimeout(() => {
@@ -5020,7 +5020,7 @@ async function submitIndexNowFromAdmin() {
           btn.style.borderColor = '#4338ca';
         }, 5000);
       }
-      flash();
+      flash('Başarılı! ' + (json.urlCount || 152) + ' sayfa IndexNow protokolüyle Bing, Copilot ve yapay zeka dizinlerine iletildi.');
     } else {
       throw new Error(json.error || 'İstek başarısız oldu.');
     }
