@@ -2441,7 +2441,10 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
             <label>Parça Kodu / OEM No *</label>
             <input type="text" id="prod-code" placeholder="Örn: 22030848 veya DM-FLT-101" required>
             <input type="hidden" id="prod-oem-ref">
-            <input type="hidden" id="prod-cross-ref">
+          </div>
+          <div class="field-wrap">
+            <label>Muadil / Çapraz Kodlar (Arama ve Eşleşme İçin)</label>
+            <input type="text" id="prod-cross-ref" placeholder="Örn: Jabsco 17937-0001, Johnson 09-819B, CEF 500168">
           </div>
           <div class="field-wrap">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">
@@ -4144,12 +4147,13 @@ function handlePosSearchInput(val) {
     return;
   }
 
-  // Filter products by name, code, barcode, brand
+  // Filter products by name, code, barcode, brand, cross-reference
   const matches = productsState.filter(p => 
     (p.barcode && p.barcode.toLowerCase().includes(query)) ||
     (p.code && p.code.toLowerCase().includes(query)) ||
     (p.name && p.name.toLowerCase().includes(query)) ||
-    (p.brand && p.brand.toLowerCase().includes(query))
+    (p.brand && p.brand.toLowerCase().includes(query)) ||
+    (p.crossRef && p.crossRef.toLowerCase().includes(query))
   ).slice(0, 10);
 
   if (matches.length === 0) {
@@ -4987,7 +4991,6 @@ function renderProducts() {
         <b style="color:var(--navy);font-size:14px">${escapeHtml(p.name)}</b><br>
         <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:3px">
           <span style="font-family:monospace;background:#f1f5f9;color:#334155;padding:1px 6px;border-radius:4px;font-size:11px;font-weight:600">Kod: ${escapeHtml(oem)}</span>
-          ${p.crossRef ? `<span style="font-family:monospace;background:#f8fafc;color:#64748b;padding:1px 6px;border-radius:4px;font-size:11px">${escapeHtml(p.crossRef)}</span>` : ''}
           ${p.barcode ? `<span style="font-family:monospace;background:#f1f5f9;color:#475569;padding:1px 6px;border-radius:4px;font-size:11px">🏷️ ${escapeHtml(p.barcode)}</span>` : ''}
         </div>
       </td>
