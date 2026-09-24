@@ -1402,6 +1402,69 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
   </div>
 </div>
 
+<!-- ⚓ AKILLI BAKIM HATIRLATICI & MARIN CRM -->
+<section class="view" id="crm">
+  <div class="head">
+    <div>
+      <h2>⚓ Akıllı Tekne Bakım Hatırlatıcısı & Marin CRM</h2>
+      <p>Servis geçmişine göre periyodik motor bakımı (100-200 saat / 6 ay) yaklaşan veya geciken tekneleri takip edin; tek tıkla kaptana/tekne sahibine nazik WhatsApp hatırlatması gönderin.</p>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn primary sm" type="button" onclick="openNewCrmBoatModal()">➕ Yeni Tekne & Müşteri Kaydet</button>
+      <button class="btn sm" type="button" onclick="refreshCrmBoatList()">🔄 Listeyi Yenile</button>
+    </div>
+  </div>
+
+  <!-- CRM KPI GRID -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:14px;margin-bottom:20px">
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
+      <span style="font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase">KAYITLI TEKNE / MÜŞTERİ</span>
+      <b style="font-size:22px;color:#071b2b;display:block;margin-top:2px" id="crm-total-boats">0</b>
+    </div>
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
+      <span style="font-size:11px;font-weight:800;color:#f59e0b;text-transform:uppercase">BAKIMI YAKLAŞAN (1-2 AY)</span>
+      <b style="font-size:22px;color:#f59e0b;display:block;margin-top:2px" id="crm-upcoming-boats">0</b>
+    </div>
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
+      <span style="font-size:11px;font-weight:800;color:#ef4444;text-transform:uppercase">⚠️ SEZONLUK BAKIM ZAMANI GELEN</span>
+      <b style="font-size:22px;color:#ef4444;display:block;margin-top:2px" id="crm-overdue-boats">0</b>
+    </div>
+  </div>
+
+  <!-- CRM BOATS TABLE -->
+  <div class="card" style="padding:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px;flex-wrap:wrap">
+      <div style="display:flex;gap:10px;align-items:center;flex:1">
+        <input type="text" id="crm-search-input" placeholder="Tekne adı, müşteri veya marina ara..." style="height:38px;padding:0 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;width:300px" oninput="renderCrmTable()">
+        <select id="crm-status-filter" style="height:38px;padding:0 10px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px" onchange="renderCrmTable()">
+          <option value="all">Tüm Tekneler</option>
+          <option value="overdue">⚠️ Bakım Zamanı Gelenler (6+ Ay)</option>
+          <option value="upcoming">⏱️ Bakımı Yaklaşanlar (3-6 Ay)</option>
+          <option value="good">✅ Bakımı Güncel (Son 3 Ay)</option>
+        </select>
+      </div>
+      <button class="btn sm" type="button" onclick="exportCrmBoatsCSV()">📥 Excel / CSV İndir</button>
+    </div>
+
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead>
+          <tr style="background:#f8fafc;border-bottom:2px solid #e2e8f0;text-align:left">
+            <th style="padding:10px 12px">Müşteri & Kaptan</th>
+            <th style="padding:10px 12px">Tekne Adı & Modeli</th>
+            <th style="padding:10px 12px">Motor / Makine</th>
+            <th style="padding:10px 12px">Marina / Konum</th>
+            <th style="padding:10px 12px">Son Servis & Geçen Süre</th>
+            <th style="padding:10px 12px">Önerilen Bakım Paketi</th>
+            <th style="padding:10px 12px;text-align:right">WhatsApp Hatırlatma</th>
+          </tr>
+        </thead>
+        <tbody id="crm-boats-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
 <!-- NOTIFICATIONS VIEW -->
 <section class="view" id="notifications">
   <div class="head">
