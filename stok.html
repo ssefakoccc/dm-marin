@@ -1739,14 +1739,14 @@ table.erp-table tbody tr:hover { background: #f8fbfc; }
         <div id="bulk-product-bar" style="display:none;background:linear-gradient(135deg, #0f172a 0%, #1e293b 100%);color:#fff;padding:10px 18px;border-radius:10px;margin-bottom:14px;box-shadow:0 8px 20px -4px rgba(15,23,42,0.25);align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
           <div style="display:flex;align-items:center;gap:12px">
             <span style="background:#0284c7;color:#fff;font-weight:750;font-size:12.5px;padding:4px 12px;border-radius:20px;letter-spacing:0.02em" id="bulk-selected-count">0 Ürün Seçildi</span>
-            <button type="button" class="btn outline sm" onclick="clearSelectedProducts()" style="color:#94a3b8;border-color:#334155;font-size:11.5px;padding:3px 10px">✕ Seçimi Temizle</button>
+            <button type="button" class="btn sm" onclick="clearSelectedProducts()" style="background:transparent;color:#cbd5e1;border:1px solid #475569;font-size:11.5px;padding:3px 10px;cursor:pointer">✕ Seçimi Temizle</button>
           </div>
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-            <button type="button" class="btn warning sm" onclick="openBulkEditModal('price')" style="font-weight:700;font-size:12px">💹 Toplu Fiyat Güncelle</button>
-            <button type="button" class="btn outline sm" onclick="openBulkEditModal('category')" style="color:#fff;border-color:#475569;font-size:12px">🏷️ Toplu Kategori Değiştir</button>
-            <button type="button" class="btn outline sm" onclick="openBulkEditModal('location')" style="color:#fff;border-color:#475569;font-size:12px">📍 Toplu Depo Değiştir</button>
-            <button type="button" class="btn outline sm" onclick="bulkPrintBarcodes()" style="color:#38bdf8;border-color:#0284c7;font-size:12px">🖨️ Barkod Bas</button>
-            <button type="button" class="btn danger sm" onclick="bulkDeleteSelectedProducts()" style="font-weight:700;font-size:12px">🗑️ Seçilenleri Sil</button>
+            <button type="button" class="btn warning sm" onclick="openBulkEditModal('price')" style="font-weight:750;font-size:12px">💹 Toplu Fiyat Güncelle</button>
+            <button type="button" class="btn sm" onclick="openBulkEditModal('category')" style="background:#334155;color:#f8fafc;border:1px solid #64748b;font-weight:700;font-size:12px;cursor:pointer">🏷️ Toplu Kategori Değiştir</button>
+            <button type="button" class="btn sm" onclick="openBulkEditModal('location')" style="background:#334155;color:#f8fafc;border:1px solid #64748b;font-weight:700;font-size:12px;cursor:pointer">📍 Toplu Depo Değiştir</button>
+            <button type="button" class="btn sm" onclick="bulkPrintBarcodes()" style="background:#0284c7;color:#ffffff;border:1px solid #38bdf8;font-weight:700;font-size:12px;cursor:pointer">🖨️ Barkod Bas</button>
+            <button type="button" class="btn danger sm" onclick="bulkDeleteSelectedProducts()" style="font-weight:750;font-size:12px">🗑️ Seçilenleri Sil</button>
           </div>
         </div>
 
