@@ -3714,16 +3714,22 @@ function exportProductsCSV() {
   flash("📊 Stok listesi CSV olarak indirildi.");
 }
 
-// ─── ERP TOKEN (stok sayfası için local-admin-token kullan) ──────────────────
+// ─── ERP TOKEN (stok sayfası için güvenli oturum jetonu) ──────────────────
 async function getErpToken() {
+  if (supabaseRealtimeClient) {
+    try {
+      const { data: { session } } = await supabaseRealtimeClient.auth.getSession();
+      if (session && session.access_token) return session.access_token;
+    } catch(e) {}
+  }
   try {
-    const saved = sessionStorage.getItem('dm_admin_session');
+    const saved = sessionStorage.getItem('dm_admin_session') || localStorage.getItem('dm_admin_session');
     if (saved) {
       const parsed = JSON.parse(saved);
       if (parsed && parsed.access_token) return parsed.access_token;
     }
   } catch(e) {}
-  return 'local-admin-token-' + Date.now();
+  return '';
 }
 
 // ─── ERP API yardımcı fetch ────────────────────────────────────────────────

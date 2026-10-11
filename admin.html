@@ -2576,13 +2576,13 @@ async function getValidAdminToken() {
     return currentSession.access_token;
   }
   try {
-    const savedLocal = sessionStorage.getItem('dm_admin_session');
+    const savedLocal = sessionStorage.getItem('dm_admin_session') || localStorage.getItem('dm_admin_session');
     if (savedLocal) {
       const parsed = JSON.parse(savedLocal);
       if (parsed.access_token) return parsed.access_token;
     }
   } catch(e) {}
-  return 'local-admin-token-' + Date.now();
+  return '';
 }
 
 // REQUESTS MANAGEMENT
@@ -3632,7 +3632,24 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
   submitBtn.textContent = 'Giriş yapılıyor...';
   fb.style.display = 'none';
 
-  // Master PIN check (1998 / dm1998 / saved master PIN)
+  // 1. Try Supabase auth first if client is available
+  if (supabaseClient) {
+    try {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (!error && data && data.session) {
+        sessionStorage.setItem('dm_admin_session', JSON.stringify(data.session));
+        localStorage.setItem('dm_admin_session', JSON.stringify(data.session));
+        closeLoginOverlay();
+        flash('✓ Hoş geldiniz! Yönetici girişi başarılı.');
+        handleAuthSuccess(data.session);
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Giriş Yap →';
+        return;
+      }
+    } catch (err) {}
+  }
+
+  // 2. Master Secret or Master PIN check
   let savedAdminPin = '1998';
   try {
     const erp = JSON.parse(localStorage.getItem('dm_erp_settings') || '{}');
@@ -3644,10 +3661,11 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
 
   if (isMasterPin) {
     const localSession = {
-      access_token: 'local-admin-token-' + Date.now(),
-      user: { email: email, role: 'admin' }
+      access_token: password.length >= 8 ? password : '',
+      user: { email: email || 'admin@dmmarin.com', role: 'admin' }
     };
     sessionStorage.setItem('dm_admin_session', JSON.stringify(localSession));
+    localStorage.setItem('dm_admin_session', JSON.stringify(localSession));
     closeLoginOverlay();
     flash('✓ Hoş geldiniz! Yönetici girişi başarılı.');
     handleAuthSuccess(localSession);
@@ -3656,33 +3674,10 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     return;
   }
 
-  // If not master PIN, try Supabase auth if client is available
-  if (supabaseClient) {
-    try {
-      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-      if (error) {
-        fb.style.display = 'block';
-        fb.style.background = '#fef2f2';
-        fb.style.color = '#991b1b';
-        fb.textContent = error.message === 'Invalid login credentials' ? 'Geçersiz kullanıcı adı veya şifre/PIN kodu.' : error.message;
-      } else if (data && data.session) {
-        sessionStorage.setItem('dm_admin_session', JSON.stringify(data.session));
-        closeLoginOverlay();
-        flash('✓ Hoş geldiniz! Yönetici girişi başarılı.');
-        handleAuthSuccess(data.session);
-      }
-    } catch (err) {
-      fb.style.display = 'block';
-      fb.style.background = '#fef2f2';
-      fb.style.color = '#991b1b';
-      fb.textContent = 'Giriş hatası: ' + err.message;
-    }
-  } else {
-    fb.style.display = 'block';
-    fb.style.background = '#fef2f2';
-    fb.style.color = '#991b1b';
-    fb.textContent = 'Hatalı kullanıcı adı veya şifre! Lütfen bilgilerinizi kontrol ediniz.';
-  }
+  fb.style.display = 'block';
+  fb.style.background = '#fef2f2';
+  fb.style.color = '#991b1b';
+  fb.textContent = 'Hatalı e-posta veya şifre/PIN kodu! Lütfen bilgilerinizi kontrol ediniz.';
 
   submitBtn.disabled = false;
   submitBtn.textContent = 'Giriş Yap →';

@@ -33,28 +33,16 @@ async function verifyAdmin(req, res) {
     return { id: 'admin-master', email: 'admin@dmmarin.com', role: 'admin' };
   }
 
-  // 2. Allow local admin session token generated during browser admin authentication
-  if (token.startsWith('local-admin-token-') && token.length > 25) {
-    return { id: 'admin-local', email: 'admin@dmmarin.com', role: 'admin' };
-  }
-
   const supabase = getServiceClient() || getAnonClient();
 
   if (!supabase) {
-    // If Supabase is not configured and token matches verified local admin session
-    if (token.startsWith('local-admin-token-')) {
-      return { id: 'admin-local', email: 'admin@dmmarin.com', role: 'admin' };
-    }
-    res.status(401).json({ error: 'Yetkilendirme yapılandırılamadı.' });
+    res.status(503).json({ error: 'Yetkilendirme veritabanı (Supabase) yapılandırılamadı.' });
     return null;
   }
 
   try {
     const { data, error } = await supabase.auth.getUser(token);
     if (error || !data || !data.user) {
-      if (token.startsWith('local-admin-token-') && token.length > 25) {
-        return { id: 'admin-local', email: 'admin@dmmarin.com', role: 'admin' };
-      }
       res.status(401).json({ error: 'Geçersiz veya süresi dolmuş oturum jetonu.' });
       return null;
     }
