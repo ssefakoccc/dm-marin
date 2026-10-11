@@ -5938,7 +5938,13 @@ async function dbSaveSale(sale) {
   try {
     const res = await erpFetch('/api/admin/erp/sales', { method: 'POST', body: JSON.stringify(sale) });
     const data = await res.json();
-    if (!res.ok || !data.success) throw new Error(data.error || 'DB hatası');
+    if (!res.ok || !data.success) {
+      const errMsg = data.error || 'DB hatası';
+      if (errMsg.includes('Yetersiz stok') || errMsg.includes('yetersiz')) {
+        alert('⚠️ SATIŞ İPTAL EDİLDİ:\n' + errMsg + '\n\nEşzamanlı başka bir satış veya işlem sebebiyle stok tükendi.');
+      }
+      throw new Error(errMsg);
+    }
     if (data.data && data.data.id) {
       const idx = salesState.findIndex(s => s.id === sale.id);
       if (idx !== -1) salesState[idx].id = data.data.id;
@@ -5946,7 +5952,7 @@ async function dbSaveSale(sale) {
     saveLocalCache();
     return true;
   } catch(err) {
-    console.warn('Satış DB kaydı başarısız (offline fallback):', err);
+    console.warn('Satış DB kaydı başarısız:', err);
     saveLocalCache();
     return false;
   }

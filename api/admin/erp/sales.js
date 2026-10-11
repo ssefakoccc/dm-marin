@@ -68,8 +68,62 @@ module.exports = async (req, res) => {
         };
       }
 
+      if (!isPurchase) {
+        // 1. Önce PostgreSQL seviyesindeki kilitli atomik RPC fonksiyonunu dene
+        try {
+          const { data: rpcData, error: rpcError } = await supabase.rpc('process_erp_sale_atomic', { p_sale: insertData });
+          if (!rpcError && rpcData) {
+            return res.status(201).json({ success: true, data: rpcData });
+          }
+          if (rpcError && rpcError.message && (rpcError.message.includes('Yetersiz stok') || rpcError.message.includes('yetersiz'))) {
+            return res.status(400).json({ error: rpcError.message });
+          }
+        } catch (rpcErr) {}
+
+        // 2. RPC yoksa: Sunucu seviyesinde eşzamanlı satış/stok doğrulama (Race Condition Fallback)
+        if (Array.isArray(insertData.items) && insertData.items.length > 0) {
+          for (const it of insertData.items) {
+            const pId = it.prodId || it.productId || it.id;
+            const reqQty = Number(it.qty) || 1;
+            if (pId) {
+              const { data: prod } = await supabase.from('erp_products').select('id, name, qty').eq('id', pId).maybeSingle();
+              if (prod && Number(prod.qty) < reqQty) {
+                return res.status(400).json({
+                  error: `Yetersiz stok! "${prod.name}" için mevcut stok: ${prod.qty}, talep edilen: ${reqQty}. Satış iptal edildi.`
+                });
+              }
+            }
+          }
+        }
+      }
+
       const { data, error } = await supabase.from(tableName).insert(insertData).select().single();
       if (error) return res.status(500).json({ error: error.message });
+
+      // Satış sonrası stok düşümü ve ilişkisel erp_sale_items tablosu senkronizasyonu
+      if (!isPurchase && data && Array.isArray(insertData.items) && insertData.items.length > 0) {
+        for (const it of insertData.items) {
+          const pId = it.prodId || it.productId || it.id;
+          const reqQty = Number(it.qty) || 1;
+          if (pId) {
+            try {
+              const { data: currentProd } = await supabase.from('erp_products').select('qty').eq('id', pId).maybeSingle();
+              if (currentProd) {
+                const newQty = Math.max(0, (Number(currentProd.qty) || 0) - reqQty);
+                await supabase.from('erp_products').update({ qty: newQty, updated_at: new Date().toISOString() }).eq('id', pId);
+              }
+              await supabase.from('erp_sale_items').insert({
+                sale_id: data.id,
+                product_id: (pId.includes('-') && pId.length === 36) ? pId : null,
+                product_name: it.name || 'Ürün',
+                qty: reqQty,
+                unit_price: Number(it.price) || Number(it.unitPrice) || 0
+              });
+            } catch (ignoreErr) {}
+          }
+        }
+      }
+
       return res.status(201).json({ success: true, data });
     } catch (err) { return res.status(500).json({ error: err.message }); }
   }
@@ -91,6 +145,28 @@ module.exports = async (req, res) => {
   if (method === 'DELETE') {
     if (!id) return res.status(400).json({ error: 'id gerekli' });
     try {
+      // Satış silinirken stokları geri iade et
+      if (!isPurchase) {
+        try {
+          const { data: existingSale } = await supabase.from(tableName).select('items').eq('id', id).maybeSingle();
+          if (existingSale && Array.isArray(existingSale.items)) {
+            for (const it of existingSale.items) {
+              const pId = it.prodId || it.productId || it.id;
+              const reqQty = Number(it.qty) || 0;
+              if (pId && reqQty > 0) {
+                const { data: currentProd } = await supabase.from('erp_products').select('qty').eq('id', pId).maybeSingle();
+                if (currentProd) {
+                  await supabase.from('erp_products').update({
+                    qty: (Number(currentProd.qty) || 0) + reqQty,
+                    updated_at: new Date().toISOString()
+                  }).eq('id', pId);
+                }
+              }
+            }
+          }
+        } catch (restoreErr) {}
+      }
+
       const { error } = await supabase.from(tableName).delete().eq('id', id);
       if (error) return res.status(500).json({ error: error.message });
       return res.status(200).json({ success: true });
