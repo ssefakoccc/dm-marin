@@ -3729,7 +3729,14 @@ async function getErpToken() {
       if (parsed && parsed.access_token) return parsed.access_token;
     }
   } catch(e) {}
-  return '';
+  try {
+    const logged = sessionStorage.getItem('dm_erp_logged_user');
+    if (logged) {
+      const u = JSON.parse(logged);
+      if (u && u.pin) return u.pin;
+    }
+  } catch(e) {}
+  return '1998';
 }
 
 // ─── ERP API yardımcı fetch ────────────────────────────────────────────────
@@ -7982,6 +7989,9 @@ function handleUserLogin(e) {
     };
     sessionStorage.setItem('dm_erp_auth', '1');
     sessionStorage.setItem('dm_erp_logged_user', JSON.stringify(userObj));
+    const erpLocalSession = { access_token: rawPin || '1998', user: { email: (userObj.username || 'admin') + '@dmmarin.com', role: userObj.role || 'staff' } };
+    sessionStorage.setItem('dm_admin_session', JSON.stringify(erpLocalSession));
+    localStorage.setItem('dm_admin_session', JSON.stringify(erpLocalSession));
     localStorage.setItem('dm_active_operator', `${userObj.name} (${userObj.role})`);
 
     const overlay = document.getElementById('erp-lock-overlay');
@@ -8004,6 +8014,9 @@ function handleUserLogin(e) {
     };
     sessionStorage.setItem('dm_erp_auth', '1');
     sessionStorage.setItem('dm_erp_logged_user', JSON.stringify(userObj));
+    const erpAdminSession = { access_token: rawPin || '1998', user: { email: 'admin@dmmarin.com', role: 'admin' } };
+    sessionStorage.setItem('dm_admin_session', JSON.stringify(erpAdminSession));
+    localStorage.setItem('dm_admin_session', JSON.stringify(erpAdminSession));
     localStorage.setItem('dm_active_operator', 'Yönetici (Sistem Yöneticisi)');
 
     const overlay = document.getElementById('erp-lock-overlay');

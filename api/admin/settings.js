@@ -51,11 +51,21 @@ function submitToIndexNow(urls, endpoint = 'api.indexnow.org') {
 module.exports = async (req, res) => {
   res.setHeader('Content-Type', 'application/json');
 
-  const adminUser = await verifyAdmin(req, res);
-  if (!adminUser) return;
-
   const method = req.method;
   const isIndexNow = req.query.type === 'indexnow' || (req.url && req.url.includes('/admin/indexnow'));
+
+  // Mutations and IndexNow strictly require admin verification
+  if (method !== 'GET' || isIndexNow) {
+    const adminUser = await verifyAdmin(req, res);
+    if (!adminUser) return;
+  } else {
+    // On GET, if Authorization header is sent, verify it
+    const authHeader = req.headers.authorization || req.headers.Authorization || '';
+    if (authHeader.startsWith('Bearer ') && authHeader.slice(7).trim()) {
+      const adminUser = await verifyAdmin(req, res);
+      if (!adminUser) return;
+    }
+  }
 
   // Handle IndexNow submission
   if (method === 'POST' && isIndexNow) {

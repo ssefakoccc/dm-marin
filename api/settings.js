@@ -9,7 +9,9 @@ const PUBLIC_SETTINGS_WHITELIST = [
   'business_hours',
   'emergency_phone',
   'theme_config',
-  'contact_info'
+  'contact_info',
+  'form_config_tr',
+  'form_config_en'
 ];
 
 module.exports = async (req, res) => {
