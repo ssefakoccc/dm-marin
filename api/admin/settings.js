@@ -1,7 +1,4 @@
 // api/admin/settings.js (Unified settings handler for site settings, SEO, ERP settings, inventory, and IndexNow)
-const https = require('https');
-const fs = require('fs');
-const path = require('path');
 const { getServiceClient } = require('../_lib/supabase');
 const { verifyAdmin } = require('../_lib/auth');
 
@@ -9,43 +6,37 @@ const HOST = 'dmmarin.com';
 const KEY = 'c8d41a7b8e2f491c920f3458b6e7921a';
 const KEY_LOCATION = `https://${HOST}/${KEY}.txt`;
 
-function submitToIndexNow(urls, endpoint = 'api.indexnow.org') {
-  return new Promise((resolve, reject) => {
-    const payload = JSON.stringify({
-      host: HOST,
-      key: KEY,
-      keyLocation: KEY_LOCATION,
-      urlList: urls
-    });
+async function submitToIndexNow(urls, endpoint = 'api.indexnow.org') {
+  const payload = JSON.stringify({
+    host: HOST,
+    key: KEY,
+    keyLocation: KEY_LOCATION,
+    urlList: urls
+  });
 
-    const options = {
-      hostname: endpoint,
-      port: 443,
-      path: '/indexnow',
+  try {
+    const res = await fetch(`https://${endpoint}/indexnow`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'Content-Length': Buffer.byteLength(payload)
-      }
-    };
-
-    const req = https.request(options, (res) => {
-      let data = '';
-      res.on('data', chunk => data += chunk);
-      res.on('end', () => {
-        resolve({
-          endpoint,
-          statusCode: res.statusCode,
-          statusMessage: res.statusMessage,
-          body: data
-        });
-      });
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      body: payload
     });
-
-    req.on('error', reject);
-    req.write(payload);
-    req.end();
-  });
+    const body = await res.text();
+    return {
+      endpoint,
+      statusCode: res.status,
+      statusMessage: res.statusText,
+      body
+    };
+  } catch (err) {
+    return {
+      endpoint,
+      statusCode: 500,
+      statusMessage: err.message,
+      body: err.message
+    };
+  }
 }
 
 module.exports = async (req, res) => {
@@ -72,14 +63,14 @@ module.exports = async (req, res) => {
     try {
       let urls = [];
       try {
-        const sitemapPath = path.join(process.cwd(), 'sitemap.xml');
-        if (fs.existsSync(sitemapPath)) {
-          const content = fs.readFileSync(sitemapPath, 'utf8');
+        const smRes = await fetch(`https://${HOST}/sitemap.xml`);
+        if (smRes.ok) {
+          const content = await smRes.text();
           const matches = content.match(/<loc>(.*?)<\/loc>/g) || [];
           urls = matches.map(m => m.replace(/<\/?loc>/g, '').trim());
         }
       } catch (e) {
-        console.error('Sitemap read error in settings API:', e.message);
+        console.warn('Sitemap fetch fallback in settings API:', e.message);
       }
 
       if (!urls || urls.length === 0) {

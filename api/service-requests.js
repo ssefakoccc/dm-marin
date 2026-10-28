@@ -10,11 +10,30 @@ const MAX_REQUESTS_PER_WINDOW = 5;
 
 function hashIp(rawIp) {
   const salt = process.env.IP_HASH_SALT || 'dm-marin-salt-2026';
-  return crypto.createHash('sha256').update((rawIp || 'unknown') + salt).digest('hex');
+  const str = (rawIp || 'unknown') + salt;
+  try {
+    if (crypto && typeof crypto.createHash === 'function') {
+      return crypto.createHash('sha256').update(str).digest('hex');
+    }
+  } catch (e) {}
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash |= 0;
+  }
+  return 'ip_' + Math.abs(hash).toString(16);
 }
 
 function checkRateLimit(ipHash) {
   const now = Date.now();
+  // Lazy cleanup to avoid unbounded memory growth without requiring global timer
+  if (rateLimitMap.size > 200) {
+    for (const [key, val] of rateLimitMap.entries()) {
+      if (now - val.startTime > RATE_LIMIT_WINDOW) rateLimitMap.delete(key);
+    }
+  }
+
   const record = rateLimitMap.get(ipHash);
   if (!record || now - record.startTime > RATE_LIMIT_WINDOW) {
     rateLimitMap.set(ipHash, { startTime: now, count: 1 });
@@ -25,16 +44,6 @@ function checkRateLimit(ipHash) {
   }
   record.count += 1;
   return true;
-}
-
-// Periyodik bellek temizliği
-if (!global._cleanupTimer) {
-  global._cleanupTimer = setInterval(() => {
-    const now = Date.now();
-    for (const [key, val] of rateLimitMap.entries()) {
-      if (now - val.startTime > RATE_LIMIT_WINDOW) rateLimitMap.delete(key);
-    }
-  }, 120000);
 }
 
 module.exports = async (req, res) => {

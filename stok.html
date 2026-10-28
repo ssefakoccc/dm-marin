@@ -8080,10 +8080,15 @@ window.addEventListener("DOMContentLoaded", () => {
   // ⚡ Supabase Realtime WebSocket canlı dinleyiciyi başlat
   initSupabaseRealtime();
 
-  // Her 30 saniyede bir arka planda sessizce Supabase ile senkronize et
-  setInterval(() => {
-    loadAllFromDB();
-  }, 30000);
+  // 🛡️ Akıllı Senkronizasyon: Supabase Realtime WebSocket canlı güncellemeleri anlık iletir.
+  // Sekme uzun süre (5+ dakika) arka planda kaldıktan sonra ön plana geldiğinde arka plan yenilemesi yapılır.
+  let lastSyncTime = Date.now();
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && (Date.now() - lastSyncTime > 5 * 60 * 1000)) {
+      lastSyncTime = Date.now();
+      loadAllFromDB();
+    }
+  });
 });
 
 // =========================================================================
